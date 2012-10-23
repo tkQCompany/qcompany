@@ -23,7 +23,7 @@ struct UnitData
      * @brief
      *
      */
-    enum Names {UNIT, KG, G, M, KM, HOUR, PACKAGE};
+    enum Names {UNIT = 1, KG, G, M, KM, HOUR, PACKAGE}; // "= 1" because SQL starts counting from 1
 
     /**
      * @brief

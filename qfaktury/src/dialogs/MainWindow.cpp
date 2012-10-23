@@ -1,7 +1,11 @@
 #include "MainWindow.h"
 
 
-/** Constructor
+
+/**
+ * @brief Default constructor
+ *
+ * @param parent Pointer to Qt's parent widget
  */
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
@@ -9,15 +13,20 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     init();
 }
 
-/** Destructor
+
+/**
+ * @brief Saves settings on exit
+ *
  */
 MainWindow::~MainWindow()
 {
     saveAllSettings();
 }
 
+
 /**
- * init() method
+ * @brief
+ *
  */
 void MainWindow::init()
 {
@@ -98,8 +107,10 @@ void MainWindow::init()
 }
 
 
+
 /**
- *  Loads PyQt plugins
+ * @brief
+ *
  */
 void MainWindow::loadPlugins()
 {
@@ -136,6 +147,11 @@ void MainWindow::loadPlugins()
 
 
 
+/**
+ * @brief
+ *
+ * @param type
+ */
 void MainWindow::createInvoice(const InvoiceTypeData::Type type)
 {
     QScopedPointer<InvoiceDialog> invoice;
@@ -181,8 +197,11 @@ void MainWindow::createInvoice(const InvoiceTypeData::Type type)
     }
 }
 
+
 /**
- * firstRun setup()
+ * @brief
+ *
+ * @return bool
  */
 bool MainWindow::firstRun()
 {
@@ -197,8 +216,11 @@ bool MainWindow::firstRun()
     return ok;
 }
 
-/** save sett() before quit
- * save column width
+
+
+/**
+ * @brief
+ *
  */
 void MainWindow::saveColumnWidth()
 {
@@ -231,6 +253,16 @@ void MainWindow::saveColumnWidth()
 
 
 
+/**
+ * @brief
+ *
+ * @param counterpartiesEditEnabled
+ * @param counterpartiesRemoveEnable
+ * @param commoditiesEditEnabled
+ * @param commoditiesRemoveEnabled
+ * @param historyEditEnabled
+ * @param historyRemoveEnabled
+ */
 void MainWindow::setActions(const bool counterpartiesEditEnabled, const bool counterpartiesRemoveEnable,
                             const bool commoditiesEditEnabled, const bool commoditiesRemoveEnabled,
                             const bool historyEditEnabled, const bool historyRemoveEnabled)
@@ -246,7 +278,10 @@ void MainWindow::setActions(const bool counterpartiesEditEnabled, const bool cou
 
 
 
-/** Saves all sett()
+
+/**
+ * @brief
+ *
  */
 void MainWindow::saveAllSettings()
 {
@@ -261,7 +296,10 @@ void MainWindow::saveAllSettings()
 }
 
 
-/** Creates directories if required
+
+/**
+ * @brief
+ *
  */
 void MainWindow::setupDir() const
 {
@@ -281,6 +319,11 @@ void MainWindow::setupDir() const
 
 // ----------------------------------------  SLOTS ---------------------------------//
 
+/**
+ * @brief
+ *
+ * @param event
+ */
 void MainWindow::keyPressEvent(QKeyEvent * event)
 {
     if (event->key() == Qt::Key_Return)
@@ -323,8 +366,10 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 }
 
 
-/** Slot
- *  Just show the message.
+
+/**
+ * @brief
+ *
  */
 void MainWindow::pluginInfoSlot()
 {
@@ -333,8 +378,11 @@ void MainWindow::pluginInfoSlot()
                                     "Skrypty Pythona sa czytane z folderu \"~/elinux/plugins/\"."));
 }
 
-/** Slot
- *  Used while calling python script from the menu
+
+
+/**
+ * @brief
+ *
  */
 void MainWindow::pluginSlot()
 {
@@ -355,8 +403,12 @@ void MainWindow::pluginSlot()
     }
 }
 
-/** Slot
- *  Show context menu
+
+
+/**
+ * @brief
+ *
+ * @param p
  */
 void MainWindow::showTableMenuGoods(const QPoint &p) const
 {
@@ -368,8 +420,11 @@ void MainWindow::showTableMenuGoods(const QPoint &p) const
 }
 
 
-/** Slot
- *  Show context menu
+
+/**
+ * @brief
+ *
+ * @param p
  */
 void MainWindow::showTableMenuCounterparties(const QPoint &p) const
 {
@@ -381,8 +436,11 @@ void MainWindow::showTableMenuCounterparties(const QPoint &p) const
 }
 
 
-/** Slot
- *  Show context menu
+
+/**
+ * @brief
+ *
+ * @param p
  */
 void MainWindow::showTableMenuHistory(const QPoint &p) const
 {
@@ -400,8 +458,12 @@ void MainWindow::showTableMenuHistory(const QPoint &p) const
     menuTableInvoices.exec(tableViewInvoices->mapToGlobal(p));
 }
 
-/** Slot
- *  StatusBar slot
+
+
+/**
+ * @brief
+ *
+ * @param index
  */
 void MainWindow::mainUpdateStatus(QModelIndex index)
 {
@@ -417,8 +479,13 @@ void MainWindow::mainUpdateStatus(QModelIndex index)
 
 }
 
-/** Slot which enables/disables menu. It's possible to add/remove goods/customers
- *  only if this is the current tab.
+ //Slot which enables/disables menu. It's possible to add/remove goods/customers
+  // only if this is the current tab.
+
+/**
+ * @brief
+ *
+ * @param widget
  */
 void MainWindow::tabChanged(QWidget * widget)
 {
@@ -438,14 +505,20 @@ void MainWindow::tabChanged(QWidget * widget)
 }
 
 
-/** Slot used to display aboutQt informations.
+
+/**
+ * @brief
+ *
  */
 void MainWindow::aboutQt()
 {
     QMessageBox::aboutQt(this, QString("%1 - %2").arg(qApp->applicationName()).arg(qApp->applicationVersion()));
 }
 
-/** Slot used to display information about QFaktury
+
+/**
+ * @brief
+ *
  */
 void MainWindow::about()
 {
@@ -464,7 +537,10 @@ void MainWindow::about()
                 trUtf8("gospodarczych lub koszt urządzeń lub programów zastępczych."));
 }
 
-/** Slot used to edit the invoice from list of invoices.
+
+/**
+ * @brief
+ *
  */
 void MainWindow::editInvoice()
 {
@@ -546,7 +622,10 @@ void MainWindow::editInvoice()
     }
 }
 
-/** Slot used to delete invoices
+
+/**
+ * @brief
+ *
  */
 void MainWindow::delInvoice()
 {
@@ -573,7 +652,11 @@ void MainWindow::delInvoice()
     }
 }
 
-/** Slot used to edit data of the current company
+
+
+/**
+ * @brief
+ *
  */
 void MainWindow::editCompanyInfo()
 {
@@ -599,7 +682,11 @@ void MainWindow::editCompanyInfo()
     db_.modelCounterpartyType()->select();
 }
 
-/** Slot used to edit edit sett()
+
+
+/**
+ * @brief
+ *
  */
 void MainWindow::editSettings()
 {
@@ -607,7 +694,11 @@ void MainWindow::editSettings()
     settWindow.exec();
 }
 
-/** Slot used to add new customer
+
+
+/**
+ * @brief
+ *
  */
 void MainWindow::addCounterparty()
 {
@@ -626,7 +717,11 @@ void MainWindow::addCounterparty()
     }
 }
 
-/** Slot used to delete current customer
+
+
+/**
+ * @brief
+ *
  */
 void MainWindow::delCounterparty()
 {
@@ -654,7 +749,12 @@ void MainWindow::delCounterparty()
     }
 }
 
-/** Slot used to edit customer
+
+
+
+/**
+ * @brief
+ *
  */
 void MainWindow::editCounterparty()
 {
@@ -685,7 +785,10 @@ void MainWindow::editCounterparty()
 }
 
 
-/** Slot used for creating new invoices
+
+/**
+ * @brief
+ *
  */
 void MainWindow::newInvoice()
 {
@@ -693,7 +796,10 @@ void MainWindow::newInvoice()
 }
 
 
-/** Slot used for creating new invoices
+
+/**
+ * @brief
+ *
  */
 void MainWindow::newBill()
 {
@@ -701,7 +807,10 @@ void MainWindow::newBill()
 }
 
 
-/** Slot used for creating new invoices
+
+/**
+ * @brief
+ *
  */
 void MainWindow::newGrossInvoice()
 {
@@ -709,14 +818,20 @@ void MainWindow::newGrossInvoice()
 }
 
 
-/** Slot used to create new ProForma Invoice
+
+/**
+ * @brief
+ *
  */
 void MainWindow::newProFormaInvoice()
 {
     createInvoice(InvoiceTypeData::PRO_FORMA);
 }
 
-/** Slot used to create new Korekta
+
+/**
+ * @brief
+ *
  */
 void MainWindow::newCorrection()
 {
@@ -747,8 +862,10 @@ void MainWindow::newCorrection()
     }*/
 }
 
-/** Slot
- *  Creates duplicate
+
+/**
+ * @brief
+ *
  */
 void MainWindow::newDuplicate()
 {
@@ -780,7 +897,10 @@ void MainWindow::newDuplicate()
     }*/
 }
 
-/** Slot used to add goods
+
+/**
+ * @brief
+ *
  */
 void MainWindow::addCommodity()
 {
@@ -799,7 +919,10 @@ void MainWindow::addCommodity()
     }
 }
 
-/** Slot used to delete goods
+
+/**
+ * @brief
+ *
  */
 void MainWindow::delCommodity()
 {
@@ -829,7 +952,10 @@ void MainWindow::delCommodity()
     }
 }
 
-/** Slot used for editing goods
+
+/**
+ * @brief
+ *
  */
 void MainWindow::editCommodity()
 {
@@ -853,7 +979,11 @@ void MainWindow::editCommodity()
     }
 }
 
-/** Slot close
+
+/**
+ * @brief
+ *
+ * @param event
  */
 void MainWindow::closeEvent(QCloseEvent *event)
 {
@@ -870,14 +1000,20 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
-/** Slot help
+
+/**
+ * @brief
+ *
  */
 void MainWindow::help() const
 {
     QDesktopServices::openUrl(QUrl("http://www.e-linux.pl/"));
 }
 
-/** Slot reportBug
+
+/**
+ * @brief
+ *
  */
 void MainWindow::reportBug() const
 {

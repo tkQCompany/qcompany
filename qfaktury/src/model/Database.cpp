@@ -32,6 +32,13 @@ Database::~Database()
 }
 
 
+const QString Database::dbFileName() const
+{
+    return db_.databaseName();
+}
+
+
+
 ModelCommodity* Database::modelCommodity() const
 {
     return modelCommodity_;
@@ -523,56 +530,69 @@ bool Database::insertDataIfNotInserted()
 bool Database::invoiceWithCommoditiesInsertTransact(const InvoiceData &invoice, const QList<CommodityVisualData> &commodities)
 {
     QString errorMsg;
-
-    if(db_.transaction())
+    if(commodities.isEmpty())
     {
-        QSqlQuery queryInv(modelInvoice()->query());
-        const QString dateFormat("yyyy-MM-dd");
-        const QString queryInvStr(QString("INSERT INTO invoice(inv_number, selling_date, type_id, counterparty_id, issuance_date, payment_date, payment_id, currency_id, additional_text, discount) VALUES('%1', '%2', %3, %4, '%5', '%6', %7, %8, '%9', %10)")
-                                  .arg(invoice.invNumber).arg(invoice.sellingDate.toString(dateFormat)).arg(invoice.typeID)
-                                  .arg(invoice.counterpartyID).arg(invoice.issuanceDate.toString(dateFormat))
-                                  .arg(invoice.paymentDate.toString(dateFormat)).arg(invoice.paymentID).arg(invoice.currencyID)
-                                  .arg(invoice.additText).arg(invoice.discount));
-
-        if(queryInv.exec(queryInvStr))
+        errorMsg = "List of commodities is empty. Empty invoices are not allowed.";
+    }
+    else
+    {
+        if(db_.transaction())
         {
-            const qint64 id_invoice = queryInv.lastInsertId().toLongLong();
+            QSqlQuery queryInv(modelInvoice()->query());
+            const QString dateFormat("yyyy-MM-dd");
+            const QString queryInvStr(QString("INSERT INTO invoice(inv_number, selling_date, type_id, counterparty_id, issuance_date, payment_date, payment_id, currency_id, additional_text, discount) VALUES('%1', '%2', %3, %4, '%5', '%6', %7, %8, '%9', %10)")
+                                      .arg(invoice.invNumber).arg(invoice.sellingDate.toString(dateFormat)).arg(invoice.typeID)
+                                      .arg(invoice.counterpartyID).arg(invoice.issuanceDate.toString(dateFormat))
+                                      .arg(invoice.paymentDate.toString(dateFormat)).arg(invoice.paymentID).arg(invoice.currencyID)
+                                      .arg(invoice.additText).arg(invoice.discount));
 
-            QSqlQuery queryInvCommod(modelInvoiceWithCommodities_->query());
-            const QString queryInvCommodStr("INSERT INTO table_invoice_commodity(invoice_id, commodity_id, net, quantity, discount) VALUES (:invoice_id, :commodity_id, :net, :quantity, :discount)");
-            queryInvCommod.prepare(queryInvCommodStr);
-            for(int i = 0; i < commodities.size(); ++i)
+            if(queryInv.exec(queryInvStr))
             {
-                queryInvCommod.bindValue(":invoice_id", id_invoice);
-                queryInvCommod.bindValue(":commodity_id", commodities.at(i).id);
-                queryInvCommod.bindValue(":net", commodities.at(i).net);
-                queryInvCommod.bindValue(":quantity", commodities.at(i).quantity);
-                queryInvCommod.bindValue(":discount", commodities.at(i).discount);
-                if(!queryInvCommod.exec())
+                const qint64 id_invoice = queryInv.lastInsertId().toLongLong();
+
+                QSqlQuery queryInvCommod(modelInvoiceWithCommodities_->query());
+                const QString queryInvCommodStr("INSERT INTO table_invoice_commodity(invoice_id, commodity_id, net, quantity, discount) VALUES (:invoice_id, :commodity_id, :net, :quantity, :discount)");
+                queryInvCommod.prepare(queryInvCommodStr);
+                for(int i = 0; i < commodities.size(); ++i)
                 {
-                    qDebug() << "queryInvCommodStr: " << queryInvCommod.lastQuery();
-                    qDebug() << "lastError: " << queryInvCommod.lastError().text();
-                    qDebug() << "INSERT error in 'table_invoice_commodity' table.";
+                    queryInvCommod.bindValue(":invoice_id", id_invoice);
+                    queryInvCommod.bindValue(":commodity_id", commodities.at(i).id.toLongLong());
+                    queryInvCommod.bindValue(":net", commodities.at(i).net.toDouble());
+                    queryInvCommod.bindValue(":quantity", commodities.at(i).quantity.toInt());
+                    queryInvCommod.bindValue(":discount", commodities.at(i).discount.toInt());
+                    if(!queryInvCommod.exec())
+                    {
+                        qDebug() << "queryInvCommodStr: " << queryInvCommod.lastQuery();
+                        QMapIterator<QString, QVariant> boundIter(queryInvCommod.boundValues());
+                        while(boundIter.hasNext())
+                        {
+                            boundIter.next();
+                            qDebug() << boundIter.key() << ": " << boundIter.value();
+                        }
+
+                        qDebug() << "lastError: " << queryInvCommod.lastError().text();
+                        qDebug() << "INSERT error in 'table_invoice_commodity' table.\n";
+                    }
                 }
-            }
-            if(db_.commit())
-            {
-                modelInvoice_->select();
+                if(db_.commit())
+                {
+                    modelInvoice_->select();
+                }
+                else
+                {
+                    errorMsg  = "Couldn't commit all changes in the DB.";
+                }
             }
             else
             {
-                errorMsg  = "Couldn't commit all changes in the DB.";
+                qDebug() << "queryInvStr: " << queryInvStr;
+                errorMsg = "INSERT error in 'invoice' table.";
             }
         }
         else
         {
-            qDebug() << "queryInvStr: " << queryInvStr;
-            errorMsg = "INSERT error in 'invoice' table.";
+            errorMsg = "Can't create a DB transaction.";
         }
-    }
-    else
-    {
-        errorMsg = "Can't create a DB transaction.";
     }
 
     if(!errorMsg.isEmpty())

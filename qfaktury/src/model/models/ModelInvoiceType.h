@@ -3,7 +3,7 @@
 
 #include <QSqlTableModel>
 
-#include "models_data/InvoiceTypeData.h"
+#include "../models_data/InvoiceTypeData.h"
 
 /**
  * @brief

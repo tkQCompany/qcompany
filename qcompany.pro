@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
 
-SUBDIRS += \
-    tests/qfaktury/MainWindow \
-    qfaktury
+SUBDIRS += qfaktury \
+    qfaktury/src/testRoot \
+    qfaktury/src/model/testModel

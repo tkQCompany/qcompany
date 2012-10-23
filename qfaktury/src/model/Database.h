@@ -22,7 +22,7 @@
 #include "models/ModelUnit.h"
 #include "models/ModelVat.h"
 #include "DB_Constants.h"
-#include "CommodityVisualData.h"
+#include "../dialogs/CommodityVisualData.h"
 
 /**
  * @brief
@@ -43,6 +43,8 @@ public:
      *
      */
     ~Database();
+
+    const QString dbFileName() const;
 
     /**
      * @brief

@@ -178,11 +178,9 @@ void InvoiceDialog::discountConstChange()
     }
 }
 
-/** Slot discountChange
- *  Used to recalculate discount when spinBox arrows are pressed.
- */
+
 /**
- * @brief
+ * @brief Used to recalculate discount when spinBox arrows are pressed.
  *
  */
 void InvoiceDialog::discountChange()
@@ -192,9 +190,8 @@ void InvoiceDialog::discountChange()
     unsaved = true;
 }
 
-/** Slot addTow
- *  Shows window with a list of products
- */
+
+
 /**
  * @brief
  *
@@ -226,11 +223,11 @@ void InvoiceDialog::addCommodity()
     }
 }
 
-/** Slot delTowar
- *  Remove the product from the list
- */
+
+
+
 /**
- * @brief
+ * @brief Removes the commodity from the list
  *
  */
 void InvoiceDialog::delCommodity_()
@@ -241,11 +238,11 @@ void InvoiceDialog::delCommodity_()
     unsaved = true;
 }
 
-/** Slot editTowar
- *  Allows to edit selected product. Opens changeAmount window.
- */
+
+
+
 /**
- * @brief
+ * @brief Allows to edit selected product. Opens ChangeAmountDialog window.
  *
  */
 void InvoiceDialog::editCommodity_()
@@ -266,11 +263,11 @@ void InvoiceDialog::editCommodity_()
 }
 
 
-/** Slot
- *  Validate close and save if requested
- */
+
+
+
 /**
- * @brief
+ * @brief Asks the user if save the invoice
  *
  */
 void InvoiceDialog::canQuit()

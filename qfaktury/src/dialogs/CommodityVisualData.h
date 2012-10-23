@@ -110,6 +110,23 @@ struct CommodityVisualData
         return QString();
     }
 
+    bool operator ==(const CommodityVisualData &cvd) const
+    {
+        for(int i = CommodityVisualFields::ID; i <= CommodityVisualFields::DISCOUNT; ++i)
+        {
+            if(this->field(i) != cvd.field(i))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool operator !=(const CommodityVisualData &cvd) const
+    {
+        return !(*this == cvd);
+    }
+
     QString id; /**< TODO */
     QString name; /**< TODO */
     QString quantity; /**< TODO */
