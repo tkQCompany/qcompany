@@ -1,17 +1,17 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2012-10-20T12:53:39
+# Project created by QtCreator 2012-11-01T17:16:32
 #
 #-------------------------------------------------
 
-QT       += sql xml testlib
+QT       += testlib
 
-TARGET = tst_mainwindowtest
+TARGET = tst_correctiveinvoicedialogtest
 CONFIG   += console
 CONFIG   -= app_bundle
 
 TEMPLATE = app
 
 
-SOURCES += tst_mainwindowtest.cpp
+SOURCES += tst_correctiveinvoicedialogtest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
