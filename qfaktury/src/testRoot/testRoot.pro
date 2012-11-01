@@ -17,3 +17,6 @@ TEMPLATE = app
 SOURCES += tst_TestRootTest.cpp ../ConvertAmount.cpp
 HEADERS += ../SettingsGlobal.h
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
+
+QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage -O0
+LIBS += -lgcov

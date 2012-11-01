@@ -62,3 +62,6 @@ HEADERS += \
     ../models_data/CounterpartyData.h \
     ../models_data/CommodityTypeData.h \
     ../models_data/CommodityData.h
+
+QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage -O0
+LIBS += -lgcov

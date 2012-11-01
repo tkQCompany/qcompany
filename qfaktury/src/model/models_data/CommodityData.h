@@ -14,31 +14,15 @@ namespace CommodityFields
 enum Fields {ID, NAME, ABBREV, PKWIU, TYPE_ID, UNIT_ID, NET1, NET2, NET3, NET4, VAT, QUANTITY};
 }
 
-/* Class used in the Commodity list
- *
- */
-/**
- * @brief
- *
- */
+
 class CommodityData
 {
 public:
-/**
- * @brief
- *
- */
     CommodityData()
     {
         id = type_id = unit_id = net1 = net2 = net3 = net4 = quantity = 0;
     }
 
-    /**
-     * @brief
-     *
-     * @param i
-     * @return QVariant
-     */
     QVariant field(const int i) const
     {
         switch(i)
@@ -61,12 +45,7 @@ public:
         }
     }
 
-    /**
-     * @brief
-     *
-     * @param i
-     * @param v
-     */
+
     void setField(const int i, const QVariant &v)
     {
         switch(i)
@@ -112,12 +91,7 @@ public:
         }
     }
 
-    /**
-     * @brief
-     *
-     * @param i
-     * @return QString
-     */
+
     static QString header(const int i)
     {
         switch(i)
