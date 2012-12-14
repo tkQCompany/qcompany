@@ -6,8 +6,6 @@
 
 QT       += testlib
 
-QT       -= gui
-
 TARGET = tst_paymenttypedatatest
 CONFIG   += console
 CONFIG   -= app_bundle
@@ -17,3 +15,5 @@ TEMPLATE = app
 
 SOURCES += tst_paymenttypedatatest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
+
+include(../CommonTest.pri)

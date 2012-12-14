@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += sql xml testlib
+QT       += xml testlib
 
 TARGET = tst_databasetest
 CONFIG   += console
@@ -15,3 +15,5 @@ TEMPLATE = app
 
 SOURCES += tst_databasetest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
+
+include(../CommonTest.pri)

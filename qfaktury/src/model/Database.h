@@ -22,7 +22,7 @@
 #include "models/ModelUnit.h"
 #include "models/ModelVat.h"
 #include "DB_Constants.h"
-#include "../dialogs/CommodityVisualData.h"
+#include "../../ui/CommodityVisualData.h"
 
 /**
  * @brief

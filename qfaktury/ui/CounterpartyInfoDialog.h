@@ -7,9 +7,9 @@
 #include <QDebug>
 #include <QDataWidgetMapper>
 
-#include "../SettingsGlobal.h"
+#include "../src/SettingsGlobal.h"
 #include "ui_CounterpartyInfoDialog.h"
-#include "../model/Database.h"
+#include "../src/model/Database.h"
 
 /**
  * @brief

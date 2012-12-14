@@ -6,7 +6,7 @@
 #include <QDataWidgetMapper>
 
 #include "ui_CommodityListDialog.h"
-#include "../model/Database.h"
+#include "../src/model/Database.h"
 
 /**
  * @brief

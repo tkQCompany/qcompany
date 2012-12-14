@@ -9,8 +9,8 @@
 #include "../ui/CounterpartyTypeDialog.h"
 #include "../ui/EmailDialog.h"
 #include "../ui/PhoneDialog.h"
-#include "../model/Database.h"
-#include "../SettingsGlobal.h"
+#include "../src/model/Database.h"
+#include "../src/SettingsGlobal.h"
 
 /**
  * @brief

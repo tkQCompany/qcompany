@@ -9,8 +9,8 @@
 #define BILLDIALOG_H
 
 #include "InvoiceDialog.h"
-#include "../ConvertAmount.h"
-#include "../SettingsGlobal.h"
+#include "../src/ConvertAmount.h"
+#include "../src/SettingsGlobal.h"
 
 
 /**

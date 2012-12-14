@@ -3,7 +3,7 @@
 #include <QTextCodec>
 #include <QSplashScreen>
 
-#include "dialogs/MainWindow.h"
+#include "MainWindow.h"
 #include "SettingsGlobal.h"
 
 

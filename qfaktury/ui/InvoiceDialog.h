@@ -11,11 +11,11 @@
 #include "CounterpartyInfoDialog.h"
 #include "CommodityListDialog.h"
 #include "ChangeAmountDialog.h"
-#include "../ConvertAmount.h"
+#include "../src/ConvertAmount.h"
 #include "CustomPaymentDialog.h"
 #include "CounterpartyDialog.h"
 #include "ui_InvoiceDialog.h"
-#include "../model/Database.h"
+#include "../src/model/Database.h"
 
 
 /**

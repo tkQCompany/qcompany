@@ -15,3 +15,5 @@ TEMPLATE = app
 
 SOURCES += tst_commoditydialogtest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
+
+include(../CommonTest.pri)

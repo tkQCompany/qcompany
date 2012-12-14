@@ -6,8 +6,6 @@
 
 QT       += testlib
 
-QT       -= gui
-
 TARGET = tst_BillDialogTest
 CONFIG   += console
 CONFIG   -= app_bundle
@@ -16,4 +14,5 @@ TEMPLATE = app
 
 
 SOURCES += tst_BillDialogTest.cpp
-DEFINES += SRCDIR=\\\"$$PWD/\\\"
+
+include(../CommonTest.pri)

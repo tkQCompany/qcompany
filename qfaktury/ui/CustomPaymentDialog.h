@@ -10,8 +10,8 @@
 
 #include <QMessageBox>
 
-#include "../SettingsGlobal.h"
-#include "../CustomPaymData.h"
+#include "../src/SettingsGlobal.h"
+#include "../src/CustomPaymData.h"
 #include "ui_CustomPaymentDialog.h"
 
 /**

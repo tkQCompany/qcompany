@@ -8,13 +8,11 @@ DEPENDPATH += . \
               src \
               translations \
               ui \
-              src/dialogs \
               src/model \
               src/model/models \
               src/model/models_data
 INCLUDEPATH += . \
                src \
-               src/dialogs \
                src/model \
                src/model/models \
                src/model/models_data \
@@ -28,20 +26,20 @@ HEADERS += \
            ui/CountryDialog.h \
            ui/EmailDialog.h \
            ui/PhoneDialog.h \
-           src/dialogs/BillDialog.h \
-           src/dialogs/ChangeAmountDialog.h \
-           src/dialogs/CommodityDialog.h \
-           src/dialogs/CommodityListDialog.h \
-           src/dialogs/CommodityListGrossDialog.h \
-           src/dialogs/CorrectiveInvoiceDialog.h \
-           src/dialogs/CorrectiveInvoiceGrossDialog.h \
-           src/dialogs/CounterpartyDialog.h \
-           src/dialogs/CustomPaymentDialog.h \
-           src/dialogs/DuplicateDialog.h \
-           src/dialogs/InvoiceDialog.h \
-           src/dialogs/InvoiceGrossDialog.h \
-           src/dialogs/MainWindow.h \
-           src/dialogs/SettingsDialog.h \
+           ui/BillDialog.h \
+           ui/ChangeAmountDialog.h \
+           ui/CommodityDialog.h \
+           ui/CommodityListDialog.h \
+           ui/CommodityListGrossDialog.h \
+           ui/CorrectiveInvoiceDialog.h \
+           ui/CorrectiveInvoiceGrossDialog.h \
+           ui/CounterpartyDialog.h \
+           ui/CustomPaymentDialog.h \
+           ui/DuplicateDialog.h \
+           ui/InvoiceDialog.h \
+           ui/InvoiceGrossDialog.h \
+           ui/MainWindow.h \
+           ui/SettingsDialog.h \
            src/model/Database.h \
            src/model/DB_Constants.h \
            src/model/models/ModelCommodity.h \
@@ -62,53 +60,52 @@ HEADERS += \
            src/model/models_data/InvoiceData.h \
            src/model/models_data/PhoneData.h \
            src/model/models_data/UnitData.h \
-    src/CustomPaymData.h \
-    src/model/models/ModelCurrency.h \
-    src/model/models_data/CurrencyData.h \
-    src/model/models/ModelInvoiceWithCommodities.h \
-    src/model/models/ModelPaymentType.h \
-    src/model/models_data/PaymentTypeData.h \
-    src/model/models_data/InvoiceTypeData.h \
-    src/model/models/ModelInvoiceType.h \
-    src/dialogs/CounterpartyInfoDialog.h \
-    src/dialogs/CommodityVisualData.h \
-    src/model/models/ModelVat.h \
-    ui/ComboBoxCurrentTextRW.h
+           src/CustomPaymData.h \
+           src/model/models/ModelCurrency.h \
+           src/model/models_data/CurrencyData.h \
+           src/model/models/ModelInvoiceWithCommodities.h \
+           src/model/models/ModelPaymentType.h \
+           src/model/models_data/PaymentTypeData.h \
+           src/model/models_data/InvoiceTypeData.h \
+           src/model/models/ModelInvoiceType.h \
+           ui/CounterpartyInfoDialog.h \
+           ui/CommodityVisualData.h \
+           src/model/models/ModelVat.h \
+           ui/ComboBoxCurrentTextRW.h
 
-FORMS += \
-         ui/CounterpartyTypeDialog.ui \
+FORMS += ui/CounterpartyTypeDialog.ui \
          ui/CountryDialog.ui \
          ui/CustomPaymentDialog.ui \
          ui/EmailDialog.ui \
          ui/MainWindow.ui \
          ui/PhoneDialog.ui \
-    ui/CounterpartyInfoDialog.ui \
-    ui/InvoiceDialog.ui \
-    ui/ChangeAmountDialog.ui \
-    ui/CommodityDialog.ui \
-    ui/CommodityListDialog.ui \
-    ui/CounterpartyDialog.ui \
-    ui/SettingsDialog.ui
+         ui/CounterpartyInfoDialog.ui \
+         ui/InvoiceDialog.ui \
+         ui/ChangeAmountDialog.ui \
+         ui/CommodityDialog.ui \
+         ui/CommodityListDialog.ui \
+         ui/CounterpartyDialog.ui \
+         ui/SettingsDialog.ui
 SOURCES += src/ConvertAmount.cpp \
            src/main.cpp \
            ui/CounterpartyTypeDialog.cpp \
            ui/CountryDialog.cpp \
            ui/EmailDialog.cpp \
            ui/PhoneDialog.cpp \
-           src/dialogs/BillDialog.cpp \
-           src/dialogs/ChangeAmountDialog.cpp \
-           src/dialogs/CommodityDialog.cpp \
-           src/dialogs/CommodityListDialog.cpp \
-           src/dialogs/CommodityListGrossDialog.cpp \
-           src/dialogs/CorrectiveInvoiceDialog.cpp \
-           src/dialogs/CorrectiveInvoiceGrossDialog.cpp \
-           src/dialogs/CounterpartyDialog.cpp \
-           src/dialogs/CustomPaymentDialog.cpp \
-           src/dialogs/DuplicateDialog.cpp \
-           src/dialogs/InvoiceDialog.cpp \
-           src/dialogs/InvoiceGrossDialog.cpp \
-           src/dialogs/MainWindow.cpp \
-           src/dialogs/SettingsDialog.cpp \
+           ui/BillDialog.cpp \
+           ui/ChangeAmountDialog.cpp \
+           ui/CommodityDialog.cpp \
+           ui/CommodityListDialog.cpp \
+           ui/CommodityListGrossDialog.cpp \
+           ui/CorrectiveInvoiceDialog.cpp \
+           ui/CorrectiveInvoiceGrossDialog.cpp \
+           ui/CounterpartyDialog.cpp \
+           ui/CustomPaymentDialog.cpp \
+           ui/DuplicateDialog.cpp \
+           ui/InvoiceDialog.cpp \
+           ui/InvoiceGrossDialog.cpp \
+           ui/MainWindow.cpp \
+           ui/SettingsDialog.cpp \
            src/model/Database.cpp \
            src/model/models/ModelCommodity.cpp \
            src/model/models/ModelCommodityType.cpp \
@@ -119,14 +116,14 @@ SOURCES += src/ConvertAmount.cpp \
            src/model/models/ModelInvoice.cpp \
            src/model/models/ModelPhone.cpp \
            src/model/models/ModelUnit.cpp \
-    src/CustomPaymData.cpp \
-    src/model/models/ModelCurrency.cpp \
-    src/model/models/ModelInvoiceWithCommodities.cpp \
-    src/model/models/ModelPaymentType.cpp \
-    src/model/models/ModelInvoiceType.cpp \
-    src/dialogs/CounterpartyInfoDialog.cpp \
-    src/model/models/ModelVat.cpp \
-    ui/ComboBoxCurrentTextRW.cpp
+           src/CustomPaymData.cpp \
+           src/model/models/ModelCurrency.cpp \
+           src/model/models/ModelInvoiceWithCommodities.cpp \
+           src/model/models/ModelPaymentType.cpp \
+           src/model/models/ModelInvoiceType.cpp \
+           ui/CounterpartyInfoDialog.cpp \
+           src/model/models/ModelVat.cpp \
+           ui/ComboBoxCurrentTextRW.cpp
 RESOURCES += qfaktury.qrc
 TRANSLATIONS += translations/qfaktury_de.ts translations/qfaktury_en.ts
 
@@ -136,6 +133,8 @@ QT += gui xml sql
 VERSION = 0.7.0
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+
+UI_DIR = ./ui
 
 OTHER_FILES += \
     doc/Doxyfile
