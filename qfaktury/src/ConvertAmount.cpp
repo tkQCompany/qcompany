@@ -29,10 +29,12 @@ QString ConvertAmount::convertPL(QString input, const QString &currency)
            << QObject::trUtf8("trzynaście") << QObject::trUtf8("czternaście")
            << QObject::trUtf8("piętnaście") << QObject::trUtf8("szesnaście")
            << QObject::trUtf8("siedemnaście")
-           << QObject::trUtf8("osiemnaście") << QObject::trUtf8(
-                  "dziewiętnaście") << QObject::trUtf8("dziesięć"));
+           << QObject::trUtf8("osiemnaście") << QObject::trUtf8("dziewiętnaście")
+                             << QObject::trUtf8("dziesięć"));
 
-    const QStringList tens(QStringList() << QObject::trUtf8("dwadzieścia") << QObject::trUtf8("trzydzieści")
+    const QStringList tens(QStringList() << QObject::trUtf8("dziesięć")
+                           << QObject::trUtf8("dwadzieścia")
+                           << QObject::trUtf8("trzydzieści")
           << QObject::trUtf8("czterdzieści")
           << QObject::trUtf8("pięćdziesiąt")
           << QObject::trUtf8("sześdziesiąt") << QObject::trUtf8(
@@ -96,7 +98,7 @@ QString ConvertAmount::convertPL(QString input, const QString &currency)
     const int mid100 = hundreds.mid(1, 1).toInt();
     if(mid100 != 0)
     {
-        out += space + tens[mid100 - 2];
+        out += space + tens[mid100 - 2]; //było mid100 - 2
     }
 
     const int right100 = hundreds.right(1).toInt();
@@ -124,5 +126,5 @@ QString ConvertAmount::convertPL(QString input, const QString &currency)
     }
 
     const QString fraction = input.remove(0, input.indexOf(sett().getDecimalPointStr()) + 1);
-    return out + space + fraction + QObject::trUtf8("/100 ") + currency;
+    return (out + space + fraction + QObject::trUtf8("/100 ") + currency).trimmed();
 }

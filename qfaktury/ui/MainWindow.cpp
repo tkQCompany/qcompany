@@ -33,13 +33,6 @@ void MainWindow::init()
     if (firstRun())
     {
         sett().resetSettings();
-
-        if (QMessageBox::warning(this, qApp->applicationName(),
-                                 trUtf8("Pierwsze uruchomienie programu. Czy chcesz skonfigurować firmę?"),
-                                 QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
-        {
-            editCompanyInfo();
-        }
     }
     else
     {

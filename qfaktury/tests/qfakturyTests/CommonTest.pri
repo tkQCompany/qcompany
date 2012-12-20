@@ -1,15 +1,27 @@
-QT += sql
+QT += sql xml
 
-SOURCES += ../../../ui/CounterpartyDialog.cpp \
-    ../../../ui/CustomPaymentDialog.cpp \
-    ../../../ui/CommodityListDialog.cpp \
+SOURCES +=     ../../../ui/BillDialog.cpp \
     ../../../ui/ChangeAmountDialog.cpp \
-    ../../../ui/PhoneDialog.cpp \
-    ../../../ui/EmailDialog.cpp \
-    ../../../ui/CountryDialog.cpp \
-    ../../../ui/CounterpartyTypeDialog.cpp \
+    ../../../ui/ComboBoxCurrentTextRW.cpp \
+    ../../../ui/CommodityDialog.cpp \
+    ../../../ui/CommodityListDialog.cpp \
+    ../../../ui/CommodityListGrossDialog.cpp \
+    ../../../ui/CorrectiveInvoiceDialog.cpp \
+    ../../../ui/CorrectiveInvoiceGrossDialog.cpp \
+    ../../../ui/CounterpartyDialog.cpp \
     ../../../ui/CounterpartyInfoDialog.cpp \
+    ../../../ui/CounterpartyTypeDialog.cpp \
+    ../../../ui/CountryDialog.cpp \
+    ../../../ui/CustomPaymentDialog.cpp \
+    ../../../ui/DuplicateDialog.cpp \
+    ../../../ui/EmailDialog.cpp \
+    ../../../ui/InvoiceDialog.cpp \
+    ../../../ui/InvoiceGrossDialog.cpp \
+    ../../../ui/MainWindow.cpp \
+    ../../../ui/PhoneDialog.cpp \
+    ../../../ui/SettingsDialog.cpp \
     ../../../src/ConvertAmount.cpp \
+    ../../../src/CustomPaymData.cpp \
     ../../../src/model/Database.cpp \
     ../../../src/model/models/ModelCommodity.cpp \
     ../../../src/model/models/ModelCommodityType.cpp \
@@ -24,11 +36,31 @@ SOURCES += ../../../ui/CounterpartyDialog.cpp \
     ../../../src/model/models/ModelCurrency.cpp \
     ../../../src/model/models/ModelPaymentType.cpp \
     ../../../src/model/models/ModelInvoiceType.cpp \
-    ../../../src/model/models/ModelInvoiceWithCommodities.cpp \
-    ../../../ui/BillDialog.cpp \
-    ../../../ui/InvoiceDialog.cpp
+    ../../../src/model/models/ModelInvoiceWithCommodities.cpp
 
-HEADERS += ../../../src/model/Database.h \
+HEADERS += ../../../ui/BillDialog.h \
+    ../../../ui/ChangeAmountDialog.h \
+    ../../../ui/ComboBoxCurrentTextRW.h \
+    ../../../ui/CommodityDialog.h \
+    ../../../ui/CommodityListDialog.h \
+    ../../../ui/CommodityListGrossDialog.h \
+    ../../../ui/CorrectiveInvoiceDialog.h \
+    ../../../ui/CorrectiveInvoiceGrossDialog.h \
+    ../../../ui/CounterpartyDialog.h \
+    ../../../ui/CounterpartyInfoDialog.h \
+    ../../../ui/CounterpartyTypeDialog.h \
+    ../../../ui/CountryDialog.h \
+    ../../../ui/CustomPaymentDialog.h \
+    ../../../ui/DuplicateDialog.h \
+    ../../../ui/EmailDialog.h \
+    ../../../ui/InvoiceDialog.h \
+    ../../../ui/InvoiceGrossDialog.h \
+    ../../../ui/MainWindow.h \
+    ../../../ui/PhoneDialog.h \
+    ../../../ui/SettingsDialog.h \
+    ../../../src/ConvertAmount.h \
+    ../../../src/CustomPaymData.h \
+    ../../../src/model/Database.h \
     ../../../src/model/DB_Constants.h \
     ../../../src/model/models_data/UnitData.h \
     ../../../src/model/models_data/PhoneData.h \
@@ -57,19 +89,9 @@ HEADERS += ../../../src/model/Database.h \
     ../../../src/model/models/ModelCommodityType.h \
     ../../../src/model/models/ModelCommodity.h \
     ../../../src/ConvertAmount.h \
-    ../../../src/SettingsGlobal.h \
-    ../../../ui/BillDialog.h \
-    ../../../ui/InvoiceDialog.h \
-    ../../../ui/CounterpartyDialog.h \
-    ../../../ui/CustomPaymentDialog.h \
-    ../../../ui/CommodityListDialog.h \
-    ../../../ui/ChangeAmountDialog.h \
-    ../../../ui/PhoneDialog.h \
-    ../../../ui/EmailDialog.h \
-    ../../../ui/CountryDialog.h \
-    ../../../ui/CounterpartyTypeDialog.h \
-    ../../../ui/CounterpartyInfoDialog.h
+    ../../../src/SettingsGlobal.h
 
 INCLUDEPATH += ../../../ui \
+        ../../../src \
 	../../../src/model \
 	../../../src/model/models
