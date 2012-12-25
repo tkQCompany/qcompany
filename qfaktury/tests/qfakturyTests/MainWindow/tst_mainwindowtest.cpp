@@ -35,6 +35,7 @@ void MainWindowTest::initTestCase()
     QCoreApplication::setApplicationName("QFaktury");
     QCoreApplication::setOrganizationName("www.e-linux.pl");
     QCoreApplication::setOrganizationDomain("www.e-linux.pl");
+    QCoreApplication::setApplicationVersion(APP_VERSION);
 }
 
 void MainWindowTest::cleanupTestCase()

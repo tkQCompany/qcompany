@@ -15,4 +15,22 @@ TEMPLATE = app
 
 SOURCES += tst_BillDialogTest.cpp
 
-include(../CommonTest.pri)
+DEPENDPATH += ../../../ \
+              ../../../src \
+              ../../../translations \
+              ../../../ui \
+              ../../../src/model \
+              ../../../src/model/models \
+              ../../../src/model/models_data
+
+INCLUDEPATH += ../../../ \
+               ../../../src \
+               ../../../src/model \
+               ../../../src/model/models \
+               ../../../src/model/models_data \
+               ../../../ui
+
+include(../../../qfaktury_common.pri)
+
+OBJECTS_DIR = ../obj
+MOC_DIR = ../obj
