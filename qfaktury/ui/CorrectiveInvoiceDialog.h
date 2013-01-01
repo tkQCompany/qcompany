@@ -31,7 +31,7 @@ public:
      * @brief
      *
      */
-    void init(); // called outside
+    void init_(); // called outside
     /**
      * @brief
      *

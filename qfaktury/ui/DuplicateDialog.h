@@ -33,7 +33,7 @@ public slots:
      * @brief
      *
      */
-    void init();
+    void init_();
     /**
      * @brief
      *

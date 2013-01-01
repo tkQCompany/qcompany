@@ -13,7 +13,7 @@ DuplicateDialog::DuplicateDialog(QWidget *parent, Database *db):
 {
 }
 
-void DuplicateDialog::init() {
+void DuplicateDialog::init_() {
     QLabel *labelDupDate = new QLabel(this);
     labelDupDate->setText(trUtf8("Data duplikatu:"));
     labelDupDate->setAlignment(Qt::AlignRight);

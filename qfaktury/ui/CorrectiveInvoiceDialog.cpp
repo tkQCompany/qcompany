@@ -12,7 +12,7 @@ CorrectiveInvoiceDialog::~CorrectiveInvoiceDialog()
 
 /* Init
  */
-void CorrectiveInvoiceDialog::init (/*const bool mode*/)
+void CorrectiveInvoiceDialog::init_ (/*const bool mode*/)
 {
     labelReason1 = new QLabel(this);
     labelReason1->setText(trUtf8("Przyczyna korekty:"));

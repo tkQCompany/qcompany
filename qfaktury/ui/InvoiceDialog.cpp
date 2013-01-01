@@ -13,7 +13,7 @@
 InvoiceDialog::InvoiceDialog(QWidget *parent, Database *db, const QModelIndex &id_edit) : QDialog(parent), db_(db)
 {
     setupUi(this);
-    init();
+    init_();
 
     if(id_edit.isValid())
     {
@@ -50,7 +50,7 @@ InvoiceDialog::~InvoiceDialog()
  * @brief
  *
  */
-void InvoiceDialog::init()
+void InvoiceDialog::init_()
 {
     // set all the dates to todays date -> could be logical date :)
     dateEditDateOfSell->setDate(QDate::currentDate());

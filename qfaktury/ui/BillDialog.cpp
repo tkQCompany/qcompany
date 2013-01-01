@@ -11,10 +11,12 @@
 BillDialog::BillDialog(QWidget *parent, Database *db):
     InvoiceDialog(parent, db)
 {
+    init_();
 }
 
-void BillDialog::init()
+void BillDialog::init_()
 {
     invType = InvoiceTypeData::BILL;
     setWindowTitle(InvoiceTypeData::InvoiceTypeToString(invType));
+    comboBoxInvoiceType->setCurrentIndex(invType - 1);
 }

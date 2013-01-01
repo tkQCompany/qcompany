@@ -28,11 +28,13 @@ public:
  * @param db
  */
     BillDialog(QWidget*, Database *db);
+
+private:
     /**
      * @brief
      *
      */
-    void init();
+    void init_();
 };
 
 #endif

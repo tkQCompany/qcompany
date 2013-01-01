@@ -44,7 +44,7 @@ public:
      * @brief
      *
      */
-    virtual void init();
+    virtual void init_();
     /**
      * @brief
      *

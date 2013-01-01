@@ -28,7 +28,24 @@ Database::Database(QObject *parent): QObject(parent)
 
 Database::~Database()
 {
+    const QString connName(db_.connectionName());
     db_.close();
+    delete modelCommodity_;
+    delete modelCommodityType_;
+    delete modelCounterparty_;
+    delete modelCounterpartyType_;
+    delete modelCountry_;
+    delete modelCurrency_;
+    delete modelEmail_;
+    delete modelInvoice_;
+    delete modelInvoiceType_;
+    delete modelInvoiceWithCommodities_;
+    delete modelPaymentType_;
+    delete modelPhone_;
+    delete modelUnit_;
+    delete modelVat_;
+    db_ = QSqlDatabase();
+    db_.removeDatabase(connName);
 }
 
 
