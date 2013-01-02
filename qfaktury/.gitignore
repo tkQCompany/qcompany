@@ -1,0 +1,9 @@
+obj
+moc
+*.db3
+Makefile
+moc_files*
+qfaktury
+qrc_qfaktury.cpp
+ui/ui_*.h
+
