@@ -426,8 +426,8 @@ void Database::initModels()
     modelCommodity_ = new ModelCommodity(this->parent());
     modelCommodity_->setEditStrategy(QSqlTableModel::OnManualSubmit);
     modelCommodity_->setSort(CommodityFields::ID, Qt::AscendingOrder);
-    modelCommodity_->setRelation(CommodityFields::TYPE_ID, QSqlRelation("commodity_type", "id_commodity_type", "type"));
-    modelCommodity_->setRelation(CommodityFields::UNIT_ID, QSqlRelation("unit", "id_unit", "name"));
+    modelCommodity_->setRelation(CommodityFields::TYPE_ID, QSqlRelation("commodity_type", "id_commodity_type", "commodity_type"));
+    modelCommodity_->setRelation(CommodityFields::UNIT_ID, QSqlRelation("unit", "id_unit", "unit"));
     modelCommodity_->select();
 
     modelCounterparty_ = new ModelCounterparty(this->parent());
