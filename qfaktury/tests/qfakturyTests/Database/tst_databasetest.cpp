@@ -16,6 +16,7 @@ private Q_SLOTS:
     void cleanupTestCase();
 
     void testCaseCheckDBFileName();
+    void testCaseCheckDBStructure();
 
     void testCaseCheckModelCommodity();
     void testCaseCheckModelCommodityType();
@@ -33,11 +34,14 @@ private Q_SLOTS:
     void testCaseCheckModelVat();
 
     void testCaseCheckCommodities();
+    void testCaseCheckCommodities_data();
     void testCaseCheckInvoiceWithCommoditiesInsertTransact();
+    void testCaseCheckInvoiceWithCommoditiesInsertTransact_data();
     void testCaseCheckInvoiceWithCommoditiesDeleteTransact();
+    void testCaseCheckInvoiceWithCommoditiesDeleteTransact_data();
 
-//    void testCase1();
-//    void testCase1_data();
+private:
+    QString dbFilename_;
 };
 
 DatabaseTest::DatabaseTest()
@@ -50,6 +54,13 @@ void DatabaseTest::initTestCase()
     QCoreApplication::setOrganizationName("www.e-linux.pl");
     QCoreApplication::setOrganizationDomain("www.e-linux.pl");
     QCoreApplication::setApplicationVersion(APP_VERSION);
+
+    dbFilename_ = QString("%1-%2.db3").arg(QCoreApplication::applicationName()).arg(APP_VERSION);
+    if(QFile::exists(dbFilename_))
+    {
+        QDir dir;
+        dir.remove(dbFilename_);
+    }
 }
 
 void DatabaseTest::cleanupTestCase()
@@ -61,8 +72,13 @@ void DatabaseTest::cleanupTestCase()
 void DatabaseTest::testCaseCheckDBFileName()
 {
     Database db;
-    const QString filename(QString("%1-%2.db3").arg(QCoreApplication::applicationName()).arg(APP_VERSION));
-    QCOMPARE(db.dbFileName(), filename);
+    QCOMPARE(db.dbFileName(), dbFilename_);
+}
+
+
+void DatabaseTest::testCaseCheckDBStructure()
+{
+    Database db;
 }
 
 
@@ -77,6 +93,8 @@ void DatabaseTest::testCaseCheckModelCommodityType()
 {
     Database db;
     QVERIFY(db.modelCommodityType() != NULL);
+
+
 }
 
 
@@ -171,13 +189,45 @@ void DatabaseTest::testCaseCheckCommodities()
 }
 
 
+void DatabaseTest::testCaseCheckCommodities_data()
+{
+
+}
+
+
 void DatabaseTest::testCaseCheckInvoiceWithCommoditiesInsertTransact()
 {
     Database db;
     InvoiceData invData;
     QList<CommodityVisualData> commodities;
 
+    for(size_t i = 0; i < 1000; ++i)
+    {
+
+    }
+
     //db.invoiceWithCommoditiesInsertTransact(invData, commodities);
+}
+
+
+
+void DatabaseTest::testCaseCheckInvoiceWithCommoditiesInsertTransact_data()
+{
+    QTest::addColumn<QString>("invoice_number");
+    QTest::addColumn<QDate>("selling_date");
+    QTest::addColumn<qint64>("type_id");
+    QTest::addColumn<qint64>("counterparty_id");
+    QTest::addColumn<QDate>("issuance_date");
+    QTest::addColumn<QDate>("payment_date");
+    QTest::addColumn<qint64>("payment_id");
+    QTest::addColumn<qint64>("currency_id");
+    QTest::addColumn<QString>("additional_text");
+    QTest::addColumn<short int>("discount");
+
+    for(size_t i = 0; i < 1000; ++i)
+    {
+        //QTest::newRow(QString("%1").arg(i+1).toAscii()) << QString("%1").arg(i+1) << QDate::currentDate() <<;
+    }
 }
 
 
@@ -185,6 +235,13 @@ void DatabaseTest::testCaseCheckInvoiceWithCommoditiesDeleteTransact()
 {
     Database db;
 }
+
+
+void DatabaseTest::testCaseCheckInvoiceWithCommoditiesDeleteTransact_data()
+{
+
+}
+
 
 //void DatabaseTest::testCase1()
 //{

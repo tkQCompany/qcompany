@@ -357,7 +357,7 @@ void CorrectiveInvoiceDialog::calculateSum(){
         {
             //origGrossTotal += iter.value().gross;
             //origDiscTotal += iter.value().discount;
-            origNettTotal += iter.value().net1;
+            //origNettTotal += iter.value().net1;
         }
     }
 
