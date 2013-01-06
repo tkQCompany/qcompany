@@ -7,7 +7,7 @@ namespace EmailFields
      * @brief
      *
      */
-    enum Fields {ID_EMAIL, ID_COUNTERPARTY, EMAIL};
+    enum Fields {ID_EMAIL, COUNTERPARTY_ID, EMAIL};
 }
 
 #endif // EMAILDATA_H

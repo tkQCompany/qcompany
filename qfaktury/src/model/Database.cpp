@@ -407,7 +407,7 @@ void Database::initModels()
     modelEmail_ = new ModelEmail(this->parent(), "");
     modelEmail_->setEditStrategy(QSqlTableModel::OnManualSubmit);
     modelEmail_->setSort(EmailFields::ID_EMAIL, Qt::AscendingOrder);
-    modelEmail_->setRelation(EmailFields::ID_COUNTERPARTY, QSqlRelation("counterparty", "id_counterparty", "name"));
+    modelEmail_->setRelation(EmailFields::COUNTERPARTY_ID, QSqlRelation("counterparty", "id_counterparty", "name"));
     modelEmail_->select();
 
     modelPhone_ = new ModelPhone(this->parent());
