@@ -17,7 +17,7 @@ namespace CounterpartyFields
      * @brief
      *
      */
-    enum Fields {ID, NAME, TYPE_ID, COUNTRY_ID, LOCATION, POSTAL_CODE, ADDRESS, TAX_ID, ACCOUNT_NAME, WWW, PRIMARY_EMAIL, PRIMARY_PHONE};
+    enum Fields {ID, NAME, TYPE_ID, COUNTRY_ID, LOCATION, POSTAL_CODE, STREET, TAX_IDENT, ACCOUNT_NAME, WWW, PRIMARY_EMAIL, PRIMARY_PHONE};
 }
 
 
@@ -44,8 +44,8 @@ public:
         case CounterpartyFields::COUNTRY_ID: return country_id;
         case CounterpartyFields::LOCATION: return location;
         case CounterpartyFields::POSTAL_CODE: return postalCode;
-        case CounterpartyFields::ADDRESS: return address;
-        case CounterpartyFields::TAX_ID: return taxID;
+        case CounterpartyFields::STREET: return address;
+        case CounterpartyFields::TAX_IDENT: return taxID;
         case CounterpartyFields::ACCOUNT_NAME: return accountName;
         case CounterpartyFields::WWW: return www;
         case CounterpartyFields::PRIMARY_EMAIL: return primary_email;

@@ -240,7 +240,7 @@ void MainWindow::saveColumnWidth()
     sett().setValue("custCol0", tableViewCounterparties->columnWidth(CPF::NAME));
     sett().setValue("custCol1", tableViewCounterparties->columnWidth(CPF::TYPE_ID));
     sett().setValue("custCol2", tableViewCounterparties->columnWidth(CPF::LOCATION));
-    sett().setValue("custCol3", tableViewCounterparties->columnWidth(CPF::ADDRESS));
+    sett().setValue("custCol3", tableViewCounterparties->columnWidth(CPF::STREET));
     //sett().setValue("custCol4", tableViewCounterparties->columnWidth(CPF::PHONE_ID));
 }
 

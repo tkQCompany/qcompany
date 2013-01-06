@@ -60,8 +60,8 @@ void CounterpartyDialog::init()
     mapper_.addMapping(comboBoxCountry, CounterpartyFields::COUNTRY_ID);
     mapper_.addMapping(lineEditLocation, CounterpartyFields::LOCATION);
     mapper_.addMapping(lineEditPostalCode, CounterpartyFields::POSTAL_CODE);
-    mapper_.addMapping(lineEditAddress, CounterpartyFields::ADDRESS);
-    mapper_.addMapping(lineEditTaxID, CounterpartyFields::TAX_ID);
+    mapper_.addMapping(lineEditAddress, CounterpartyFields::STREET);
+    mapper_.addMapping(lineEditTaxID, CounterpartyFields::TAX_IDENT);
     mapper_.addMapping(lineEditAccountName, CounterpartyFields::ACCOUNT_NAME);
     mapper_.addMapping(lineEditWWW, CounterpartyFields::WWW);
     mapper_.addMapping(lineEditPrimaryEmail, CounterpartyFields::PRIMARY_EMAIL);

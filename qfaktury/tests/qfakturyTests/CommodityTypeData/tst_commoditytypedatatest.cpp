@@ -44,18 +44,22 @@ void CommodityTypeDataTest::cleanupTestCase()
 void CommodityTypeDataTest::testCaseCheckDBFields()
 {
     QFETCH(QString, field_name);
+    QFETCH(int, field_num);
+
     Database db;
     QSqlQuery query(db.modelCommodityType()->query());
+
     QVERIFY2(query.exec(QString("SELECT %1 FROM 'commodity_type'").arg(field_name)), "Missing DB field in the table 'commodity_type'");
-    QCOMPARE(db.modelCommodityType()->fieldIndex("id_commodity_type"), (int)CommodityTypeFields::ID_COMMODITY_TYPE);
-    QCOMPARE(db.modelCommodityType()->fieldIndex("type"), (int)CommodityTypeFields::TYPE);
+    QCOMPARE(db.modelCommodityType()->fieldIndex(field_name), field_num);
 }
 
 void CommodityTypeDataTest::testCaseCheckDBFields_data()
 {
     QTest::addColumn<QString>("field_name");
-    QTest::newRow("id_commodity_type") << QString("id_commodity_type");
-    QTest::newRow("type") << QString("type");
+    QTest::addColumn<int>("field_num");
+
+    QTest::newRow("id_commodity_type")  << QString("id_commodity_type") << (int)CommodityTypeFields::ID_COMMODITY_TYPE;
+    QTest::newRow("type")               << QString("type")              << (int)CommodityTypeFields::TYPE;
 }
 
 

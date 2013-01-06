@@ -31,9 +31,9 @@ QVariant ModelCounterparty::headerData(int section, Qt::Orientation orientation,
         return trUtf8("Miejscowość");
     case CounterpartyFields::POSTAL_CODE:
         return trUtf8("Kod pocztowy");
-    case CounterpartyFields::ADDRESS:
+    case CounterpartyFields::STREET:
         return trUtf8("Ulica");
-    case CounterpartyFields::TAX_ID:
+    case CounterpartyFields::TAX_IDENT:
         return trUtf8("NIP");
     case CounterpartyFields::ACCOUNT_NAME:
         return trUtf8("Numer konta");

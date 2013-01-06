@@ -48,7 +48,7 @@ void CommodityDataTest::testCaseCheckDBFields()
     Database db;
     QSqlQuery query(db.modelCommodity()->query());
 
-    QVERIFY2(query.exec(QString("SELECT %1 FROM commodity").arg(field_name)), "'commodity' table is missing a field");
+    QVERIFY2(query.exec(QString("SELECT %1 FROM 'commodity'").arg(field_name)), "'commodity' table is missing a field");
     QCOMPARE(db.modelCommodity()->fieldIndex(field_name), field_num);
 }
 

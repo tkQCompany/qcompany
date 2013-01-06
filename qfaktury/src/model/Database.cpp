@@ -165,7 +165,7 @@ bool Database::createTablesIfNotExist()
                            "`location` VARCHAR(45) NOT NULL ,"
                            "`postal_code` VARCHAR(10) NOT NULL ,"
                            "`street` VARCHAR(45) NOT NULL ,"
-                           "`tax_id` VARCHAR(25) NOT NULL ,"
+                           "`tax_ident` VARCHAR(25) NOT NULL ,"
                            "`account_name` VARCHAR(25) NOT NULL ,"
                            "`www` VARCHAR(45) NOT NULL ,"
                            "`primary_email` VARCHAR(45) NOT NULL,"
@@ -433,8 +433,8 @@ void Database::initModels()
     modelCounterparty_ = new ModelCounterparty(this->parent());
     modelCounterparty_->setEditStrategy(QSqlTableModel::OnManualSubmit);
     modelCounterparty_->setSort(CounterpartyFields::ID, Qt::AscendingOrder);
-    modelCounterparty_->setRelation(CounterpartyFields::COUNTRY_ID, QSqlRelation("country", "id_country", "name"));
-    modelCounterparty_->setRelation(CounterpartyFields::TYPE_ID, QSqlRelation("counterparty_type", "id_counterparty_type", "type"));
+    modelCounterparty_->setRelation(CounterpartyFields::COUNTRY_ID, QSqlRelation("country", "id_country", "country"));
+    modelCounterparty_->setRelation(CounterpartyFields::TYPE_ID, QSqlRelation("counterparty_type", "id_counterparty_type", "counterparty_type"));
     modelCounterparty_->setFilter(QString("type_id != %1").arg(CounterpartyTypeData::MY_COMPANY));
     modelCounterparty_->select();
 
@@ -525,7 +525,7 @@ bool Database::insertDataIfNotInserted()
     {
         const QString selectCountry(QString("(SELECT `id_country` FROM `country` WHERE `name` = \"%1\")").arg(DB_Constants::My_Country));
         query.exec(QString("INSERT INTO `counterparty`(`name`, `type_id`, `country_id`, `location`, `postal_code`, "
-                   "`street`, `tax_id`, `account_name`, `www`, `primary_email`, `primary_phone`) "
+                   "`street`, `tax_ident`, `account_name`, `www`, `primary_email`, `primary_phone`) "
                    "VALUES(\"%1\", %2, %3, \"%4\", \"%5\", \"%6\", \"%7\", \"%8\", \"%9\", \"%10\", \"%11\")")
                    .arg(trUtf8("Brak nazwy firmy")).arg(CounterpartyTypeData::MY_COMPANY).arg(selectCountry)
                    .arg(trUtf8("Brak nazwy miejscowości")).arg(trUtf8("Brak kodu pocztowego")).arg(trUtf8("Brak nazwy ulicy"))

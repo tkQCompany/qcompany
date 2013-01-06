@@ -30,9 +30,9 @@ void CounterpartyInfoDialog::init()
     const QByteArray labelProp("text");
     widgetMapper_->addMapping(labelTypeVal, CounterpartyFields::TYPE_ID, labelProp);
     widgetMapper_->addMapping(labelNameE, CounterpartyFields::NAME, labelProp);
-    widgetMapper_->addMapping(labelAddressE, CounterpartyFields::ADDRESS, labelProp);
+    widgetMapper_->addMapping(labelAddressE, CounterpartyFields::STREET, labelProp);
     widgetMapper_->addMapping(labelCityE, CounterpartyFields::LOCATION, labelProp);
-    widgetMapper_->addMapping(labelTicE, CounterpartyFields::TAX_ID, labelProp);
+    widgetMapper_->addMapping(labelTicE, CounterpartyFields::TAX_IDENT, labelProp);
     widgetMapper_->addMapping(labelAccountE, CounterpartyFields::ACCOUNT_NAME, labelProp);
     widgetMapper_->addMapping(pushButtonWWW, CounterpartyFields::WWW, labelProp);
 
