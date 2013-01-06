@@ -1,6 +1,8 @@
 #include <QtCore/QString>
 #include <QtTest/QtTest>
 
+#include "Database.h"
+
 class CounterpartyTypeDataTest : public QObject
 {
     Q_OBJECT
@@ -11,8 +13,8 @@ public:
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-    void testCase1();
-    void testCase1_data();
+    void testCaseCheckDBFields();
+    void testCaseCheckDBFields_data();
 };
 
 CounterpartyTypeDataTest::CounterpartyTypeDataTest()
@@ -21,22 +23,43 @@ CounterpartyTypeDataTest::CounterpartyTypeDataTest()
 
 void CounterpartyTypeDataTest::initTestCase()
 {
+    QCoreApplication::setApplicationName("QFaktury");
+    QCoreApplication::setOrganizationName("www.e-linux.pl");
+    QCoreApplication::setOrganizationDomain("www.e-linux.pl");
+    QCoreApplication::setApplicationVersion(APP_VERSION);
+
+    const QString dbFilename(QString("%1-%2.db3").arg(QCoreApplication::applicationName()).arg(APP_VERSION));
+    if(QFile::exists(dbFilename))
+    {
+        QDir dir;
+        dir.remove(dbFilename);
+    }
 }
 
 void CounterpartyTypeDataTest::cleanupTestCase()
 {
 }
 
-void CounterpartyTypeDataTest::testCase1()
+void CounterpartyTypeDataTest::testCaseCheckDBFields()
 {
-    QFETCH(QString, data);
-    QVERIFY2(true, "Failure");
+    QFETCH(QString, field_name);
+    QFETCH(int, field_num);
+
+    Database db;
+    QSqlQuery query(db.modelCounterpartyType()->query());
+
+    QVERIFY2(query.exec(QString("SELECT %1 FROM 'counterparty_type'").arg(field_name)),
+             QString("Missing DB field in the table 'counterparty_type': %1").arg(field_name).toAscii());
+    QCOMPARE(db.modelCounterpartyType()->fieldIndex(field_name), field_num);
 }
 
-void CounterpartyTypeDataTest::testCase1_data()
+void CounterpartyTypeDataTest::testCaseCheckDBFields_data()
 {
-    QTest::addColumn<QString>("data");
-    QTest::newRow("0") << QString();
+    QTest::addColumn<QString>("field_name");
+    QTest::addColumn<int>("field_num");
+
+    QTest::newRow("id_counterparty_type") << QString("id_counterparty_type") << (int)CounterpartyTypeFields::ID;
+    QTest::newRow("type") << QString("type") << (int)CounterpartyTypeFields::TYPE;
 }
 
 QTEST_APPLESS_MAIN(CounterpartyTypeDataTest)
