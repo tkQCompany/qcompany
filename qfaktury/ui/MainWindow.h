@@ -20,7 +20,7 @@
 
 namespace CMF = CommodityFields;
 namespace CPF = CounterpartyFields;
-namespace IVF = InvoiceDataFields;
+namespace IVF = InvoiceFields;
 
 
 /**

@@ -100,16 +100,16 @@ void InvoiceDialog::init_()
     mapper_.setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
     mapper_.setItemDelegate(new QSqlRelationalDelegate(this));
     mapper_.setModel(db_->modelInvoice());
-    mapper_.addMapping(lineEditInvNumber, InvoiceDataFields::INV_NUMBER);
-    mapper_.addMapping(dateEditDateOfSell, InvoiceDataFields::SELLING_DATE);
-    mapper_.addMapping(comboBoxInvoiceType, InvoiceDataFields::TYPE_ID);
-    mapper_.addMapping(comboBoxCounterparties, InvoiceDataFields::COUNTERPARTY_ID, "currentIndex");
-    mapper_.addMapping(dateEditDateOfIssuance, InvoiceDataFields::ISSUANCE_DATE);
-    mapper_.addMapping(dateEditDayOfPayment, InvoiceDataFields::PAYMENT_DATE);
-    mapper_.addMapping(comboBoxPayment, InvoiceDataFields::PAYMENT_ID);
-    mapper_.addMapping(comboBoxCurrency, InvoiceDataFields::CURRENCY_ID);
-    mapper_.addMapping(lineEditAdditionalText, InvoiceDataFields::ADDIT_TEXT);
-    mapper_.addMapping(spinBoxDiscount, InvoiceDataFields::DISCOUNT);
+    mapper_.addMapping(lineEditInvNumber, InvoiceFields::INV_NUMBER);
+    mapper_.addMapping(dateEditDateOfSell, InvoiceFields::SELLING_DATE);
+    mapper_.addMapping(comboBoxInvoiceType, InvoiceFields::TYPE_ID);
+    mapper_.addMapping(comboBoxCounterparties, InvoiceFields::COUNTERPARTY_ID, "currentIndex");
+    mapper_.addMapping(dateEditDateOfIssuance, InvoiceFields::ISSUANCE_DATE);
+    mapper_.addMapping(dateEditDayOfPayment, InvoiceFields::PAYMENT_DATE);
+    mapper_.addMapping(comboBoxPayment, InvoiceFields::PAYMENT_ID);
+    mapper_.addMapping(comboBoxCurrency, InvoiceFields::CURRENCY_ID);
+    mapper_.addMapping(lineEditAdditionalText, InvoiceFields::ADDIT_TEXT);
+    mapper_.addMapping(spinBoxDiscount, InvoiceFields::DISCOUNT);
 
     unsaved = false;
 }

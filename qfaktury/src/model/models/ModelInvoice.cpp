@@ -19,27 +19,27 @@ QVariant ModelInvoice::headerData(int section, Qt::Orientation orientation, int 
 
     switch(section)
     {
-    case InvoiceDataFields::ID:
+    case InvoiceFields::ID_INVOICE:
         return trUtf8("L.p.");
-    case InvoiceDataFields::INV_NUMBER:
+    case InvoiceFields::INV_NUMBER:
         return trUtf8("Numer faktury");
-    case InvoiceDataFields::SELLING_DATE:
+    case InvoiceFields::SELLING_DATE:
         return trUtf8("Data sprzedaży");
-    case InvoiceDataFields::TYPE_ID:
+    case InvoiceFields::TYPE_ID:
         return trUtf8("Rodzaj faktury");
-    case InvoiceDataFields::COUNTERPARTY_ID:
+    case InvoiceFields::COUNTERPARTY_ID:
         return trUtf8("Nazwa kontrahenta");
-    case InvoiceDataFields::ISSUANCE_DATE:
+    case InvoiceFields::ISSUANCE_DATE:
         return trUtf8("Data wydania");
-    case InvoiceDataFields::PAYMENT_DATE:
+    case InvoiceFields::PAYMENT_DATE:
         return trUtf8("Data płatności");
-    case InvoiceDataFields::PAYMENT_ID:
+    case InvoiceFields::PAYMENT_ID:
         return trUtf8("Rodzaj płatności");
-    case InvoiceDataFields::CURRENCY_ID:
+    case InvoiceFields::CURRENCY_ID:
         return trUtf8("Waluta");
-    case InvoiceDataFields::ADDIT_TEXT:
+    case InvoiceFields::ADDIT_TEXT:
         return trUtf8("Tekst dodatkowy");
-    case InvoiceDataFields::DISCOUNT:
+    case InvoiceFields::DISCOUNT:
         return trUtf8("Zniżka");
 
     default:

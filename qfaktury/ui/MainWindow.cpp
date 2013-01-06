@@ -186,7 +186,7 @@ void MainWindow::createInvoice(const InvoiceTypeData::Type type)
     {
         invoice->exec();
         tableViewInvoices->selectionModel()->setCurrentIndex(db_.modelInvoice()->index(db_.modelInvoice()->rowCount() - 1,
-                                                                           InvoiceDataFields::ID), QItemSelectionModel::Rows | QItemSelectionModel::Select);
+                                                                           InvoiceFields::ID_INVOICE), QItemSelectionModel::Rows | QItemSelectionModel::Select);
     }
 }
 
@@ -547,7 +547,7 @@ void MainWindow::editInvoice()
     QSqlQuery query(db_.modelInvoiceType()->query());
     const qint64 invType = query.exec(QString("SELECT `id_invoice_type` FROM `invoice_type` WHERE `type` = '%1'")
                                 .arg(db_.modelInvoice()->data(db_.modelInvoice()->index(list.at(0).row(),
-                                InvoiceDataFields::TYPE_ID)).toString()));
+                                InvoiceFields::TYPE_ID)).toString()));
     switch(invType)
     {
     case InvoiceTypeData::VAT:

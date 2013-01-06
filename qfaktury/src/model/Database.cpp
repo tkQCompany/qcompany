@@ -445,11 +445,11 @@ void Database::initModels()
 
     modelInvoice_ = new ModelInvoice(this->parent());
     modelInvoice_->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    modelInvoice_->setSort(InvoiceDataFields::ID, Qt::AscendingOrder);
-    modelInvoice_->setRelation(InvoiceDataFields::TYPE_ID, QSqlRelation("invoice_type", "id_invoice_type", "type"));
-    modelInvoice_->setRelation(InvoiceDataFields::COUNTERPARTY_ID, QSqlRelation("counterparty", "id_counterparty", "name"));
-    modelInvoice_->setRelation(InvoiceDataFields::PAYMENT_ID, QSqlRelation("payment_type", "id_payment_type", "type"));
-    modelInvoice_->setRelation(InvoiceDataFields::CURRENCY_ID, QSqlRelation("currency", "id_currency", "name"));
+    modelInvoice_->setSort(InvoiceFields::ID_INVOICE, Qt::AscendingOrder);
+    modelInvoice_->setRelation(InvoiceFields::TYPE_ID, QSqlRelation("invoice_type", "id_invoice_type", "invoice_type"));
+    modelInvoice_->setRelation(InvoiceFields::COUNTERPARTY_ID, QSqlRelation("counterparty", "id_counterparty", "counterparty"));
+    modelInvoice_->setRelation(InvoiceFields::PAYMENT_ID, QSqlRelation("payment_type", "id_payment_type", "payment_type"));
+    modelInvoice_->setRelation(InvoiceFields::CURRENCY_ID, QSqlRelation("currency", "id_currency", "currency"));
     modelInvoice_->select();
 
     modelCurrency_ = new ModelCurrency(this->parent());
