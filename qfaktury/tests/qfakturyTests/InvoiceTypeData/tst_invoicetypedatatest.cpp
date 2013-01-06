@@ -80,7 +80,7 @@ void InvoiceTypeDataTest::testCaseCheckTypesNames_data()
     QTest::addColumn<QString>("output_name");
 
     QTest::newRow("-1") << -1 << QString();
-    QTest::newRow("0") << -1 << QString();
+    QTest::newRow("0") << 0 << QString();
     QTest::newRow("1") << 1 << QString("Faktura VAT");
     QTest::newRow("2") << 2 << QString("Faktura Pro Forma");
     QTest::newRow("3") << 3 << QString("Korekta");
