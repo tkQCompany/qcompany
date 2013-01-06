@@ -7,7 +7,7 @@ namespace PhoneFields
      * @brief
      *
      */
-    enum Fields {ID_PHONE, ID_COUNTERPARTY, NUMBER};
+    enum Fields {ID_PHONE, COUNTERPARTY_ID, NUMBER};
 }
 
 #endif // PHONEDATA_H

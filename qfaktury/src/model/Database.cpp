@@ -413,7 +413,7 @@ void Database::initModels()
     modelPhone_ = new ModelPhone(this->parent());
     modelPhone_->setEditStrategy(QSqlTableModel::OnManualSubmit);
     modelPhone_->setSort(PhoneFields::ID_PHONE, Qt::AscendingOrder);
-    modelPhone_->setRelation(PhoneFields::ID_COUNTERPARTY, QSqlRelation("counterparty", "id_counterparty", "name"));
+    modelPhone_->setRelation(PhoneFields::COUNTERPARTY_ID, QSqlRelation("counterparty", "id_counterparty", "counterparty"));
     modelPhone_->select();
 
     modelUnit_ = new ModelUnit(this->parent());
