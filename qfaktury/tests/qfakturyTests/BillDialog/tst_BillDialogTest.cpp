@@ -47,10 +47,19 @@ void BillDialogTest::testGUI_InitialState()
 {
     Database db;
     BillDialog billDialog(0, &db);
-    QCOMPARE(billDialog.windowTitle(), QString("Rachunek"));
-    QCOMPARE(billDialog.comboBoxInvoiceType->currentText(), QString("Rachunek"));
+    QCOMPARE(billDialog.windowTitle(), InvoiceTypeData::InvoiceTypeToString(InvoiceTypeData::BILL));
+    QCOMPARE(billDialog.comboBoxInvoiceType->currentText(), InvoiceTypeData::InvoiceTypeToString(InvoiceTypeData::BILL));
     QCOMPARE(billDialog.dateEditDateOfIssuance->date(), QDate::currentDate());
     QCOMPARE(billDialog.dateEditDateOfSell->date(), QDate::currentDate());
+    QCOMPARE(billDialog.dateEditDayOfPayment->date(), QDate::currentDate());
+    QCOMPARE(billDialog.tableWidgetCommodities->rowCount(), 0);
+    QCOMPARE(billDialog.checkBoxDiscount->isChecked(), false);
+    QCOMPARE(billDialog.spinBoxDiscount->value(), 0);
+
+    QLocale locale;
+    QCOMPARE(billDialog.labelSumNetVal->text(), locale.toString(0.0, 'f', 2));
+    QCOMPARE(billDialog.labelDiscountVal->text(), locale.toString(0.0, 'f', 2));
+    QCOMPARE(billDialog.labelSumGrossVal->text(), locale.toString(0.0, 'f', 2));
 }
 
 
