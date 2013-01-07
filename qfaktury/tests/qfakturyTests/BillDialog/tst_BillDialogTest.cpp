@@ -16,10 +16,7 @@ public:
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-    void testGUI_CheckWindowTitle();
-    void testGUI_CheckInvoiceType();
-    void testGUI_CheckDates();
-    //void testCase1_data();
+    void testGUI_InitialState();
 };
 
 BillDialogTest::BillDialogTest()
@@ -32,6 +29,13 @@ void BillDialogTest::initTestCase()
     QCoreApplication::setOrganizationName("www.e-linux.pl");
     QCoreApplication::setOrganizationDomain("www.e-linux.pl");
     QCoreApplication::setApplicationVersion(APP_VERSION);
+
+    const QString dbFilename(QString("%1-%2.db3").arg(QCoreApplication::applicationName()).arg(APP_VERSION));
+    if(QFile::exists(dbFilename))
+    {
+        QDir dir;
+        dir.remove(dbFilename);
+    }
 }
 
 void BillDialogTest::cleanupTestCase()
@@ -39,42 +43,16 @@ void BillDialogTest::cleanupTestCase()
 }
 
 
-
-void BillDialogTest::testGUI_CheckWindowTitle()
+void BillDialogTest::testGUI_InitialState()
 {
     Database db;
     BillDialog billDialog(0, &db);
     QCOMPARE(billDialog.windowTitle(), QString("Rachunek"));
-}
-
-
-void BillDialogTest::testGUI_CheckInvoiceType()
-{
-    Database db;
-    BillDialog billDialog(0, &db);
     QCOMPARE(billDialog.comboBoxInvoiceType->currentText(), QString("Rachunek"));
-}
-
-
-void BillDialogTest::testGUI_CheckDates()
-{
-    Database db;
-    BillDialog billDialog(0, &db);
     QCOMPARE(billDialog.dateEditDateOfIssuance->date(), QDate::currentDate());
     QCOMPARE(billDialog.dateEditDateOfSell->date(), QDate::currentDate());
 }
 
-//void BillDialogTest::testCase1()
-//{
-//    QFETCH(QString, data);
-//    QVERIFY2(true, "Failure");
-//}
-
-//void BillDialogTest::testCase1_data()
-//{
-//    QTest::addColumn<QString>("data");
-//    QTest::newRow("0") << QString();
-//}
 
 QTEST_MAIN(BillDialogTest)
 
