@@ -45,6 +45,9 @@ protected:
      */
     QString getInvoiceTypeAndSaveNr();
 
+private:
+    void init_();
+
 };
 
 #endif

@@ -12,6 +12,13 @@
 CorrectiveInvoiceGrossDialog::CorrectiveInvoiceGrossDialog(QWidget *parent, Database *db):
     CorrectiveInvoiceDialog(parent, db)
 {
+    init_();
+}
+
+void CorrectiveInvoiceGrossDialog::init_()
+{
+    setWindowTitle(InvoiceTypeData::InvoiceTypeToString(InvoiceTypeData::CORRECTIVE_GROSS));
+    comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::CORRECTIVE_GROSS - 1);
 }
 
 QString CorrectiveInvoiceGrossDialog::getInvoiceTypeAndSaveNr() {

@@ -8,8 +8,6 @@
 #ifndef DUPLICATEDIALOG_H
 #define DUPLICATEDIALOG_H
 
-#include <QDateEdit>
-
 #include "InvoiceDialog.h"
 
 
@@ -33,11 +31,6 @@ public slots:
      * @brief
      *
      */
-    void init_();
-    /**
-     * @brief
-     *
-     */
     virtual void canQuit();
 protected:
     /**
@@ -48,6 +41,13 @@ protected:
      * @param bool
      */
     virtual void makeInvoiceHeader(const bool, const bool, const bool);
+private:
+    /**
+     * @brief
+     *
+     */
+    void init_();
+
 private:
     QDateEdit *duplicateDate; /**< TODO */
 

@@ -161,7 +161,7 @@ void MainWindow::createInvoice(const InvoiceTypeData::Type type)
         break;
     case InvoiceTypeData::BILL:
         invoice.reset(new BillDialog(this, &db_));
-        invoice->init_();
+        //invoice->init_();
         break;
     case InvoiceTypeData::CORRECTIVE_VAT:
     case InvoiceTypeData::CORRECTIVE_GROSS:
@@ -173,9 +173,9 @@ void MainWindow::createInvoice(const InvoiceTypeData::Type type)
         {
             invoice.reset(new CorrectiveInvoiceGrossDialog(this, &db_));
         }
-        invoice->init_();
+        //invoice->init_();
         //invoice->readData(tableViewInvoices->item(tableViewInvoices->selectedItems()[0]->row(), 0)->text(), type);
-        invoice->setWindowTitle(trUtf8("Nowa korekta"));
+        //invoice->setWindowTitle(trUtf8("Nowa korekta"));
         break;
     case InvoiceTypeData::GROSS:
         invoice.reset(new InvoiceGrossDialog(this, &db_));
@@ -569,7 +569,7 @@ void MainWindow::editInvoice()
     case InvoiceTypeData::CORRECTIVE_VAT:
     {
         CorrectiveInvoiceDialog dialog(this, &db_);
-        dialog.init_(/*true*/);
+        //dialog.init_(/*true*/);
         //dialog.readCorrData(tableViewInvoices->item(row, IVF::FILE_NAME)->text());
         if (dialog.exec() == QDialog::Accepted)
         {
@@ -589,7 +589,7 @@ void MainWindow::editInvoice()
     case InvoiceTypeData::CORRECTIVE_GROSS:
     {
         CorrectiveInvoiceGrossDialog dialog(this, &db_);
-        dialog.init_(/*true*/);
+        //dialog.init_(/*true*/);
         //dialog.readCorrData(tableViewInvoices->item(row, IVF::FILE_NAME)->text());
         if (dialog.exec() == QDialog::Accepted)
         {
@@ -601,7 +601,7 @@ void MainWindow::editInvoice()
     {
         BillDialog dialog(this, &db_);
         //dialog.readData(tableViewInvoices->item(row, IVF::FILE_NAME)->text(), InvoiceData::BILL);
-        dialog.setWindowTitle(trUtf8("Edytuje Rachunek"));
+        //dialog.setWindowTitle(trUtf8("Edytuje Rachunek"));
         if (dialog.exec() == QDialog::Accepted)
         {
             // edit window shouln't return anything

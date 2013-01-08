@@ -4,6 +4,7 @@
 CorrectiveInvoiceDialog::CorrectiveInvoiceDialog(QWidget *parent, Database *db):
     InvoiceDialog(parent, db)
 {
+    init_();
 }
 
 CorrectiveInvoiceDialog::~CorrectiveInvoiceDialog()
@@ -29,6 +30,7 @@ void CorrectiveInvoiceDialog::init_ (/*const bool mode*/)
 
     invType = InvoiceTypeData::CORRECTIVE_VAT;
     setWindowTitle(InvoiceTypeData::InvoiceTypeToString(invType));
+    comboBoxInvoiceType->setCurrentIndex(invType - 1);
     origGrossTotal = -1;
 
     //editMode = mode;

@@ -11,6 +11,7 @@
 DuplicateDialog::DuplicateDialog(QWidget *parent, Database *db):
     InvoiceDialog(parent, db)
 {
+    init_();
 }
 
 void DuplicateDialog::init_() {

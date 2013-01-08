@@ -27,11 +27,7 @@ public:
      *
      */
     virtual ~CorrectiveInvoiceDialog();
-    /**
-     * @brief
-     *
-     */
-    void init_(); // called outside
+
     /**
      * @brief
      *
@@ -99,6 +95,13 @@ private:
      *
      */
     void makeBeforeCorrProducts();
+
+    /**
+     * @brief
+     *
+     */
+    void init_();
+
     /**
      * @brief
      *
