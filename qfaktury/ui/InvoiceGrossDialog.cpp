@@ -11,7 +11,8 @@
 InvoiceGrossDialog::InvoiceGrossDialog(QWidget *parent, Database *db) :
     InvoiceDialog(parent, db)
 {
-    setWindowTitle(trUtf8("Faktura VAT Brutto"));
+    setWindowTitle(InvoiceTypeData::InvoiceTypeToString(InvoiceTypeData::GROSS));
+    comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::GROSS - 1);
 }
 
 
