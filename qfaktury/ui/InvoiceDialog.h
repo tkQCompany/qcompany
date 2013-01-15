@@ -26,6 +26,7 @@ class InvoiceDialog: public QDialog, public Ui::InvoiceDialog
 {
     Q_OBJECT
 public:
+    enum InvoiceNumChosenPeriod {WEEK, MONTH, QUARTER, YEAR, WHOLE_LIFE};
 /**
  * @brief
  *

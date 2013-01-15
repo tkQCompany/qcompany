@@ -1124,6 +1124,15 @@ void InvoiceDialog::calculateSum()
 /**
  * @brief Generate the new number for newly created invoice
  *
+ * Problems related to generating numbers for invoices:
+ * 1) In the period chosen by the owner (month, quarter, year, whole company's life), numbers should be consecutive.
+ * 2) At the new year, numbering should start from 1.
+ * 3) The chosen period should refer to issuance dates, not dates of sell or payment (because of possible problems when the year is changing).
+ * 4) No correction of the invoice number is possible; it's forbidden by the law.
+ * 5) Must be possible to introduce separate numbering scheme for different counterparties.
+ * 6) Must be possible to introduce separate numbering scheme for different checkouts
+ * 7) Should be possible to take missing invoice numbers into consideration. Example: we have invoices 1, 2, 3, then gap and then: 5, 6, 7, etc.
+ *
  * @return QString The new invoice number
  */
 QString InvoiceDialog::generateInvoiceNumber() const //TODO: introduce restarting numbering every new year

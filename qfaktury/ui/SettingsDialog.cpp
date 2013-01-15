@@ -655,7 +655,7 @@ QStringList SettingsDialog::getTemplates()
 // returns list of translations
 QStringList SettingsDialog::getTranslations() const
 {
-    const QDir languages(":/res/translations/");
+    const QDir languages(":/res/translations");
     QStringList translations = languages.entryList();
     translations.replaceInStrings("qfaktury_", "");
     translations.replaceInStrings(".qm", "");

@@ -64,7 +64,7 @@ void InvoiceDialogTest::testGUI_InitialState()
 
 void InvoiceDialogTest::test_generateInvoiceNumber()
 {
-
+    InvoiceDialog::InvoiceNumChosenPeriod week = InvoiceDialog::WEEK;
 }
 
 QTEST_MAIN(InvoiceDialogTest)

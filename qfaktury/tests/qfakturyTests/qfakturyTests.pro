@@ -26,4 +26,5 @@ SUBDIRS += \
     InvoiceTypeData \
     PaymentTypeData \
     PhoneData \
-    UnitData
+    UnitData \
+    SettingsDialog

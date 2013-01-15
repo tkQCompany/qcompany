@@ -25,7 +25,7 @@ public:
  *
  * @param
  */
-    SettingsDialog(QWidget *);
+    SettingsDialog(QWidget *parent  = 0);
 private slots:
     /**
      * @brief
