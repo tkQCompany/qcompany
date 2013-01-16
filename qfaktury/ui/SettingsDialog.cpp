@@ -34,7 +34,6 @@ void SettingsDialog::init()
 
     connect( comboBoxCSS, SIGNAL( currentIndexChanged (int)), this, SLOT( zastBtnEnable() ) );
     connect( comboBoxLanguage, SIGNAL( currentIndexChanged (int)), this, SLOT( zastBtnEnable() ) );
-    connect( comboBoxEncoding, SIGNAL( currentIndexChanged (int)), this, SLOT( zastBtnEnable() ) );
     connect( lineEditLogo, SIGNAL(  textChanged (const QString &)), this, SLOT( zastBtnEnable() ) );
     connect( lineEditWorkDir, SIGNAL(  textChanged (const QString &)), this, SLOT( zastBtnEnable() ) );
     connect( lineEditTaxIDMask, SIGNAL(  textChanged (const QString &)), this, SLOT( zastBtnEnable() ) );
@@ -81,7 +80,6 @@ void SettingsDialog::init()
     comboBoxCSS->clear();
     comboBoxCSS->insertItems(0, getTemplates());
 
-    getEncodings();
     readSettings();
 
     // disable apply button :)
@@ -405,46 +403,6 @@ void SettingsDialog::paymDownBtnClick() {
 
 
 
-
-
-// ------------- SLOTS for items on the invoice START ----
-void SettingsDialog::getEncodings()
-{
-    QMap<QString, QTextCodec *> codecMap;
-    QRegExp iso8859RegExp("ISO[- ]8859-([0-9]+).*");
-
-    foreach (const int mib, QTextCodec::availableMibs())
-    {
-        QTextCodec *codec = QTextCodec::codecForMib(mib);
-        QString sortKey = codec->name().toUpper();
-
-        int rank = 5;
-        if (sortKey.startsWith("UTF-8"))
-        {
-            rank = 1;
-        }
-        else if (sortKey.startsWith("UTF-16"))
-        {
-            rank = 2;
-        }
-        else if (iso8859RegExp.exactMatch(sortKey))
-        {
-            if (iso8859RegExp.cap(1).size() == 1)
-                rank = 3;
-            else
-                rank = 4;
-        }
-
-        sortKey.prepend(QChar('0' + rank));
-        codecMap.insert(sortKey, codec);
-    }
-    codecs = codecMap.values();
-
-    comboBoxEncoding->clear();
-    foreach (QTextCodec *codec, codecs)
-        comboBoxEncoding->addItem(codec->name(), codec->mibEnum());
-}
-
 /** Used for parsing
  */
 QString SettingsDialog::getItemsToString(const QListWidget *lw)
@@ -465,7 +423,6 @@ QString SettingsDialog::getItemsToString(const QListWidget *lw)
 void SettingsDialog::saveSettings() {
     sett().setValue("lang", comboBoxLanguage->currentText());
     sett().setValue("css", comboBoxCSS->currentText());
-    sett().setValue("localEnc", comboBoxEncoding->currentText());
     sett().setValue("working_dir", lineEditWorkDir->text());
 
     sett().beginGroup("printpos");
@@ -539,9 +496,6 @@ void SettingsDialog::readSettings()
     listWidgetCurrency->addItems(sett().value("waluty").toString().split("|"));
     listWidgetPayment->clear();
     listWidgetPayment->addItems(sett().value("payments").toString().split("|"));
-
-    curr = codecs.indexOf(QTextCodec::codecForName(sett().value("localEnc").toByteArray()));
-    comboBoxEncoding->setCurrentIndex(curr);
 
     listWidgetCorrectionReason->clear();
     listWidgetCorrectionReason->addItems(sett().value("pkorekty").toString().split("|"));

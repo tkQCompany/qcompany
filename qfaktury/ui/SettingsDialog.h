@@ -158,11 +158,7 @@ private:
      *
      */
     void readSettings();
-    /**
-     * @brief
-     *
-     */
-    void getEncodings();
+
     /**
      * @brief
      *
