@@ -1137,42 +1137,6 @@ void InvoiceDialog::calculateSum()
  */
 QString InvoiceDialog::generateInvoiceNumber() const //TODO: introduce restarting numbering every new year
 {
-//    QString tmp, prefix, suffix;
-
-//    if(comboBoxInvoiceType->currentIndex() == InvoiceTypeData::PRO_FORMA)
-//    {
-//        tmp = sett().value("fpro").toString();
-//    }
-//    else
-//    {
-//        tmp = sett().value("fvat").toString();
-//    }
-
-//    prefix = sett().value("prefix").toString();
-
-//    QStringList one1 = tmp.split("/");
-//    one1[0] = one1[0].remove(prefix);
-
-//    int nr = one1[0].toInt() + 1;
-//    QString lastInvoice = prefix + numbersCount(nr,
-//                                        sett().value("chars_in_symbol").toInt());
-
-//    if (sett().value("day") .toBool())
-//        lastInvoice += "/" + QDate::currentDate().toString("dd");
-
-//    if (sett().value("month") .toBool())
-//        lastInvoice += "/" + QDate::currentDate().toString("MM");
-
-//    if (sett().value("year") .toBool()) {
-//        if (!sett().value("shortYear") .toBool())
-//            lastInvoice += "/" + QDate::currentDate().toString("yy");
-//        else
-//            lastInvoice += "/" + QDate::currentDate().toString("yyyy");
-//    }
-//    suffix = sett().value("sufix").toString();
-//    lastInvoice += suffix;
-
-//    return lastInvoice;
     return QDate::currentDate().toString("yyyy/MM/dd") + QString("/%1").arg(db_->modelInvoice()->rowCount()); //the "rowCount()" includes the newly added empty row
 }
 

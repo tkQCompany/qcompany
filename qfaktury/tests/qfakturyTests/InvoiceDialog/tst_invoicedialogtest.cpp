@@ -17,6 +17,11 @@ private Q_SLOTS:
     void cleanupTestCase();
     void testGUI_InitialState();
     void test_generateInvoiceNumber();
+    void test_compatibilityWithOldGenerateInvoiceNumber();
+
+private:
+    QString generateInvoiceNumberOldVer(InvoiceTypeData::Type invType);
+    QString numbersCount(int in, int x);
 };
 
 InvoiceDialogTest::InvoiceDialogTest()
@@ -64,7 +69,63 @@ void InvoiceDialogTest::testGUI_InitialState()
 
 void InvoiceDialogTest::test_generateInvoiceNumber()
 {
-    InvoiceDialog::InvoiceNumChosenPeriod week = InvoiceDialog::WEEK;
+    //InvoiceDialog::InvoiceNumChosenPeriod week = InvoiceDialog::WEEK;
+    QFAIL("implement me");
+}
+
+void InvoiceDialogTest::test_compatibilityWithOldGenerateInvoiceNumber()
+{
+    QFAIL("implement me");
+}
+
+
+QString InvoiceDialogTest::generateInvoiceNumberOldVer(InvoiceTypeData::Type invType)
+{//old code - for checking compatibility with previous versions
+    QString tmp, prefix, suffix;
+
+    if(invType == InvoiceTypeData::PRO_FORMA)
+    {
+        tmp = sett().value("fpro").toString();
+    }
+    else
+    {
+        tmp = sett().value("fvat").toString();
+    }
+
+    prefix = sett().value("prefix").toString();
+
+    QStringList one1 = tmp.split("/");
+    one1[0] = one1[0].remove(prefix);
+
+    int nr = one1[0].toInt() + 1;
+    QString lastInvoice = prefix + numbersCount(nr, sett().value("chars_in_symbol").toInt());
+
+    if (sett().value("day") .toBool())
+        lastInvoice += "/" + QDate::currentDate().toString("dd");
+
+    if (sett().value("month") .toBool())
+        lastInvoice += "/" + QDate::currentDate().toString("MM");
+
+    if (sett().value("year") .toBool()) {
+        if (!sett().value("shortYear") .toBool())
+            lastInvoice += "/" + QDate::currentDate().toString("yy");
+        else
+            lastInvoice += "/" + QDate::currentDate().toString("yyyy");
+    }
+    suffix = sett().value("sufix").toString();
+    lastInvoice += suffix;
+
+    return lastInvoice;
+}
+
+
+QString InvoiceDialogTest::numbersCount(int in, int x) {//old code - for checking compatibility with previous versions
+    QString tmp2, tmp = sett().numberToString(in);
+    tmp2 = "";
+    int incr = x - tmp.length();
+    for (int i = 0; i < incr; ++i)
+        tmp2 += "0";
+    return tmp2 + tmp;
 }
 
 QTEST_MAIN(InvoiceDialogTest)

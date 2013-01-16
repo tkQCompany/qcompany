@@ -32,6 +32,7 @@ void SettingsDialogTest::cleanupTestCase()
 void SettingsDialogTest::testGUIChangeLanguage()
 {
     QString currLang, nextLang;
+    int currInd = 0;
 
     {
         SettingsDialog sdialog;
@@ -40,7 +41,7 @@ void SettingsDialogTest::testGUIChangeLanguage()
         QVERIFY(langCount > 0);
 
         currLang = sdialog.comboBoxLanguage->currentText();
-        const int currInd = sdialog.comboBoxLanguage->currentIndex();
+        currInd = sdialog.comboBoxLanguage->currentIndex();
         sdialog.comboBoxLanguage->setCurrentIndex( (currInd + 1 ) % langCount); //next language
         nextLang = sdialog.comboBoxLanguage->currentText();
         QVERIFY(currLang != nextLang);
@@ -50,7 +51,11 @@ void SettingsDialogTest::testGUIChangeLanguage()
     SettingsDialog sdialog;
     QVERIFY(sdialog.comboBoxLanguage->count() > 0);
     QCOMPARE(sdialog.comboBoxLanguage->currentText(), nextLang);
+
+    sdialog.comboBoxLanguage->setCurrentIndex(currInd); //restoring
 }
+
+
 
 QTEST_MAIN(SettingsDialogTest)
 
