@@ -31,6 +31,7 @@ void SettingsDialog::init()
     connect(pushButtonDefault, SIGNAL(clicked()), this, SLOT(setDefaultClick()));
     connect(pushButtonDefaultAdditionalText, SIGNAL(clicked()), this, SLOT(defTextBtnClick()));
     connect(pushButtonMaskHelp, SIGNAL(clicked()), this, SLOT(maskHelpClick()));
+    connect(pushButtonFormatEdit, SIGNAL(clicked()), this, SLOT(editFormat_()));
 
     connect( comboBoxCSS, SIGNAL( currentIndexChanged (int)), this, SLOT( zastBtnEnable() ) );
     connect( comboBoxLanguage, SIGNAL( currentIndexChanged (int)), this, SLOT( zastBtnEnable() ) );
@@ -38,14 +39,7 @@ void SettingsDialog::init()
     connect( lineEditWorkDir, SIGNAL(  textChanged (const QString &)), this, SLOT( zastBtnEnable() ) );
     connect( lineEditTaxIDMask, SIGNAL(  textChanged (const QString &)), this, SLOT( zastBtnEnable() ) );
     connect( lineEditAccountMask, SIGNAL(  textChanged (const QString &)), this, SLOT( zastBtnEnable() ) );
-    connect( lineEditPrefix, SIGNAL(  textChanged (const QString &) ), this, SLOT( zastBtnEnable() ) );
-    connect( lineEditSuffix, SIGNAL(  textChanged (const QString &) ), this, SLOT( zastBtnEnable() ) );
-    connect( spinBoxDigitCount, SIGNAL(  valueChanged (const QString &) ), this, SLOT( zastBtnEnable() ) );
-    connect( spinBoxNumCopies, SIGNAL(  valueChanged (const QString &) ), this, SLOT( zastBtnEnable() ) );
-    connect( checkBoxDay, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable()) );
-    connect( checkBoxMonth, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable() ) );
-    connect( checkBoxYear, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable() ) );
-    connect( checkBoxLongYear, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable() ) );
+    connect( spinBoxNumCopies, SIGNAL(  valueChanged (const QString &) ), this, SLOT( zastBtnEnable() ) );    
     connect( checkBoxInvEdit, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable() ) );
     connect( checkBoxInvSymbolEdit, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable() ) );
     connect( checkBoxProductNameEdit, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable() ) );
@@ -446,16 +440,9 @@ void SettingsDialog::saveSettings() {
     sett().setValue("paym1", listWidgetPayment->item(0)->text());
     sett().setValue("addText", textEditAdditionalText->toPlainText());
 
-    sett().setValue("prefix", lineEditPrefix->text());
-    sett().setValue("sufix", lineEditSuffix->text());
-    sett().setValue("day", checkBoxDay->isChecked());
-    sett().setValue("month", checkBoxMonth->isChecked());
-    sett().setValue("year", checkBoxYear->isChecked());
     sett().setValue("edit", checkBoxInvEdit->isChecked());
     sett().setValue("editSymbol", checkBoxInvSymbolEdit->isChecked());
     sett().setValue("editName", checkBoxProductNameEdit->isChecked());
-    sett().setValue("shortYear", checkBoxLongYear->isChecked());
-    sett().setValue("chars_in_symbol", spinBoxDigitCount->value());
     sett().setValue("ticMask", lineEditTaxIDMask->text());
     sett().setValue("accountMask", lineEditAccountMask->text());
     sett().setValue("numberOfCopies", spinBoxNumCopies->value());
@@ -526,21 +513,13 @@ void SettingsDialog::readSettings()
     checkBoxFieldGrossVal->setChecked(sett().value("bruttoval").toBool());
     sett().endGroup();
 
-    lineEditPrefix->setText(sett().value("prefix").toString());
-    lineEditSuffix->setText(sett().value("sufix").toString());
-
     textEditAdditionalText->setText(sett().value("addText").toString());
 
-    checkBoxDay->setChecked(sett().value("day").toBool());
-    checkBoxMonth->setChecked(sett().value("month").toBool());
-    checkBoxYear->setChecked(sett().value("year").toBool());
-    checkBoxLongYear->setChecked(sett().value("shortYear").toBool());
     checkBoxInvEdit->setChecked(sett().value("edit").toBool());
 
     checkBoxInvSymbolEdit->setChecked(sett().value("editSymbol").toBool());
     checkBoxProductNameEdit->setChecked(sett().value("editName").toBool());
 
-    spinBoxDigitCount->setValue(sett(). value("chars_in_symbol").toInt());
     spinBoxNumCopies->setValue(sett(). value("numberOfCopies").toInt());
 
     sett().beginGroup("printpos");
@@ -554,15 +533,8 @@ void SettingsDialog::readSettings()
     checkBoxWWW->setChecked(sett().value("userwww").toBool());
     sett().endGroup();
 
-    lineEditPrefix->setText(sett().value("prefix").toString());
-
-    checkBoxDay->setChecked(sett().value("day") .toBool());
-    checkBoxMonth->setChecked(sett().value("month") .toBool());
-    checkBoxYear->setChecked(sett().value("year") .toBool());
-    checkBoxLongYear->setChecked(sett().value("shortYear") .toBool());
     checkBoxInvEdit->setChecked(sett().value("edit") .toBool());
     checkBoxInvSymbolEdit->setChecked(sett().value("editSymbol") .toBool());
-    spinBoxDigitCount->setValue(sett().value("chars_in_symbol").toInt());
 
     read=true;
     // readTemplate();
@@ -619,4 +591,11 @@ QStringList SettingsDialog::getTranslations() const
     }
     translations.sort();
     return translations;
+}
+
+void SettingsDialog::editFormat_()
+{
+    InvoiceNumberFormatEditDialog dialog;
+    if(QDialog::Accepted == dialog.exec())
+        lineEditFormat->setText(dialog.format());
 }

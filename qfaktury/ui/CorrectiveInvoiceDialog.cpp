@@ -18,11 +18,11 @@ void CorrectiveInvoiceDialog::init_ (/*const bool mode*/)
     labelReason1 = new QLabel(this);
     labelReason1->setText(trUtf8("Przyczyna korekty:"));
     labelReason1->setAlignment(Qt::AlignRight);
-    addDataLabels->addWidget(labelReason1);
+    //addDataLabels->addWidget(labelReason1);
 
     reasonCombo = new QComboBox(this);
     reasonCombo->addItems(sett().value("pkorekty").toString().split("|"));
-    addData->addWidget(reasonCombo);
+    //addData->addWidget(reasonCombo);
 
     labelSumNet->setText(trUtf8("Wartość korekty:"));
     labelDiscount2->setText(trUtf8("Wartość faktury:"));

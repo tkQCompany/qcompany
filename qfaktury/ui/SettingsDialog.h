@@ -10,6 +10,7 @@
 
 #include "ui_SettingsDialog.h"
 #include "../SettingsGlobal.h"
+#include "InvoiceNumberFormatEditDialog.h"
 
 
 /**
@@ -137,6 +138,7 @@ private slots:
      *
      */
     void workingDirBtnClick();
+    void editFormat_();
 private:    
     /**
      * @brief
@@ -180,6 +182,6 @@ private:
     QString getItemsToString(const QListWidget *);
 private:
     bool read; /**< TODO */
-    QList<QTextCodec *> codecs; /**< TODO */
+    //QList<QTextCodec *> codecs; /**< TODO */
 };
 #endif

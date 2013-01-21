@@ -16,6 +16,7 @@ SOURCES +=     ui/BillDialog.cpp \
     ui/DuplicateDialog.cpp \
     ui/EmailDialog.cpp \
     ui/InvoiceDialog.cpp \
+    ui/InvoiceNumberFormatEditDialog.cpp \
     ui/InvoiceGrossDialog.cpp \
     ui/MainWindow.cpp \
     ui/PhoneDialog.cpp \
@@ -54,6 +55,7 @@ HEADERS += ui/BillDialog.h \
     ui/DuplicateDialog.h \
     ui/EmailDialog.h \
     ui/InvoiceDialog.h \
+    ui/InvoiceNumberFormatEditDialog.h \
     ui/InvoiceGrossDialog.h \
     ui/MainWindow.h \
     ui/PhoneDialog.h \
@@ -67,6 +69,7 @@ HEADERS += ui/BillDialog.h \
     src/model/models_data/PaymentTypeData.h \
     src/model/models_data/InvoiceTypeData.h \
     src/model/models_data/InvoiceData.h \
+    src/model/models_data/InvoiceNumberFormatData.h \
     src/model/models_data/EmailData.h \
     src/model/models_data/CurrencyData.h \
     src/model/models_data/CountryData.h \
@@ -90,6 +93,7 @@ HEADERS += ui/BillDialog.h \
     src/model/models/ModelCommodity.h \
     src/ConvertAmount.h \
     src/SettingsGlobal.h
+
 
 OBJECTS_DIR = obj
 MOC_DIR = moc_files

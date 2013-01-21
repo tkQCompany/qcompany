@@ -15,17 +15,20 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="_12">
-     <item>
+    <layout class="QFormLayout" name="formLayout_3">
+     <item row="0" column="0">
       <widget class="QLabel" name="labelCommodities">
        <property name="maximumSize">
         <size>
-         <width>50</width>
+         <width>32767</width>
          <height>32767</height>
         </size>
        </property>
        <property name="text">
         <string>Typ towaru:</string>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
        </property>
        <property name="wordWrap">
         <bool>false</bool>
@@ -35,8 +38,15 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QComboBox" name="comboBoxCommodities"/>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="comboBoxCommodities">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -228,6 +238,9 @@
       <widget class="QLabel" name="labelChosenNetPrice">
        <property name="text">
         <string>Wybrana cena:</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBoxChosenNetPrice</cstring>
        </property>
       </widget>
      </item>

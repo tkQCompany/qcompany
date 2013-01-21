@@ -170,6 +170,7 @@ bool Database::createTablesIfNotExist()
                            "`www` VARCHAR(45) NOT NULL ,"
                            "`primary_email` VARCHAR(45) NOT NULL,"
                            "`primary_phone` VARCHAR(45) NOT NULL,"
+                           "`inv_number_format` VARCHAR(100) NOT NULL,"
                            "CONSTRAINT `country_id` "
                              "FOREIGN KEY (`country_id` ) "
                              "REFERENCES `country` (`id_country` )"
@@ -290,7 +291,7 @@ bool Database::createTablesIfNotExist()
 
     if(!sqlExecute(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
                            "`id_invoice` INTEGER PRIMARY KEY AUTOINCREMENT ,"
-                           "`inv_number` VARCHAR(10) NOT NULL UNIQUE,"
+                           "`inv_number` VARCHAR(100) NOT NULL UNIQUE,"
                            "`selling_date` DATE NOT NULL ,"
                            "`type_id` INTEGER NOT NULL ,"
                            "`counterparty_id` INTEGER NOT NULL ,"
@@ -525,11 +526,11 @@ bool Database::insertDataIfNotInserted()
     {
         const QString selectCountry(QString("(SELECT `id_country` FROM `country` WHERE `name` = \"%1\")").arg(DB_Constants::My_Country));
         query.exec(QString("INSERT INTO `counterparty`(`name`, `type_id`, `country_id`, `location`, `postal_code`, "
-                   "`street`, `tax_ident`, `account_name`, `www`, `primary_email`, `primary_phone`) "
-                   "VALUES(\"%1\", %2, %3, \"%4\", \"%5\", \"%6\", \"%7\", \"%8\", \"%9\", \"%10\", \"%11\")")
+                           "`street`, `tax_ident`, `account_name`, `www`, `primary_email`, `primary_phone`, 'inv_number_format') "
+                   "VALUES(\"%1\", %2, %3, \"%4\", \"%5\", \"%6\", \"%7\", \"%8\", \"%9\", \"%10\", \"%11\", \"%12\")")
                    .arg(trUtf8("Brak nazwy firmy")).arg(CounterpartyTypeData::MY_COMPANY).arg(selectCountry)
                    .arg(trUtf8("Brak nazwy miejscowości")).arg(trUtf8("Brak kodu pocztowego")).arg(trUtf8("Brak nazwy ulicy"))
-                   .arg(trUtf8("Brak NIP")).arg(trUtf8("Brak numeru konta")).arg("").arg("").arg(""));
+                   .arg(trUtf8("Brak NIP")).arg(trUtf8("Brak numeru konta")).arg("").arg("").arg("").arg(""));
         if(!query.isActive())
         {
             QMessageBox::critical(0, trUtf8("Błąd SQL INSERT"), QString("Detected at line %1: %2\nQuery:\n%3")

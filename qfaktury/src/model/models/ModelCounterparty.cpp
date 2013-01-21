@@ -43,6 +43,8 @@ QVariant ModelCounterparty::headerData(int section, Qt::Orientation orientation,
         return trUtf8("Główny e-mail");
     case CounterpartyFields::PRIMARY_PHONE:
         return trUtf8("Główny telefon");
+    case CounterpartyFields::INV_FORMAT:
+        return trUtf8("Format numeru faktury");
 
     default:
         qDebug() << QString("File: %1, line: %2 - Unknown header of counterparties' table: %3").arg(__FILE__).arg(__LINE__).arg(section);

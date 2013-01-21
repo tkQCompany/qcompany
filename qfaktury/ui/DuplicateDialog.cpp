@@ -18,14 +18,14 @@ void DuplicateDialog::init_() {
     QLabel *labelDupDate = new QLabel(this);
     labelDupDate->setText(trUtf8("Data duplikatu:"));
     labelDupDate->setAlignment(Qt::AlignRight);
-    addDataLabels->addWidget(labelDupDate);
+    //addDataLabels->addWidget(labelDupDate);
 
     duplicateDate = new QDateEdit(this);
     duplicateDate->setObjectName(QString::fromUtf8("duplicateDate"));
     duplicateDate->setCalendarPopup(true);
     duplicateDate->setDisplayFormat(sett().getDateFormat());
     duplicateDate->setDate(QDate::currentDate());
-    addData->addWidget(duplicateDate);
+    //addData->addWidget(duplicateDate);
 
     setIsEditAllowed(false); // since it's a duplikat
     pushButtonSave->setEnabled(false);
