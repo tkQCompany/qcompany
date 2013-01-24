@@ -25,20 +25,56 @@ struct InvoiceNumberFormatData
         }
     }
 
-    static QString SeparatorName(const int separator)
+    static QChar SeparatorName(const int separator)
     {
         switch(separator)
         {
-        case SLASH: return QObject::trUtf8("\\");
-        case BACKSLASH: return QObject::trUtf8("/");
-        case HYPHEN: return QObject::trUtf8("-");
+        case SLASH: return QChar('\\');
+        case BACKSLASH: return QChar('/');
+        case HYPHEN: return QChar('-');
         default:
-            qDebug() << QString("Undefined period in InvNumFormatData::SeparatorName: separator=%1").arg((int)separator);
-            return QString();
+            qDebug() << QString("Undefined separator in InvNumFormatData::SeparatorName: separator=%1").arg((int)separator);
+            return QChar();
         }
     }
 
     static QString FieldName(const int field)
+    {
+        switch(field)
+        {
+        case NUMBER: return QObject::trUtf8("{NR}");
+        case INVOICE_TYPE: return QObject::trUtf8("{TYPE}");
+        case TEXT1: return QObject::trUtf8("{TEXT1}");
+        case TEXT2: return QObject::trUtf8("{TEXT2}");
+        case TEXT3: return QObject::trUtf8("{TEXT3}");
+        case F_YEAR: return QObject::trUtf8("{Y}");
+        case F_MONTH: return QObject::trUtf8("{M}");
+        case F_DAY: return QObject::trUtf8("{D}");
+        case F_WEEK: return QObject::trUtf8("{W}");
+        case F_QUARTER: return QObject::trUtf8("{Q}");
+        default:
+            qDebug() << QString("Undefined field in InvNumFormatData::FieldName: field=%1").arg((int)field);
+            return QString();
+        }
+    }
+
+    static int FieldID(const QString &field)
+    {
+        int ret = -1;
+        for(int i = NUMBER; i <= F_QUARTER; ++i)
+        {
+            if(field.compare(FieldName(i)) == 0)
+            {
+                ret = i;
+                break;
+            }
+        }
+        return ret;
+    }
+
+
+
+    static QString FieldDescription(const int field)
     {
         switch(field)
         {
@@ -53,7 +89,7 @@ struct InvoiceNumberFormatData
         case F_WEEK: return QObject::trUtf8("Tydzień");
         case F_QUARTER: return QObject::trUtf8("Kwartał");
         default:
-            qDebug() << QString("Undefined period in InvNumFormatData::FieldName: field=%1").arg((int)field);
+            qDebug() << QString("Undefined field in InvNumFormatData::FieldDescription: field=%1").arg((int)field);
             return QString();
         }
     }

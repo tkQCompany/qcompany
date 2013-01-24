@@ -94,7 +94,8 @@
      <item>
       <widget class="QPushButton" name="pushButtonRemoveField">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
+        <string notr="true">background-color: rgb(255, 0, 0);
+color: rgb(255, 255, 255);</string>
        </property>
        <property name="text">
         <string>Usuń pole</string>

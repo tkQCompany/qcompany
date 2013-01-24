@@ -483,7 +483,11 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEditFormat"/>
+             <widget class="QLineEdit" name="lineEditFormat">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -1072,8 +1076,8 @@ korekt:</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>533</width>
-            <height>471</height>
+            <width>292</width>
+            <height>155</height>
            </rect>
           </property>
           <attribute name="label">

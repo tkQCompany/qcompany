@@ -595,7 +595,7 @@ QStringList SettingsDialog::getTranslations() const
 
 void SettingsDialog::editFormat_()
 {
-    InvoiceNumberFormatEditDialog dialog;
+    InvoiceNumberFormatEditDialog dialog(this, lineEditFormat->text());
     if(QDialog::Accepted == dialog.exec())
         lineEditFormat->setText(dialog.format());
 }
