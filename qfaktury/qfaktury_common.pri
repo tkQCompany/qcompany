@@ -17,6 +17,7 @@ SOURCES +=     ui/BillDialog.cpp \
     ui/EmailDialog.cpp \
     ui/InvoiceDialog.cpp \
     ui/InvoiceNumberFormatEditDialog.cpp \
+    ui/InvoiceNumberFormatExamplesDialog.cpp \
     ui/InvoiceGrossDialog.cpp \
     ui/MainWindow.cpp \
     ui/PhoneDialog.cpp \
@@ -56,6 +57,7 @@ HEADERS += ui/BillDialog.h \
     ui/EmailDialog.h \
     ui/InvoiceDialog.h \
     ui/InvoiceNumberFormatEditDialog.h \
+    ui/InvoiceNumberFormatExamplesDialog.h \
     ui/InvoiceGrossDialog.h \
     ui/MainWindow.h \
     ui/PhoneDialog.h \

@@ -34,7 +34,8 @@ FORMS += ui/CounterpartyTypeDialog.ui \
          ui/CommodityListDialog.ui \
          ui/CounterpartyDialog.ui \
          ui/SettingsDialog.ui \
-         ui/InvoiceNumberFormatEditDialog.ui
+         ui/InvoiceNumberFormatEditDialog.ui \
+         ui/InvoiceNumberFormatExamplesDialog.ui
 
 RESOURCES += qfaktury.qrc
 TRANSLATIONS += translations/qfaktury_de.ts translations/qfaktury_en.ts

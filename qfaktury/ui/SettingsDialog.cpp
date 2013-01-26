@@ -20,6 +20,7 @@ void SettingsDialog::init()
     connect(pushButtonPaymentRemove, SIGNAL(clicked()), this, SLOT(paymDelBtnClick()));
     connect(pushButtonPaymentDown, SIGNAL(clicked()), this, SLOT(paymDownBtnClick()));
     connect(pushButtonPaymentUp, SIGNAL(clicked()), this, SLOT(paymUpBtnClick()));
+    connect(pushButtonShowExamples, SIGNAL(clicked()), this, SLOT(showExamples_()));
     connect(pushButtonVATAdd, SIGNAL(clicked()), this, SLOT(vatAddBtnClick()));
     connect(pushButtonVATRemove, SIGNAL(clicked()), this, SLOT(vatDelBtnClick()));
     connect(pushButtonVATUp, SIGNAL(clicked()), this, SLOT(vatUpBtnClick()));
@@ -125,6 +126,13 @@ void SettingsDialog::setDefaultClick() {
     sett().resetSettings();
     // is this required? //TODO
     readSettings();
+}
+
+
+void SettingsDialog::showExamples_()
+{
+    InvoiceNumberFormatExamplesDialog dialog(this, lineEditFormat->text());
+    dialog.exec();
 }
 
 /** Slot used to change location of invoiced

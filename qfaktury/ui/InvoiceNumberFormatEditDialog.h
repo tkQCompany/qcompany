@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QMessageBox>
 #include "model/models_data/InvoiceNumberFormatData.h"
+#include "InvoiceNumberFormatExamplesDialog.h"
 
 namespace Ui {
 class InvoiceNumberFormatEditDialog;
@@ -35,6 +36,7 @@ private slots:
 private:
     void init_();
     void initList_(const QString &);
+    QString listToString_() const;
     
 private:
     Ui::InvoiceNumberFormatEditDialog *ui;

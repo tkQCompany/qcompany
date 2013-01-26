@@ -11,6 +11,7 @@
 #include "ui_SettingsDialog.h"
 #include "../SettingsGlobal.h"
 #include "InvoiceNumberFormatEditDialog.h"
+#include "InvoiceNumberFormatExamplesDialog.h"
 
 
 /**
@@ -128,6 +129,8 @@ private slots:
      *
      */
     void setDefaultClick();
+
+    void showExamples_();
     /**
      * @brief
      *

@@ -33,6 +33,7 @@ void InvoiceNumberFormatEditDialog::init_()
     connect(ui->pushButtonRemoveField, SIGNAL(clicked()), this, SLOT(fieldRemove_()));
     connect(ui->pushButtonAddSeparator, SIGNAL(clicked()), this, SLOT(separatorAdd_()));
     connect(ui->pushButtonChangeSeparator, SIGNAL(clicked()), this, SLOT(separatorChange_()));
+    connect(ui->pushButtonShowExamples, SIGNAL(clicked()), this, SLOT(showExamples_()));
 }
 
 
@@ -82,14 +83,21 @@ void InvoiceNumberFormatEditDialog::initList_(const QString &format)
 }
 
 
-void InvoiceNumberFormatEditDialog::accept()
+QString InvoiceNumberFormatEditDialog::listToString_() const
 {
-    invNumFormat_.clear();
+    QString ret;
     const int rowMax = ui->listWidgetFields->count();
     for(int row = 0; row < rowMax; ++row)
     {
-        invNumFormat_.append(ui->listWidgetFields->item(row)->text());
+        ret.append(ui->listWidgetFields->item(row)->text());
     }
+
+    return ret;
+}
+
+void InvoiceNumberFormatEditDialog::accept()
+{
+    invNumFormat_ = listToString_();
     done(QDialog::Accepted);
 }
 
@@ -166,5 +174,6 @@ void InvoiceNumberFormatEditDialog::separatorChange_()
 
 void InvoiceNumberFormatEditDialog::showExamples_()
 {
-
+    InvoiceNumberFormatExamplesDialog dialog(this, listToString_());
+    dialog.exec();
 }
