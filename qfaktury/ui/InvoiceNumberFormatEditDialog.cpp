@@ -17,7 +17,7 @@ InvoiceNumberFormatEditDialog::~InvoiceNumberFormatEditDialog()
 
 void InvoiceNumberFormatEditDialog::init_()
 {
-    for(int i = InvoiceNumberFormatData::NUMBER; i <= InvoiceNumberFormatData::F_QUARTER; ++i)
+    for(int i = InvoiceNumberFormatData::NR; i <= InvoiceNumberFormatData::PERIOD_QUARTER; ++i)
     {
         ui->comboBoxFields->addItem(QString("%1 - %2").arg(InvoiceNumberFormatData::FieldName(i))
                                     .arg(InvoiceNumberFormatData::FieldDescription(i)));
@@ -26,11 +26,6 @@ void InvoiceNumberFormatEditDialog::init_()
     for(int i = InvoiceNumberFormatData::SLASH; i <= InvoiceNumberFormatData::HYPHEN; ++i)
     {
         ui->comboBoxSeparator->addItem(InvoiceNumberFormatData::SeparatorName(i));
-    }
-
-    for(int i = InvoiceNumberFormatData::WEEK; i <= InvoiceNumberFormatData::WHOLE_LIFE; ++i)
-    {
-        ui->comboBoxPeriod->addItem(InvoiceNumberFormatData::ChosenPeriodName(i), i);
     }
 
     connect(ui->pushButtonAddField, SIGNAL(clicked()), this, SLOT(fieldAdd_()));
