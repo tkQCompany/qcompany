@@ -24,7 +24,7 @@ InvoiceDialog::InvoiceDialog(QWidget *parent, Database *db, const QModelIndex &i
     {
         db_->modelInvoice()->insertRow(db_->modelInvoice()->rowCount());
         mapper_.toLast();
-        lineEditInvNumber->setText(generateInvoiceNumber(""));
+        lineEditInvNumber->setText(generateInvoiceNumber(lineEditInvNumFormat->text()));
         setInitialComboBoxIndexes_();
         if(!sett().value ("addText").toString().isEmpty())
         {
@@ -1132,9 +1132,58 @@ void InvoiceDialog::calculateSum()
  * 8) The format of an invoice number should be stored somewhere (because it must be clear to everyone and see point 5 above). E.g. in the number itself or in the database
  * @return QString The new invoice number
  */
-QString InvoiceDialog::generateInvoiceNumber(const QString &/*format*/) const
+QString InvoiceDialog::generateInvoiceNumber(const QString &format) const
 {
-    return QDate::currentDate().toString("yyyy/MM/dd") + QString("/%1").arg(db_->modelInvoice()->rowCount()); //the "rowCount()" includes the newly added empty row
+    QString ret;
+    const QDate currDate(QDate::currentDate());
+    const QVector<int> parse(InvoiceNumberFormatData::Parse(format));
+    for(int i = 0; i < parse.size(); ++i)
+    {
+        switch(parse.at(i))
+        {
+        case InvoiceNumberFormatData::NR:
+            ret += QString("%1").arg(db_->modelInvoice()->rowCount()); //the "rowCount()" includes the newly added empty row
+            break;
+        case InvoiceNumberFormatData::NR_Y:
+            break;
+        case InvoiceNumberFormatData::NR_M:
+            break;
+        case InvoiceNumberFormatData::NR_D:
+            break;
+        case InvoiceNumberFormatData::NR_W:
+            break;
+        case InvoiceNumberFormatData::NR_Q:
+            break;
+        case InvoiceNumberFormatData::INVOICE_TYPE:
+            break;
+        case InvoiceNumberFormatData::TEXT1:
+            break;
+        case InvoiceNumberFormatData::TEXT2:
+            break;
+        case InvoiceNumberFormatData::TEXT3:
+            break;
+        case InvoiceNumberFormatData::PERIOD_YEAR:
+            ret += currDate.toString("yyyy");
+            break;
+        case InvoiceNumberFormatData::PERIOD_MONTH:
+            ret += currDate.toString("MM");
+            break;
+        case InvoiceNumberFormatData::PERIOD_DAY:
+            ret += currDate.toString("dd");
+            break;
+        case InvoiceNumberFormatData::PERIOD_WEEK:
+            break;
+        case InvoiceNumberFormatData::PERIOD_QUARTER:
+            break;
+        case InvoiceNumberFormatData::SLASH:
+        case InvoiceNumberFormatData::BACKSLASH:
+        case InvoiceNumberFormatData::HYPHEN:
+            ret += InvoiceNumberFormatData::SeparatorName(parse.at(i));
+            break;
+        }
+
+    }
+    return ret;
 }
 
 

@@ -6,8 +6,8 @@
 
 struct InvoiceNumberFormatData
 {
-    enum Separator {SLASH, BACKSLASH, HYPHEN};
     enum Field {NR, NR_Y, NR_M, NR_D, NR_W, NR_Q, INVOICE_TYPE, TEXT1, TEXT2, TEXT3, PERIOD_YEAR, PERIOD_MONTH, PERIOD_DAY, PERIOD_WEEK, PERIOD_QUARTER};
+    enum Separator {SLASH = PERIOD_QUARTER + 1, BACKSLASH, HYPHEN};
 
     static QChar SeparatorName(const int separator)
     {
@@ -86,6 +86,51 @@ struct InvoiceNumberFormatData
             qDebug() << QString("Undefined field in InvNumFormatData::FieldDescription: field=%1").arg((int)field);
             return QString();
         }
+    }
+
+    static QVector<int> Parse(const QString &format)
+    {
+        int from = 0, to = 0;
+        const QChar left('{'), right('}');
+        QVector<int> ret;
+
+        if(!format.isEmpty())
+        {
+            while( (from = format.indexOf(left, from)) != -1)
+            {
+                if( (to = format.indexOf(right, from)) != -1)
+                {
+                    ret.append(FieldID(format.mid(from, to - from + 1)));
+                    from = to + 1;
+                    if(from >= format.count())
+                        break;
+                }
+                else
+                {
+                    break;
+                }
+
+                if(format.at(from) != left)
+                {//it should be a separator now. If not, then it's an error
+                    to = format.indexOf(left, from);
+                    if(to == -1)
+                    {
+                        to = format.count() - 1;
+                    }
+
+                    const QChar separator(format.at(from));
+                    for(int i = InvoiceNumberFormatData::SLASH; i <= InvoiceNumberFormatData::HYPHEN; ++i)
+                    {
+                        if(separator == SeparatorName(i))
+                        {
+                            ret.append(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return ret;
     }
 };
 

@@ -42,43 +42,22 @@ void InvoiceNumberFormatEditDialog::initList_(const QString &format)
     if(format.isEmpty())
         return;
 
-    int from = 0, to = 0;
-    const QChar left('{'), right('}');
+    QString label;
+    QVector<int> vint(InvoiceNumberFormatData::Parse(format));
 
     ui->listWidgetFields->clear();
-    while( (from = format.indexOf(left, from)) != -1)
+    for(int i = 0; i < vint.size(); ++i)
     {
-        if( (to = format.indexOf(right, from)) != -1)
+        if(vint.at(i) < InvoiceNumberFormatData::SLASH)
         {
-            const QString fieldName(InvoiceNumberFormatData::FieldName(InvoiceNumberFormatData::FieldID(format.mid(from, to - from + 1))));
-            ui->listWidgetFields->insertItem(ui->listWidgetFields->count(), fieldName);
-            from = to + 1;
-            if(from >= format.count())
-                break;
+            label = InvoiceNumberFormatData::FieldName(vint.at(i));
         }
         else
         {
-            break;
+            label = InvoiceNumberFormatData::SeparatorName(vint.at(i));
         }
 
-        if(format.at(from) != left)
-        {//it should be a separator now. If not, then it's an error
-            to = format.indexOf(left, from);
-            if(to == -1)
-            {
-                to = format.count() - 1;
-            }
-
-            const QChar separator(format.at(from));
-            for(int i = InvoiceNumberFormatData::SLASH; i <= InvoiceNumberFormatData::HYPHEN; ++i)
-            {
-                if(separator == InvoiceNumberFormatData::SeparatorName(i))
-                {
-                    ui->listWidgetFields->insertItem(ui->listWidgetFields->count(), separator);
-                    break;
-                }
-            }
-        }
+        ui->listWidgetFields->insertItem(ui->listWidgetFields->count(), label);
     }
 }
 
