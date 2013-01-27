@@ -16,6 +16,7 @@
 #include "CounterpartyDialog.h"
 #include "ui_InvoiceDialog.h"
 #include "../src/model/Database.h"
+#include "InvoiceNumberFormatEditDialog.h"
 
 
 /**

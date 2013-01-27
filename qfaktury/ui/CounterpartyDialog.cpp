@@ -81,14 +81,15 @@ void CounterpartyDialog::okClick_()
 {
     if (validate_())
     {
-        if(mapper_.submit())
+        mapper_.submit();
+        if(db_->modelCounterparty()->lastError().type() == QSqlError::NoError)
         {
-            if(db_->modelCounterparty()->lastError().type() != QSqlError::NoError)
-            {
-                qDebug() << "lastError(): " << db_->modelCounterparty()->lastError() <<
+            accept();
+        }
+        else
+        {
+            qDebug() << "lastError(): " << db_->modelCounterparty()->lastError() <<
                         ", lastQuery(): " << db_->modelCounterparty()->query().lastQuery();
-                accept();
-            }
         }
     }
 }
@@ -143,7 +144,7 @@ bool CounterpartyDialog::validate_()
     QString missing;
     if (!validateForm_(missing))
     {
-        QMessageBox::critical(this, qApp->applicationName(),
+        QMessageBox::warning(this, qApp->applicationName(),
                     trUtf8("Kontrahent nie moze zostać zapisany, ponieważ brakuje wymaganych danych w polu: ") + missing);
         return false;
     }

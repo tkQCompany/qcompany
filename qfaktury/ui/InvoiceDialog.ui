@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>910</width>
-    <height>561</height>
+    <height>598</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -98,6 +98,27 @@
         </widget>
        </item>
       </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <item>
+      <widget class="QLabel" name="labelInvNumFormat">
+       <property name="text">
+        <string>Format numeracji faktury:</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEditInvNumFormat</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEditInvNumFormat">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

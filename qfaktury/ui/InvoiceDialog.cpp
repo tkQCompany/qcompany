@@ -65,6 +65,7 @@ void InvoiceDialog::init_()
     connect(pushButtonClose, SIGNAL(clicked()), this, SLOT(canQuit()));
     connect(pushButtonSave, SIGNAL(clicked()), this, SLOT(saveInvoice()));
     connect(pushButtonPrint, SIGNAL(clicked()), this, SLOT(makeInvoice()));
+    connect(pushButtonAddCounterparty, SIGNAL(clicked()), this, SLOT(counterpartyAdd_()));
     connect(tableWidgetCommodities, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(editCommodity_()));
     connect(tableWidgetCommodities, SIGNAL(itemActivated(QTableWidgetItem *)), this, SLOT(tableActivated_(QTableWidgetItem *)));
     connect(tableWidgetCommodities, SIGNAL(itemClicked(QTableWidgetItem *)), this, SLOT(tableActivated_(QTableWidgetItem *)));
@@ -76,7 +77,6 @@ void InvoiceDialog::init_()
     connect(dateEditDayOfPayment, SIGNAL(dateChanged(QDate)), this, SLOT(dateChanged_(QDate)));
     connect(spinBoxDiscount, SIGNAL(valueChanged(int)), this, SLOT(discountChange()));
     connect(checkBoxDiscount, SIGNAL(stateChanged(int)), this, SLOT(discountConstChange()));
-    connect(pushButtonAddCounterparty, SIGNAL(clicked()), this, SLOT(counterpartyAdd_()));
 
     pushButtonRemoveCommodity->setEnabled(false);
     pushButtonEditCommodity->setEnabled(false);
@@ -261,9 +261,6 @@ void InvoiceDialog::editCommodity_()
         calculateSum();
     }
 }
-
-
-
 
 
 /**
