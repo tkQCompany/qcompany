@@ -8,6 +8,8 @@
 #include "../ui/CountryDialog.h"
 #include "../ui/CounterpartyTypeDialog.h"
 #include "../ui/EmailDialog.h"
+#include "../ui/InvoiceNumberFormatEditDialog.h"
+#include "../ui/InvoiceNumberFormatExamplesDialog.h"
 #include "../ui/PhoneDialog.h"
 #include "../src/model/Database.h"
 #include "../src/SettingsGlobal.h"
@@ -55,11 +57,15 @@ private slots:
      *
      */
     void editPhoneList_();
+
+    void editFormat_();
     /**
      * @brief
      *
      */
     void okClick_();
+
+    void showExamples_();
 private:
     /**
      * @brief

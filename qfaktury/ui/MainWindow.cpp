@@ -705,6 +705,7 @@ void MainWindow::addCounterparty()
         else
         {
             QMessageBox::critical(this, trUtf8("Błąd w dodawaniu kontrahenta"), db_.modelCounterparty()->lastError().text());
+            db_.modelCounterparty()->revertAll();
         }
     }
 }

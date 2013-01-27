@@ -43,7 +43,7 @@ QVariant ModelCounterparty::headerData(int section, Qt::Orientation orientation,
         return trUtf8("Główny e-mail");
     case CounterpartyFields::PRIMARY_PHONE:
         return trUtf8("Główny telefon");
-    case CounterpartyFields::INV_FORMAT:
+    case CounterpartyFields::INV_NUM_FORMAT:
         return trUtf8("Format numeru faktury");
 
     default:

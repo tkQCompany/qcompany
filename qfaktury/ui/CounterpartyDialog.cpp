@@ -19,7 +19,7 @@ CounterpartyDialog::CounterpartyDialog(QWidget *parent, Database *db, const QMod
     }
     else
     {
-        groupBox->setVisible(false); //because at this moment there is no id_counterparty
+        groupBoxAdditionalContacts->setVisible(false); //because at this moment there is no id_counterparty
 
         db_->modelCounterparty()->insertRow(db_->modelCounterparty()->rowCount());
         mapper_.toLast();
@@ -30,7 +30,9 @@ CounterpartyDialog::CounterpartyDialog(QWidget *parent, Database *db, const QMod
     connect(pushButtonEditTypeList, SIGNAL(clicked()), this, SLOT(editCounterpartyTypeList_()));
     connect(pushButtonEditCountryList, SIGNAL(clicked()), this, SLOT(editCountryList_()));
     connect(pushButtonEditEmailList, SIGNAL(clicked()), this, SLOT(editEmailList_()));
+    connect(pushButtonEditFormat, SIGNAL(clicked()), this, SLOT(editFormat_()));
     connect(pushButtonEditPhoneList, SIGNAL(clicked()), this, SLOT(editPhoneList_()));
+    connect(pushButtonShowExamples, SIGNAL(clicked()), this, SLOT(showExamples_()));
 }
 
 
@@ -66,6 +68,7 @@ void CounterpartyDialog::init()
     mapper_.addMapping(lineEditWWW, CounterpartyFields::WWW);
     mapper_.addMapping(lineEditPrimaryEmail, CounterpartyFields::PRIMARY_EMAIL);
     mapper_.addMapping(lineEditPrimaryPhone, CounterpartyFields::PRIMARY_PHONE);
+    mapper_.addMapping(lineEditInvNumberFormat, CounterpartyFields::INV_NUM_FORMAT);
 
     lineEditTaxID->setInputMask(sett().value("ticMask", "999-99-999-99; ").toString());
     lineEditAccountName->setInputMask(sett().value("accountMask", "99-9999-9999-9999-9999-9999-9999; ").toString());
@@ -79,7 +82,14 @@ void CounterpartyDialog::okClick_()
     if (validate_())
     {
         if(mapper_.submit())
-            accept();
+        {
+            if(db_->modelCounterparty()->lastError().type() != QSqlError::NoError)
+            {
+                qDebug() << "lastError(): " << db_->modelCounterparty()->lastError() <<
+                        ", lastQuery(): " << db_->modelCounterparty()->query().lastQuery();
+                accept();
+            }
+        }
     }
 }
 // --------- SLOTS END --
@@ -93,32 +103,32 @@ void CounterpartyDialog::okClick_()
  */
 bool CounterpartyDialog::validateForm_(QString &missing) {
     if (lineEditName->text().isEmpty()) {
-        missing = trUtf8("Nazwa");
+        missing = labelName->text();
         lineEditName->setFocus();
         return false;
     }
 
     if (lineEditLocation->text().isEmpty()) {
-        missing = trUtf8("Miejscowość");
+        missing = labelLocation->text();
         lineEditLocation->setFocus();
         return false;
     }
 
     if (lineEditPostalCode->text().isEmpty()) {
-        missing = trUtf8("Kod pocztowy");
+        missing = labelPostalCode->text();
         lineEditPostalCode->setFocus();
         return false;
     }
 
 
     if (lineEditAddress->text().isEmpty()) {
-        missing = trUtf8("Adres");
+        missing = labelStreet->text();
         lineEditAddress->setFocus();
         return false;
     }
 
     if (lineEditTaxID->text().isEmpty()) {
-        missing = trUtf8("Nip");
+        missing = labelTaxID->text();
         lineEditTaxID->setFocus();
         return false;
     }
@@ -217,4 +227,21 @@ void CounterpartyDialog::editPhoneList_()
         }
     }
     db_->modelPhone()->revertAll();
+}
+
+
+void CounterpartyDialog::editFormat_()
+{
+    InvoiceNumberFormatEditDialog dialog(this, lineEditInvNumberFormat->text());
+    if(QDialog::Accepted == dialog.exec())
+    {
+        this->lineEditInvNumberFormat->setText(dialog.format());
+    }
+}
+
+
+void CounterpartyDialog::showExamples_()
+{
+    InvoiceNumberFormatExamplesDialog dialog(this, lineEditInvNumberFormat->text());
+    dialog.exec();
 }
