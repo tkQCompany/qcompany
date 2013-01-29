@@ -1001,7 +1001,7 @@ void InvoiceDialog::makeInvoiceFooterHtml() {
  */
 QString InvoiceDialog::getGroupedSums() {
     QStringList out;
-    const QStringList rates = sett().value("stawki").toString().split("|");
+    const QStringList rates = sett().value(SettingsGlobal::keyName(SettingsGlobal::VAT_RATES)).toString().split("|");
     QMap<int, double> rateNet;
     QMap<int, double> rateVat;
     QMap<int, double> ratesGross;

@@ -38,9 +38,7 @@ void MainWindow::init()
     {
         setupDir();
         dateEditFilterStart->setDisplayFormat(sett().getDateFormat());
-        dateEditFilterStart->setDate(sett().getValueAsDate("filtrStart"));
         dateEditFilterEnd->setDisplayFormat(sett().getDateFormat());
-        dateEditFilterEnd->setDate(sett().getValueAsDate("filtrEnd"));
     }
 
     tableViewCounterparties->setModel(db_.modelCounterparty());
@@ -199,7 +197,6 @@ void MainWindow::createInvoice(const InvoiceTypeData::Type type)
 bool MainWindow::firstRun()
 {
     const bool ok = sett().value("firstrun", true).toBool();
-    sett().checkSettings();
     if(ok)
     {
         // set dates for filter

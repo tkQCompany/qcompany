@@ -120,10 +120,10 @@ void CorrectiveInvoiceDialog::readCorrData(const QString &invFileName)
 
     setWindowTitle(trUtf8("Edytuje korektę"));
 
-    QDomDocument doc(sett().getInoiveDocName());
+    QDomDocument doc("invoice");
     //fName = invFileName;
 
-    QFile file(sett().getInvoicesDir() + invFileName);
+    QFile file(sett().getWorkingDir() + sett().getDataDir() + "/" + invFileName);
     if (!file.open(QIODevice::ReadOnly)) {
         qDebug("file doesn't exist"); //TODO
         return;

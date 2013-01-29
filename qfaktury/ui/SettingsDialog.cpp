@@ -441,7 +441,7 @@ void SettingsDialog::saveSettings() {
     sett().setValue("firstrun", false);
     sett().setValue("logo", lineEditLogo->text());
     sett().setValue("jednostki", getItemsToString(listWidgetUnit));
-    sett().setValue("stawki", getItemsToString(listWidgetVAT).remove("%"));
+    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::VAT_RATES), getItemsToString(listWidgetVAT).remove("%"));
     sett().setValue("waluty", getItemsToString(listWidgetCurrency));
     sett().setValue("pkorekty", getItemsToString(listWidgetCorrectionReason));
     sett().setValue("payments", getItemsToString(listWidgetPayment)); // uwaga!! get first
@@ -486,7 +486,7 @@ void SettingsDialog::readSettings()
     listWidgetUnit->clear();
     listWidgetUnit->addItems(sett().value("jednostki").toString().split("|"));
     listWidgetVAT->clear();
-    listWidgetVAT->addItems(sett().value("stawki").toString().split("|"));
+    listWidgetVAT->addItems(sett().value(SettingsGlobal::keyName(SettingsGlobal::VAT_RATES)).toString().split("|"));
     listWidgetCurrency->clear();
     listWidgetCurrency->addItems(sett().value("waluty").toString().split("|"));
     listWidgetPayment->clear();
