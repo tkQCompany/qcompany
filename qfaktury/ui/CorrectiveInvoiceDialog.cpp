@@ -235,16 +235,16 @@ void CorrectiveInvoiceDialog::readCorrData(const QString &invFileName)
     }
 
     dateEditDayOfPayment->setDate(QDate::fromString(additional.attribute("liabDate"), sett().getDateFormat()));
-    int curCurrency = sett().value("waluty").toString().split("|").indexOf(additional.attribute("currency"));
+    int curCurrency = sett().value(SettingsGlobal::keyName(SettingsGlobal::CURRENCIES)).toString().split("|").indexOf(additional.attribute("currency"));
     comboBoxCurrency->setCurrentIndex(curCurrency);
 
-    int corrReason = sett().value("pkorekty").toString().split("|").indexOf(additional.attribute("reason"));
+    int corrReason = sett().value(SettingsGlobal::keyName(SettingsGlobal::CORRECTION_REASON)).toString().split("|").indexOf(additional.attribute("reason"));
     reasonCombo->setCurrentIndex(corrReason);
 
     unsaved = false;
     pushButtonSave->setEnabled(false);
 
-    setIsEditAllowed(sett().value("edit").toBool());
+    setIsEditAllowed(sett().value(SettingsGlobal::keyName(SettingsGlobal::EDIT)).toBool());
     calculateDiscount();
     calculateSum();
 }

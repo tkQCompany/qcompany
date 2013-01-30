@@ -98,12 +98,12 @@ QString InvoiceDialogTest::generateInvoiceNumberOldVer(InvoiceTypeData::Type inv
     one1[0] = one1[0].remove(prefix);
 
     int nr = one1[0].toInt() + 1;
-    QString lastInvoice = prefix + numbersCount(nr, sett().value("chars_in_symbol").toInt());
+    QString lastInvoice = prefix + numbersCount(nr, 0);
 
     if (sett().value("day") .toBool())
         lastInvoice += "/" + QDate::currentDate().toString("dd");
 
-    if (sett().value("month") .toBool())
+    if (false) //sett().value("month") .toBool()
         lastInvoice += "/" + QDate::currentDate().toString("MM");
 
     if (sett().value("year") .toBool()) {

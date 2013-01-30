@@ -19,17 +19,53 @@ class SettingsGlobal: public QSettings
     Q_OBJECT
 
 public:
-    enum KEYS {VAT_RATES, BROWSER_NAME, DEFAULT_BROWSER, LANG, CURRENCIES};
+    enum KEYS {VAT_RATES, LANG, CURRENCIES, ADDIT_TEXT, EDIT, EDIT_NAME, EDIT_SYMBOL,
+              NUMBER_OF_COPIES, TAXID_MASK, ACCOUNT_MASK, FIRST_RUN, UNITS, LOGO, PAYMENT_TYPE, CORRECTION_REASON,
+              ORDER_NUMBER, NAME, CODE, PKWIU, QUANTITY, INTERNAT_UNIT, UNIT_PRICE, NET_VAL, DISCOUNT, DISCOUNT_VAL,
+              NET_AFTER, VAT_VAL, VAT_PRICE, GROSS_VAL, USER_NAME, USER_LOCATION, USER_ADDRESS, USER_ACCOUNT,
+              USER_TAXID, USER_PHONE, USER_MAIL, USER_WWW};
 
     static QString keyName(const int key)
     {
         switch(key)
         {
         case VAT_RATES: return QString("stawki");
-        case BROWSER_NAME: return QString("browser_name");
-        case DEFAULT_BROWSER: return QString("default_browser");
         case LANG: return QString("lang");
         case CURRENCIES: return QString("waluty");
+        case ADDIT_TEXT: return QString("addText");
+        case EDIT: return QString("edit");
+        case EDIT_NAME: return QString("editName");
+        case EDIT_SYMBOL: return QString("editSymbol");
+        case NUMBER_OF_COPIES: return QString("numberOfCopies");
+        case TAXID_MASK: return QString("nipMask");
+        case ACCOUNT_MASK: return QString("accountMask");
+        case FIRST_RUN: return QString("firstrun");
+        case UNITS: return QString("jednostki");
+        case LOGO: return QString("logo");
+        case PAYMENT_TYPE: return QString("payments");
+        case CORRECTION_REASON: return QString("pkorekty");
+        case ORDER_NUMBER: return QString("Lp");
+        case NAME: return QString("Nazwa");
+        case CODE: return QString("Kod");
+        case PKWIU: return QString("pkwiu");
+        case QUANTITY: return QString("ilosc");
+        case INTERNAT_UNIT: return QString("jm");
+        case UNIT_PRICE: return QString("cenajedn");
+        case NET_VAL: return QString("wartnetto");
+        case DISCOUNT: return QString("rabatperc");
+        case DISCOUNT_VAL: return QString("rabatval");
+        case NET_AFTER: return QString("nettoafter");
+        case VAT_VAL: return QString("vatval");
+        case VAT_PRICE: return QString("vatprice");
+        case GROSS_VAL: return QString("bruttoval");
+        case USER_NAME: return QString("usernazwa");
+        case USER_LOCATION: return QString("usermiejscowosc");
+        case USER_ADDRESS: return QString("useradres");
+        case USER_ACCOUNT: return QString("userkonto");
+        case USER_TAXID: return QString("usernip");
+        case USER_PHONE: return QString("userphone");
+        case USER_MAIL: return QString("usermail");
+        case USER_WWW: return QString("userwww");
         default:
             qDebug() << "SettingsGlobal::keyName(): improper value of the argument key: " << key;
             return QString();
@@ -58,153 +94,51 @@ public:
     void resetSettings()
     {
         beginGroup("General");
-        setValue(keyName(BROWSER_NAME), "");
-        setValue(keyName(DEFAULT_BROWSER), "true");
         setValue(keyName(LANG), tr("pl"));
         setValue(keyName(CURRENCIES), tr("PLN"));
         endGroup();
 
-        setValue("addText", trUtf8("towar odebrałem zgodnie z fakturą"));
-        setValue("chars_in_symbol", tr("0"));
-        setValue("day", "false");
-        setValue("edit", "false");
-        setValue("editName", "false");
-        setValue("editSymbol", "false");
-        setValue("numberOfCopies", 1);
-        setValue("nipMask", "999-99-999-99; ");
-        setValue("accountMask", "99-9999-9999-9999-9999-9999-9999; ");
-        //      setValue ("filtrEnd", QDate::currentDate ().toString (Qt::ISODate));
-        setValue("filtrStart", QDate::currentDate().toString(getDateFormat()));
-        setValue("firstrun", false);
-        setValue("jednostki", tr("szt.|kg.|g.|m.|km.|godz."));
-        setValue("korNr", "1");
-        setValue("logo", "");
-        /*
-         setValue("margLeft","15");
-         setValue("margTop","15");
-         setValue("margDown","15");
-         setValue("margRight","15");
-         */
-        setValue("margLeftPrinter", "10");
-        setValue("margTopPrinter", "10");
-        setValue("margDownPrinter", "10");
-        setValue("margRightPrinter", "10");
-        setValue("month", "false");
-        setValue("paym1", trUtf8("gotówka") );
-        setValue("payments", trUtf8("gotówka|przelew|zaliczka") );
-        setValue("pdfQuality", "1");
-        setValue("pkorekty", trUtf8("zmiana ilości") );
-        setValue("prefix", "");
-        setValue("renamed", "tak");
-        setValue("shortYear", "false");
-        setValue(keyName(VAT_RATES), tr("22|7|0|zw."));
-        setValue("sufix", "");
-        setValue("waluty", tr("PLN|EUR|USD"));
-        setValue("year", "false");
+        setValue(keyName(ADDIT_TEXT), trUtf8("towar odebrałem zgodnie z fakturą"));
+        setValue(keyName(EDIT), "false");
+        setValue(keyName(EDIT_NAME), "false");
+        setValue(keyName(EDIT_SYMBOL), "false");
+        setValue(keyName(NUMBER_OF_COPIES), 1);
+        setValue(keyName(TAXID_MASK), "999-999-99-99;");
+        setValue(keyName(ACCOUNT_MASK), "99-9999-9999-9999-9999-9999-9999;");
+        setValue(keyName(FIRST_RUN), false);
+        setValue(keyName(UNITS), tr("szt.|kg.|g.|m.|km.|godz."));
+        setValue(keyName(LOGO), "");
+        setValue(keyName(PAYMENT_TYPE), trUtf8("gotówka|przelew|zaliczka"));
+        setValue(keyName(CORRECTION_REASON), trUtf8("zmiana ilości") );
+        setValue(keyName(VAT_RATES), tr("23|8|5|0|zw."));
 
         // here we could add special code for Rachunek
         beginGroup("faktury_pozycje");
-        setValue("Lp", true);
-        setValue("Nazwa", true);
-        setValue("Kod", true);
-        setValue("pkwiu", true);
-        setValue("ilosc", true);
-        setValue("jm", true);
-        setValue("cenajedn", true);
-        setValue("wartnetto", true);
-        setValue("rabatperc", true);
-        setValue("rabatval", true);
-        setValue("nettoafter", true);
-        setValue("vatval", true);
-        setValue("vatprice", true);
-        setValue("bruttoval", true);
-        endGroup();
-
-        beginGroup("formatki");
-        setValue("chAmount_top", "50");
-        setValue("chAmount_left", "50");
-        setValue("chAmount_width", "288");
-        setValue("chAmount_height", "184");
-        setValue("form1_top", "50");
-        setValue("form1_left", "50");
-        setValue("form1_width", "748");
-        setValue("form1_height", "507");
-        setValue("form2_top", "200");
-        setValue("form2_left", "200");
-        setValue("form2_width", "388");
-        setValue("form2_height", "350");
-        setValue("form4_top", "50");
-        setValue("form4_left", "50");
-        setValue("form4_width", "423");
-        setValue("form4_height", "358");
-        setValue("form7_top", "50");
-        setValue("form7_left", "50");
-        setValue("form7_width", "636");
-        setValue("form7_height", "600");
-        setValue("formfra_top", "50");
-        setValue("formfra_left", "50");
-        setValue("formfra_width", "546");
-        setValue("formfra_height", "650");
-        setValue("kontlist_top", "50");
-        setValue("kontlist_left", "50");
-        setValue("kontlist_width", "300");
-        setValue("kontlist_height", "300");
-        setValue("korform_top", "50");
-        setValue("korform_left", "50");
-        setValue("korform_width", "537");
-        setValue("korform_height", "677");
-        setValue("korprintpreview_top", "50");
-        setValue("korprintpreview_left", "50");
-        setValue("korprintpreview_width", "900");
-        setValue("korprintpreview_height", "600");
-        setValue("printpreview_top", "50");
-        setValue("printpreview_left", "50");
-        setValue("printpreview_width", "900");
-        setValue("printpreview_height", "600");
-        setValue("towadd_top", "50");
-        setValue("towadd_left", "50");
-        setValue("towadd_width", "334");
-        setValue("towadd_height", "286");
-        setValue("towlist_top", "50");
-        setValue("towlist_left", "50");
-        setValue("towlist_width", "300");
-        setValue("towlist_height", "300");
+        setValue(keyName(ORDER_NUMBER), true);
+        setValue(keyName(NAME), true);
+        setValue(keyName(CODE), true);
+        setValue(keyName(PKWIU), true);
+        setValue(keyName(QUANTITY), true);
+        setValue(keyName(INTERNAT_UNIT), true);
+        setValue(keyName(UNIT_PRICE), true);
+        setValue(keyName(NET_VAL), true);
+        setValue(keyName(DISCOUNT), true);
+        setValue(keyName(DISCOUNT_VAL), true);
+        setValue(keyName(NET_AFTER), true);
+        setValue(keyName(VAT_VAL), true);
+        setValue(keyName(VAT_PRICE), true);
+        setValue(keyName(GROSS_VAL), true);
         endGroup();
 
         beginGroup("printpos");
-        setValue("usernazwa", "true");
-        setValue("usermiejscowosc", "true");
-        setValue("useradres", "true");
-        setValue("userkonto", "true");
-        setValue("usernip", "true");
-        setValue("userphone", "true");
-        setValue("usermail", "true");
-        setValue("userwww", "true");
-        setValue("clientnazwa", "true");
-        setValue("clientmiejscowosc", "true");
-        setValue("clientadres", "true");
-        setValue("clientkonto", "true");
-        setValue("clientnip", "true");
-        setValue("clientphone", "true");
-        setValue("clientmail", "true");
-        setValue("clientwww", "true");
-        endGroup();
-
-        beginGroup("wydruki");
-        setValue("col1", "10");
-        setValue("col2", "25");
-        setValue("col3", "12");
-        setValue("col4", "12");
-        setValue("col5", "12");
-        setValue("col6", "9");
-        setValue("col7", "11");
-        setValue("col8", "11");
-        setValue("col9", "10");
-        setValue("col10", "12");
-        setValue("col11", "12");
-        setValue("col12", "12");
-        setValue("col13", "12");
-        setValue("col14", "12");
+        setValue(keyName(USER_NAME), "true");
+        setValue(keyName(USER_LOCATION), "true");
+        setValue(keyName(USER_ADDRESS), "true");
+        setValue(keyName(USER_ACCOUNT), "true");
+        setValue(keyName(USER_TAXID), "true");
+        setValue(keyName(USER_PHONE), "true");
+        setValue(keyName(USER_MAIL), "true");
+        setValue(keyName(USER_WWW), "true");
         endGroup();
     }
 

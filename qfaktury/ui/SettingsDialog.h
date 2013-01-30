@@ -33,158 +33,160 @@ private slots:
      * @brief
      *
      */
-    void apply();
+    void apply_();
     /**
      * @brief
      *
      */
-    void okButtonClick();
+    void okButtonClick_();
     /**
      * @brief
      *
      */
-    void addLogoBtnClick();
+    void addLogoBtnClick_();
     /**
      * @brief
      *
      */
-    void currAddBtnClick();
+    void currAddBtnClick_();
     /**
      * @brief
      *
      */
-    void currDelBtnClick();
+    void currDelBtnClick_();
     /**
      * @brief
      *
      */
-    void corrAddBtnClick();
+    void corrAddBtnClick_();
     /**
      * @brief
      *
      */
-    void corrDelBtnClick();
+    void corrDelBtnClick_();
     /**
      * @brief
      *
      */
-    void vatAddBtnClick();
+    void vatAddBtnClick_();
     /**
      * @brief
      *
      */
-    void vatDelBtnClick();
+    void vatDelBtnClick_();
     /**
      * @brief
      *
      */
-    void vatUpBtnClick();
+    void vatUpBtnClick_();
     /**
      * @brief
      *
      */
-    void vatDownBtnClick();
+    void vatDownBtnClick_();
     /**
      * @brief
      *
      */
-    void currencyAddBtnClick();
+    void currencyAddBtnClick_();
     /**
      * @brief
      *
      */
-    void currencyDelBtnClick();
+    void currencyDelBtnClick_();
     /**
      * @brief
      *
      */
-    void paymUpBtnClick();
+    void paymUpBtnClick_();
     /**
      * @brief
      *
      */
-    void paymDownBtnClick();
+    void paymDownBtnClick_();
     /**
      * @brief
      *
      */
-    void paymDelBtnClick();
+    void paymDelBtnClick_();
     /**
      * @brief
      *
      */
-    void zastBtnEnable();
+    void zastBtnEnable_();
     /**
      * @brief
      *
      */
-    void paymAddBtnClick();
+    void paymAddBtnClick_();
     /**
      * @brief
      *
      */
-    void defTextBtnClick();
+    void defTextBtnClick_();
     /**
      * @brief
      *
      */
-    void setDefaultClick();
+    void setDefaultClick_();
 
     void showExamples_();
     /**
      * @brief
      *
      */
-    void maskHelpClick();
+    void maskHelpClick_();
     /**
      * @brief
      *
      */
-    void workingDirBtnClick();
+    void workingDirBtnClick_();
     void editFormat_();
 private:    
     /**
      * @brief
      *
      */
-    void init();
+    void init_();
     /**
      * @brief
      *
      */
-    void sumSize();
+    void sumSize_();
     /**
      * @brief
      *
      */
-    void saveSettings();
+    void saveSettings_();
     /**
      * @brief
      *
      */
-    void readSettings();
+    void readSettings_();
 
     /**
      * @brief
      *
      * @return QStringList
      */
-    QStringList getTemplates();
+    QStringList getTemplates_();
     /**
      * @brief
      *
      * @return QStringList
      */
-    QStringList getTranslations() const;
+    QStringList getTranslations_() const;
     /**
      * @brief
      *
      * @param
      * @return QString
      */
-    QString getItemsToString(const QListWidget *);
+    QString getItemsToString_(const QListWidget *);
+
+    void addToListWidget_(QListWidget *listTo, QLineEdit *lineEditFrom);
+    void delFromListWidget_(QListWidget *list);
 private:
-    bool read; /**< TODO */
-    //QList<QTextCodec *> codecs; /**< TODO */
+    bool read_; /**< TODO */
 };
 #endif
