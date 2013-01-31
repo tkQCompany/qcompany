@@ -23,7 +23,7 @@ public:
               NUMBER_OF_COPIES, TAXID_MASK, ACCOUNT_MASK, FIRST_RUN, UNITS, LOGO, PAYMENT_TYPE, CORRECTION_REASON,
               ORDER_NUMBER, NAME, CODE, PKWIU, QUANTITY, INTERNAT_UNIT, UNIT_PRICE, NET_VAL, DISCOUNT, DISCOUNT_VAL,
               NET_AFTER, VAT_VAL, VAT_PRICE, GROSS_VAL, USER_NAME, USER_LOCATION, USER_ADDRESS, USER_ACCOUNT,
-              USER_TAXID, USER_PHONE, USER_MAIL, USER_WWW};
+              USER_TAXID, USER_PHONE, USER_MAIL, USER_WWW, WORKING_DIR, CSS};
 
     static QString keyName(const int key)
     {
@@ -66,6 +66,8 @@ public:
         case USER_PHONE: return QString("userphone");
         case USER_MAIL: return QString("usermail");
         case USER_WWW: return QString("userwww");
+        case WORKING_DIR: return QString("working_dir");
+        case CSS: return QString("css");
         default:
             qDebug() << "SettingsGlobal::keyName(): improper value of the argument key: " << key;
             return QString();
@@ -79,7 +81,8 @@ public:
      *
      * @return QString
      */
-    QString getDateFormat() const {
+    QString getDateFormat() const
+    {
         // it's better to have a full year... so
         return dateFormat;
     }
@@ -111,6 +114,8 @@ public:
         setValue(keyName(PAYMENT_TYPE), trUtf8("gotówka|przelew|zaliczka"));
         setValue(keyName(CORRECTION_REASON), trUtf8("zmiana ilości") );
         setValue(keyName(VAT_RATES), tr("23|8|5|0|zw."));
+        setValue(keyName(WORKING_DIR), QString("%1/elinux").arg(QDir::homePath()));
+        setValue(keyName(CSS), QString("style.css"));
 
         // here we could add special code for Rachunek
         beginGroup("faktury_pozycje");
@@ -151,7 +156,7 @@ public:
      */
     QString getWorkingDir() const
     {
-        return value("working_dir", QDir::homePath()).toString() + QString("/elinux");
+        return value(keyName(WORKING_DIR)).toString();
     }
 
     // returns templates directory
@@ -162,12 +167,7 @@ public:
      */
     QString getTemplate() const
     {
-        QString style = value("css", "style.css").toString();
-        if (style.isEmpty())
-        {
-            style = "style.css";
-        }
-
+        const QString style = value(keyName(CSS)).toString();
         QString ret = getWorkingDir() + "/templates/" + style;
 
         QFile f;
@@ -258,7 +258,6 @@ private:
     QString dateFormat; /**< TODO */
     QLocale locale; /**< TODO */
 
-    // constr
 /**
  * @brief
  *

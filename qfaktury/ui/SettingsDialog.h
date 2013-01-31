@@ -113,17 +113,13 @@ private slots:
      * @brief
      *
      */
-    void zastBtnEnable_();
+    void applyBtnEnable_();
     /**
      * @brief
      *
      */
     void paymAddBtnClick_();
-    /**
-     * @brief
-     *
-     */
-    void defTextBtnClick_();
+
     /**
      * @brief
      *
@@ -186,6 +182,8 @@ private:
 
     void addToListWidget_(QListWidget *listTo, QLineEdit *lineEditFrom);
     void delFromListWidget_(QListWidget *list);
+    void moveUpElement_(QListWidget *list);
+    void moveDownElement_(QListWidget *list);
 private:
     bool read_; /**< TODO */
 };

@@ -30,44 +30,43 @@ void SettingsDialog::init_()
     connect(pushButtonChooseLogo, SIGNAL(clicked()), this, SLOT(addLogoBtnClick_()));
     connect(pushButtonWorkDir, SIGNAL(clicked()), this, SLOT(workingDirBtnClick_()));
     connect(pushButtonDefault, SIGNAL(clicked()), this, SLOT(setDefaultClick_()));
-    connect(pushButtonDefaultAdditionalText, SIGNAL(clicked()), this, SLOT(defTextBtnClick_()));
     connect(pushButtonMaskHelp, SIGNAL(clicked()), this, SLOT(maskHelpClick_()));
     connect(pushButtonFormatEdit, SIGNAL(clicked()), this, SLOT(editFormat_()));
 
-    connect( comboBoxCSS, SIGNAL( currentIndexChanged (int)), this, SLOT( zastBtnEnable_() ) );
-    connect( comboBoxLanguage, SIGNAL( currentIndexChanged (int)), this, SLOT( zastBtnEnable_() ) );
-    connect( lineEditLogo, SIGNAL(  textChanged (const QString &)), this, SLOT( zastBtnEnable_() ) );
-    connect( lineEditWorkDir, SIGNAL(  textChanged (const QString &)), this, SLOT( zastBtnEnable_() ) );
-    connect( lineEditTaxIDMask, SIGNAL(  textChanged (const QString &)), this, SLOT( zastBtnEnable_() ) );
-    connect( lineEditAccountMask, SIGNAL(  textChanged (const QString &)), this, SLOT( zastBtnEnable_() ) );
-    connect( spinBoxNumCopies, SIGNAL(  valueChanged (const QString &) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxInvEdit, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxInvSymbolEdit, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxProductNameEdit, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( textEditAdditionalText,  SIGNAL( textChanged() ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxName, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxLocation, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxAddress, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxAccountName, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxTaxID, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxPhone, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxEmail, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxWWW, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
+    connect( comboBoxCSS, SIGNAL( currentIndexChanged (int)), this, SLOT( applyBtnEnable_() ) );
+    connect( comboBoxLanguage, SIGNAL( currentIndexChanged (int)), this, SLOT( applyBtnEnable_() ) );
+    connect( lineEditLogo, SIGNAL(  textChanged (const QString &)), this, SLOT( applyBtnEnable_() ) );
+    connect( lineEditWorkDir, SIGNAL(  textChanged (const QString &)), this, SLOT( applyBtnEnable_() ) );
+    connect( lineEditTaxIDMask, SIGNAL(  textChanged (const QString &)), this, SLOT( applyBtnEnable_() ) );
+    connect( lineEditAccountMask, SIGNAL(  textChanged (const QString &)), this, SLOT( applyBtnEnable_() ) );
+    connect( spinBoxNumCopies, SIGNAL(  valueChanged (const QString &) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxInvEdit, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxInvSymbolEdit, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxProductNameEdit, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( textEditAdditionalText,  SIGNAL( textChanged() ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxName, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxLocation, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxAddress, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxAccountName, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxTaxID, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxPhone, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxEmail, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxWWW, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
 
-    connect( checkBoxFieldID, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxFieldName, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxFieldPostalCode, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxFieldPKWIU, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxFieldAmount, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxFieldUnit, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxFieldUnitPrice, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxFieldNetVal, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxFieldDiscount, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxFieldDiscountVal, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxFieldNetAfterDiscount, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxFieldVAT, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxFieldVATVal, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
-    connect( checkBoxFieldGrossVal, SIGNAL( stateChanged(int) ), this, SLOT( zastBtnEnable_() ) );
+    connect( checkBoxFieldID, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxFieldName, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxFieldPostalCode, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxFieldPKWIU, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxFieldAmount, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxFieldUnit, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxFieldUnitPrice, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxFieldNetVal, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxFieldDiscount, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxFieldDiscountVal, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxFieldNetAfterDiscount, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxFieldVAT, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxFieldVATVal, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect( checkBoxFieldGrossVal, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
 
     comboBoxLanguage->clear();
     comboBoxLanguage->insertItems(0, getTranslations_());
@@ -77,7 +76,6 @@ void SettingsDialog::init_()
 
     readSettings_();
 
-    // disable apply button :)
     pushButtonApply->setEnabled(false);
 
 }
@@ -101,30 +99,23 @@ void SettingsDialog::apply_()
  */
 void SettingsDialog::okButtonClick_()
 {
-    saveSettings_ ();
+    saveSettings_();
     accept();
 }
 
 /** Slot applyBtn
  */
-void SettingsDialog::zastBtnEnable_()
+void SettingsDialog::applyBtnEnable_()
 {
     pushButtonApply->setEnabled(true);
 }
 
 
-/** Slot - set default text
- */
-void SettingsDialog::defTextBtnClick_()
-{
-    textEditAdditionalText->setText( trUtf8("towar odebrałem zgodnie z fakturą") );
-}
-
 /** Slot - set all to default
  */
 void SettingsDialog::setDefaultClick_()
 {
-    if (QMessageBox::question(this, qApp->applicationName(), trUtf8("Czy napewno chcesz przywrócic ustawienia domyślne?"),
+    if (QMessageBox::question(this, qApp->applicationName(), trUtf8("Czy na pewno chcesz przywrócic ustawienia domyślne?"),
                               QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
         return;
 
@@ -144,9 +135,9 @@ void SettingsDialog::showExamples_()
  */
 void SettingsDialog::workingDirBtnClick_()
 {
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+    const QString dir(QFileDialog::getExistingDirectory(this, tr("Open Directory"),
                                                     "/home", QFileDialog::ShowDirsOnly
-                                                    | QFileDialog::DontResolveSymlinks);
+                                                    | QFileDialog::DontResolveSymlinks));
     lineEditWorkDir->setText(dir);
     pushButtonApply->setEnabled(true);
 }
@@ -243,116 +234,29 @@ void SettingsDialog::paymAddBtnClick_()
  */
 void SettingsDialog::vatUpBtnClick_()
 {
-    const int selNr = listWidgetVAT->currentRow();
-
-    if (selNr == 0)
-    {
-        QMessageBox::information(this, trUtf8("Uwaga!!"), trUtf8("Nie można przenieść w górę, już jest najwyżej."),
-                                 QMessageBox::Ok);
-        return;
-    }
-
-    if (selNr > 0)
-    {
-        QListWidgetItem *item = listWidgetVAT->item(listWidgetVAT->currentRow());
-        listWidgetVAT->takeItem(selNr);
-        listWidgetVAT->insertItem(selNr - 1, item);
-        listWidgetVAT->setCurrentRow(selNr - 1);
-    }
-    else
-    {
-        QMessageBox::information(this, trUtf8("Uwaga!!"), trUtf8("Musisz coś zaznaczyć, żeby przesuwać."), QMessageBox::Ok);
-        return;
-    }
-    pushButtonApply->setEnabled(true);
+    moveUpElement_(listWidgetVAT);
 }
 
 /** Slot move VAT value down
  */
 void SettingsDialog::vatDownBtnClick_()
 {
-    const int selNr = listWidgetVAT->currentRow();
-    int recCount = listWidgetVAT->count();
-
-    if (selNr == recCount - 1)
-    {
-        QMessageBox::information(this, trUtf8("Uwaga!!"), trUtf8("Nie można przenieść w dół, już jest najniżej."),
-                                 QMessageBox::Ok);
-        return;
-    }
-
-    if (selNr >= 0)
-    {
-        QListWidgetItem *item = listWidgetVAT->item(listWidgetVAT->currentRow());
-        listWidgetVAT->takeItem(selNr);
-        listWidgetVAT->insertItem(selNr + 1, item);
-        listWidgetVAT->setCurrentRow(selNr + 1);
-    }
-    else
-    {
-        QMessageBox::information(this, trUtf8("Uwaga!!"), trUtf8("Musisz coś zaznaczyć, żeby przesuwać."), QMessageBox::Ok);
-        return;
-    }
-    pushButtonApply->setEnabled(true);
+    moveDownElement_(listWidgetVAT);
 }
 
 /** Slot move payment value up
  */
 void SettingsDialog::paymUpBtnClick_()
 {
-    const int selNr = listWidgetPayment->currentRow();
-
-    if (selNr == 0)
-    {
-        QMessageBox::information(this, trUtf8("Uwaga!!"), trUtf8("Nie można przenieść w górę, już jest najwyżej."),
-                                 QMessageBox::Ok);
-        return;
-    }
-
-    if (selNr > 0)
-    {
-        QListWidgetItem *item = listWidgetPayment->item(listWidgetPayment->currentRow());
-        listWidgetPayment->takeItem(selNr);
-        listWidgetPayment->insertItem(selNr - 1, item);
-        listWidgetPayment->setCurrentRow(selNr - 1);
-    }
-    else
-    {
-        QMessageBox::information(this, trUtf8("Uwaga!!"), trUtf8("Musisz coś zaznaczyć, żeby przesuwać."), QMessageBox::Ok);
-        return;
-    }
-    pushButtonApply->setEnabled(true);
+    moveUpElement_(listWidgetPayment);
 }
 
 /** Slot move payment value down
  */
 void SettingsDialog::paymDownBtnClick_()
 {
-    const int selNr = listWidgetPayment->currentRow();
-
-    if (selNr == listWidgetPayment->count() - 1)
-    {
-        QMessageBox::information(this, trUtf8("Uwaga!!"), trUtf8("Nie można przenieść w dół, już jest najniżej."),
-                                 QMessageBox::Ok);
-        return;
-    }
-
-    if (selNr >= 0)
-    {
-        QListWidgetItem *item = listWidgetPayment->item(listWidgetPayment->currentRow());
-        listWidgetPayment->takeItem(selNr);
-        listWidgetPayment->insertItem(selNr + 1, item);
-        listWidgetPayment->setCurrentRow(selNr + 1);
-    }
-    else
-    {
-        QMessageBox::information(this, trUtf8("Uwaga!!"), trUtf8("Musisz coś zaznaczyć, żeby przesuwać."), QMessageBox::Ok);
-        return;
-    }
-    pushButtonApply->setEnabled(true);
+    moveDownElement_(listWidgetPayment);
 }
-//---------------------- UP DOWN SLOTS END----
-
 
 
 /** Used for parsing
@@ -372,10 +276,11 @@ QString SettingsDialog::getItemsToString_(const QListWidget *lw)
 
 /** Save all sett()
  */
-void SettingsDialog::saveSettings_() {
+void SettingsDialog::saveSettings_()
+{
     sett().setValue(SettingsGlobal::keyName(SettingsGlobal::LANG), comboBoxLanguage->currentText());
-    sett().setValue("css", comboBoxCSS->currentText());
-    sett().setValue("working_dir", lineEditWorkDir->text());
+    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::CSS), comboBoxCSS->currentText());
+    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::WORKING_DIR), lineEditWorkDir->text());
 
     sett().beginGroup("printpos");
     sett().setValue(SettingsGlobal::keyName(SettingsGlobal::USER_NAME), checkBoxName->isChecked());
@@ -388,7 +293,7 @@ void SettingsDialog::saveSettings_() {
     sett().setValue(SettingsGlobal::keyName(SettingsGlobal::USER_WWW), checkBoxWWW->isChecked());
     sett().endGroup();
 
-    sett().setValue("firstrun", false);
+    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::FIRST_RUN), false);
     sett().setValue(SettingsGlobal::keyName(SettingsGlobal::LOGO), lineEditLogo->text());
     sett().setValue(SettingsGlobal::keyName(SettingsGlobal::UNITS), getItemsToString_(listWidgetUnit));
     sett().setValue(SettingsGlobal::keyName(SettingsGlobal::VAT_RATES), getItemsToString_(listWidgetVAT).remove("%"));
@@ -430,7 +335,7 @@ void SettingsDialog::readSettings_()
     int curr = 0;
 
     lineEditLogo->setText(sett().value(SettingsGlobal::keyName(SettingsGlobal::LOGO)).toString());
-    lineEditWorkDir->setText(sett().value("working_dir").toString());
+    lineEditWorkDir->setText(sett().value(SettingsGlobal::keyName(SettingsGlobal::WORKING_DIR)).toString());
 
     listWidgetUnit->clear();
     listWidgetUnit->addItems(sett().value(SettingsGlobal::keyName(SettingsGlobal::UNITS)).toString().split("|"));
@@ -447,7 +352,7 @@ void SettingsDialog::readSettings_()
     curr = getTranslations_().indexOf(sett().value(SettingsGlobal::keyName(SettingsGlobal::LANG)).toString());
     comboBoxLanguage->setCurrentIndex(curr);
 
-    curr = getTemplates_().indexOf(sett().value("css").toString());
+    curr = getTemplates_().indexOf(sett().value(SettingsGlobal::keyName(SettingsGlobal::CSS)).toString());
     comboBoxCSS->setCurrentIndex(curr);
 
     lineEditTaxIDMask->setText(sett().value(SettingsGlobal::keyName(SettingsGlobal::TAXID_MASK)).toString());
@@ -493,14 +398,14 @@ void SettingsDialog::readSettings_()
 }
 
 
-// returns list of translations
 QStringList SettingsDialog::getTemplates_()
 {
     QStringList templates;
     QString ret;
     QString path = sett().getWorkingDir() + "/templates/";
 
-    if (templates.isEmpty()) {
+    if (templates.isEmpty())
+    {
         QDir allFiles;
         allFiles.setPath(path);
         allFiles.setFilter(QDir::Files);
@@ -580,6 +485,58 @@ void SettingsDialog::delFromListWidget_(QListWidget *list)
     {
         QMessageBox::information(this, trUtf8("Uwaga!!"), trUtf8("Musisz coś zaznaczyć, żeby usuwać."),
                                  QMessageBox::Ok);
+        return;
+    }
+    pushButtonApply->setEnabled(true);
+}
+
+
+void SettingsDialog::moveUpElement_(QListWidget *list)
+{
+    const int selNr = list->currentRow();
+    if (selNr == 0)
+    {
+        QMessageBox::information(this, trUtf8("Uwaga!!"), trUtf8("Nie można przenieść w górę, już jest najwyżej."),
+                                 QMessageBox::Ok);
+        return;
+    }
+
+    if (selNr > 0)
+    {
+        QListWidgetItem *item = list->item(list->currentRow());
+        list->takeItem(selNr);
+        list->insertItem(selNr - 1, item);
+        list->setCurrentRow(selNr - 1);
+    }
+    else
+    {
+        QMessageBox::information(this, trUtf8("Uwaga!!"), trUtf8("Musisz coś zaznaczyć, żeby przesuwać."), QMessageBox::Ok);
+        return;
+    }
+    pushButtonApply->setEnabled(true);
+}
+
+
+void SettingsDialog::moveDownElement_(QListWidget *list)
+{
+    const int selNr = list->currentRow();
+    if (selNr == list->count() - 1)
+    {
+        QMessageBox::information(this, trUtf8("Uwaga!!"), trUtf8("Nie można przenieść w dół, już jest najniżej."),
+                                 QMessageBox::Ok);
+        return;
+    }
+
+    if (selNr >= 0)
+    {
+        QListWidgetItem *item = list->item(list->currentRow());
+        list->takeItem(selNr);
+        list->insertItem(selNr + 1, item);
+        list->setCurrentRow(selNr + 1);
+    }
+    else
+    {
+        QMessageBox::information(this, trUtf8("Uwaga!!"), trUtf8("Musisz coś zaznaczyć, żeby przesuwać."), QMessageBox::Ok);
         return;
     }
     pushButtonApply->setEnabled(true);

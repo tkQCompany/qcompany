@@ -261,16 +261,6 @@
              </property>
             </spacer>
            </item>
-           <item>
-            <widget class="QPushButton" name="pushButtonDefaultAdditionalText">
-             <property name="text">
-              <string>Do&amp;myślny</string>
-             </property>
-             <property name="shortcut">
-              <string>Alt+M</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </item>
          <item>
