@@ -8,7 +8,6 @@
 #include <QLocale>
 #include <QDebug>
 
-// Singleton class to store all the settings and static values
 
 /**
  * @brief
@@ -24,6 +23,11 @@ public:
               ORDER_NUMBER, NAME, CODE, PKWIU, QUANTITY, INTERNAT_UNIT, UNIT_PRICE, NET_VAL, DISCOUNT, DISCOUNT_VAL,
               NET_AFTER, VAT_VAL, VAT_PRICE, GROSS_VAL, USER_NAME, USER_LOCATION, USER_ADDRESS, USER_ACCOUNT,
               USER_TAXID, USER_PHONE, USER_MAIL, USER_WWW, WORKING_DIR, CSS};
+
+    SettingsGlobal()
+    {
+        dateFormat = "dd/MM/yyyy";
+    }
 
     static QString keyName(const int key)
     {
@@ -257,39 +261,6 @@ public:
 private:
     QString dateFormat; /**< TODO */
     QLocale locale; /**< TODO */
-
-/**
- * @brief
- *
- */
-    SettingsGlobal()
-    {
-        dateFormat = "dd/MM/yyyy";
-    }
-
-/**
- * @brief
- *
- * @param
- */
-    SettingsGlobal(const SettingsGlobal&):QSettings() {}
-
-    /**
-     * @brief
-     *
-     * @return SettingsGlobal
-     */
-    friend SettingsGlobal& sett() {
-        static SettingsGlobal sett;
-        return sett;
-    }
 };
-
-/**
- * @brief
- *
- * @return SettingsGlobal
- */
-SettingsGlobal& sett();
 
 #endif

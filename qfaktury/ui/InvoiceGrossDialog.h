@@ -40,12 +40,6 @@ protected:
      * @param i
      */
     void calculateOneDiscount(const int i);
-    /**
-     * @brief
-     *
-     * @return QString
-     */
-    QString getInvoiceTypeAndSaveNr();
 };
 
 

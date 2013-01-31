@@ -2,6 +2,7 @@
 
 ModelVat::ModelVat(QObject *parent) : QStringListModel(parent)
 {
-    listVat_.append(sett().value(SettingsGlobal::keyName(SettingsGlobal::VAT_RATES)).toString().split(QChar('|')));
+    SettingsGlobal s;
+    listVat_.append(s.value(s.keyName(s.VAT_RATES)).toString().split(QChar('|')));
     setStringList(listVat_);
 }

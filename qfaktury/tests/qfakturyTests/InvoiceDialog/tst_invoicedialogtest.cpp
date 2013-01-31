@@ -82,17 +82,18 @@ void InvoiceDialogTest::test_compatibilityWithOldGenerateInvoiceNumber()
 QString InvoiceDialogTest::generateInvoiceNumberOldVer(InvoiceTypeData::Type invType)
 {//old code - for checking compatibility with previous versions
     QString tmp, prefix, suffix;
+    SettingsGlobal s;
 
     if(invType == InvoiceTypeData::PRO_FORMA)
     {
-        tmp = sett().value("fpro").toString();
+        tmp = s.value("fpro").toString();
     }
     else
     {
-        tmp = sett().value("fvat").toString();
+        tmp = s.value("fvat").toString();
     }
 
-    prefix = sett().value("prefix").toString();
+    prefix = s.value("prefix").toString();
 
     QStringList one1 = tmp.split("/");
     one1[0] = one1[0].remove(prefix);
@@ -100,19 +101,19 @@ QString InvoiceDialogTest::generateInvoiceNumberOldVer(InvoiceTypeData::Type inv
     int nr = one1[0].toInt() + 1;
     QString lastInvoice = prefix + numbersCount(nr, 0);
 
-    if (sett().value("day") .toBool())
+    if (s.value("day") .toBool())
         lastInvoice += "/" + QDate::currentDate().toString("dd");
 
     if (false) //sett().value("month") .toBool()
         lastInvoice += "/" + QDate::currentDate().toString("MM");
 
-    if (sett().value("year") .toBool()) {
-        if (!sett().value("shortYear") .toBool())
+    if (s.value("year") .toBool()) {
+        if (!s.value("shortYear") .toBool())
             lastInvoice += "/" + QDate::currentDate().toString("yy");
         else
             lastInvoice += "/" + QDate::currentDate().toString("yyyy");
     }
-    suffix = sett().value("sufix").toString();
+    suffix = s.value("sufix").toString();
     lastInvoice += suffix;
 
     return lastInvoice;
@@ -120,7 +121,8 @@ QString InvoiceDialogTest::generateInvoiceNumberOldVer(InvoiceTypeData::Type inv
 
 
 QString InvoiceDialogTest::numbersCount(int in, int x) {//old code - for checking compatibility with previous versions
-    QString tmp2, tmp = sett().numberToString(in);
+    SettingsGlobal s;
+    QString tmp2, tmp = s.numberToString(in);
     tmp2 = "";
     int incr = x - tmp.length();
     for (int i = 0; i < incr; ++i)

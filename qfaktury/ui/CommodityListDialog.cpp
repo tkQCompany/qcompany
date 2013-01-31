@@ -33,9 +33,13 @@ void CommodityListDialog::init()
     listViewCommodities->selectionModel()->setCurrentIndex(db_->modelCommodity()->index(0, 0), QItemSelectionModel::Rows);
     comboBoxChosenNetPriceChanged(comboBoxChosenNetPrice->currentIndex());
 
-	if (sett().value("editName", false).toBool()) {
+    SettingsGlobal settings;
+    if (settings.value(SettingsGlobal::keyName(SettingsGlobal::EDIT_NAME)).toBool())
+    {
         lineEditName->setEnabled(true);
-	} else {
+    }
+    else
+    {
         lineEditName->setEnabled(false);
 	}
 
@@ -139,7 +143,9 @@ void CommodityListDialog::updateNetVal()
 {
     const double totalNetPrice = netVal_ * doubleSpinBoxAmount->value();
     const double discountedNetPrice = totalNetPrice - totalNetPrice * spinBoxDiscount->value() * 0.01;
-    labelNetVal->setText(sett().numberToString(discountedNetPrice, 'f', 2));
+
+    SettingsGlobal settings;
+    labelNetVal->setText(settings.numberToString(discountedNetPrice, 'f', 2));
 }
 
 

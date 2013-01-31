@@ -119,7 +119,8 @@ void SettingsDialog::setDefaultClick_()
                               QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
         return;
 
-    sett().resetSettings();
+    SettingsGlobal s;
+    s.resetSettings();
     // is this required? //TODO
     readSettings_();
 }
@@ -274,124 +275,125 @@ QString SettingsDialog::getItemsToString_(const QListWidget *lw)
     return  tmp;
 }
 
-/** Save all sett()
- */
+
 void SettingsDialog::saveSettings_()
 {
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::LANG), comboBoxLanguage->currentText());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::CSS), comboBoxCSS->currentText());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::WORKING_DIR), lineEditWorkDir->text());
+    SettingsGlobal s;
 
-    sett().beginGroup("printpos");
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::USER_NAME), checkBoxName->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::USER_LOCATION), checkBoxLocation->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::USER_ADDRESS), checkBoxAddress->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::USER_ACCOUNT), checkBoxAccountName->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::USER_TAXID), checkBoxTaxID->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::USER_PHONE), checkBoxPhone->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::USER_MAIL), checkBoxEmail->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::USER_WWW), checkBoxWWW->isChecked());
-    sett().endGroup();
+    s.setValue(s.keyName(s.LANG), comboBoxLanguage->currentText());
+    s.setValue(s.keyName(s.CSS), comboBoxCSS->currentText());
+    s.setValue(s.keyName(s.WORKING_DIR), lineEditWorkDir->text());
 
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::FIRST_RUN), false);
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::LOGO), lineEditLogo->text());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::UNITS), getItemsToString_(listWidgetUnit));
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::VAT_RATES), getItemsToString_(listWidgetVAT).remove("%"));
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::CURRENCIES), getItemsToString_(listWidgetCurrency));
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::CORRECTION_REASON), getItemsToString_(listWidgetCorrectionReason));
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::PAYMENT_TYPE), getItemsToString_(listWidgetPayment)); //TODO: uwaga!! get first
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::ADDIT_TEXT), textEditAdditionalText->toPlainText());
+    s.beginGroup("printpos");
+    s.setValue(s.keyName(s.USER_NAME), checkBoxName->isChecked());
+    s.setValue(s.keyName(s.USER_LOCATION), checkBoxLocation->isChecked());
+    s.setValue(s.keyName(s.USER_ADDRESS), checkBoxAddress->isChecked());
+    s.setValue(s.keyName(s.USER_ACCOUNT), checkBoxAccountName->isChecked());
+    s.setValue(s.keyName(s.USER_TAXID), checkBoxTaxID->isChecked());
+    s.setValue(s.keyName(s.USER_PHONE), checkBoxPhone->isChecked());
+    s.setValue(s.keyName(s.USER_MAIL), checkBoxEmail->isChecked());
+    s.setValue(s.keyName(s.USER_WWW), checkBoxWWW->isChecked());
+    s.endGroup();
 
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::EDIT), checkBoxInvEdit->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::EDIT_SYMBOL), checkBoxInvSymbolEdit->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::EDIT_NAME), checkBoxProductNameEdit->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::TAXID_MASK), lineEditTaxIDMask->text());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::ACCOUNT_MASK), lineEditAccountMask->text());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::NUMBER_OF_COPIES), spinBoxNumCopies->value());
+    s.setValue(s.keyName(s.FIRST_RUN), false);
+    s.setValue(s.keyName(s.LOGO), lineEditLogo->text());
+    s.setValue(s.keyName(s.UNITS), getItemsToString_(listWidgetUnit));
+    s.setValue(s.keyName(s.VAT_RATES), getItemsToString_(listWidgetVAT).remove("%"));
+    s.setValue(s.keyName(s.CURRENCIES), getItemsToString_(listWidgetCurrency));
+    s.setValue(s.keyName(s.CORRECTION_REASON), getItemsToString_(listWidgetCorrectionReason));
+    s.setValue(s.keyName(s.PAYMENT_TYPE), getItemsToString_(listWidgetPayment)); //TODO: uwaga!! get first
+    s.setValue(s.keyName(s.ADDIT_TEXT), textEditAdditionalText->toPlainText());
 
-    sett().beginGroup("faktury_pozycje");
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::ORDER_NUMBER), checkBoxFieldID->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::NAME), checkBoxFieldName->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::CODE), checkBoxFieldPostalCode->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::PKWIU), checkBoxFieldPKWIU->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::QUANTITY), checkBoxFieldAmount->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::INTERNAT_UNIT), checkBoxFieldUnit->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::UNIT_PRICE), checkBoxFieldUnitPrice->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::NET_VAL), checkBoxFieldNetVal->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::DISCOUNT), checkBoxFieldDiscount->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::DISCOUNT_VAL), checkBoxFieldDiscountVal->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::NET_AFTER), checkBoxFieldNetAfterDiscount->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::VAT_PRICE), checkBoxFieldVAT->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::VAT_VAL), checkBoxFieldVATVal->isChecked());
-    sett().setValue(SettingsGlobal::keyName(SettingsGlobal::GROSS_VAL), checkBoxFieldGrossVal->isChecked());
-    sett().endGroup();
+    s.setValue(s.keyName(s.EDIT), checkBoxInvEdit->isChecked());
+    s.setValue(s.keyName(s.EDIT_SYMBOL), checkBoxInvSymbolEdit->isChecked());
+    s.setValue(s.keyName(s.EDIT_NAME), checkBoxProductNameEdit->isChecked());
+    s.setValue(s.keyName(s.TAXID_MASK), lineEditTaxIDMask->text());
+    s.setValue(s.keyName(s.ACCOUNT_MASK), lineEditAccountMask->text());
+    s.setValue(s.keyName(s.NUMBER_OF_COPIES), spinBoxNumCopies->value());
+
+    s.beginGroup("faktury_pozycje");
+    s.setValue(s.keyName(s.ORDER_NUMBER), checkBoxFieldID->isChecked());
+    s.setValue(s.keyName(s.NAME), checkBoxFieldName->isChecked());
+    s.setValue(s.keyName(s.CODE), checkBoxFieldPostalCode->isChecked());
+    s.setValue(s.keyName(s.PKWIU), checkBoxFieldPKWIU->isChecked());
+    s.setValue(s.keyName(s.QUANTITY), checkBoxFieldAmount->isChecked());
+    s.setValue(s.keyName(s.INTERNAT_UNIT), checkBoxFieldUnit->isChecked());
+    s.setValue(s.keyName(s.UNIT_PRICE), checkBoxFieldUnitPrice->isChecked());
+    s.setValue(s.keyName(s.NET_VAL), checkBoxFieldNetVal->isChecked());
+    s.setValue(s.keyName(s.DISCOUNT), checkBoxFieldDiscount->isChecked());
+    s.setValue(s.keyName(s.DISCOUNT_VAL), checkBoxFieldDiscountVal->isChecked());
+    s.setValue(s.keyName(s.NET_AFTER), checkBoxFieldNetAfterDiscount->isChecked());
+    s.setValue(s.keyName(s.VAT_PRICE), checkBoxFieldVAT->isChecked());
+    s.setValue(s.keyName(s.VAT_VAL), checkBoxFieldVATVal->isChecked());
+    s.setValue(s.keyName(s.GROSS_VAL), checkBoxFieldGrossVal->isChecked());
+    s.endGroup();
 
 }
 
-/** Read all sett()
- */
+
 void SettingsDialog::readSettings_()
 {
     int curr = 0;
+    SettingsGlobal s;
 
-    lineEditLogo->setText(sett().value(SettingsGlobal::keyName(SettingsGlobal::LOGO)).toString());
-    lineEditWorkDir->setText(sett().value(SettingsGlobal::keyName(SettingsGlobal::WORKING_DIR)).toString());
+    lineEditLogo->setText(s.value(s.keyName(s.LOGO)).toString());
+    lineEditWorkDir->setText(s.value(s.keyName(s.WORKING_DIR)).toString());
 
     listWidgetUnit->clear();
-    listWidgetUnit->addItems(sett().value(SettingsGlobal::keyName(SettingsGlobal::UNITS)).toString().split("|"));
+    listWidgetUnit->addItems(s.value(s.keyName(s.UNITS)).toString().split("|"));
     listWidgetVAT->clear();
-    listWidgetVAT->addItems(sett().value(SettingsGlobal::keyName(SettingsGlobal::VAT_RATES)).toString().split("|"));
+    listWidgetVAT->addItems(s.value(s.keyName(s.VAT_RATES)).toString().split("|"));
     listWidgetCurrency->clear();
-    listWidgetCurrency->addItems(sett().value(SettingsGlobal::keyName(SettingsGlobal::CURRENCIES)).toString().split("|"));
+    listWidgetCurrency->addItems(s.value(s.keyName(s.CURRENCIES)).toString().split("|"));
     listWidgetPayment->clear();
-    listWidgetPayment->addItems(sett().value(SettingsGlobal::keyName(SettingsGlobal::PAYMENT_TYPE)).toString().split("|"));
+    listWidgetPayment->addItems(s.value(s.keyName(s.PAYMENT_TYPE)).toString().split("|"));
 
     listWidgetCorrectionReason->clear();
-    listWidgetCorrectionReason->addItems(sett().value(SettingsGlobal::keyName(SettingsGlobal::CORRECTION_REASON)).toString().split("|"));
+    listWidgetCorrectionReason->addItems(s.value(s.keyName(s.CORRECTION_REASON)).toString().split("|"));
 
-    curr = getTranslations_().indexOf(sett().value(SettingsGlobal::keyName(SettingsGlobal::LANG)).toString());
+    curr = getTranslations_().indexOf(s.value(s.keyName(s.LANG)).toString());
     comboBoxLanguage->setCurrentIndex(curr);
 
-    curr = getTemplates_().indexOf(sett().value(SettingsGlobal::keyName(SettingsGlobal::CSS)).toString());
+    curr = getTemplates_().indexOf(s.value(s.keyName(s.CSS)).toString());
     comboBoxCSS->setCurrentIndex(curr);
 
-    lineEditTaxIDMask->setText(sett().value(SettingsGlobal::keyName(SettingsGlobal::TAXID_MASK)).toString());
-    lineEditAccountMask->setText(sett().value(SettingsGlobal::keyName(SettingsGlobal::ACCOUNT_MASK)).toString());
+    lineEditTaxIDMask->setText(s.value(s.keyName(s.TAXID_MASK)).toString());
+    lineEditAccountMask->setText(s.value(s.keyName(s.ACCOUNT_MASK)).toString());
 
-    sett().beginGroup("faktury_pozycje");
-    checkBoxFieldID->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::ORDER_NUMBER)).toBool());
-    checkBoxFieldName->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::NAME)).toBool());
-    checkBoxFieldPostalCode->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::CODE)).toBool());
-    checkBoxFieldPKWIU->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::PKWIU)).toBool());
-    checkBoxFieldAmount->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::QUANTITY)).toBool());
-    checkBoxFieldUnit->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::INTERNAT_UNIT)).toBool());
-    checkBoxFieldUnitPrice->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::UNIT_PRICE)).toBool());
-    checkBoxFieldNetVal->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::NET_VAL)).toBool());
-    checkBoxFieldDiscount->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::DISCOUNT)).toBool());
-    checkBoxFieldDiscountVal->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::DISCOUNT_VAL)).toBool());
-    checkBoxFieldNetAfterDiscount->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::NET_AFTER)).toBool());
-    checkBoxFieldVAT->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::VAT_VAL)).toBool());
-    checkBoxFieldVATVal->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::VAT_PRICE)).toBool());
-    checkBoxFieldGrossVal->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::GROSS_VAL)).toBool());
-    sett().endGroup();
+    s.beginGroup("faktury_pozycje");
+    checkBoxFieldID->setChecked(s.value(s.keyName(s.ORDER_NUMBER)).toBool());
+    checkBoxFieldName->setChecked(s.value(s.keyName(s.NAME)).toBool());
+    checkBoxFieldPostalCode->setChecked(s.value(s.keyName(s.CODE)).toBool());
+    checkBoxFieldPKWIU->setChecked(s.value(s.keyName(s.PKWIU)).toBool());
+    checkBoxFieldAmount->setChecked(s.value(s.keyName(s.QUANTITY)).toBool());
+    checkBoxFieldUnit->setChecked(s.value(s.keyName(s.INTERNAT_UNIT)).toBool());
+    checkBoxFieldUnitPrice->setChecked(s.value(s.keyName(s.UNIT_PRICE)).toBool());
+    checkBoxFieldNetVal->setChecked(s.value(s.keyName(s.NET_VAL)).toBool());
+    checkBoxFieldDiscount->setChecked(s.value(s.keyName(s.DISCOUNT)).toBool());
+    checkBoxFieldDiscountVal->setChecked(s.value(s.keyName(s.DISCOUNT_VAL)).toBool());
+    checkBoxFieldNetAfterDiscount->setChecked(s.value(s.keyName(s.NET_AFTER)).toBool());
+    checkBoxFieldVAT->setChecked(s.value(s.keyName(s.VAT_VAL)).toBool());
+    checkBoxFieldVATVal->setChecked(s.value(s.keyName(s.VAT_PRICE)).toBool());
+    checkBoxFieldGrossVal->setChecked(s.value(s.keyName(s.GROSS_VAL)).toBool());
+    s.endGroup();
 
-    textEditAdditionalText->setText(sett().value(SettingsGlobal::keyName(SettingsGlobal::ADDIT_TEXT)).toString());
-    checkBoxInvEdit->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::EDIT)).toBool());
-    checkBoxInvSymbolEdit->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::EDIT_SYMBOL)).toBool());
-    checkBoxProductNameEdit->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::EDIT_NAME)).toBool());
+    textEditAdditionalText->setText(s.value(s.keyName(s.ADDIT_TEXT)).toString());
+    checkBoxInvEdit->setChecked(s.value(s.keyName(s.EDIT)).toBool());
+    checkBoxInvSymbolEdit->setChecked(s.value(s.keyName(s.EDIT_SYMBOL)).toBool());
+    checkBoxProductNameEdit->setChecked(s.value(s.keyName(s.EDIT_NAME)).toBool());
 
-    spinBoxNumCopies->setValue(sett().value(SettingsGlobal::keyName(SettingsGlobal::NUMBER_OF_COPIES)).toInt());
+    spinBoxNumCopies->setValue(s.value(s.keyName(s.NUMBER_OF_COPIES)).toInt());
 
-    sett().beginGroup("printpos");
-    checkBoxName->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::USER_NAME)).toBool());
-    checkBoxLocation->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::USER_LOCATION)).toBool());
-    checkBoxAddress->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::USER_ADDRESS)).toBool());
-    checkBoxAccountName->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::USER_ACCOUNT)).toBool());
-    checkBoxTaxID->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::USER_TAXID)).toBool());
-    checkBoxPhone->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::USER_PHONE)).toBool());
-    checkBoxEmail->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::USER_MAIL)).toBool());
-    checkBoxWWW->setChecked(sett().value(SettingsGlobal::keyName(SettingsGlobal::USER_WWW)).toBool());
-    sett().endGroup();
+    s.beginGroup("printpos");
+    checkBoxName->setChecked(s.value(s.keyName(s.USER_NAME)).toBool());
+    checkBoxLocation->setChecked(s.value(s.keyName(s.USER_LOCATION)).toBool());
+    checkBoxAddress->setChecked(s.value(s.keyName(s.USER_ADDRESS)).toBool());
+    checkBoxAccountName->setChecked(s.value(s.keyName(s.USER_ACCOUNT)).toBool());
+    checkBoxTaxID->setChecked(s.value(s.keyName(s.USER_TAXID)).toBool());
+    checkBoxPhone->setChecked(s.value(s.keyName(s.USER_PHONE)).toBool());
+    checkBoxEmail->setChecked(s.value(s.keyName(s.USER_MAIL)).toBool());
+    checkBoxWWW->setChecked(s.value(s.keyName(s.USER_WWW)).toBool());
+    s.endGroup();
 
     read_=true;
     // readTemplate();
@@ -402,7 +404,8 @@ QStringList SettingsDialog::getTemplates_()
 {
     QStringList templates;
     QString ret;
-    QString path = sett().getWorkingDir() + "/templates/";
+    SettingsGlobal s;
+    QString path = s.getWorkingDir() + "/templates/";
 
     if (templates.isEmpty())
     {

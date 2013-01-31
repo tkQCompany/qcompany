@@ -23,17 +23,21 @@ CustomPaymentDialog::CustomPaymentDialog(QWidget *parent): QDialog(parent) {
 CustomPaymentDialog::~CustomPaymentDialog() {
 }
 
-void CustomPaymentDialog::init() {
+void CustomPaymentDialog::init()
+{
+    SettingsGlobal s;
+
     connect(pushButtonOK, SIGNAL(clicked()), this, SLOT(okClicked()));
     connect(pushButtonCancel, SIGNAL(clicked()), this, SLOT(reject()));
     connect( doubleSpinBoxAmount1, SIGNAL(valueChanged(double)), this, SLOT(doubleSpinBoxAmount1Changed(double)));
     connect( doubleSpinBoxAmount2, SIGNAL(valueChanged(double)), this, SLOT(doubleSpinBoxAmount2Changed(double)));
 
-    comboBoxPayment1->insertItems(0, sett().value("payments").toString().split("|"));
+    const QStringList payments(s.value(s.keyName(s.PAYMENT_TYPE)).toString().split("|"));
+    comboBoxPayment1->insertItems(0, payments);
     const int removeLast = comboBoxPayment1->count() - 1;
     comboBoxPayment1->removeItem(removeLast);
 
-    comboBoxPayment2->insertItems(0, sett().value("payments").toString().split("|"));
+    comboBoxPayment2->insertItems(0, payments);
     comboBoxPayment2->removeItem(removeLast);
 
     dateEditDayOfPayment1->setDate(QDate::currentDate());

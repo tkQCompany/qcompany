@@ -32,13 +32,11 @@ class MainWindow: public QMainWindow, public Ui::MainWindow
     Q_OBJECT
 public:
     MainWindow(QWidget *parent = 0);
-    ~MainWindow();
 private slots:
     void tabChanged(QWidget * widget);
     void aboutQt();
     void about();
     void addCommodity();
-    void closeEvent(QCloseEvent *event);
     void delCommodity();
     void editCommodity();
     void addCounterparty();
@@ -68,8 +66,6 @@ private:
     void createInvoice(const InvoiceTypeData::Type type);
     bool firstRun();
     void init();
-    void saveAllSettings();
-    void saveColumnWidth();
     void setActions(const bool counterpartiesEditEnabled, const bool counterpartiesRemoveEnable, const bool, const bool, const bool historyEditEnabled, const bool historyRemoveEnabled);
     void setupDir() const;
 

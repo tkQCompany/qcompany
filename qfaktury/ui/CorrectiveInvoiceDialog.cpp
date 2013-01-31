@@ -21,7 +21,8 @@ void CorrectiveInvoiceDialog::init_ (/*const bool mode*/)
     //addDataLabels->addWidget(labelReason1);
 
     reasonCombo = new QComboBox(this);
-    reasonCombo->addItems(sett().value("pkorekty").toString().split("|"));
+    SettingsGlobal s;
+    reasonCombo->addItems(s.value(s.keyName(s.CORRECTION_REASON)).toString().split("|"));
     //addData->addWidget(reasonCombo);
 
     labelSumNet->setText(trUtf8("Wartość korekty:"));
@@ -64,8 +65,10 @@ void CorrectiveInvoiceDialog::makeInvoice()
     makeInvoiceSummAll();
     makeInvoiceFooter();
 
-    const int numberOfCopies = sett().value("numberOfCopies", 2).toInt();
-    for (int i = 1; i <= numberOfCopies; i++) {
+    SettingsGlobal s;
+    const int numberOfCopies = s.value(s.keyName(s.NUMBER_OF_COPIES), 2).toInt();
+    for (int i = 1; i <= numberOfCopies; i++)
+    {
         makeInvoiceHeader(false, true, false);
         makeInvoiceBody();
         makeInvoceProductsTitle(0);
@@ -123,8 +126,10 @@ void CorrectiveInvoiceDialog::readCorrData(const QString &invFileName)
     QDomDocument doc("invoice");
     //fName = invFileName;
 
-    QFile file(sett().getWorkingDir() + sett().getDataDir() + "/" + invFileName);
-    if (!file.open(QIODevice::ReadOnly)) {
+    SettingsGlobal s;
+    QFile file(s.getWorkingDir() + s.getDataDir() + "/" + invFileName);
+    if (!file.open(QIODevice::ReadOnly))
+    {
         qDebug("file doesn't exist"); //TODO
         return;
     }
@@ -140,8 +145,8 @@ void CorrectiveInvoiceDialog::readCorrData(const QString &invFileName)
 
     const QDomElement root(doc.documentElement());
     lineEditInvNumber->setText(root.attribute("no"));
-    dateEditDateOfSell->setDate(QDate::fromString(root.attribute("sellingDate"), sett().getDateFormat()));
-    dateEditDateOfIssuance->setDate(QDate::fromString(root.attribute("issueDate"),	sett().getDateFormat()));
+    dateEditDateOfSell->setDate(QDate::fromString(root.attribute("sellingDate"), s.getDateFormat()));
+    dateEditDateOfIssuance->setDate(QDate::fromString(root.attribute("issueDate"),	s.getDateFormat()));
 
     invData.invNumber = root.attribute("originalInvoiceNo");
 
@@ -214,9 +219,10 @@ void CorrectiveInvoiceDialog::readCorrData(const QString &invFileName)
     tmp = tmp.toElement().nextSibling();
     QDomElement additional = tmp.toElement();
     lineEditAdditionalText->setText(additional.attribute("text"));
-    int curPayment = sett().value("payments").toString().split("|").indexOf(additional.attribute("paymentType"));
+    int curPayment = s.value("payments").toString().split("|").indexOf(additional.attribute("paymentType"));
 
-    if (curPayment == sett().value("payments").toString().split("|").count() - 1) {
+    if (curPayment == s.value("payments").toString().split("|").count() - 1)
+    {
         disconnect(comboBoxPayment, SIGNAL(currentIndexChanged (QString)), this, SLOT(payTextChanged(QString)));
 
         comboBoxPayment->setCurrentIndex(curPayment);
@@ -224,27 +230,27 @@ void CorrectiveInvoiceDialog::readCorrData(const QString &invFileName)
         custPaymData = new CustomPaymData();
         custPaymData->payment1 = additional.attribute("payment1");
         custPaymData->amount1  = additional.attribute("amount1").toDouble();
-        custPaymData->date1    = QDate::fromString(additional.attribute("liabDate1"), sett().getDateFormat());
+        custPaymData->date1    = QDate::fromString(additional.attribute("liabDate1"), s.getDateFormat());
         custPaymData->payment2 = additional.attribute("payment2");
         custPaymData->amount2  = additional.attribute("amount2").toDouble();
-        custPaymData->date2    = QDate::fromString(additional.attribute("liabDate2"), sett().getDateFormat());
+        custPaymData->date2    = QDate::fromString(additional.attribute("liabDate2"), s.getDateFormat());
 
         connect(comboBoxPayment, SIGNAL(currentIndexChanged (QString)), this, SLOT(payTextChanged(QString)));
     } else {
         comboBoxPayment->setCurrentIndex(curPayment);
     }
 
-    dateEditDayOfPayment->setDate(QDate::fromString(additional.attribute("liabDate"), sett().getDateFormat()));
-    int curCurrency = sett().value(SettingsGlobal::keyName(SettingsGlobal::CURRENCIES)).toString().split("|").indexOf(additional.attribute("currency"));
+    dateEditDayOfPayment->setDate(QDate::fromString(additional.attribute("liabDate"), s.getDateFormat()));
+    int curCurrency = s.value(s.keyName(s.CURRENCIES)).toString().split("|").indexOf(additional.attribute("currency"));
     comboBoxCurrency->setCurrentIndex(curCurrency);
 
-    int corrReason = sett().value(SettingsGlobal::keyName(SettingsGlobal::CORRECTION_REASON)).toString().split("|").indexOf(additional.attribute("reason"));
+    int corrReason = s.value(s.keyName(s.CORRECTION_REASON)).toString().split("|").indexOf(additional.attribute("reason"));
     reasonCombo->setCurrentIndex(corrReason);
 
     unsaved = false;
     pushButtonSave->setEnabled(false);
 
-    setIsEditAllowed(sett().value(SettingsGlobal::keyName(SettingsGlobal::EDIT)).toBool());
+    setIsEditAllowed(s.value(s.keyName(s.EDIT)).toBool());
     calculateDiscount();
     calculateSum();
 }
@@ -337,11 +343,13 @@ void CorrectiveInvoiceDialog::calculateSum(){
     diffTotal = 0;
 
     // sum of after correction invoice
-    for (int i = 0; i < tableWidgetCommodities->rowCount(); ++i) {
-        price = sett().stringToDouble(tableWidgetCommodities->item(i, 7)->text());
-        quantity = sett().stringToDouble(tableWidgetCommodities->item(i, 4)->text());
-        netto = sett().stringToDouble(tableWidgetCommodities->item(i, 8)->text());
-        gross = sett().stringToDouble(tableWidgetCommodities->item(i, 10)->text());
+    SettingsGlobal s;
+    for (int i = 0; i < tableWidgetCommodities->rowCount(); ++i)
+    {
+        price = s.stringToDouble(tableWidgetCommodities->item(i, 7)->text());
+        quantity = s.stringToDouble(tableWidgetCommodities->item(i, 4)->text());
+        netto = s.stringToDouble(tableWidgetCommodities->item(i, 8)->text());
+        gross = s.stringToDouble(tableWidgetCommodities->item(i, 10)->text());
         discountValue = (price * quantity) - netto;
         netTotal += netto;
         discountTotal += discountValue;
@@ -364,9 +372,9 @@ void CorrectiveInvoiceDialog::calculateSum(){
     }
 
     diffTotal = grossTotal - origGrossTotal;
-    labelSumNetVal->setText(sett().numberToString(grossTotal, 'f', 2));
-    labelDiscountVal->setText(sett().numberToString(origGrossTotal, 'f', 2));
-    labelSumGrossVal->setText(sett().numberToString(diffTotal, 'f', 2));
+    labelSumNetVal->setText(s.numberToString(grossTotal, 'f', 2));
+    labelDiscountVal->setText(s.numberToString(origGrossTotal, 'f', 2));
+    labelSumGrossVal->setText(s.numberToString(diffTotal, 'f', 2));
 
     if (diffTotal < 0) {
         labelSumGross->setText(trUtf8("Do zwrotu:"));
@@ -381,27 +389,23 @@ void CorrectiveInvoiceDialog::calculateOneDiscount(const int i) {
     double netto = 0,  price = 0;
     double discountValue = 0, discount;
 
-    price = sett().stringToDouble(tableWidgetCommodities->item(i, 7)->text());
+    SettingsGlobal s;
+    price = s.stringToDouble(tableWidgetCommodities->item(i, 7)->text());
     if (checkBoxDiscount->isChecked()) {
         discount = spinBoxDiscount->value() * 0.01;
     } else {
-        discount = sett().stringToDouble(tableWidgetCommodities->item(i, 6)->text()) * 0.01;
+        discount = s.stringToDouble(tableWidgetCommodities->item(i, 6)->text()) * 0.01;
     }
-    quantity = sett().stringToDouble(tableWidgetCommodities->item(i, 4)->text());
+    quantity = s.stringToDouble(tableWidgetCommodities->item(i, 4)->text());
     netto = (price * quantity);
     discountValue = netto * discount;
     netto -= discountValue;
-    vat = sett().stringToDouble(tableWidgetCommodities->item(i, 9)->text());
+    vat = s.stringToDouble(tableWidgetCommodities->item(i, 9)->text());
     gross = netto * ((vat * 0.01) + 1);
 
-    tableWidgetCommodities->item(i, 6)->setText(sett().numberToString(discount * 100, 'f', 0)); // discount
-    tableWidgetCommodities->item(i, 8)->setText(sett().numberToString(netto)); // nett
-    tableWidgetCommodities->item(i, 10)->setText(sett().numberToString(gross)); // gross
-}
-
-QString CorrectiveInvoiceDialog::getInvoiceTypeAndSaveNr() {
-    sett().setValue("korNr", lineEditInvNumber->text());
-    return "korekta";
+    tableWidgetCommodities->item(i, 6)->setText(s.numberToString(discount * 100, 'f', 0)); // discount
+    tableWidgetCommodities->item(i, 8)->setText(s.numberToString(netto)); // nett
+    tableWidgetCommodities->item(i, 10)->setText(s.numberToString(gross)); // gross
 }
 
 
@@ -471,7 +475,9 @@ void CorrectiveInvoiceDialog::makeBeforeCorrProducts(){
     invStrList += "</table>";
 }
 
-void CorrectiveInvoiceDialog::makeBeforeCorrSumm(){
+void CorrectiveInvoiceDialog::makeBeforeCorrSumm()
+{
+    SettingsGlobal s;
     invStrList += "<br><table width=\"100%\" border=\"0\" cellpadding=\"5\">";
     double vatPrice = origGrossTotal - origNettTotal;
     invStrList += "<tr class=\"productsSumHeader\" valign=\"middle\">";
@@ -482,16 +488,18 @@ void CorrectiveInvoiceDialog::makeBeforeCorrSumm(){
     invStrList += "</tr>";
     invStrList += "<tr class=\"productsSum\" valign=\"middle\">";
     invStrList += "<td align=\"right\">" + trUtf8("Razem:") + "</td>";
-    invStrList += "<td align=\"center\">" + sett().numberToString(origNettTotal, 'f', 2) + "</td>"; // netto
-    invStrList += "<td align=\"center\">" + sett().numberToString(vatPrice, 'f', 2) + "</td>";// vat
-    invStrList += "<td align=\"center\">" + sett().numberToString(origGrossTotal, 'f', 2) + "</td>"; // brutto
+    invStrList += "<td align=\"center\">" + s.numberToString(origNettTotal, 'f', 2) + "</td>"; // netto
+    invStrList += "<td align=\"center\">" + s.numberToString(vatPrice, 'f', 2) + "</td>";// vat
+    invStrList += "<td align=\"center\">" + s.numberToString(origGrossTotal, 'f', 2) + "</td>"; // brutto
     invStrList += "</tr>";
     invStrList += "</table>";
 
     invStrList += "<hr class=\"hrdiv1\">";
 }
 
-void CorrectiveInvoiceDialog::makeInvoiceSumm() {
+void CorrectiveInvoiceDialog::makeInvoiceSumm()
+{
+    SettingsGlobal s;
     invStrList += "<br><table width=\"100%\" border=\"0\" cellpadding=\"5\">";
     double vatPrice = grossTotal - netTotal;
     invStrList += "<tr class=\"productsSumHeader\" valign=\"middle\">";
@@ -501,21 +509,23 @@ void CorrectiveInvoiceDialog::makeInvoiceSumm() {
     invStrList += "<td width=\"11%\" align=\"center\">" + trUtf8("Wartość Brutto") + "</td>"; // brutto
     invStrList += "</tr><tr class=\"productsSum\" valign=\"middle\">";
     invStrList += "<td align=\"right\">" + trUtf8("Razem:") + "</td>";
-    invStrList += "<td align=\"center\">" + sett().numberToString(netTotal, 'f', 2) + "</td>"; // netto
-    invStrList += "<td align=\"center\">" + sett().numberToString(vatPrice, 'f', 2) + "</td>";// vat
-    invStrList += "<td align=\"center\">" + sett().numberToString(grossTotal, 'f', 2) + "</td>"; // brutto
+    invStrList += "<td align=\"center\">" + s.numberToString(netTotal, 'f', 2) + "</td>"; // netto
+    invStrList += "<td align=\"center\">" + s.numberToString(vatPrice, 'f', 2) + "</td>";// vat
+    invStrList += "<td align=\"center\">" + s.numberToString(grossTotal, 'f', 2) + "</td>"; // brutto
     invStrList += "</tr>";
     invStrList += "</table>";
 }
 
-void CorrectiveInvoiceDialog::makeInvoiceSummAll(){
+void CorrectiveInvoiceDialog::makeInvoiceSummAll()
+{
+    SettingsGlobal s;
     //fraStrList += "<tr comment=\"podsumowanie\"><td>";
     invStrList += "<table width=\"100%\" border=\"0\" cellpadding=\"7\">";
     invStrList += "<tr class=\"summary\">";
     invStrList += "<td width=\"48%\">";
 
-    invStrList += trUtf8("Wartość faktury: ") + sett().numberToString(origGrossTotal) + "<br>";
-    invStrList += trUtf8("Wartość korekty: ") + sett().numberToString(grossTotal) + "<br>";
+    invStrList += trUtf8("Wartość faktury: ") + s.numberToString(origGrossTotal) + "<br>";
+    invStrList += trUtf8("Wartość korekty: ") + s.numberToString(grossTotal) + "<br>";
     if (diffTotal > 0) {
         invStrList += trUtf8("Do zapłaty: ");
         invStrList += labelSumGrossVal->text() + " " + comboBoxCurrency->currentText() + "<br>";
@@ -532,17 +542,17 @@ void CorrectiveInvoiceDialog::makeInvoiceSummAll(){
     } else if ((comboBoxPayment->currentIndex() == comboBoxPayment->count() -1) && (custPaymData != NULL)) {
         invStrList += "<span style=\"toPay\">";
         invStrList += QString(trUtf8("Zapłacono: ") + custPaymData->payment1 + ": "
-                              +  sett().numberToString(custPaymData->amount1) + " " + comboBoxCurrency->currentText() + " "
-                              + custPaymData->date1.toString(sett().getDateFormat()) + "<br>");
+                              +  s.numberToString(custPaymData->amount1) + " " + comboBoxCurrency->currentText() + " "
+                              + custPaymData->date1.toString(s.getDateFormat()) + "<br>");
         invStrList += QString(trUtf8("Zaległości: ") + custPaymData->payment2 + ": "
-                              +  sett().numberToString(custPaymData->amount2) + " " + comboBoxCurrency->currentText() + " "
-                              + custPaymData->date2.toString(sett().getDateFormat()));
+                              +  s.numberToString(custPaymData->amount2) + " " + comboBoxCurrency->currentText() + " "
+                              + custPaymData->date2.toString(s.getDateFormat()));
         invStrList += "</span>";
     }  else {
         invStrList += trUtf8("forma płatności: ") + comboBoxPayment->currentText() + "<br><b>";
         invStrList += "<span style=\"payDate\">";
         invStrList += trUtf8("termin płatności: ")
-                + dateEditDayOfPayment->date().toString(sett().getDateFormat())	+ "<br>";
+                + dateEditDayOfPayment->date().toString(s.getDateFormat())	+ "<br>";
         invStrList += "</span>";
     }
 

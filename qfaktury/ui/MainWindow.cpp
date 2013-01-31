@@ -15,30 +15,22 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 
 
 /**
- * @brief Saves settings on exit
- *
- */
-MainWindow::~MainWindow()
-{
-    saveAllSettings();
-}
-
-
-/**
  * @brief
  *
  */
 void MainWindow::init()
 {
+    SettingsGlobal s;
+
     if (firstRun())
     {
-        sett().resetSettings();
+        s.resetSettings();
     }
     else
     {
         setupDir();
-        dateEditFilterStart->setDisplayFormat(sett().getDateFormat());
-        dateEditFilterEnd->setDisplayFormat(sett().getDateFormat());
+        dateEditFilterStart->setDisplayFormat(s.getDateFormat());
+        dateEditFilterEnd->setDisplayFormat(s.getDateFormat());
     }
 
     tableViewCounterparties->setModel(db_.modelCounterparty());
@@ -106,7 +98,9 @@ void MainWindow::init()
 void MainWindow::loadPlugins()
 {
     QDir allFiles;
-    const QString path = sett().getWorkingDir() + "/plugins/";
+    SettingsGlobal s;
+
+    const QString path = s.getWorkingDir() + "/plugins/";
     allFiles.setPath(path);
     allFiles.setFilter(QDir::Files);
     QStringList filters;
@@ -196,7 +190,9 @@ void MainWindow::createInvoice(const InvoiceTypeData::Type type)
  */
 bool MainWindow::firstRun()
 {
-    const bool ok = sett().value("firstrun", true).toBool();
+    SettingsGlobal s;
+
+    const bool ok = s.value(s.keyName(s.FIRST_RUN)).toBool();
     if(ok)
     {
         // set dates for filter
@@ -205,42 +201,6 @@ bool MainWindow::firstRun()
     }
     return ok;
 }
-
-
-
-/**
- * @brief
- *
- */
-void MainWindow::saveColumnWidth()
-{
-    sett().setValue("towCol0", tableViewCommodities->columnWidth(CMF::ID));
-    sett().setValue("towCol1", tableViewCommodities->columnWidth(CMF::NAME));
-    sett().setValue("towCol2", tableViewCommodities->columnWidth(CMF::ABBREV));
-    //sett().setValue("towCol3", tableViewCommodities->columnWidth(CMF::POSTAL_CODE));
-    sett().setValue("towCol4", tableViewCommodities->columnWidth(CMF::PKWIU));
-    sett().setValue("towCol5", tableViewCommodities->columnWidth(CMF::TYPE_ID));
-    sett().setValue("towCol6", tableViewCommodities->columnWidth(CMF::UNIT_ID));
-    sett().setValue("towCol7", tableViewCommodities->columnWidth(CMF::NET1));
-    sett().setValue("towCol8", tableViewCommodities->columnWidth(CMF::NET2));
-    sett().setValue("towCol9", tableViewCommodities->columnWidth(CMF::NET3));
-    sett().setValue("towCol10", tableViewCommodities->columnWidth(CMF::NET4));
-    sett().setValue("towCol11", tableViewCommodities->columnWidth(CMF::VAT));
-
-    //sett().setValue("histCol0", tableViewInvoices->columnWidth(IVF::FILE_NAME));
-    sett().setValue("histCol1", tableViewInvoices->columnWidth(IVF::INV_NUMBER));
-    sett().setValue("histCol2", tableViewInvoices->columnWidth(IVF::SELLING_DATE));
-    sett().setValue("histCol3", tableViewInvoices->columnWidth(IVF::TYPE_ID));
-    sett().setValue("histCol4", tableViewInvoices->columnWidth(IVF::COUNTERPARTY_ID));
-    //sett().setValue("histCol5", tableViewInvoices->columnWidth(IVF::COUNTERPARTY_TAX_ID));
-
-    sett().setValue("custCol0", tableViewCounterparties->columnWidth(CPF::NAME));
-    sett().setValue("custCol1", tableViewCounterparties->columnWidth(CPF::TYPE_ID));
-    sett().setValue("custCol2", tableViewCounterparties->columnWidth(CPF::LOCATION));
-    sett().setValue("custCol3", tableViewCounterparties->columnWidth(CPF::STREET));
-    //sett().setValue("custCol4", tableViewCounterparties->columnWidth(CPF::PHONE_ID));
-}
-
 
 
 /**
@@ -268,41 +228,24 @@ void MainWindow::setActions(const bool counterpartiesEditEnabled, const bool cou
 
 
 
-
-/**
- * @brief
- *
- */
-void MainWindow::saveAllSettings()
-{
-    // save filtr
-    sett().setValue("filtrStart", dateEditFilterStart->text());
-    sett().setValue("filtrEnd", dateEditFilterEnd->text());
-
-    saveColumnWidth();
-
-    // save unsaved
-    sett().sync();
-}
-
-
-
 /**
  * @brief
  *
  */
 void MainWindow::setupDir() const
 {
-    const QString workingDir(sett().getWorkingDir());
+    SettingsGlobal s;
+
+    const QString workingDir(s.getWorkingDir());
     const QDir dir(workingDir);
     if (!dir.exists())
     {
         dir.mkdir(workingDir);
     }
 
-    if (!dir.exists(workingDir + sett().getDataDir()))
+    if (!dir.exists(workingDir + s.getDataDir()))
     {
-        dir.mkdir(workingDir + sett().getDataDir());
+        dir.mkdir(workingDir + s.getDataDir());
     }
 }
 
@@ -966,27 +909,6 @@ void MainWindow::editCommodity()
                 db_.modelCommodity()->revertAll();
             }
         }
-    }
-}
-
-
-/**
- * @brief
- *
- * @param event
- */
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    if (QMessageBox::question(this, trUtf8("Potwierdź"),
-                              trUtf8("Czy chcesz wyjść z programu?"), QMessageBox::Yes | QMessageBox::No,
-                              QMessageBox::Yes) == QMessageBox::Yes)
-    {
-        saveAllSettings();
-        event->accept();
-    }
-    else
-    {
-        event->ignore();
     }
 }
 

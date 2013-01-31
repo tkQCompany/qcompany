@@ -47,6 +47,7 @@ CounterpartyDialog::~CounterpartyDialog()
  */
 void CounterpartyDialog::init()
 {
+    SettingsGlobal s;
     comboBoxType->setModel(db_->modelCounterpartyType());
     comboBoxType->setModelColumn(CounterpartyTypeFields::TYPE);
     comboBoxType->setEditable(false);
@@ -70,8 +71,8 @@ void CounterpartyDialog::init()
     mapper_.addMapping(lineEditPrimaryPhone, CounterpartyFields::PRIMARY_PHONE);
     mapper_.addMapping(lineEditInvNumberFormat, CounterpartyFields::INV_NUM_FORMAT);
 
-    lineEditTaxID->setInputMask(sett().value("ticMask", "999-99-999-99; ").toString());
-    lineEditAccountName->setInputMask(sett().value("accountMask", "99-9999-9999-9999-9999-9999-9999; ").toString());
+    lineEditTaxID->setInputMask(s.value(s.keyName(s.TAXID_MASK)).toString());
+    lineEditAccountName->setInputMask(s.value(s.keyName(s.ACCOUNT_MASK)).toString());
 }
 
 // --------- SLOTS START --

@@ -14,7 +14,10 @@ DuplicateDialog::DuplicateDialog(QWidget *parent, Database *db):
     init_();
 }
 
-void DuplicateDialog::init_() {
+void DuplicateDialog::init_()
+{
+    SettingsGlobal s;
+
     QLabel *labelDupDate = new QLabel(this);
     labelDupDate->setText(trUtf8("Data duplikatu:"));
     labelDupDate->setAlignment(Qt::AlignRight);
@@ -23,7 +26,7 @@ void DuplicateDialog::init_() {
     duplicateDate = new QDateEdit(this);
     duplicateDate->setObjectName(QString::fromUtf8("duplicateDate"));
     duplicateDate->setCalendarPopup(true);
-    duplicateDate->setDisplayFormat(sett().getDateFormat());
+    duplicateDate->setDisplayFormat(s.getDateFormat());
     duplicateDate->setDate(QDate::currentDate());
     //addData->addWidget(duplicateDate);
 
@@ -35,6 +38,7 @@ void DuplicateDialog::init_() {
  */
 void DuplicateDialog::makeInvoiceHeader(const bool sellDate, const bool breakPage, const bool original) {
 
+    SettingsGlobal s;
     QString breakPageStr = "class=\"page_break\"";
     if (breakPage == false) breakPageStr = "";
 
@@ -42,8 +46,9 @@ void DuplicateDialog::makeInvoiceHeader(const bool sellDate, const bool breakPag
     invStrList += "<tr>";
     invStrList += "<td width=\"60%\" align=\"center\" valign=\"bottom\">";
     invStrList += "<span class=\"stamp\">";
-    QString logo = sett().value("logo").toString();
-    if (logo != "") {
+    const QString logo(s.value(s.keyName(s.LOGO)).toString());
+    if (!logo.isEmpty())
+    {
         invStrList += "<img src=\"" + logo + "\" width=\"100\" " + " height=\"100\"+ >";
     } else {
         invStrList += trUtf8("Pieczęć wystawcy");
@@ -57,13 +62,13 @@ void DuplicateDialog::makeInvoiceHeader(const bool sellDate, const bool breakPag
     invStrList += trUtf8("Nr: ") + lineEditInvNumber->text() + "<br></span>";
     invStrList += "<span style=\"font-size:11pt; font-weight:600\">";
     invStrList += trUtf8("Duplikat z dnia: ") + "<b>" +
-            duplicateDate->date().toString(sett().getDateFormat()) +  "</b></span><br>";
+            duplicateDate->date().toString(s.getDateFormat()) +  "</b></span><br>";
     invStrList += "<span class=\"dates\">" + trUtf8("Data wystawienia: ")
-            + dateEditDateOfIssuance->date().toString(sett().getDateFormat()) + "<br>";
+            + dateEditDateOfIssuance->date().toString(s.getDateFormat()) + "<br>";
 
     if (sellDate)
         invStrList += trUtf8("Data sprzedaży: ")
-                + dateEditDateOfSell->date().toString(sett().getDateFormat())
+                + dateEditDateOfSell->date().toString(s.getDateFormat())
                 + "<br>";
     invStrList += "</span>";
     invStrList += "</td><td width=\"3%\">&nbsp;</td>";

@@ -9,8 +9,10 @@
 
 QString ConvertAmount::convertPL(QString input, const QString &currency)
 {
-    QString in(input.remove(sett().getTPointStr()));
-    const QString tmp(in.remove(in.indexOf(sett().getDecimalPointStr()), 3));
+    SettingsGlobal s;
+
+    QString in(input.remove(s.getTPointStr()));
+    const QString tmp(in.remove(in.indexOf(s.getDecimalPointStr()), 3));
 
     QString hundreds(tmp.right(3));
     QString thousands;
@@ -125,6 +127,6 @@ QString ConvertAmount::convertPL(QString input, const QString &currency)
         }
     }
 
-    const QString fraction = input.remove(0, input.indexOf(sett().getDecimalPointStr()) + 1);
+    const QString fraction = input.remove(0, input.indexOf(s.getDecimalPointStr()) + 1);
     return (out + space + fraction + QObject::trUtf8("/100 ") + currency).trimmed();
 }
