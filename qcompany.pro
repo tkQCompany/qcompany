@@ -1,4 +1,4 @@
 TEMPLATE = subdirs
 
-SUBDIRS += qfaktury \
-    qfaktury/tests/qfakturyTests
+SUBDIRS += qfaktury #\
+    #qfaktury/tests/qfakturyTests

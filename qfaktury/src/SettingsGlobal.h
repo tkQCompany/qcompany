@@ -22,7 +22,7 @@ public:
               NUMBER_OF_COPIES, TAXID_MASK, ACCOUNT_MASK, FIRST_RUN, UNITS, LOGO, PAYMENT_TYPE, CORRECTION_REASON,
               ORDER_NUMBER, NAME, CODE, PKWIU, QUANTITY, INTERNAT_UNIT, UNIT_PRICE, NET_VAL, DISCOUNT, DISCOUNT_VAL,
               NET_AFTER, VAT_VAL, VAT_PRICE, GROSS_VAL, USER_NAME, USER_LOCATION, USER_ADDRESS, USER_ACCOUNT,
-              USER_TAXID, USER_PHONE, USER_MAIL, USER_WWW, WORKING_DIR, CSS};
+              USER_TAXID, USER_PHONE, USER_MAIL, USER_WWW, WORKING_DIR, CSS, DEFAULT_INV_NUM_FORMAT, TEXT1, TEXT2, TEXT3};
 
     SettingsGlobal()
     {
@@ -48,30 +48,34 @@ public:
         case LOGO: return QString("logo");
         case PAYMENT_TYPE: return QString("payments");
         case CORRECTION_REASON: return QString("pkorekty");
-        case ORDER_NUMBER: return QString("Lp");
-        case NAME: return QString("Nazwa");
-        case CODE: return QString("Kod");
-        case PKWIU: return QString("pkwiu");
-        case QUANTITY: return QString("ilosc");
-        case INTERNAT_UNIT: return QString("jm");
-        case UNIT_PRICE: return QString("cenajedn");
-        case NET_VAL: return QString("wartnetto");
-        case DISCOUNT: return QString("rabatperc");
-        case DISCOUNT_VAL: return QString("rabatval");
-        case NET_AFTER: return QString("nettoafter");
-        case VAT_VAL: return QString("vatval");
-        case VAT_PRICE: return QString("vatprice");
-        case GROSS_VAL: return QString("bruttoval");
-        case USER_NAME: return QString("usernazwa");
-        case USER_LOCATION: return QString("usermiejscowosc");
-        case USER_ADDRESS: return QString("useradres");
-        case USER_ACCOUNT: return QString("userkonto");
-        case USER_TAXID: return QString("usernip");
-        case USER_PHONE: return QString("userphone");
-        case USER_MAIL: return QString("usermail");
-        case USER_WWW: return QString("userwww");
+        case ORDER_NUMBER: return QString("faktury_pozycje/Lp");
+        case NAME: return QString("faktury_pozycje/Nazwa");
+        case CODE: return QString("faktury_pozycje/Kod");
+        case PKWIU: return QString("faktury_pozycje/pkwiu");
+        case QUANTITY: return QString("faktury_pozycje/ilosc");
+        case INTERNAT_UNIT: return QString("faktury_pozycje/jm");
+        case UNIT_PRICE: return QString("faktury_pozycje/cenajedn");
+        case NET_VAL: return QString("faktury_pozycje/wartnetto");
+        case DISCOUNT: return QString("faktury_pozycje/rabatperc");
+        case DISCOUNT_VAL: return QString("faktury_pozycje/rabatval");
+        case NET_AFTER: return QString("faktury_pozycje/nettoafter");
+        case VAT_VAL: return QString("faktury_pozycje/vatval");
+        case VAT_PRICE: return QString("faktury_pozycje/vatprice");
+        case GROSS_VAL: return QString("faktury_pozycje/bruttoval");
+        case USER_NAME: return QString("printpos/usernazwa");
+        case USER_LOCATION: return QString("printpos/usermiejscowosc");
+        case USER_ADDRESS: return QString("printpos/useradres");
+        case USER_ACCOUNT: return QString("printpos/userkonto");
+        case USER_TAXID: return QString("printpos/usernip");
+        case USER_PHONE: return QString("printpos/userphone");
+        case USER_MAIL: return QString("printpos/usermail");
+        case USER_WWW: return QString("printpos/userwww");
         case WORKING_DIR: return QString("working_dir");
         case CSS: return QString("css");
+        case DEFAULT_INV_NUM_FORMAT: return QString("default_inv_num_format");
+        case TEXT1: return QString("inv_num_text1");
+        case TEXT2: return QString("inv_num_text2");
+        case TEXT3: return QString("inv_num_text3");
         default:
             qDebug() << "SettingsGlobal::keyName(): improper value of the argument key: " << key;
             return QString();
@@ -100,12 +104,9 @@ public:
      */
     void resetSettings()
     {
-        beginGroup("General");
-        setValue(keyName(LANG), tr("pl"));
-        setValue(keyName(CURRENCIES), tr("PLN"));
-        endGroup();
-
-        setValue(keyName(ADDIT_TEXT), trUtf8("towar odebrałem zgodnie z fakturą"));
+        setValue(keyName(LANG), trUtf8("pl"));
+        setValue(keyName(CURRENCIES), trUtf8("PLN|EUR|USD"));
+        setValue(keyName(ADDIT_TEXT), trUtf8("Towar odebrałem zgodnie z fakturą"));
         setValue(keyName(EDIT), "false");
         setValue(keyName(EDIT_NAME), "false");
         setValue(keyName(EDIT_SYMBOL), "false");
@@ -113,16 +114,19 @@ public:
         setValue(keyName(TAXID_MASK), "999-999-99-99;");
         setValue(keyName(ACCOUNT_MASK), "99-9999-9999-9999-9999-9999-9999;");
         setValue(keyName(FIRST_RUN), false);
-        setValue(keyName(UNITS), tr("szt.|kg.|g.|m.|km.|godz."));
+        setValue(keyName(UNITS), trUtf8("szt.|kg.|g.|m.|km.|godz."));
         setValue(keyName(LOGO), "");
         setValue(keyName(PAYMENT_TYPE), trUtf8("gotówka|przelew|zaliczka"));
         setValue(keyName(CORRECTION_REASON), trUtf8("zmiana ilości") );
-        setValue(keyName(VAT_RATES), tr("23|8|5|0|zw."));
+        setValue(keyName(VAT_RATES), trUtf8("23|8|5|0|zw."));
         setValue(keyName(WORKING_DIR), QString("%1/elinux").arg(QDir::homePath()));
         setValue(keyName(CSS), QString("style.css"));
+        setValue(keyName(DEFAULT_INV_NUM_FORMAT), trUtf8("{TEKST1}/{R}-{M}-{D}/{NR_R}"));
+        setValue(keyName(TEXT1), trUtf8("F"));
+        setValue(keyName(TEXT2), trUtf8(""));
+        setValue(keyName(TEXT3), trUtf8(""));
 
         // here we could add special code for Rachunek
-        beginGroup("faktury_pozycje");
         setValue(keyName(ORDER_NUMBER), true);
         setValue(keyName(NAME), true);
         setValue(keyName(CODE), true);
@@ -137,9 +141,7 @@ public:
         setValue(keyName(VAT_VAL), true);
         setValue(keyName(VAT_PRICE), true);
         setValue(keyName(GROSS_VAL), true);
-        endGroup();
 
-        beginGroup("printpos");
         setValue(keyName(USER_NAME), "true");
         setValue(keyName(USER_LOCATION), "true");
         setValue(keyName(USER_ADDRESS), "true");
@@ -148,7 +150,6 @@ public:
         setValue(keyName(USER_PHONE), "true");
         setValue(keyName(USER_MAIL), "true");
         setValue(keyName(USER_WWW), "true");
-        endGroup();
     }
 
 

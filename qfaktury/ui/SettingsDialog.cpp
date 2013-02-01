@@ -116,13 +116,13 @@ void SettingsDialog::applyBtnEnable_()
 void SettingsDialog::setDefaultClick_()
 {
     if (QMessageBox::question(this, qApp->applicationName(), trUtf8("Czy na pewno chcesz przywrócic ustawienia domyślne?"),
-                              QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
-        return;
-
-    SettingsGlobal s;
-    s.resetSettings();
-    // is this required? //TODO
-    readSettings_();
+                              QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+    {
+        SettingsGlobal s;
+        s.resetSettings();
+        // is this required? //TODO
+        readSettings_();
+    }
 }
 
 
@@ -136,7 +136,7 @@ void SettingsDialog::showExamples_()
  */
 void SettingsDialog::workingDirBtnClick_()
 {
-    const QString dir(QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+    const QString dir(QFileDialog::getExistingDirectory(this, trUtf8("Open Directory"),
                                                     "/home", QFileDialog::ShowDirsOnly
                                                     | QFileDialog::DontResolveSymlinks));
     lineEditWorkDir->setText(dir);
@@ -155,8 +155,7 @@ void SettingsDialog::addLogoBtnClick_()
     pushButtonApply->setEnabled(true);
 }
 
-//----------------------- List box Slots START ---
-//@TODO merge into 1 function
+
 
 /** Slot add currency
  */
@@ -338,6 +337,9 @@ void SettingsDialog::readSettings_()
 
     lineEditLogo->setText(s.value(s.keyName(s.LOGO)).toString());
     lineEditWorkDir->setText(s.value(s.keyName(s.WORKING_DIR)).toString());
+    lineEditTaxIDMask->setText(s.value(s.keyName(s.TAXID_MASK)).toString());
+    lineEditAccountMask->setText(s.value(s.keyName(s.ACCOUNT_MASK)).toString());
+    lineEditFormat->setText(s.value(s.keyName(s.DEFAULT_INV_NUM_FORMAT)).toString());
 
     listWidgetUnit->clear();
     listWidgetUnit->addItems(s.value(s.keyName(s.UNITS)).toString().split("|"));
@@ -357,10 +359,6 @@ void SettingsDialog::readSettings_()
     curr = getTemplates_().indexOf(s.value(s.keyName(s.CSS)).toString());
     comboBoxCSS->setCurrentIndex(curr);
 
-    lineEditTaxIDMask->setText(s.value(s.keyName(s.TAXID_MASK)).toString());
-    lineEditAccountMask->setText(s.value(s.keyName(s.ACCOUNT_MASK)).toString());
-
-    s.beginGroup("faktury_pozycje");
     checkBoxFieldID->setChecked(s.value(s.keyName(s.ORDER_NUMBER)).toBool());
     checkBoxFieldName->setChecked(s.value(s.keyName(s.NAME)).toBool());
     checkBoxFieldPostalCode->setChecked(s.value(s.keyName(s.CODE)).toBool());
@@ -375,7 +373,6 @@ void SettingsDialog::readSettings_()
     checkBoxFieldVAT->setChecked(s.value(s.keyName(s.VAT_VAL)).toBool());
     checkBoxFieldVATVal->setChecked(s.value(s.keyName(s.VAT_PRICE)).toBool());
     checkBoxFieldGrossVal->setChecked(s.value(s.keyName(s.GROSS_VAL)).toBool());
-    s.endGroup();
 
     textEditAdditionalText->setText(s.value(s.keyName(s.ADDIT_TEXT)).toString());
     checkBoxInvEdit->setChecked(s.value(s.keyName(s.EDIT)).toBool());
@@ -384,7 +381,6 @@ void SettingsDialog::readSettings_()
 
     spinBoxNumCopies->setValue(s.value(s.keyName(s.NUMBER_OF_COPIES)).toInt());
 
-    s.beginGroup("printpos");
     checkBoxName->setChecked(s.value(s.keyName(s.USER_NAME)).toBool());
     checkBoxLocation->setChecked(s.value(s.keyName(s.USER_LOCATION)).toBool());
     checkBoxAddress->setChecked(s.value(s.keyName(s.USER_ADDRESS)).toBool());
@@ -393,10 +389,6 @@ void SettingsDialog::readSettings_()
     checkBoxPhone->setChecked(s.value(s.keyName(s.USER_PHONE)).toBool());
     checkBoxEmail->setChecked(s.value(s.keyName(s.USER_MAIL)).toBool());
     checkBoxWWW->setChecked(s.value(s.keyName(s.USER_WWW)).toBool());
-    s.endGroup();
-
-    read_=true;
-    // readTemplate();
 }
 
 

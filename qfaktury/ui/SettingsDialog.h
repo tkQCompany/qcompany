@@ -184,7 +184,5 @@ private:
     void delFromListWidget_(QListWidget *list);
     void moveUpElement_(QListWidget *list);
     void moveDownElement_(QListWidget *list);
-private:
-    bool read_; /**< TODO */
 };
 #endif

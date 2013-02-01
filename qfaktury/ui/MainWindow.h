@@ -33,41 +33,41 @@ class MainWindow: public QMainWindow, public Ui::MainWindow
 public:
     MainWindow(QWidget *parent = 0);
 private slots:
-    void tabChanged(QWidget * widget);
-    void aboutQt();
-    void about();
-    void addCommodity();
-    void delCommodity();
-    void editCommodity();
-    void addCounterparty();
-    void delCounterparty();
-    void editCounterparty();
-    void editInvoice();
-    void delInvoice();
-    void editCompanyInfo();
-    void editSettings();
-    void newInvoice();
-    void newProFormaInvoice();
-    void newCorrection();
-    void newDuplicate();
-    void newGrossInvoice();
-    void newBill();
-    void help() const;
-    void reportBug() const;
-    void mainUpdateStatus(QModelIndex index);
-    void showTableMenuGoods(const QPoint &) const;
-    void showTableMenuCounterparties(const QPoint&) const;
-    void showTableMenuHistory(const QPoint &) const;
-    void pluginSlot();
-    void pluginInfoSlot();
+    void tabChanged_(QWidget * widget);
+    void aboutQt_();
+    void about_();
+    void addCommodity_();
+    void delCommodity_();
+    void editCommodity_();
+    void addCounterparty_();
+    void delCounterparty_();
+    void editCounterparty_();
+    void editInvoice_();
+    void delInvoice_();
+    void editCompanyInfo_();
+    void editSettings_();
+    void newInvoice_();
+    void newProFormaInvoice_();
+    void newCorrection_();
+    void newDuplicate_();
+    void newGrossInvoice_();
+    void newBill_();
+    void help_() const;
+    void reportBug_() const;
+    void mainUpdateStatus_(QModelIndex index);
+    void showTableMenuGoods_(const QPoint &) const;
+    void showTableMenuCounterparties_(const QPoint&) const;
+    void showTableMenuHistory_(const QPoint &) const;
+    void pluginSlot_();
+    void pluginInfoSlot_();
     void keyPressEvent(QKeyEvent*);
 
 private:
-    void createInvoice(const InvoiceTypeData::Type type);
-    bool firstRun();
-    void init();
-    void setActions(const bool counterpartiesEditEnabled, const bool counterpartiesRemoveEnable, const bool, const bool, const bool historyEditEnabled, const bool historyRemoveEnabled);
-    void setupDir() const;
+    void createInvoice_(const InvoiceTypeData::Type type);
+    bool firstRun_();
+    void init_();
+    void setActions_(const bool counterpartiesEditEnabled, const bool counterpartiesRemoveEnable, const bool, const bool, const bool historyEditEnabled, const bool historyRemoveEnabled);
+    void setupDir_() const;
 
 private:
     Database db_; /**< An object representing the application's database */

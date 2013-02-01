@@ -10,7 +10,7 @@
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
     setupUi(this);
-    init();
+    init_();
 }
 
 
@@ -18,17 +18,18 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
  * @brief
  *
  */
-void MainWindow::init()
+void MainWindow::init_()
 {
     SettingsGlobal s;
 
-    if (firstRun())
+    if (firstRun_())
     {
         s.resetSettings();
+        editCompanyInfo_();
     }
     else
     {
-        setupDir();
+        setupDir_();
         dateEditFilterStart->setDisplayFormat(s.getDateFormat());
         dateEditFilterEnd->setDisplayFormat(s.getDateFormat());
     }
@@ -51,41 +52,41 @@ void MainWindow::init()
     this->setWindowTitle(QString("%1 - %2").arg(qApp->applicationName()).arg(qApp->applicationVersion()));
 
     // connect slots
-    connect(actionHelp_BugReport, SIGNAL (activated ()), this, SLOT(reportBug()));
+    connect(actionHelp_BugReport, SIGNAL (activated ()), this, SLOT(reportBug_()));
     //connect(toolButtonApply, SIGNAL (clicked()), this, SLOT(rereadHistory()));
-    connect(actionProgram_CompanyInfo, SIGNAL(activated()), this, SLOT(editCompanyInfo()));
+    connect(actionProgram_CompanyInfo, SIGNAL(activated()), this, SLOT(editCompanyInfo_()));
     connect(actionProgram_Exit, SIGNAL(activated()), this, SLOT(close()));
-    connect(actionCounterparties_Add, SIGNAL(activated()), this, SLOT(addCounterparty()));
-    connect(actionCounterparties_Remove, SIGNAL(activated()), this, SLOT(delCounterparty()));
-    connect(actionCounterparties_Edit, SIGNAL(activated()), this, SLOT(editCounterparty()));
-    connect(actionInvoices_InvoiceNew, SIGNAL(activated()), this, SLOT(newInvoice()));
-    connect(actionInvoices_Remove, SIGNAL(activated()), this, SLOT(delInvoice()));
-    connect(actionInvoices_Edit, SIGNAL(triggered()), this, SLOT(editInvoice()));
-    connect(actionInvoices_InvoiceDuplicate, SIGNAL(activated()), this, SLOT(newDuplicate()));
-    connect(actionInvoices_InvoiceGross, SIGNAL(activated()), this, SLOT(newGrossInvoice()));
-    connect(actionInvoices_Bill, SIGNAL(activated()), this, SLOT(newBill()));
-    connect(actionInvoices_InvoiceCorrective, SIGNAL(activated()), this, SLOT(newCorrection()));
-    connect(actionInvoices_InvoiceProForma, SIGNAL(activated()), this, SLOT(newProFormaInvoice()));
-    connect(actionCommodities_Add, SIGNAL(activated()), this, SLOT(addCommodity()));
-    connect(actionCommodities_Edit, SIGNAL(activated()), this, SLOT(editCommodity()));
-    connect(actionCommodities_Remove, SIGNAL(activated()), this, SLOT(delCommodity()));
-    connect(actionHelp_AboutQt, SIGNAL(activated()), this, SLOT(aboutQt()));
-    connect(actionHelp_About, SIGNAL(activated()), this, SLOT(about()));
-    connect(actionProgram_Settings, SIGNAL(activated()), this, SLOT(editSettings()));
-    connect(tabWidgetMain, SIGNAL(currentChanged(QWidget*)), this, SLOT(tabChanged(QWidget*)));
-    connect(actionHelp_Help, SIGNAL(activated()), this, SLOT(help()));
-    connect(tableViewInvoices, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editInvoice()));
-    connect(tableViewInvoices, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTableMenuHistory(QPoint)));
-    connect(tableViewCounterparties, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editCounterparty()));
-    connect(tableViewCounterparties, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTableMenuCounterparties(QPoint)));
-    connect(tableViewCommodities, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editCommodity()));
-    connect(tableViewCommodities, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTableMenuGoods(QPoint)));
+    connect(actionCounterparties_Add, SIGNAL(activated()), this, SLOT(addCounterparty_()));
+    connect(actionCounterparties_Remove, SIGNAL(activated()), this, SLOT(delCounterparty_()));
+    connect(actionCounterparties_Edit, SIGNAL(activated()), this, SLOT(editCounterparty_()));
+    connect(actionInvoices_InvoiceNew, SIGNAL(activated()), this, SLOT(newInvoice_()));
+    connect(actionInvoices_Remove, SIGNAL(activated()), this, SLOT(delInvoice_()));
+    connect(actionInvoices_Edit, SIGNAL(triggered()), this, SLOT(editInvoice_()));
+    connect(actionInvoices_InvoiceDuplicate, SIGNAL(activated()), this, SLOT(newDuplicate_()));
+    connect(actionInvoices_InvoiceGross, SIGNAL(activated()), this, SLOT(newGrossInvoice_()));
+    connect(actionInvoices_Bill, SIGNAL(activated()), this, SLOT(newBill_()));
+    connect(actionInvoices_InvoiceCorrective, SIGNAL(activated()), this, SLOT(newCorrection_()));
+    connect(actionInvoices_InvoiceProForma, SIGNAL(activated()), this, SLOT(newProFormaInvoice_()));
+    connect(actionCommodities_Add, SIGNAL(activated()), this, SLOT(addCommodity_()));
+    connect(actionCommodities_Edit, SIGNAL(activated()), this, SLOT(editCommodity_()));
+    connect(actionCommodities_Remove, SIGNAL(activated()), this, SLOT(delCommodity_()));
+    connect(actionHelp_AboutQt, SIGNAL(activated()), this, SLOT(aboutQt_()));
+    connect(actionHelp_About, SIGNAL(activated()), this, SLOT(about_()));
+    connect(actionProgram_Settings, SIGNAL(activated()), this, SLOT(editSettings_()));
+    connect(tabWidgetMain, SIGNAL(currentChanged(QWidget*)), this, SLOT(tabChanged_(QWidget*)));
+    connect(actionHelp_Help, SIGNAL(activated()), this, SLOT(help_()));
+    connect(tableViewInvoices, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editInvoice_()));
+    connect(tableViewInvoices, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTableMenuHistory_(QPoint)));
+    connect(tableViewCounterparties, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editCounterparty_()));
+    connect(tableViewCounterparties, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTableMenuCounterparties_(QPoint)));
+    connect(tableViewCommodities, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editCommodity_()));
+    connect(tableViewCommodities, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTableMenuGoods_(QPoint)));
 
-    connect(tableViewInvoices, SIGNAL(clicked(QModelIndex)), this, SLOT(mainUpdateStatus(QModelIndex)));
-    connect(tableViewCounterparties, SIGNAL(clicked(QModelIndex)), this, SLOT(mainUpdateStatus(QModelIndex)));
-    connect(tableViewCommodities, SIGNAL(clicked(QModelIndex)), this, SLOT(mainUpdateStatus(QModelIndex)));
+    connect(tableViewInvoices, SIGNAL(clicked(QModelIndex)), this, SLOT(mainUpdateStatus_(QModelIndex)));
+    connect(tableViewCounterparties, SIGNAL(clicked(QModelIndex)), this, SLOT(mainUpdateStatus_(QModelIndex)));
+    connect(tableViewCommodities, SIGNAL(clicked(QModelIndex)), this, SLOT(mainUpdateStatus_(QModelIndex)));
 
-    tabChanged(tabWidgetMain);
+    tabChanged_(tabWidgetMain);
     loadPlugins();
 }
 
@@ -121,13 +122,13 @@ void MainWindow::loadPlugins()
             t.readLine();
             QAction *action = new QAction(t.readLine().remove ("# "), this);
             action->setData(QVariant(i));
-            connect(action, SIGNAL(triggered()), this, SLOT (pluginSlot()));
+            connect(action, SIGNAL(triggered()), this, SLOT (pluginSlot_()));
             this->menuPlugins->addAction(action);
             customActions[i] = path + allFiles[i];
         }
     }
     menuPlugins->addSeparator();
-    menuPlugins->addAction(trUtf8("Informacje"), this, SLOT (pluginInfoSlot()));
+    menuPlugins->addAction(trUtf8("Informacje"), this, SLOT (pluginInfoSlot_()));
 }
 
 
@@ -137,7 +138,7 @@ void MainWindow::loadPlugins()
  *
  * @param type
  */
-void MainWindow::createInvoice(const InvoiceTypeData::Type type)
+void MainWindow::createInvoice_(const InvoiceTypeData::Type type)
 {
     QScopedPointer<InvoiceDialog> invoice;
     switch(type)
@@ -188,11 +189,11 @@ void MainWindow::createInvoice(const InvoiceTypeData::Type type)
  *
  * @return bool
  */
-bool MainWindow::firstRun()
+bool MainWindow::firstRun_()
 {
     SettingsGlobal s;
 
-    const bool ok = s.value(s.keyName(s.FIRST_RUN)).toBool();
+    const bool ok = s.value(s.keyName(s.FIRST_RUN), true).toBool();
     if(ok)
     {
         // set dates for filter
@@ -213,7 +214,7 @@ bool MainWindow::firstRun()
  * @param historyEditEnabled
  * @param historyRemoveEnabled
  */
-void MainWindow::setActions(const bool counterpartiesEditEnabled, const bool counterpartiesRemoveEnable,
+void MainWindow::setActions_(const bool counterpartiesEditEnabled, const bool counterpartiesRemoveEnable,
                             const bool commoditiesEditEnabled, const bool commoditiesRemoveEnabled,
                             const bool historyEditEnabled, const bool historyRemoveEnabled)
 {
@@ -232,7 +233,7 @@ void MainWindow::setActions(const bool counterpartiesEditEnabled, const bool cou
  * @brief
  *
  */
-void MainWindow::setupDir() const
+void MainWindow::setupDir_() const
 {
     SettingsGlobal s;
 
@@ -264,13 +265,13 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
         switch (tabWidgetMain->currentIndex())
         {
         case 0:
-            editInvoice();
+            editInvoice_();
             break;
         case 1:
-            editCounterparty();
+            editCounterparty_();
             break;
         case 2:
-            editCommodity();
+            editCommodity_();
             break;
         }
     }
@@ -304,7 +305,7 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
  * @brief
  *
  */
-void MainWindow::pluginInfoSlot()
+void MainWindow::pluginInfoSlot_()
 {
     QMessageBox::information(this, qApp->applicationName(),
                              trUtf8("To menu służy do obsługi pluginów pythona,\nnp. archiwizacji danych, generowania raportów etc.\n\n"
@@ -317,7 +318,7 @@ void MainWindow::pluginInfoSlot()
  * @brief
  *
  */
-void MainWindow::pluginSlot()
+void MainWindow::pluginSlot_()
 {
     const QAction *a = static_cast<QAction *> (this->sender());
 
@@ -343,7 +344,7 @@ void MainWindow::pluginSlot()
  *
  * @param p
  */
-void MainWindow::showTableMenuGoods(const QPoint &p) const
+void MainWindow::showTableMenuGoods_(const QPoint &p) const
 {
     QMenu menutableViewGoods(tableViewCommodities);
     menutableViewGoods.addAction(actionCommodities_Add);
@@ -359,7 +360,7 @@ void MainWindow::showTableMenuGoods(const QPoint &p) const
  *
  * @param p
  */
-void MainWindow::showTableMenuCounterparties(const QPoint &p) const
+void MainWindow::showTableMenuCounterparties_(const QPoint &p) const
 {
     QMenu menuTableCounterparties(tableViewCounterparties);
     menuTableCounterparties.addAction(actionCounterparties_Add);
@@ -375,7 +376,7 @@ void MainWindow::showTableMenuCounterparties(const QPoint &p) const
  *
  * @param p
  */
-void MainWindow::showTableMenuHistory(const QPoint &p) const
+void MainWindow::showTableMenuHistory_(const QPoint &p) const
 {
     QMenu menuTableInvoices(tableViewInvoices);
     menuTableInvoices.addAction(actionInvoices_InvoiceNew);
@@ -398,7 +399,7 @@ void MainWindow::showTableMenuHistory(const QPoint &p) const
  *
  * @param index
  */
-void MainWindow::mainUpdateStatus(QModelIndex index)
+void MainWindow::mainUpdateStatus_(QModelIndex index)
 {
     const QString message(QString("%1 : %2, %3 : %4, %5 : %6")
                           .arg(index.model()->headerData(1, Qt::Horizontal).toString())
@@ -420,19 +421,19 @@ void MainWindow::mainUpdateStatus(QModelIndex index)
  *
  * @param widget
  */
-void MainWindow::tabChanged(QWidget * widget)
+void MainWindow::tabChanged_(QWidget * widget)
 {
     // disable Edit and Remove actions _ONLY_
     switch (tabWidgetMain->indexOf(widget))
     {
     case 1: //counterparties
-        setActions(true, true, false, false, false, false);
+        setActions_(true, true, false, false, false, false);
         break;
     case 2: //commodities
-        setActions(false, false, true, true, false, false);
+        setActions_(false, false, true, true, false, false);
         break;
     default:// invoices
-        setActions(false, false, false, false, true, true);
+        setActions_(false, false, false, false, true, true);
         break;
     }
 }
@@ -443,7 +444,7 @@ void MainWindow::tabChanged(QWidget * widget)
  * @brief
  *
  */
-void MainWindow::aboutQt()
+void MainWindow::aboutQt_()
 {
     QMessageBox::aboutQt(this, QString("%1 - %2").arg(qApp->applicationName()).arg(qApp->applicationVersion()));
 }
@@ -453,7 +454,7 @@ void MainWindow::aboutQt()
  * @brief
  *
  */
-void MainWindow::about()
+void MainWindow::about_()
 {
     QMessageBox::about(
                 this,
@@ -475,7 +476,7 @@ void MainWindow::about()
  * @brief
  *
  */
-void MainWindow::editInvoice()
+void MainWindow::editInvoice_()
 {
     const QModelIndexList list(tableViewInvoices->selectionModel()->selectedIndexes());
     if(list.size() <= 0)
@@ -559,7 +560,7 @@ void MainWindow::editInvoice()
  * @brief
  *
  */
-void MainWindow::delInvoice()
+void MainWindow::delInvoice_()
 {
     if(tableViewInvoices->selectionModel()->selectedRows().length() != 1)
     {
@@ -590,7 +591,7 @@ void MainWindow::delInvoice()
  * @brief
  *
  */
-void MainWindow::editCompanyInfo()
+void MainWindow::editCompanyInfo_()
 {
     db_.modelCounterparty()->setFilter(QString("type_id = %1").arg(CounterpartyTypeData::MY_COMPANY));
     db_.modelCounterparty()->select();
@@ -620,7 +621,7 @@ void MainWindow::editCompanyInfo()
  * @brief
  *
  */
-void MainWindow::editSettings()
+void MainWindow::editSettings_()
 {
     SettingsDialog settWindow(this);
     settWindow.exec();
@@ -632,7 +633,7 @@ void MainWindow::editSettings()
  * @brief
  *
  */
-void MainWindow::addCounterparty()
+void MainWindow::addCounterparty_()
 {
     CounterpartyDialog dialog(this, &db_);
     if (dialog.exec() == QDialog::Accepted)
@@ -656,7 +657,7 @@ void MainWindow::addCounterparty()
  * @brief
  *
  */
-void MainWindow::delCounterparty()
+void MainWindow::delCounterparty_()
 {
     if(tableViewCounterparties->selectionModel()->selectedRows().length() != 1)
     {
@@ -689,7 +690,7 @@ void MainWindow::delCounterparty()
  * @brief
  *
  */
-void MainWindow::editCounterparty()
+void MainWindow::editCounterparty_()
 {
     if(tableViewCounterparties->selectionModel()->selectedRows().length() != 1)
     {
@@ -723,9 +724,9 @@ void MainWindow::editCounterparty()
  * @brief
  *
  */
-void MainWindow::newInvoice()
+void MainWindow::newInvoice_()
 {
-    createInvoice(InvoiceTypeData::VAT);
+    createInvoice_(InvoiceTypeData::VAT);
 }
 
 
@@ -734,9 +735,9 @@ void MainWindow::newInvoice()
  * @brief
  *
  */
-void MainWindow::newBill()
+void MainWindow::newBill_()
 {
-    createInvoice(InvoiceTypeData::BILL);
+    createInvoice_(InvoiceTypeData::BILL);
 }
 
 
@@ -745,9 +746,9 @@ void MainWindow::newBill()
  * @brief
  *
  */
-void MainWindow::newGrossInvoice()
+void MainWindow::newGrossInvoice_()
 {
-    createInvoice(InvoiceTypeData::GROSS);
+    createInvoice_(InvoiceTypeData::GROSS);
 }
 
 
@@ -756,9 +757,9 @@ void MainWindow::newGrossInvoice()
  * @brief
  *
  */
-void MainWindow::newProFormaInvoice()
+void MainWindow::newProFormaInvoice_()
 {
-    createInvoice(InvoiceTypeData::PRO_FORMA);
+    createInvoice_(InvoiceTypeData::PRO_FORMA);
 }
 
 
@@ -766,7 +767,7 @@ void MainWindow::newProFormaInvoice()
  * @brief
  *
  */
-void MainWindow::newCorrection()
+void MainWindow::newCorrection_()
 {
     /*if(!areTableItemsSelected(tableViewInvoices, trUtf8("Żadna faktura nie jest wybrana.") + QChar(' ') +
                               trUtf8("Wybierz fakturę, do której chcesz wystawić korektę.")))
@@ -800,7 +801,7 @@ void MainWindow::newCorrection()
  * @brief
  *
  */
-void MainWindow::newDuplicate()
+void MainWindow::newDuplicate_()
 {
     /*if(!areTableItemsSelected(tableViewInvoices, trUtf8("Żadna faktura nie jest wybrana.") + QChar(' ') +
                               trUtf8("Wybierz fakturę, do której chcesz wystawić duplikat.")))
@@ -835,7 +836,7 @@ void MainWindow::newDuplicate()
  * @brief
  *
  */
-void MainWindow::addCommodity()
+void MainWindow::addCommodity_()
 {
     CommodityDialog dialog(this, &db_);
     if (dialog.exec() == QDialog::Accepted)
@@ -857,7 +858,7 @@ void MainWindow::addCommodity()
  * @brief
  *
  */
-void MainWindow::delCommodity()
+void MainWindow::delCommodity_()
 {
     if(tableViewCommodities->selectionModel()->selectedRows().length() != 1)
     {
@@ -890,7 +891,7 @@ void MainWindow::delCommodity()
  * @brief
  *
  */
-void MainWindow::editCommodity()
+void MainWindow::editCommodity_()
 {
     if(tableViewCommodities->selectionModel()->selectedRows().length() != 1)
     {
@@ -917,7 +918,7 @@ void MainWindow::editCommodity()
  * @brief
  *
  */
-void MainWindow::help() const
+void MainWindow::help_() const
 {
     QDesktopServices::openUrl(QUrl("http://www.e-linux.pl/"));
 }
@@ -927,7 +928,7 @@ void MainWindow::help() const
  * @brief
  *
  */
-void MainWindow::reportBug() const
+void MainWindow::reportBug_() const
 {
     QDesktopServices::openUrl(QUrl("https://sourceforge.net/tracker2/?func=add&group_id=154610&atid=792471"));
 }
