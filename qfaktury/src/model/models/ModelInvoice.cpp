@@ -47,3 +47,26 @@ QVariant ModelInvoice::headerData(int section, Qt::Orientation orientation, int 
         return QVariant();
     }
 }
+
+int ModelInvoice::nextNumberInYear(const QDate &currDate) const
+{
+    return 0;
+}
+
+
+int ModelInvoice::nextNumberInMonth(const QDate &currDate) const
+{
+    return 0;
+}
+
+
+int ModelInvoice::nextNumberInDay(const QDate &currDate) const
+{
+    return 0;
+}
+
+
+int ModelInvoice::nextNumberInQuarter(const QDate &currDate) const
+{
+    return 0;
+}

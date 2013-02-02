@@ -24,11 +24,13 @@ InvoiceDialog::InvoiceDialog(QWidget *parent, Database *db, const QModelIndex &i
     {
         db_->modelInvoice()->insertRow(db_->modelInvoice()->rowCount());
         mapper_.toLast();
-        lineEditInvNumber->setText(generateInvoiceNumber(lineEditInvNumFormat->text()));
         setInitialComboBoxIndexes_();
+        lineEditInvNumber->setText(generateInvoiceNumber(lineEditInvNumFormat->text(),
+                                                         dateEditDateOfIssuance->date(),
+                                                         comboBoxInvoiceType->currentText()));
 
-        SettingsGlobal settings;
-        const QString additText(settings.value(settings.keyName(SettingsGlobal::ADDIT_TEXT)).toString());
+        SettingsGlobal s;
+        const QString additText(s.value(s.keyName(s.ADDIT_TEXT)).toString());
         if(!additText.isEmpty())
         {
             lineEditAdditionalText->setText(additText);
@@ -55,12 +57,13 @@ InvoiceDialog::~InvoiceDialog()
  */
 void InvoiceDialog::init_()
 {
-    // set all the dates to todays date -> could be logical date :)
     dateEditDateOfSell->setDate(QDate::currentDate());
     dateEditDateOfIssuance->setDate(QDate::currentDate());
     dateEditDayOfPayment->setDate(QDate::currentDate());
 
-    // connects
+    SettingsGlobal s;
+    lineEditInvNumFormat->setText(s.value(s.keyName(s.DEFAULT_INV_NUM_FORMAT)).toString());
+
     connect(pushButtonAddCommodity, SIGNAL(clicked()), this, SLOT(addCommodity()));
     connect(pushButtonMoreInfo, SIGNAL(clicked()), this, SLOT(counterpartyMoreInfo_()));
     connect(pushButtonRemoveCommodity, SIGNAL(clicked()), this, SLOT(delCommodity_()));
@@ -1172,10 +1175,10 @@ void InvoiceDialog::calculateSum()
  * 8) The format of an invoice number should be stored somewhere (because it must be clear to everyone and see point 5 above). E.g. in the number itself or in the database
  * @return QString The new invoice number
  */
-QString InvoiceDialog::generateInvoiceNumber(const QString &format) const
+QString InvoiceDialog::generateInvoiceNumber(const QString &format, const QDate &currDate, const QString &invoiceType) const
 {
     QString ret;
-    const QDate currDate(QDate::currentDate());
+    SettingsGlobal s;
     const QVector<int> parse(InvoiceNumberFormatData::Parse(format));
     for(int i = 0; i < parse.size(); ++i)
     {
@@ -1185,22 +1188,28 @@ QString InvoiceDialog::generateInvoiceNumber(const QString &format) const
             ret += QString("%1").arg(db_->modelInvoice()->rowCount()); //the "rowCount()" includes the newly added empty row
             break;
         case InvoiceNumberFormatData::NR_Y:
+            ret += QString("%1").arg(db_->modelInvoice()->nextNumberInYear(currDate));
             break;
         case InvoiceNumberFormatData::NR_M:
+            ret += QString("%1").arg(db_->modelInvoice()->nextNumberInMonth(currDate));
             break;
         case InvoiceNumberFormatData::NR_D:
-            break;
-        case InvoiceNumberFormatData::NR_W:
+            ret += QString("%1").arg(db_->modelInvoice()->nextNumberInDay(currDate));
             break;
         case InvoiceNumberFormatData::NR_Q:
+            ret += QString("%1").arg(db_->modelInvoice()->nextNumberInQuarter(currDate));
             break;
         case InvoiceNumberFormatData::INVOICE_TYPE:
+            ret += invoiceType;
             break;
         case InvoiceNumberFormatData::TEXT1:
+            ret += s.value(s.keyName(s.TEXT1)).toString();
             break;
         case InvoiceNumberFormatData::TEXT2:
+            ret += s.value(s.keyName(s.TEXT2)).toString();
             break;
         case InvoiceNumberFormatData::TEXT3:
+            ret += s.value(s.keyName(s.TEXT3)).toString();
             break;
         case InvoiceNumberFormatData::PERIOD_YEAR:
             ret += currDate.toString("yyyy");
@@ -1211,9 +1220,8 @@ QString InvoiceDialog::generateInvoiceNumber(const QString &format) const
         case InvoiceNumberFormatData::PERIOD_DAY:
             ret += currDate.toString("dd");
             break;
-        case InvoiceNumberFormatData::PERIOD_WEEK:
-            break;
         case InvoiceNumberFormatData::PERIOD_QUARTER:
+            ret += QString("%1").arg( (currDate.month() - 1)/3 + 1); //1-4
             break;
         case InvoiceNumberFormatData::SLASH:
         case InvoiceNumberFormatData::BACKSLASH:

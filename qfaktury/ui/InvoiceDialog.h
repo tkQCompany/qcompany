@@ -151,7 +151,7 @@ protected:
      *
      * @return QString
      */
-    QString generateInvoiceNumber(const QString &) const;
+    QString generateInvoiceNumber(const QString &, const QDate &currDate, const QString &invoiceType) const;
     /**
      * @brief
      *
