@@ -28,9 +28,6 @@ private slots:
     void fieldChange_();
     void fieldRemove_();
 
-    void separatorAdd_();
-    void separatorChange_();
-
     void showExamples_();
 
 private:

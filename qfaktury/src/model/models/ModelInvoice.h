@@ -4,6 +4,8 @@
 #include <QSqlRelationalTableModel>
 
 #include "../models_data/InvoiceData.h"
+#include "../models_data/InvoiceTypeData.h"
+#include "../models_data/InvoiceNumberFormatData.h"
 
 /**
  * @brief
@@ -28,10 +30,13 @@ public:
      * @return QVariant
      */
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    int nextNumberInYear(const QDate &currDate) const;
-    int nextNumberInMonth(const QDate &currDate) const;
-    int nextNumberInDay(const QDate &currDate) const;
-    int nextNumberInQuarter(const QDate &currDate) const;
+
+    /**
+     * @brief
+     *
+     * @return QString
+     */
+    QString generateInvoiceNumber(const QString &format, const QDate &currDate, const int invoiceType) const;
 };
 
 #endif // MODELINVOICE_H

@@ -10,19 +10,6 @@ struct InvoiceNumberFormatData
                 PERIOD_YEAR, PERIOD_MONTH, PERIOD_DAY, PERIOD_QUARTER};
     enum Separator {SLASH = PERIOD_QUARTER + 1, BACKSLASH, HYPHEN};
 
-    static QChar SeparatorName(const int separator)
-    {
-        switch(separator)
-        {
-        case SLASH: return QChar('\\');
-        case BACKSLASH: return QChar('/');
-        case HYPHEN: return QChar('-');
-        default:
-            qDebug() << QString("Undefined separator in InvNumFormatData::SeparatorName: separator=%1").arg((int)separator);
-            return QChar();
-        }
-    }
-
     static QString FieldName(const int field)
     {
         switch(field)
@@ -40,6 +27,9 @@ struct InvoiceNumberFormatData
         case PERIOD_MONTH: return QObject::trUtf8("{M}");
         case PERIOD_DAY: return QObject::trUtf8("{D}");
         case PERIOD_QUARTER: return QObject::trUtf8("{K}");
+        case SLASH: return QString("\\");
+        case BACKSLASH: return QString("/");
+        case HYPHEN: return QString("-");
         default:
             qDebug() << QString("Undefined field in InvNumFormatData::FieldName: field=%1").arg((int)field);
             return QString();
@@ -49,7 +39,7 @@ struct InvoiceNumberFormatData
     static int FieldID(const QString &field)
     {
         int ret = -1;
-        for(int i = NR; i <= PERIOD_QUARTER; ++i)
+        for(int i = NR; i <= HYPHEN; ++i)
         {
             if(field.compare(FieldName(i)) == 0)
             {
@@ -79,6 +69,9 @@ struct InvoiceNumberFormatData
         case PERIOD_MONTH: return QObject::trUtf8("Miesiąc");
         case PERIOD_DAY: return QObject::trUtf8("Dzień");
         case PERIOD_QUARTER: return QObject::trUtf8("Kwartał");
+        case SLASH: return QObject::trUtf8("Separator - prawy ukośnik");
+        case BACKSLASH: return QObject::trUtf8("Separator - lewy ukośnik");
+        case HYPHEN: return QObject::trUtf8("Separator - łącznik");
         default:
             qDebug() << QString("Undefined field in InvNumFormatData::FieldDescription: field=%1").arg((int)field);
             return QString();
@@ -115,10 +108,10 @@ struct InvoiceNumberFormatData
                         to = format.count() - 1;
                     }
 
-                    const QChar separator(format.at(from));
+                    const QString separator(format.at(from));
                     for(int i = InvoiceNumberFormatData::SLASH; i <= InvoiceNumberFormatData::HYPHEN; ++i)
                     {
-                        if(separator == SeparatorName(i))
+                        if(separator == FieldName(i))
                         {
                             ret.append(i);
                             break;

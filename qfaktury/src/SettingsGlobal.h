@@ -126,7 +126,6 @@ public:
         setValue(keyName(TEXT2), trUtf8(""));
         setValue(keyName(TEXT3), trUtf8(""));
 
-        // here we could add special code for Rachunek
         setValue(keyName(ORDER_NUMBER), true);
         setValue(keyName(NAME), true);
         setValue(keyName(CODE), true);

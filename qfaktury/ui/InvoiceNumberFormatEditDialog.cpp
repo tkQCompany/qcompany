@@ -17,22 +17,15 @@ InvoiceNumberFormatEditDialog::~InvoiceNumberFormatEditDialog()
 
 void InvoiceNumberFormatEditDialog::init_()
 {
-    for(int i = InvoiceNumberFormatData::NR; i <= InvoiceNumberFormatData::PERIOD_QUARTER; ++i)
+    for(int i = InvoiceNumberFormatData::NR; i <= InvoiceNumberFormatData::HYPHEN; ++i)
     {
-        ui->comboBoxFields->addItem(QString("%1 - %2").arg(InvoiceNumberFormatData::FieldName(i))
+        ui->comboBoxFields->addItem(QString("%1 : %2").arg(InvoiceNumberFormatData::FieldName(i))
                                     .arg(InvoiceNumberFormatData::FieldDescription(i)));
-    }
-
-    for(int i = InvoiceNumberFormatData::SLASH; i <= InvoiceNumberFormatData::HYPHEN; ++i)
-    {
-        ui->comboBoxSeparator->addItem(InvoiceNumberFormatData::SeparatorName(i));
     }
 
     connect(ui->pushButtonAddField, SIGNAL(clicked()), this, SLOT(fieldAdd_()));
     connect(ui->pushButtonChangeField, SIGNAL(clicked()), this, SLOT(fieldChange_()));
     connect(ui->pushButtonRemoveField, SIGNAL(clicked()), this, SLOT(fieldRemove_()));
-    connect(ui->pushButtonAddSeparator, SIGNAL(clicked()), this, SLOT(separatorAdd_()));
-    connect(ui->pushButtonChangeSeparator, SIGNAL(clicked()), this, SLOT(separatorChange_()));
     connect(ui->pushButtonShowExamples, SIGNAL(clicked()), this, SLOT(showExamples_()));
 }
 
@@ -48,15 +41,7 @@ void InvoiceNumberFormatEditDialog::initList_(const QString &format)
     ui->listWidgetFields->clear();
     for(int i = 0; i < vint.size(); ++i)
     {
-        if(vint.at(i) < InvoiceNumberFormatData::SLASH)
-        {
-            label = InvoiceNumberFormatData::FieldName(vint.at(i));
-        }
-        else
-        {
-            label = InvoiceNumberFormatData::SeparatorName(vint.at(i));
-        }
-
+        label = InvoiceNumberFormatData::FieldName(vint.at(i));
         ui->listWidgetFields->insertItem(ui->listWidgetFields->count(), label);
     }
 }
@@ -108,7 +93,9 @@ void InvoiceNumberFormatEditDialog::fieldChange_()
         QMessageBox::information(this, trUtf8("Wybierz pole"), trUtf8("Wybierz najpierw pole do zmiany."), QMessageBox::Ok);
         return;
     }
-    ui->listWidgetFields->item(index)->setText(InvoiceNumberFormatData::FieldName(ui->comboBoxFields->currentIndex()));
+
+    const QString field(ui->comboBoxFields->currentText().left(ui->comboBoxFields->currentText().indexOf(QChar(':'))).trimmed());
+    ui->listWidgetFields->item(index)->setText(InvoiceNumberFormatData::FieldName(InvoiceNumberFormatData::FieldID(field)));
 }
 
 
@@ -123,32 +110,6 @@ void InvoiceNumberFormatEditDialog::fieldRemove_()
 
     ui->listWidgetFields->takeItem(index);
 }
-
-
-void InvoiceNumberFormatEditDialog::separatorAdd_()
-{
-    if(ui->comboBoxSeparator->currentIndex() == -1)
-    {
-        QMessageBox::information(this, trUtf8("Wybierz separator"), trUtf8("Wybierz najpierw pożądany separator."), QMessageBox::Ok);
-        return;
-    }
-
-    ui->listWidgetFields->addItem(InvoiceNumberFormatData::SeparatorName(ui->comboBoxSeparator->currentIndex()));
-}
-
-
-void InvoiceNumberFormatEditDialog::separatorChange_()
-{
-    const int index = ui->listWidgetFields->currentIndex().row();
-    if(index == -1)
-    {
-        QMessageBox::information(this, trUtf8("Wybierz separator"), trUtf8("Wybierz najpierw separator do zmiany."), QMessageBox::Ok);
-        return;
-    }
-
-    ui->listWidgetFields->item(index)->setText(InvoiceNumberFormatData::SeparatorName(ui->comboBoxSeparator->currentIndex()));
-}
-
 
 
 void InvoiceNumberFormatEditDialog::showExamples_()
