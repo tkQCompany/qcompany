@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>910</width>
-    <height>598</height>
+    <width>843</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <layout class="QFormLayout" name="formLayout_2">
        <item row="0" column="0">
@@ -74,6 +74,9 @@
      </item>
      <item>
       <layout class="QFormLayout" name="formLayout_3">
+       <property name="fieldGrowthPolicy">
+        <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+       </property>
        <item row="0" column="0">
         <widget class="QLabel" name="labelDateOfSell">
          <property name="text">
@@ -99,60 +102,15 @@
        </item>
       </layout>
      </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_7">
      <item>
-      <widget class="QLabel" name="labelInvNumFormat">
-       <property name="text">
-        <string>Format numeracji faktury:</string>
-       </property>
-       <property name="buddy">
-        <cstring>lineEditInvNumFormat</cstring>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineEditInvNumFormat">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <layout class="QFormLayout" name="formLayout_4">
-       <item row="0" column="0">
-        <widget class="QLabel" name="labelInvoiceType">
-         <property name="text">
-          <string>Typ faktury:</string>
-         </property>
-         <property name="buddy">
-          <cstring>comboBoxInvoiceType</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QComboBox" name="comboBoxInvoiceType"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <spacer name="spacer2">
+      <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>468</width>
-         <height>17</height>
+         <width>40</width>
+         <height>20</height>
         </size>
        </property>
       </spacer>
@@ -189,6 +147,81 @@
         </widget>
        </item>
       </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <item>
+      <layout class="QFormLayout" name="formLayout_7">
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelInvNumFormat">
+         <property name="text">
+          <string>Format numeracji faktury:</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEditInvNumFormat</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEditInvNumFormat">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <layout class="QFormLayout" name="formLayout_4">
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelInvoiceType">
+         <property name="text">
+          <string>Typ faktury:</string>
+         </property>
+         <property name="buddy">
+          <cstring>comboBoxInvoiceType</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="comboBoxInvoiceType"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="spacer2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>468</width>
+         <height>17</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
@@ -630,7 +663,7 @@
      <item>
       <widget class="QLineEdit" name="lineEditAdditionalText">
        <property name="text">
-        <string>towar odebrałem zgodnie z fakturą</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -772,7 +805,6 @@
   <tabstop>tableWidgetCommodities</tabstop>
  </tabstops>
  <resources>
-  <include location="../qfaktury.qrc"/>
   <include location="../qfaktury.qrc"/>
  </resources>
  <connections/>
