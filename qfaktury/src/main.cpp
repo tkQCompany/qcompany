@@ -2,6 +2,8 @@
 #include <QDesktopWidget>
 #include <QTextCodec>
 #include <QSplashScreen>
+#include <QTranslator>
+#include <QLibraryInfo>
 
 #include "MainWindow.h"
 #include "SettingsGlobal.h"
@@ -19,6 +21,10 @@ int main(int argc, char **argv)
     a.setOrganizationName("www.e-linux.pl");
     a.setOrganizationDomain("www.e-linux.pl");
     a.setApplicationVersion(APP_VERSION);
+
+    QTranslator qtTranslator;
+    qtTranslator.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    a.installTranslator(&qtTranslator);
 
 	QRect screen = QApplication::desktop()->screenGeometry();
     MainWindow w;

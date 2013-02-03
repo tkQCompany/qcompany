@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QTextCodec>
 #include <QDebug>
+#include <QTranslator>
 
 #include "ui_SettingsDialog.h"
 #include "../SettingsGlobal.h"

@@ -6,6 +6,7 @@
 #include <QPrinter>
 #include <QPrintPreviewDialog>
 #include <QTextDocument>
+#include <QTranslator>
 #include <QDebug>
 
 #include "CounterpartyInfoDialog.h"
@@ -95,6 +96,8 @@ private slots:
      * @param
      */
     void printSlot_(QPrinter*) const;
+
+    void retranslateUi_();
 
 protected slots:    
     /**

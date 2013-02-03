@@ -60,6 +60,7 @@ private slots:
     void showTableMenuHistory_(const QPoint &) const;
     void pluginSlot_();
     void pluginInfoSlot_();
+    void retranslateUi_();
     void keyPressEvent(QKeyEvent*);
 
 private:

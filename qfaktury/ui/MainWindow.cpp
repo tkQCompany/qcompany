@@ -22,6 +22,8 @@ void MainWindow::init_()
 {
     SettingsGlobal s;
 
+    retranslateUi_();
+
     if (firstRun_())
     {
         s.resetSettings();
@@ -312,6 +314,15 @@ void MainWindow::pluginInfoSlot_()
                                     "Skrypty Pythona sa czytane z folderu \"~/elinux/plugins/\"."));
 }
 
+
+void MainWindow::retranslateUi_()
+{
+    QTranslator appTranslator;
+    SettingsGlobal s;
+    appTranslator.load(QString("translations/qfaktury_") + s.value(s.keyName(s.LANG)).toString());
+    qApp->installTranslator(&appTranslator);
+    retranslateUi(this);
+}
 
 
 /**
@@ -624,7 +635,10 @@ void MainWindow::editCompanyInfo_()
 void MainWindow::editSettings_()
 {
     SettingsDialog settWindow(this);
-    settWindow.exec();
+    if(QDialog::Accepted == settWindow.exec())
+    {
+        retranslateUi_();
+    }
 }
 
 

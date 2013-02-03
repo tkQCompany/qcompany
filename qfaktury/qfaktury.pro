@@ -37,8 +37,10 @@ FORMS += ui/CounterpartyTypeDialog.ui \
          ui/InvoiceNumberFormatEditDialog.ui \
          ui/InvoiceNumberFormatExamplesDialog.ui
 
+TRANSLATIONS += translations/qfaktury_de.ts \
+                 translations/qfaktury_en.ts
+
 RESOURCES += qfaktury.qrc
-TRANSLATIONS += translations/qfaktury_de.ts translations/qfaktury_en.ts
 
 QT += gui xml sql
 

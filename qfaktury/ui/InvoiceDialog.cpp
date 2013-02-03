@@ -35,6 +35,8 @@ InvoiceDialog::InvoiceDialog(QWidget *parent, Database *db, const QModelIndex &i
         {
             lineEditAdditionalText->setText(additText);
         }
+
+        retranslateUi_();
     }
 }
 
@@ -493,6 +495,16 @@ void InvoiceDialog::printSlot_(QPrinter *printer) const
 
     doc.setHtml(s);
     doc.print(printer);
+}
+
+
+void InvoiceDialog::retranslateUi_()
+{
+    QTranslator appTranslator;
+    SettingsGlobal s;
+    appTranslator.load(QString("translations/qfaktury_") + s.value(s.keyName(s.LANG)).toString());
+    qApp->installTranslator(&appTranslator);
+    retranslateUi(this);
 }
 
 /** Slot
