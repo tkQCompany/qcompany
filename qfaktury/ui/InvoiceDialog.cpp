@@ -25,9 +25,6 @@ InvoiceDialog::InvoiceDialog(QWidget *parent, Database *db, const QModelIndex &i
         db_->modelInvoice()->insertRow(db_->modelInvoice()->rowCount());
         mapper_.toLast();
         setInitialComboBoxIndexes_();
-        lineEditInvNumber->setText(db_->modelInvoice()->generateInvoiceNumber(lineEditInvNumFormat->text(),
-                                                         dateEditDateOfIssuance->date(),
-                                                         comboBoxInvoiceType->currentIndex()));
 
         SettingsGlobal s;
         const QString additText(s.value(s.keyName(s.ADDIT_TEXT)).toString());
@@ -35,9 +32,8 @@ InvoiceDialog::InvoiceDialog(QWidget *parent, Database *db, const QModelIndex &i
         {
             lineEditAdditionalText->setText(additText);
         }
-
-        retranslateUi_();
     }
+    //counterpartyChanged(comboBoxCounterparties->currentText());
 }
 
 
@@ -63,9 +59,6 @@ void InvoiceDialog::init_()
     dateEditDateOfIssuance->setDate(QDate::currentDate());
     dateEditDayOfPayment->setDate(QDate::currentDate());
 
-    SettingsGlobal s;
-    lineEditInvNumFormat->setText(s.value(s.keyName(s.DEFAULT_INV_NUM_FORMAT)).toString());
-
     connect(pushButtonAddCommodity, SIGNAL(clicked()), this, SLOT(addCommodity()));
     connect(pushButtonMoreInfo, SIGNAL(clicked()), this, SLOT(counterpartyMoreInfo_()));
     connect(pushButtonRemoveCommodity, SIGNAL(clicked()), this, SLOT(delCommodity_()));
@@ -78,10 +71,14 @@ void InvoiceDialog::init_()
     connect(tableWidgetCommodities, SIGNAL(itemActivated(QTableWidgetItem *)), this, SLOT(tableActivated_(QTableWidgetItem *)));
     connect(tableWidgetCommodities, SIGNAL(itemClicked(QTableWidgetItem *)), this, SLOT(tableActivated_(QTableWidgetItem *)));
     connect(lineEditAdditionalText, SIGNAL(textChanged(QString)), this, SLOT(textChanged(QString)));
+    connect(lineEditInvNumFormat, SIGNAL(textChanged(QString)), this, SLOT(updateInvoiceNumber()));
     connect(comboBoxPayment, SIGNAL(currentIndexChanged (QString)), this, SLOT(payTextChanged(QString)));
     connect(comboBoxCurrency, SIGNAL(currentIndexChanged (QString)), this, SLOT(textChanged(QString)));
+    connect(comboBoxCounterparties, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateInvoiceNumber()));
+    connect(comboBoxInvoiceType, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateInvoiceNumber()));
     connect(dateEditDateOfSell, SIGNAL(dateChanged(QDate)), this, SLOT(dateChanged_(QDate)));
     connect(dateEditDateOfIssuance, SIGNAL(dateChanged(QDate)), this, SLOT(dateChanged_(QDate)));
+    connect(dateEditDateOfIssuance, SIGNAL(dateChanged(QDate)), this, SLOT(updateInvoiceNumber()));
     connect(dateEditDayOfPayment, SIGNAL(dateChanged(QDate)), this, SLOT(dateChanged_(QDate)));
     connect(spinBoxDiscount, SIGNAL(valueChanged(int)), this, SLOT(discountChange()));
     connect(checkBoxDiscount, SIGNAL(stateChanged(int)), this, SLOT(discountConstChange()));
@@ -120,6 +117,8 @@ void InvoiceDialog::init_()
     mapper_.addMapping(spinBoxDiscount, InvoiceFields::DISCOUNT);
 
     unsaved = false;
+
+    retranslateUi_();
 }
 
 
@@ -184,6 +183,15 @@ void InvoiceDialog::discountConstChange()
         spinBoxDiscount->setValue(0);
         spinBoxDiscount->setEnabled(false);
     }
+}
+
+
+void InvoiceDialog::updateInvoiceNumber()
+{
+    genInvoiceNumber_(lineEditInvNumFormat->text(),
+                      dateEditDateOfIssuance->date(),
+                      InvoiceTypeData::StringToInvoiceType(comboBoxInvoiceType->currentText()),
+                      comboBoxCounterparties->currentText());
 }
 
 
@@ -278,7 +286,7 @@ void InvoiceDialog::editCommodity_()
 void InvoiceDialog::canQuit()
 {
     // canClose == false -> data changed
-    if (!unsaved || QMessageBox::warning(this, qApp->applicationName(), trUtf8("Dane zostały zmienione, czy chcesz zapisać?"),
+    if (unsaved || QMessageBox::warning(this, qApp->applicationName(), trUtf8("Dane zostały zmienione, czy chcesz zapisać?"),
                                          QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes)
             == QMessageBox::No)
     {
@@ -292,6 +300,37 @@ void InvoiceDialog::canQuit()
             accept();
         }
     }
+}
+
+
+void InvoiceDialog::genInvoiceNumber_(const QString& invNumFormat, const QDate& issuanceDate, const int invoiceType, const QString& counterpartyName)
+{
+    if(counterpartyName.isEmpty())
+    {
+        SettingsGlobal s;
+        lineEditInvNumFormat->setText(s.value(s.keyName(s.DEFAULT_INV_NUM_FORMAT)).toString());
+    }
+    else
+    {
+        QSqlQuery q(db_->modelCounterparty()->query());
+        q.exec(QString("SELECT 'inv_number_format' FROM 'counterparty' WHERE 'name' = \"%1\"").arg(counterpartyName));
+        if(q.isActive())
+        {
+            if(q.next())
+            {
+                lineEditInvNumFormat->setText(q.value(0).toString());
+            }
+        }
+        else
+        {
+            qDebug() << "InvoiceDialog::genInvoiceNumber_(): SQL error detected in line " << __LINE__;
+        }
+    }
+    const QString invNum(db_->modelInvoice()->generateInvoiceNumber(invNumFormat, issuanceDate,
+                                                                    InvoiceTypeData::InvoiceTypeToString(invoiceType),
+                                                                    counterpartyName));
+    qDebug() << QString("newCounterparty: %1, invNum: %2").arg(counterpartyName).arg(invNum);
+    lineEditInvNumber->setText(invNum);
 }
 
 /** Slot tableActivated

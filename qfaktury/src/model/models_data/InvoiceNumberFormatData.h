@@ -3,6 +3,7 @@
 
 #include <QStringList>
 #include <QDebug>
+#include <SettingsGlobal.h>
 
 struct InvoiceNumberFormatData
 {
@@ -76,6 +77,65 @@ struct InvoiceNumberFormatData
             qDebug() << QString("Undefined field in InvNumFormatData::FieldDescription: field=%1").arg((int)field);
             return QString();
         }
+    }
+
+    static QString toRegexp(const QString& format)
+    {
+        QString ret;
+        SettingsGlobal s;
+
+        const QVector<int> tokens(Parse(format));
+        foreach(int field, tokens)
+        {
+            switch(field)
+            {
+            case NR:
+            case NR_Y:
+            case NR_M:
+            case NR_D:
+            case NR_Q:
+                ret += QString("(\\d+)");
+                break;
+            case INVOICE_TYPE:
+                ret += QString("(\\w+)");
+                break;
+            case TEXT1:
+                ret += QString("(%1)").arg(s.value(s.keyName(s.TEXT1)).toString());
+                break;
+            case TEXT2:
+                ret += QString("(%1)").arg(s.value(s.keyName(s.TEXT2)).toString());
+                break;
+            case TEXT3:
+                ret += QString("(%1)").arg(s.value(s.keyName(s.TEXT3)).toString());
+                break;
+            case PERIOD_YEAR:
+                ret += QString("(\\d{4})");
+                break;
+            case PERIOD_MONTH:
+                ret += QString("(\\d\\d?)");
+                break;
+            case PERIOD_DAY:
+                ret += QString("(\\d\\d?)");
+                break;
+            case PERIOD_QUARTER:
+                ret += QString("(\\d\\d?)");
+                break;
+            case SLASH:
+                ret += QString("(/)");
+                break;
+            case BACKSLASH:
+                ret += QString("(\\\\)");
+                break;
+            case HYPHEN:
+                ret += QString("(-)");
+                break;
+            default:
+                qDebug() << QString("Undefined field in InvNumFormatData::toRegexp: field=%1").arg((int)field);
+                return QString();
+            }
+        }
+
+        return ret;
     }
 
     static QVector<int> Parse(const QString &format)

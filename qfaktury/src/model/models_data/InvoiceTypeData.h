@@ -43,9 +43,23 @@ public:
         case CORRECTIVE_GROSS:  return QObject::trUtf8("Korekta brutto");
         case BILL:              return QObject::trUtf8("Rachunek");
         default:
-            qDebug("InvoiceDataType::InvoiceTypeToString(): Unknown type of invoice");
+            qDebug("InvoiceTypeData::InvoiceTypeToString(): Unknown type of invoice");
             return QString();
         }
+    }
+
+    static int StringToInvoiceType(const QString& str)
+    {
+        int ret = -1;
+        for(int i = VAT; i <= BILL; ++i)
+        {
+            if(0 == (str.compare(InvoiceTypeToString(i))))
+            {
+                ret = i;
+                break;
+            }
+        }
+        return ret;
     }
 };
 

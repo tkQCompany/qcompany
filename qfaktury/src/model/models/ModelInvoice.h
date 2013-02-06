@@ -2,6 +2,9 @@
 #define MODELINVOICE_H
 
 #include <QSqlRelationalTableModel>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QRegExp>
 
 #include "../models_data/InvoiceData.h"
 #include "../models_data/InvoiceTypeData.h"
@@ -36,7 +39,7 @@ public:
      *
      * @return QString
      */
-    QString generateInvoiceNumber(const QString &format, const QDate &currDate, const int invoiceType) const;
+    QString generateInvoiceNumber(const QString& invoiceNumFormat, const QDate &currDate, const QString& invoiceTypeName, const QString& counterpartyName = QString()) const;
 };
 
 #endif // MODELINVOICE_H

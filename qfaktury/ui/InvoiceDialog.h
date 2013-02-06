@@ -57,6 +57,9 @@ public:
 public:    
     InvoiceData ret; /**< TODO */
 
+signals:
+    void genInvoiceNumberParamsChanged();
+
 private slots:
     /**
      * @brief
@@ -110,6 +113,7 @@ protected slots:
      *
      */
     virtual void canQuit();
+
     /**
      * @brief
      *
@@ -120,6 +124,8 @@ protected slots:
      *
      */
     virtual void discountConstChange();
+
+    virtual void updateInvoiceNumber();
     /**
      * @brief
      *
@@ -226,6 +232,7 @@ private:
      * @param commodities
      */
     void fillTableCommodity_(const QList<CommodityVisualData> &commodities);
+    void genInvoiceNumber_(const QString& invNumFormat, const QDate& issuanceDate, const int invoiceType, const QString& counterpartyName);
     /**
      * @brief
      *

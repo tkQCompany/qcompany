@@ -63,11 +63,17 @@ QVariant ModelInvoice::headerData(int section, Qt::Orientation orientation, int 
  * 8) The format of an invoice number should be stored somewhere (because it must be clear to everyone and see point 5 above). E.g. in the number itself or in the database
  * @return QString The new invoice number
  */
-QString ModelInvoice::generateInvoiceNumber(const QString &format, const QDate &issuanceDate, const int invoiceType) const
+QString ModelInvoice::generateInvoiceNumber(const QString& invoiceNumFormat, const QDate &issuanceDate, const QString& invoiceTypeName, const QString& counterpartyName) const
 {
     QString ret;
     SettingsGlobal s;
-    const QVector<int> parse(InvoiceNumberFormatData::Parse(format));
+
+    if(invoiceTypeName.isEmpty())
+        return QString();
+
+    QSqlQuery q(query());
+
+    const QVector<int> parse(InvoiceNumberFormatData::Parse(invoiceNumFormat));
     for(int i = 0; i < parse.size(); ++i)
     {
         switch(parse.at(i))
@@ -76,7 +82,78 @@ QString ModelInvoice::generateInvoiceNumber(const QString &format, const QDate &
             ret += QString("%1").arg(this->rowCount()); //the "rowCount()" includes the newly added empty row
             break;
         case InvoiceNumberFormatData::NR_Y:
-            ret += QString("%1").arg(1);
+            database().transaction();
+            if(counterpartyName.isEmpty()) //we take default invoiceNumFormat
+            {
+                q.exec("SELECT 'inv_number', 'issuance_date' FROM 'invoice' WHERE 'id_invoice' = (SELECT MAX('id_invoice') FROM 'invoice')");
+                if(q.isActive())
+                {
+                    if(q.next())
+                    {
+                        const QDate gotIssuanceDate(q.value(1).toDate());
+                        if(issuanceDate.year() != gotIssuanceDate.year())
+                        {
+                            ret += QString("1"); //new year - new numbering
+                        }
+                        else
+                        {
+                            const QRegExp regexp(InvoiceNumberFormatData::toRegexp(invoiceNumFormat));
+                            regexp.indexIn(q.value(0).toString());
+                            int k = 0;
+                            foreach(QString cap, regexp.capturedTexts())
+                            {
+                                qDebug() << "cap(" << k++ << "): " << cap;
+                            }
+                            ret += QString("%1").arg(regexp.cap(i));
+                        }
+                    }
+                    else
+                    {
+                        ret += QString("1");
+                    }
+                }
+                else
+                {
+                    qDebug() << QString("ModelInvoice::generateInvoiceNumber(): SQL error detected in line %1: %2")
+                                .arg(__LINE__).arg(q.lastError().text());
+                }
+            }
+            else
+            {
+                q.exec("SELECT 'inv_number', 'issuance_date' FROM 'invoice' JOIN 'counterparty' ON invoice.counterparty_id = counterparty.id_counterparty  WHERE 'id_invoice' = (SELECT MAX('id_invoice') FROM 'invoice')");
+                if(q.isActive())
+                {
+                    if(q.next())
+                    {
+                        const QDate gotIssuanceDate(q.value(1).toDate());
+                        if(issuanceDate.year() != gotIssuanceDate.year())
+                        {
+                            ret += QString("1"); //new year - new numbering
+                        }
+                        else
+                        {
+                            const QRegExp regexp(InvoiceNumberFormatData::toRegexp(invoiceNumFormat));
+                            regexp.indexIn(q.value(0).toString());
+                            int k = 0;
+                            foreach(QString cap, regexp.capturedTexts())
+                            {
+                                qDebug() << "cap(" << k++ << "): " << cap;
+                            }
+                            ret += QString("%1").arg(regexp.cap(i));
+                        }
+                    }
+                    else
+                    {
+                        ret += QString("1");
+                    }
+                }
+                else
+                {
+                    qDebug() << QString("ModelInvoice::generateInvoiceNumber(): SQL error detected in line %1: %2")
+                                .arg(__LINE__).arg(q.lastError().text());
+                }
+            }
+            database().commit();
             break;
         case InvoiceNumberFormatData::NR_M:
             ret += QString("%1").arg(1);
@@ -88,7 +165,7 @@ QString ModelInvoice::generateInvoiceNumber(const QString &format, const QDate &
             ret += QString("%1").arg(1);
             break;
         case InvoiceNumberFormatData::INVOICE_TYPE:
-            ret += InvoiceTypeData::InvoiceTypeToString(invoiceType);
+            ret += invoiceTypeName;
             break;
         case InvoiceNumberFormatData::TEXT1:
             ret += s.value(s.keyName(s.TEXT1)).toString();
@@ -109,7 +186,7 @@ QString ModelInvoice::generateInvoiceNumber(const QString &format, const QDate &
             ret += issuanceDate.toString("dd");
             break;
         case InvoiceNumberFormatData::PERIOD_QUARTER:
-            ret += QString("%1").arg( (issuanceDate.month() - 1)/3 + 1); //1-4
+            ret += QString("%1").arg( (issuanceDate.month() - 1)/3 + 1); //output range 1-4
             break;
         case InvoiceNumberFormatData::SLASH:
         case InvoiceNumberFormatData::BACKSLASH:
@@ -117,7 +194,6 @@ QString ModelInvoice::generateInvoiceNumber(const QString &format, const QDate &
             ret += InvoiceNumberFormatData::FieldName(parse.at(i));
             break;
         }
-
     }
     return ret;
 }
