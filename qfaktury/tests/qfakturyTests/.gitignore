@@ -28,4 +28,5 @@ Database/tst_databasetest
 CommodityListGrossDialog/tst_commoditylistgrossdialogtest
 CommodityTypeData/tst_commoditytypedatatest
 CounterpartyData/tst_counterpartydatatest
+SettingsDialog/tst_settingsdialogtest
 

@@ -2,4 +2,10 @@ qcompany.pro.user*
 Makefile
 qfaktury/translations/qcompany_de.qm
 qfaktury/translations/qcompany_en.qm
+qdecimal/test/obj
+qdecimal/src/obj
+qdecimal/lib
+qdecimal/decnumber/obj
+qdecimal/test/moc
+qdecimal/bin
 
