@@ -28,8 +28,8 @@ struct InvoiceNumberFormatData
         case PERIOD_MONTH: return QObject::trUtf8("{M}");
         case PERIOD_DAY: return QObject::trUtf8("{D}");
         case PERIOD_QUARTER: return QObject::trUtf8("{K}");
-        case SLASH: return QString("\\");
-        case BACKSLASH: return QString("/");
+        case SLASH: return QString("/");
+        case BACKSLASH: return QString("\\");
         case HYPHEN: return QString("-");
         default:
             qDebug() << QString("Undefined field in InvNumFormatData::FieldName: field=%1").arg((int)field);

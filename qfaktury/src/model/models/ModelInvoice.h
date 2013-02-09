@@ -39,7 +39,12 @@ public:
      *
      * @return QString
      */
-    QString generateInvoiceNumber(const QString& invoiceNumFormat, const QDate &currDate, const QString& invoiceTypeName, const QString& counterpartyName = QString()) const;
+    QString generateInvoiceNumber(const QString& invoiceNumFormat, const QDate &issuanceDate, const QString& invoiceTypeName, const QString& counterpartyName = QString()) const;
+    QString getInvoiceNumberFormat(const QString &counterpartyName) const;
+
+private:
+    QString getNextInvNumberFromDB_(const QString& invoiceNumFormat, const QDate &issuanceDate, const int periodId, const int periodLocationInFormat, const QString& counterpartyName = QString()) const;
+    static QString increaseField_(const QString &invNumber, const QString& regExpStr, const int numberLocationInFormat, const int increase);
 };
 
 #endif // MODELINVOICE_H

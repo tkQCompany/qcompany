@@ -37,6 +37,9 @@ FORMS += ui/CounterpartyTypeDialog.ui \
          ui/InvoiceNumberFormatEditDialog.ui \
          ui/InvoiceNumberFormatExamplesDialog.ui
 
+CODECFORTR = UTF-8
+CODECFORSRC = UTF-8
+
 TRANSLATIONS += translations/qfaktury_de.ts \
                  translations/qfaktury_en.ts
 

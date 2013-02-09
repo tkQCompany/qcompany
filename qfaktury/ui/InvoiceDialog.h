@@ -57,9 +57,6 @@ public:
 public:    
     InvoiceData ret; /**< TODO */
 
-signals:
-    void genInvoiceNumberParamsChanged();
-
 private slots:
     /**
      * @brief
@@ -126,6 +123,7 @@ protected slots:
     virtual void discountConstChange();
 
     virtual void updateInvoiceNumber();
+    virtual void updateInvoiceNumberFormat();
     /**
      * @brief
      *
