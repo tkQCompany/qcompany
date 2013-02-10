@@ -58,7 +58,7 @@ void DuplicateDialog::makeInvoiceHeader(const bool sellDate, const bool breakPag
 
     invStrList += "<td align=\"right\">";
     invStrList += "<span style=\"font-size:12pt; font-weight:600\">";
-    invStrList += InvoiceTypeData::InvoiceTypeToString(invType) + "<br/>";
+    invStrList += InvoiceTypeData::InvoiceTypeToString(InvoiceTypeData::VAT) + "<br/>";
     invStrList += trUtf8("Nr: ") + lineEditInvNumber->text() + "<br></span>";
     invStrList += "<span style=\"font-size:11pt; font-weight:600\">";
     invStrList += trUtf8("Duplikat z dnia: ") + "<b>" +

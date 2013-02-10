@@ -29,9 +29,8 @@ void CorrectiveInvoiceDialog::init_ (/*const bool mode*/)
     labelDiscount2->setText(trUtf8("Wartość faktury:"));
     labelSumGross->setText(trUtf8("Do zapłaty:"));
 
-    invType = InvoiceTypeData::CORRECTIVE_VAT;
-    setWindowTitle(InvoiceTypeData::InvoiceTypeToString(invType));
-    comboBoxInvoiceType->setCurrentIndex(invType - 1);
+    setWindowTitle(InvoiceTypeData::InvoiceTypeToString(InvoiceTypeData::CORRECTIVE_VAT));
+    comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::CORRECTIVE_VAT - 1);
     origGrossTotal = -1;
 
     //editMode = mode;
@@ -47,14 +46,13 @@ void CorrectiveInvoiceDialog::init_ (/*const bool mode*/)
 /** Slot
  *  Generate invoice and show preview
  */
-void CorrectiveInvoiceDialog::makeInvoice()
+void CorrectiveInvoiceDialog::printInvoice()
 {
-    invType = InvoiceTypeData::CORRECTIVE_VAT;
     invStrList.clear();
 
-    makeInvoiceHeaderHTML();
+    makeInvoiceHeaderHTML(comboBoxInvoiceType->currentIndex() + 1);
 
-    makeInvoiceHeader(false, false, true);
+    makeInvoiceHeader(comboBoxInvoiceType->currentIndex() + 1, false, false, true);
     makeInvoiceBody();
     makeInvoceProductsTitle(0);
     makeBeforeCorrProducts();
@@ -69,7 +67,7 @@ void CorrectiveInvoiceDialog::makeInvoice()
     const int numberOfCopies = s.value(s.keyName(s.NUMBER_OF_COPIES), 2).toInt();
     for (int i = 1; i <= numberOfCopies; i++)
     {
-        makeInvoiceHeader(false, true, false);
+        makeInvoiceHeader(comboBoxInvoiceType->currentIndex() + 1, false, true, false);
         makeInvoiceBody();
         makeInvoceProductsTitle(0);
         makeBeforeCorrProducts();

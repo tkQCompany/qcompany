@@ -42,21 +42,6 @@ public:
      */
     virtual ~InvoiceDialog();
 
-    /**
-     * @brief
-     *
-     */
-    virtual void init_();
-    /**
-     * @brief
-     *
-     * @param bool
-     */
-    virtual void setIsEditAllowed(const bool);
-
-public:    
-    InvoiceData ret; /**< TODO */
-
 private slots:
     /**
      * @brief
@@ -128,7 +113,7 @@ protected slots:
      * @brief
      *
      */
-    virtual void makeInvoice();
+    virtual void printInvoice();
     /**
      * @brief
      *
@@ -182,12 +167,12 @@ protected:
      * @param bool
      * @param bool
      */
-    virtual void makeInvoiceHeader(const bool, const bool, const bool);
+    virtual void makeInvoiceHeader(const int invoiceType, const bool, const bool, const bool);
     /**
      * @brief
      *
      */
-    virtual void makeInvoiceHeaderHTML();
+    virtual void makeInvoiceHeaderHTML(const int invoiceType);
     /**
      * @brief
      *
@@ -215,15 +200,26 @@ protected:
      *
      */
     virtual void print();
+
+    /**
+     * @brief
+     *
+     * @param bool
+     */
+    virtual void setIsEditAllowed(const bool);
 protected:
-    bool unsaved, isEdit, saveFailed; /**< TODO */
-    InvoiceTypeData::Type invType; /**< TODO */
+    bool unsaved, saveFailed; /**< TODO */
     CustomPaymData *custPaymData; /**< TODO */
     double discountTotal, netTotal, grossTotal; /**< TODO */
     QStringList invStrList; /**< TODO */
     Database *db_; /**< TODO */
 
 private:
+    /**
+     * @brief
+     *
+     */
+    void init_();
     /**
      * @brief
      *

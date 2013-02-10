@@ -50,6 +50,7 @@ QT += gui xml sql
 UI_DIR = ./ui
 
 OTHER_FILES += \
-    doc/Doxyfile
+    doc/Doxyfile \
+    templates/template.html
 
 include(qfaktury_common.pri)

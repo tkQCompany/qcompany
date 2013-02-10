@@ -32,5 +32,6 @@
         <file>icons/usun_towar.png</file>
         <file>translations/qfaktury_de.qm</file>
         <file>translations/qfaktury_en.qm</file>
+        <file>templates/template.html</file>
     </qresource>
 </RCC>

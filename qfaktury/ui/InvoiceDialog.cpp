@@ -19,6 +19,7 @@ InvoiceDialog::InvoiceDialog(QWidget *parent, Database *db, const QModelIndex &i
     {//TODO: correct unnecessary calculations of invoice number here
         mapper_.setCurrentIndex(id_edit.row());
         fillTableCommodity_(db_->commodities(id_edit.data().toLongLong()));
+        pushButtonSave->setEnabled(false);
     }
     else
     {
@@ -66,7 +67,7 @@ void InvoiceDialog::init_()
     connect(pushButtonEditCommodity, SIGNAL(clicked()), this, SLOT(editCommodity_()));
     connect(pushButtonClose, SIGNAL(clicked()), this, SLOT(canQuit()));
     connect(pushButtonSave, SIGNAL(clicked()), this, SLOT(saveInvoice()));
-    connect(pushButtonPrint, SIGNAL(clicked()), this, SLOT(makeInvoice()));
+    connect(pushButtonPrint, SIGNAL(clicked()), this, SLOT(printInvoice()));
     connect(pushButtonAddCounterparty, SIGNAL(clicked()), this, SLOT(counterpartyAdd_()));
     connect(tableWidgetCommodities, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(editCommodity_()));
     connect(tableWidgetCommodities, SIGNAL(itemActivated(QTableWidgetItem *)), this, SLOT(tableActivated_(QTableWidgetItem *)));
@@ -430,10 +431,10 @@ bool InvoiceDialog::saveInvoice()
         if(!result)
         {
             qDebug() << "InvoiceDialog::saveInvoice() - lastError: " << db_->modelInvoice()->lastError().text();
-            pushButtonSave->setEnabled(false);
-            pushButtonRemoveCommodity->setEnabled(false);
-            pushButtonEditCommodity->setEnabled(false);
         }
+        pushButtonSave->setEnabled(false);
+        pushButtonRemoveCommodity->setEnabled(false);
+        pushButtonEditCommodity->setEnabled(false);
     }
     else
     {
@@ -452,40 +453,67 @@ bool InvoiceDialog::saveInvoice()
  * @brief
  *
  */
-void InvoiceDialog::makeInvoice()
+void InvoiceDialog::printInvoice()
 {
     if(!validateForm_())
         return;
 
-     //if (fraStrList.isEmpty()) {
-    // for perfomance reasons could be done... but not now TODO
+    SettingsGlobal s;
+    QFile file;
+    QTextStream stream;
+    QString invoiceHTMLTemplate, styleCSS;
 
-    invStrList.clear();
-    makeInvoiceHeaderHTML();
+    file.setFileName(":/templates/template.html");
+    file.open(QIODevice::ReadOnly);
+    stream.setDevice(&file);
+    stream >> invoiceHTMLTemplate;
+    file.close();
 
-    makeInvoiceHeader(true, false, true);
-    makeInvoiceBody();
-    makeInvoiceProducts();
-    makeInvoiceSumm();
-    makeInvoiceSummAll();
-    makeInvoiceFooter();
+    file.setFileName(s.getTemplate());
+    file.open(QIODevice::ReadOnly);
+    stream.setDevice(&file);
+    stream >> styleCSS;
+    file.close();
 
-    SettingsGlobal settings;
-    const int numberOfCopies = settings.value(SettingsGlobal::keyName(SettingsGlobal::NUMBER_OF_COPIES), 2).toInt();
-    for (int i = 1; i <= numberOfCopies; i++)
+    const QString logo(s.value(s.keyName(s.LOGO)).toString());
+    const QString stampStr(logo.isEmpty() ? trUtf8("Pieczęć wystawcy") : QString("<img src=\"%1\">").arg(logo));
+
+
+    const QString invoiceHTML(invoiceHTMLTemplate.arg(s.value(s.keyName(s.LANG)).toString())
+                              .arg(comboBoxInvoiceType->currentText())
+                              .arg(styleCSS)
+                              .arg(stampStr));
+    file.setFileName("debugInvoice.html");
+    file.open(QIODevice::WriteOnly);
+    stream.setDevice(&file);
+    stream << invoiceHTML;
+    file.close();
+
+    //invStrList.clear();
+    //makeInvoiceHeaderHTML(comboBoxInvoiceType->currentIndex() + 1);
+
+    //makeInvoiceHeader(comboBoxInvoiceType->currentIndex() + 1, true, false, true);
+    //makeInvoiceBody();
+    //makeInvoiceProducts();
+    //makeInvoiceSumm();
+    //makeInvoiceSummAll();
+    //makeInvoiceFooter();
+
+    const int numberOfCopies = s.value(s.keyName(s.NUMBER_OF_COPIES), 2).toInt();
+    for (int i = 0; i < numberOfCopies; ++i)
     {
         // print copy
-        makeInvoiceHeader(true, true, false);
-        makeInvoiceBody();
-        makeInvoiceProducts();
-        makeInvoiceSumm();
-        makeInvoiceSummAll();
-        makeInvoiceFooter();
+        //makeInvoiceHeader(comboBoxInvoiceType->currentIndex() + 1, true, true, false);
+        //makeInvoiceBody();
+        //makeInvoiceProducts();
+        //makeInvoiceSumm();
+        //makeInvoiceSummAll();
+        //makeInvoiceFooter();
     }
 
-    makeInvoiceFooterHtml();
-    print();
-    pushButtonSave->setFocus();
+    //makeInvoiceFooterHtml();
+    //print();
+    //pushButtonSave->setFocus();
 }
 
 /** Slot print
@@ -498,7 +526,7 @@ void InvoiceDialog::makeInvoice()
  */
 void InvoiceDialog::printSlot_(QPrinter *printer) const
 {
-    QTextDocument doc(InvoiceTypeData::InvoiceTypeToString(invType));
+    QTextDocument doc(InvoiceTypeData::InvoiceTypeToString(comboBoxInvoiceType->currentIndex() + 1));
 
     QString s;
     QStringListIterator listIter(invStrList);
@@ -620,38 +648,37 @@ bool InvoiceDialog::validateForm_()
     return true;
 }
 
-// ******************************** XML Helpers END **********************************************
 
-// Generate Invoice HTML methods --- START ---
 
 /**
  * @brief
  *
  */
-void InvoiceDialog::makeInvoiceHeaderHTML() {
+void InvoiceDialog::makeInvoiceHeaderHTML(const int invoiceType)
+{
     invStrList += "<html><head>";
-    invStrList += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"; //@TODO
+    invStrList += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"; //TODO: remove mixing logic and view
     invStrList += "<meta name=\"creator\" value=\"http://www.e-linux.pl\" />";
     invStrList += "</head>";
 
-    if (windowTitle().right(3) == "VAT") {
-        invStrList += "<title>"+ InvoiceTypeData::InvoiceTypeToString(invType)  +"</title>";
-    } else {
-        invStrList += "<title>" + InvoiceTypeData::InvoiceTypeToString(invType) + "</title>";
-    }
+    invStrList += "<title>"+ InvoiceTypeData::InvoiceTypeToString(invoiceType)  +"</title>";
 
     invStrList += "<style type=\"text/css\"> ";
-    SettingsGlobal settings;
-    QFile file(settings.getTemplate());
-    if (file.open(QIODevice::ReadOnly)) {
+    SettingsGlobal s;
+    QFile file(s.getTemplate());
+    if (file.open(QIODevice::ReadOnly))
+    {
         QTextStream stream(&file);
         QString line;
-        while (!stream.atEnd()) {
+        while (!stream.atEnd())
+        {
             line = stream.readLine();
             invStrList += line;
         }
         file.close();
-    } else {
+    }
+    else
+    {
         qWarning() << "Could not open CSS file: " << file.fileName();
     }
     invStrList += "</style>";
@@ -666,20 +693,24 @@ void InvoiceDialog::makeInvoiceHeaderHTML() {
  * @param breakPage
  * @param original
  */
-void InvoiceDialog::makeInvoiceHeader(const bool sellDate, const bool breakPage, const bool original) {
+void InvoiceDialog::makeInvoiceHeader(const int invoiceType, const bool sellDate, const bool breakPage, const bool original)
+{
     QString breakPageStr = "class=\"page_break\"";
     if (breakPage == false) breakPageStr = "";
 
-    invStrList += "<table comment=\"headar table\" width=\"100%\" border=\"0\"" + breakPageStr + ">";
+    invStrList += "<table comment=\"header table\" width=\"100%\" border=\"0\"" + breakPageStr + ">";
     invStrList += "<tr>";
     invStrList += "<td width=\"60%\" align=\"center\" valign=\"bottom\">";
     invStrList += "<span class=\"stamp\">";
 
     SettingsGlobal s;
     const QString logo(s.value(s.keyName(s.LOGO)).toString());
-    if (logo != "") {
+    if (!logo.isEmpty())
+    {
         invStrList += "<img src=\"" + logo + "\" width=\"100\" " + " height=\"100\"+ >";
-    } else {
+    }
+    else
+    {
         invStrList += trUtf8("Pieczęć wystawcy");
     }
     invStrList += "</span>";
@@ -687,7 +718,7 @@ void InvoiceDialog::makeInvoiceHeader(const bool sellDate, const bool breakPage,
 
     invStrList += "<td align=\"right\">";
     invStrList += "<span style=\"font-size:12pt; font-weight:600\">";
-    invStrList += InvoiceTypeData::InvoiceTypeToString(invType) + "<br/>";
+    invStrList += InvoiceTypeData::InvoiceTypeToString(invoiceType) + "<br/>";
     invStrList += trUtf8("Nr: ") + lineEditInvNumber->text() + "<br></span>";
     invStrList += "<span class=\"dates\">" + trUtf8("Data wystawienia: ")
             + dateEditDateOfIssuance->date().toString(s.getDateFormat()) + "<br>";
@@ -1135,7 +1166,6 @@ QString InvoiceDialog::getGroupedSums()
  * @param isAllowed
  */
 void InvoiceDialog::setIsEditAllowed(const bool isAllowed) {
-    isEdit = true;
     lineEditInvNumber->setEnabled(isAllowed);
     dateEditDateOfSell->setEnabled(isAllowed);
     dateEditDateOfIssuance->setEnabled(isAllowed);

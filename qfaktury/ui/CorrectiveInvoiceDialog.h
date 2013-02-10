@@ -39,7 +39,7 @@ protected slots:
      * @brief
      *
      */
-    void makeInvoice();
+    void printInvoice();
     /**
      * @brief
      *
@@ -109,7 +109,7 @@ private:
      */
     void makeInvoceProductsTitle(const short);
 private:
-    bool editMode; /**< TODO */
+    bool editMode, isEdit; /**< TODO */
     double origDiscTotal, origNettTotal, origGrossTotal, diffTotal; /**< TODO */
     InvoiceData invData; /**< TODO */
     QComboBox *reasonCombo; /**< TODO */
