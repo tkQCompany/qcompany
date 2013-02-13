@@ -39,7 +39,7 @@ protected slots:
      * @brief
      *
      */
-    void printInvoice();
+    //void printInvoice();
     /**
      * @brief
      *
@@ -73,12 +73,12 @@ protected:
      * @brief
      *
      */
-    void makeInvoiceSummAll();
+    //void makeInvoiceSummAll();
     /**
      * @brief
      *
      */
-    void makeInvoiceSumm();
+    //void makeInvoiceSumm();
 private:
     /**
      * @brief
@@ -89,7 +89,7 @@ private:
      * @brief
      *
      */
-    void makeBeforeCorrProducts();
+    //void makeBeforeCorrProducts();
 
     /**
      * @brief
@@ -101,7 +101,7 @@ private:
      * @brief
      *
      */
-    void makeBeforeCorrSumm();
+    //void makeBeforeCorrSumm();
     /**
      * @brief
      *

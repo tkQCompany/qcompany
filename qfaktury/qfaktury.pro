@@ -51,6 +51,7 @@ UI_DIR = ./ui
 
 OTHER_FILES += \
     doc/Doxyfile \
-    templates/template.html
+    templates/template.html \
+    templates/style.css
 
 include(qfaktury_common.pri)

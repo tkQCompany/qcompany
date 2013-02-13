@@ -69,18 +69,14 @@ private slots:
      *
      */
     void counterpartyMoreInfo_();
+
+    void printPaintRequested_(QPrinter *printer);
     /**
      * @brief
      *
      * @param item
      */
     void tableActivated_(QTableWidgetItem *item);
-    /**
-     * @brief
-     *
-     * @param
-     */
-    void printSlot_(QPrinter*) const;
 
     void retranslateUi_();
 
@@ -149,17 +145,17 @@ protected:
      * @brief
      *
      */
-    virtual void makeInvoiceBody();
+    //virtual void makeInvoiceBody();
     /**
      * @brief
      *
      */
-    void makeInvoiceFooter();
+    //void makeInvoiceFooter();
     /**
      * @brief
      *
      */
-    virtual void makeInvoiceFooterHtml();
+    //virtual void makeInvoiceFooterHtml();
     /**
      * @brief
      *
@@ -167,39 +163,32 @@ protected:
      * @param bool
      * @param bool
      */
-    virtual void makeInvoiceHeader(const int invoiceType, const bool, const bool, const bool);
+    //virtual void makeInvoiceHeader(const int invoiceType, const bool, const bool, const bool);
     /**
      * @brief
      *
      */
-    virtual void makeInvoiceHeaderHTML(const int invoiceType);
+    //virtual void makeInvoiceHeaderHTML(const int invoiceType);
     /**
      * @brief
      *
      */
-    virtual void makeInvoiceProducts();
+    //virtual void makeInvoiceProducts();
     /**
      * @brief
      *
      */
-    virtual void makeInvoiceProductsHeader();
+    //virtual void makeInvoiceProductsHeader();
     /**
      * @brief
      *
      */
-    virtual void makeInvoiceSumm();
+    //virtual void makeInvoiceSumm();
     /**
      * @brief
      *
      */
-    virtual void makeInvoiceSummAll();
-
-
-    /**
-     * @brief
-     *
-     */
-    virtual void print();
+    //virtual void makeInvoiceSummAll();
 
     /**
      * @brief
@@ -211,7 +200,7 @@ protected:
     bool unsaved, saveFailed; /**< TODO */
     CustomPaymData *custPaymData; /**< TODO */
     double discountTotal, netTotal, grossTotal; /**< TODO */
-    QStringList invStrList; /**< TODO */
+    QString docHTML;
     Database *db_; /**< TODO */
 
 private:

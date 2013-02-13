@@ -46,43 +46,43 @@ void CorrectiveInvoiceDialog::init_ (/*const bool mode*/)
 /** Slot
  *  Generate invoice and show preview
  */
-void CorrectiveInvoiceDialog::printInvoice()
-{
-    invStrList.clear();
+//void CorrectiveInvoiceDialog::printInvoice()
+//{
+//    invStrList.clear();
 
-    makeInvoiceHeaderHTML(comboBoxInvoiceType->currentIndex() + 1);
+//    makeInvoiceHeaderHTML(comboBoxInvoiceType->currentIndex() + 1);
 
-    makeInvoiceHeader(comboBoxInvoiceType->currentIndex() + 1, false, false, true);
-    makeInvoiceBody();
-    makeInvoceProductsTitle(0);
-    makeBeforeCorrProducts();
-    makeBeforeCorrSumm();
-    makeInvoceProductsTitle(1);
-    makeInvoiceProducts();
-    makeInvoiceSumm();
-    makeInvoiceSummAll();
-    makeInvoiceFooter();
+//    makeInvoiceHeader(comboBoxInvoiceType->currentIndex() + 1, false, false, true);
+//    makeInvoiceBody();
+//    makeInvoceProductsTitle(0);
+//    makeBeforeCorrProducts();
+//    makeBeforeCorrSumm();
+//    makeInvoceProductsTitle(1);
+//    makeInvoiceProducts();
+//    makeInvoiceSumm();
+//    makeInvoiceSummAll();
+//    makeInvoiceFooter();
 
-    SettingsGlobal s;
-    const int numberOfCopies = s.value(s.keyName(s.NUMBER_OF_COPIES), 2).toInt();
-    for (int i = 1; i <= numberOfCopies; i++)
-    {
-        makeInvoiceHeader(comboBoxInvoiceType->currentIndex() + 1, false, true, false);
-        makeInvoiceBody();
-        makeInvoceProductsTitle(0);
-        makeBeforeCorrProducts();
-        makeBeforeCorrSumm();
-        makeInvoceProductsTitle(1);
-        makeInvoiceProducts();
-        makeInvoiceSumm();
-        makeInvoiceSummAll();
-        makeInvoiceFooter();
-    }
+//    SettingsGlobal s;
+//    const int numberOfCopies = s.value(s.keyName(s.NUMBER_OF_COPIES), 2).toInt();
+//    for (int i = 1; i <= numberOfCopies; i++)
+//    {
+//        makeInvoiceHeader(comboBoxInvoiceType->currentIndex() + 1, false, true, false);
+//        makeInvoiceBody();
+//        makeInvoceProductsTitle(0);
+//        makeBeforeCorrProducts();
+//        makeBeforeCorrSumm();
+//        makeInvoceProductsTitle(1);
+//        makeInvoiceProducts();
+//        makeInvoiceSumm();
+//        makeInvoiceSummAll();
+//        makeInvoiceFooter();
+//    }
 
-    makeInvoiceFooterHtml();
+//    makeInvoiceFooterHtml();
 
-    print();
-}
+//    //print();
+//}
 
 /** Slot
  *  Validate close and save if requested
@@ -408,174 +408,174 @@ void CorrectiveInvoiceDialog::calculateOneDiscount(const int i) {
 
 
 //*************** HTML methods START  *** *****************************
-void CorrectiveInvoiceDialog::makeInvoceProductsTitle(const short a) {
-    invStrList += "<tr align=\"center\"><td>";
+//void CorrectiveInvoiceDialog::makeInvoceProductsTitle(const short a) {
+//    invStrList += "<tr align=\"center\"><td>";
 
-    if (a==1) {
-        invStrList += trUtf8("Pozycje na fakturze po korekcie:");
-    }
-    if (a==0) {
-        invStrList += trUtf8("Pozycje na fakturze przed korektą:");
-    }
-}
+//    if (a==1) {
+//        invStrList += trUtf8("Pozycje na fakturze po korekcie:");
+//    }
+//    if (a==0) {
+//        invStrList += trUtf8("Pozycje na fakturze przed korektą:");
+//    }
+//}
 
-void CorrectiveInvoiceDialog::makeBeforeCorrProducts(){
+//void CorrectiveInvoiceDialog::makeBeforeCorrProducts(){
 
-    invStrList += "<table border=\"1\" cellspacing=\"0\" cellpadding=\"5\" width=\"100%\">";
+//    invStrList += "<table border=\"1\" cellspacing=\"0\" cellpadding=\"5\" width=\"100%\">";
 
-    makeInvoiceProductsHeader();
+//    makeInvoiceProductsHeader();
 
-    for (QMap<int, CommodityData>::const_iterator iter = invData.products.begin();
-         iter != invData.products.end();
-         ++iter)
-    {
-        // qDebug() << iter.value()->toString();
-//        fraStrList += "<tr valign=\"middle\" align=\"center\" class=\"products\">";
-//        // lp, nazwa, kod, pkwiu, ilosc, jm, rabat, cena jm., netto, vat, brutto
-//        if (sett().value("faktury_pozycje/Lp").toBool())
-//            fraStrList += "<td align=\"center\">" + sett().numberToString(iter.key() + 1) + "</td>";
-//        if (sett().value("faktury_pozycje/Nazwa") .toBool())
-//            fraStrList += "<td align=\"left\">" + iter.value()->getName() + "</td>";
-//        if (sett().value("faktury_pozycje/Kod") .toBool())
-//            fraStrList += "<td align=\"center\">" + iter.value()->getCode() + "</td>";
-//        if (sett().value("faktury_pozycje/pkwiu") .toBool())
-//            fraStrList += "<td align=\"center\">" + iter.value()->getPkwiu() + "</td>";
-//        if (sett().value("faktury_pozycje/ilosc") .toBool())
-//            fraStrList += "<td align=\"center\">" + sett().numberToString(iter.value()->getQuantity()) + "</td>";
-//        if (sett().value("faktury_pozycje/jm") .toBool())
-//            fraStrList += "<td align=\"center\">" + iter.value()->getQuantityType() + "</td>";
-//        if (sett().value("faktury_pozycje/cenajedn") .toBool())
-//            fraStrList += "<td align=\"center\">" + sett().numberToString(iter.value()->getPrice()) + "</td>";
-//        double discountVal = iter.value()->getNett() * (iter.value()->getDiscount() * 0.01);
-//        double nettMinusDisc = iter.value()->getNett() - discountVal;
-//        if (sett().value("faktury_pozycje/wartnetto") .toBool())
-//            fraStrList += "<td align=\"center\">" + sett().numberToString(iter.value()->getNett())
-//                    + "</td>"; // netto
-//        if (sett().value("faktury_pozycje/rabatperc") .toBool())
-//            fraStrList += "<td align=\"center\">" + sett().numberToString(iter.value()->getDiscount())
-//                    + "% </td>"; // rabat
-//        if (sett().value("faktury_pozycje/rabatval") .toBool())
-//            fraStrList += "<td align=\"center\">" + sett().numberToString(discountVal, 'f',  2)	+ " </td>";
-//        if (sett().value("faktury_pozycje/nettoafter") .toBool())
-//            fraStrList += "<td align=\"center\">" + sett().numberToString(nettMinusDisc, 'f', 2) + "</td>";
-//        if (sett().value("faktury_pozycje/vatval") .toBool())
-//            fraStrList += "<td align=\"center\">" + sett().numberToString(iter.value()->getVat())
-//                    + "%</td>";
-//        double vatPrice = iter.value()->getGross() - iter.value()->getNett(); // brutt-nett :)
-//        if (sett().value("faktury_pozycje/vatprice") .toBool())
-//            fraStrList += "<td align=\"center\">" + sett().numberToString(vatPrice, 'f', 2)
-//                    + "</td>";
-//        if (sett().value("faktury_pozycje/bruttoval") .toBool())
-//            fraStrList += "<td align=\"center\">" + sett().numberToString(iter.value()->getGross()) + "</td>";
-//        fraStrList += "</tr>";
-    }
+//    for (QMap<int, CommodityData>::const_iterator iter = invData.products.begin();
+//         iter != invData.products.end();
+//         ++iter)
+//    {
+//        // qDebug() << iter.value()->toString();
+////        fraStrList += "<tr valign=\"middle\" align=\"center\" class=\"products\">";
+////        // lp, nazwa, kod, pkwiu, ilosc, jm, rabat, cena jm., netto, vat, brutto
+////        if (sett().value("faktury_pozycje/Lp").toBool())
+////            fraStrList += "<td align=\"center\">" + sett().numberToString(iter.key() + 1) + "</td>";
+////        if (sett().value("faktury_pozycje/Nazwa") .toBool())
+////            fraStrList += "<td align=\"left\">" + iter.value()->getName() + "</td>";
+////        if (sett().value("faktury_pozycje/Kod") .toBool())
+////            fraStrList += "<td align=\"center\">" + iter.value()->getCode() + "</td>";
+////        if (sett().value("faktury_pozycje/pkwiu") .toBool())
+////            fraStrList += "<td align=\"center\">" + iter.value()->getPkwiu() + "</td>";
+////        if (sett().value("faktury_pozycje/ilosc") .toBool())
+////            fraStrList += "<td align=\"center\">" + sett().numberToString(iter.value()->getQuantity()) + "</td>";
+////        if (sett().value("faktury_pozycje/jm") .toBool())
+////            fraStrList += "<td align=\"center\">" + iter.value()->getQuantityType() + "</td>";
+////        if (sett().value("faktury_pozycje/cenajedn") .toBool())
+////            fraStrList += "<td align=\"center\">" + sett().numberToString(iter.value()->getPrice()) + "</td>";
+////        double discountVal = iter.value()->getNett() * (iter.value()->getDiscount() * 0.01);
+////        double nettMinusDisc = iter.value()->getNett() - discountVal;
+////        if (sett().value("faktury_pozycje/wartnetto") .toBool())
+////            fraStrList += "<td align=\"center\">" + sett().numberToString(iter.value()->getNett())
+////                    + "</td>"; // netto
+////        if (sett().value("faktury_pozycje/rabatperc") .toBool())
+////            fraStrList += "<td align=\"center\">" + sett().numberToString(iter.value()->getDiscount())
+////                    + "% </td>"; // rabat
+////        if (sett().value("faktury_pozycje/rabatval") .toBool())
+////            fraStrList += "<td align=\"center\">" + sett().numberToString(discountVal, 'f',  2)	+ " </td>";
+////        if (sett().value("faktury_pozycje/nettoafter") .toBool())
+////            fraStrList += "<td align=\"center\">" + sett().numberToString(nettMinusDisc, 'f', 2) + "</td>";
+////        if (sett().value("faktury_pozycje/vatval") .toBool())
+////            fraStrList += "<td align=\"center\">" + sett().numberToString(iter.value()->getVat())
+////                    + "%</td>";
+////        double vatPrice = iter.value()->getGross() - iter.value()->getNett(); // brutt-nett :)
+////        if (sett().value("faktury_pozycje/vatprice") .toBool())
+////            fraStrList += "<td align=\"center\">" + sett().numberToString(vatPrice, 'f', 2)
+////                    + "</td>";
+////        if (sett().value("faktury_pozycje/bruttoval") .toBool())
+////            fraStrList += "<td align=\"center\">" + sett().numberToString(iter.value()->getGross()) + "</td>";
+////        fraStrList += "</tr>";
+//    }
 
-    invStrList += "</table>";
-}
+//    invStrList += "</table>";
+//}
 
-void CorrectiveInvoiceDialog::makeBeforeCorrSumm()
-{
-    SettingsGlobal s;
-    invStrList += "<br><table width=\"100%\" border=\"0\" cellpadding=\"5\">";
-    double vatPrice = origGrossTotal - origNettTotal;
-    invStrList += "<tr class=\"productsSumHeader\" valign=\"middle\">";
-    invStrList += "<td width=\"67%\" align=\"right\">&nbsp;</td>";
-    invStrList += "<td width=\"11%\" align=\"center\">" + trUtf8("Wartość Netto") + "</td>"; // netto
-    invStrList += "<td width=\"11%\" align=\"center\">" + trUtf8("Kwota VAT") + "</td>";// vat
-    invStrList += "<td width=\"11%\" align=\"center\">" + trUtf8("Wartość Brutto") + "</td>"; // brutto
-    invStrList += "</tr>";
-    invStrList += "<tr class=\"productsSum\" valign=\"middle\">";
-    invStrList += "<td align=\"right\">" + trUtf8("Razem:") + "</td>";
-    invStrList += "<td align=\"center\">" + s.numberToString(origNettTotal, 'f', 2) + "</td>"; // netto
-    invStrList += "<td align=\"center\">" + s.numberToString(vatPrice, 'f', 2) + "</td>";// vat
-    invStrList += "<td align=\"center\">" + s.numberToString(origGrossTotal, 'f', 2) + "</td>"; // brutto
-    invStrList += "</tr>";
-    invStrList += "</table>";
+//void CorrectiveInvoiceDialog::makeBeforeCorrSumm()
+//{
+//    SettingsGlobal s;
+//    invStrList += "<br><table width=\"100%\" border=\"0\" cellpadding=\"5\">";
+//    double vatPrice = origGrossTotal - origNettTotal;
+//    invStrList += "<tr class=\"productsSumHeader\" valign=\"middle\">";
+//    invStrList += "<td width=\"67%\" align=\"right\">&nbsp;</td>";
+//    invStrList += "<td width=\"11%\" align=\"center\">" + trUtf8("Wartość Netto") + "</td>"; // netto
+//    invStrList += "<td width=\"11%\" align=\"center\">" + trUtf8("Kwota VAT") + "</td>";// vat
+//    invStrList += "<td width=\"11%\" align=\"center\">" + trUtf8("Wartość Brutto") + "</td>"; // brutto
+//    invStrList += "</tr>";
+//    invStrList += "<tr class=\"productsSum\" valign=\"middle\">";
+//    invStrList += "<td align=\"right\">" + trUtf8("Razem:") + "</td>";
+//    invStrList += "<td align=\"center\">" + s.numberToString(origNettTotal, 'f', 2) + "</td>"; // netto
+//    invStrList += "<td align=\"center\">" + s.numberToString(vatPrice, 'f', 2) + "</td>";// vat
+//    invStrList += "<td align=\"center\">" + s.numberToString(origGrossTotal, 'f', 2) + "</td>"; // brutto
+//    invStrList += "</tr>";
+//    invStrList += "</table>";
 
-    invStrList += "<hr class=\"hrdiv1\">";
-}
+//    invStrList += "<hr class=\"hrdiv1\">";
+//}
 
-void CorrectiveInvoiceDialog::makeInvoiceSumm()
-{
-    SettingsGlobal s;
-    invStrList += "<br><table width=\"100%\" border=\"0\" cellpadding=\"5\">";
-    double vatPrice = grossTotal - netTotal;
-    invStrList += "<tr class=\"productsSumHeader\" valign=\"middle\">";
-    invStrList += "<td width=\"67%\" align=\"right\">&nbsp;</td>";
-    invStrList += "<td width=\"11%\" align=\"center\">" + trUtf8("Wartość Netto") + "</td>"; // netto
-    invStrList += "<td width=\"11%\" align=\"center\">" + trUtf8("Kwota VAT") + "</td>";// vat
-    invStrList += "<td width=\"11%\" align=\"center\">" + trUtf8("Wartość Brutto") + "</td>"; // brutto
-    invStrList += "</tr><tr class=\"productsSum\" valign=\"middle\">";
-    invStrList += "<td align=\"right\">" + trUtf8("Razem:") + "</td>";
-    invStrList += "<td align=\"center\">" + s.numberToString(netTotal, 'f', 2) + "</td>"; // netto
-    invStrList += "<td align=\"center\">" + s.numberToString(vatPrice, 'f', 2) + "</td>";// vat
-    invStrList += "<td align=\"center\">" + s.numberToString(grossTotal, 'f', 2) + "</td>"; // brutto
-    invStrList += "</tr>";
-    invStrList += "</table>";
-}
+//void CorrectiveInvoiceDialog::makeInvoiceSumm()
+//{
+//    SettingsGlobal s;
+//    invStrList += "<br><table width=\"100%\" border=\"0\" cellpadding=\"5\">";
+//    double vatPrice = grossTotal - netTotal;
+//    invStrList += "<tr class=\"productsSumHeader\" valign=\"middle\">";
+//    invStrList += "<td width=\"67%\" align=\"right\">&nbsp;</td>";
+//    invStrList += "<td width=\"11%\" align=\"center\">" + trUtf8("Wartość Netto") + "</td>"; // netto
+//    invStrList += "<td width=\"11%\" align=\"center\">" + trUtf8("Kwota VAT") + "</td>";// vat
+//    invStrList += "<td width=\"11%\" align=\"center\">" + trUtf8("Wartość Brutto") + "</td>"; // brutto
+//    invStrList += "</tr><tr class=\"productsSum\" valign=\"middle\">";
+//    invStrList += "<td align=\"right\">" + trUtf8("Razem:") + "</td>";
+//    invStrList += "<td align=\"center\">" + s.numberToString(netTotal, 'f', 2) + "</td>"; // netto
+//    invStrList += "<td align=\"center\">" + s.numberToString(vatPrice, 'f', 2) + "</td>";// vat
+//    invStrList += "<td align=\"center\">" + s.numberToString(grossTotal, 'f', 2) + "</td>"; // brutto
+//    invStrList += "</tr>";
+//    invStrList += "</table>";
+//}
 
-void CorrectiveInvoiceDialog::makeInvoiceSummAll()
-{
-    SettingsGlobal s;
-    //fraStrList += "<tr comment=\"podsumowanie\"><td>";
-    invStrList += "<table width=\"100%\" border=\"0\" cellpadding=\"7\">";
-    invStrList += "<tr class=\"summary\">";
-    invStrList += "<td width=\"48%\">";
+//void CorrectiveInvoiceDialog::makeInvoiceSummAll()
+//{
+//    SettingsGlobal s;
+//    //fraStrList += "<tr comment=\"podsumowanie\"><td>";
+//    invStrList += "<table width=\"100%\" border=\"0\" cellpadding=\"7\">";
+//    invStrList += "<tr class=\"summary\">";
+//    invStrList += "<td width=\"48%\">";
 
-    invStrList += trUtf8("Wartość faktury: ") + s.numberToString(origGrossTotal) + "<br>";
-    invStrList += trUtf8("Wartość korekty: ") + s.numberToString(grossTotal) + "<br>";
-    if (diffTotal > 0) {
-        invStrList += trUtf8("Do zapłaty: ");
-        invStrList += labelSumGrossVal->text() + " " + comboBoxCurrency->currentText() + "<br>";
-    } else if (diffTotal < 0) {
-        invStrList += trUtf8("Do zwrotu: ");
-        invStrList += labelSumGrossVal->text() + " " + comboBoxCurrency->currentText()+ "<br>";
-    }
-    invStrList += trUtf8("słownie:")
-            + ConvertAmount::convertPL(labelSumGrossVal->text(), comboBoxCurrency->currentText())
-            + "<br>";
-    if (comboBoxPayment->currentIndex() == 0) {
-        invStrList += trUtf8("forma płatności: ") + comboBoxPayment->currentText() + "<br><b>";
-        invStrList += trUtf8("Zapłacono gotówką") + "<br>";
-    } else if ((comboBoxPayment->currentIndex() == comboBoxPayment->count() -1) && (custPaymData != NULL)) {
-        invStrList += "<span style=\"toPay\">";
-        invStrList += QString(trUtf8("Zapłacono: ") + custPaymData->payment1 + ": "
-                              +  s.numberToString(custPaymData->amount1) + " " + comboBoxCurrency->currentText() + " "
-                              + custPaymData->date1.toString(s.getDateFormat()) + "<br>");
-        invStrList += QString(trUtf8("Zaległości: ") + custPaymData->payment2 + ": "
-                              +  s.numberToString(custPaymData->amount2) + " " + comboBoxCurrency->currentText() + " "
-                              + custPaymData->date2.toString(s.getDateFormat()));
-        invStrList += "</span>";
-    }  else {
-        invStrList += trUtf8("forma płatności: ") + comboBoxPayment->currentText() + "<br><b>";
-        invStrList += "<span style=\"payDate\">";
-        invStrList += trUtf8("termin płatności: ")
-                + dateEditDayOfPayment->date().toString(s.getDateFormat())	+ "<br>";
-        invStrList += "</span>";
-    }
+//    invStrList += trUtf8("Wartość faktury: ") + s.numberToString(origGrossTotal) + "<br>";
+//    invStrList += trUtf8("Wartość korekty: ") + s.numberToString(grossTotal) + "<br>";
+//    if (diffTotal > 0) {
+//        invStrList += trUtf8("Do zapłaty: ");
+//        invStrList += labelSumGrossVal->text() + " " + comboBoxCurrency->currentText() + "<br>";
+//    } else if (diffTotal < 0) {
+//        invStrList += trUtf8("Do zwrotu: ");
+//        invStrList += labelSumGrossVal->text() + " " + comboBoxCurrency->currentText()+ "<br>";
+//    }
+//    invStrList += trUtf8("słownie:")
+//            + ConvertAmount::convertPL(labelSumGrossVal->text(), comboBoxCurrency->currentText())
+//            + "<br>";
+//    if (comboBoxPayment->currentIndex() == 0) {
+//        invStrList += trUtf8("forma płatności: ") + comboBoxPayment->currentText() + "<br><b>";
+//        invStrList += trUtf8("Zapłacono gotówką") + "<br>";
+//    } else if ((comboBoxPayment->currentIndex() == comboBoxPayment->count() -1) && (custPaymData != NULL)) {
+//        invStrList += "<span style=\"toPay\">";
+//        invStrList += QString(trUtf8("Zapłacono: ") + custPaymData->payment1 + ": "
+//                              +  s.numberToString(custPaymData->amount1) + " " + comboBoxCurrency->currentText() + " "
+//                              + custPaymData->date1.toString(s.getDateFormat()) + "<br>");
+//        invStrList += QString(trUtf8("Zaległości: ") + custPaymData->payment2 + ": "
+//                              +  s.numberToString(custPaymData->amount2) + " " + comboBoxCurrency->currentText() + " "
+//                              + custPaymData->date2.toString(s.getDateFormat()));
+//        invStrList += "</span>";
+//    }  else {
+//        invStrList += trUtf8("forma płatności: ") + comboBoxPayment->currentText() + "<br><b>";
+//        invStrList += "<span style=\"payDate\">";
+//        invStrList += trUtf8("termin płatności: ")
+//                + dateEditDayOfPayment->date().toString(s.getDateFormat())	+ "<br>";
+//        invStrList += "</span>";
+//    }
 
-    invStrList += trUtf8("przyczyna korekty: ") +  reasonCombo->currentText() + "<br>";
-    invStrList += "<span class=\"additionalText\">"	+ lineEditAdditionalText->text() + "</span>";
+//    invStrList += trUtf8("przyczyna korekty: ") +  reasonCombo->currentText() + "<br>";
+//    invStrList += "<span class=\"additionalText\">"	+ lineEditAdditionalText->text() + "</span>";
 
-    invStrList += "</td>";
-    invStrList += "<td width=\"4%\">&nbsp;</td>";
-    invStrList += "<td width=\"48%\" valign=\"top\">";
+//    invStrList += "</td>";
+//    invStrList += "<td width=\"4%\">&nbsp;</td>";
+//    invStrList += "<td width=\"48%\" valign=\"top\">";
 
-    invStrList += "<table width=\"90%\" border=\"0\">";
-    invStrList += "<tr><td colspan=\"4\"><span style=\"font-size:8pt; font-weight:600;\">";
-    invStrList += trUtf8("Ogółem stawkami:");
-    invStrList += "</span></td>"; // Ogółem stawkami:
-    invStrList += "</tr>";
-    invStrList += getGroupedSums();
-    invStrList += "<tr>";
-    invStrList += "<td>&nbsp;</td>"; // netto
-    invStrList += "<td>&nbsp;</td>"; // stawka
-    invStrList += "<td>&nbsp;</td>"; // podatek
-    invStrList += "<td>&nbsp;</td>"; // brutto
-    invStrList += "</tr>";
-    invStrList += "</table>";
+//    invStrList += "<table width=\"90%\" border=\"0\">";
+//    invStrList += "<tr><td colspan=\"4\"><span style=\"font-size:8pt; font-weight:600;\">";
+//    invStrList += trUtf8("Ogółem stawkami:");
+//    invStrList += "</span></td>"; // Ogółem stawkami:
+//    invStrList += "</tr>";
+//    invStrList += getGroupedSums();
+//    invStrList += "<tr>";
+//    invStrList += "<td>&nbsp;</td>"; // netto
+//    invStrList += "<td>&nbsp;</td>"; // stawka
+//    invStrList += "<td>&nbsp;</td>"; // podatek
+//    invStrList += "<td>&nbsp;</td>"; // brutto
+//    invStrList += "</tr>";
+//    invStrList += "</table>";
 
-    invStrList += "</td></tr></table>";
-}
+//    invStrList += "</td></tr></table>";
+//}
 //*************** HTML methods END  *** *****************************
 

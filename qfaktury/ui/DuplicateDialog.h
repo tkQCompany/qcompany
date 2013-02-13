@@ -40,7 +40,7 @@ protected:
      * @param bool
      * @param bool
      */
-    virtual void makeInvoiceHeader(const bool, const bool, const bool);
+    //virtual void makeInvoiceHeader(const bool, const bool, const bool);
 private:
     /**
      * @brief
