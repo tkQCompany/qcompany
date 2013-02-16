@@ -45,8 +45,8 @@ void InvoiceGrossDialogTest::testGUI_InitialState()
 {
     Database db;
     InvoiceGrossDialog invoiceGrossDialog(0, &db);
-    QCOMPARE(invoiceGrossDialog.windowTitle(), InvoiceTypeData::InvoiceTypeToString(InvoiceTypeData::GROSS));
-    QCOMPARE(invoiceGrossDialog.comboBoxInvoiceType->currentText(), InvoiceTypeData::InvoiceTypeToString(InvoiceTypeData::GROSS));
+    QCOMPARE(invoiceGrossDialog.windowTitle(), InvoiceTypeData::names(InvoiceTypeData::GROSS));
+    QCOMPARE(invoiceGrossDialog.comboBoxInvoiceType->currentText(), InvoiceTypeData::names(InvoiceTypeData::GROSS));
     QCOMPARE(invoiceGrossDialog.dateEditDateOfIssuance->date(), QDate::currentDate());
     QCOMPARE(invoiceGrossDialog.dateEditDateOfSell->date(), QDate::currentDate());
     QCOMPARE(invoiceGrossDialog.dateEditDayOfPayment->date(), QDate::currentDate());

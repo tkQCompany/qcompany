@@ -23,6 +23,7 @@ struct UnitData
      * @brief
      *
      */
+    //TODO: remove the bug when we can add unit list and we have this fixed enum at the same time
     enum Names {UNIT = 1, KG, G, M, KM, HOUR, PACKAGE}; // "= 1" because SQL starts counting from 1
 
     /**

@@ -29,6 +29,8 @@ public:
      * @return QVariant
      */
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
+    CounterpartyData myCompany() const;
 };
 
 #endif

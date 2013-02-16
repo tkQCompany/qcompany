@@ -32,7 +32,7 @@ public:
      * @param invoiceType
      * @return QString
      */
-    static QString InvoiceTypeToString(const int invoiceType)
+    static QString names(const int invoiceType)
     {
         switch (invoiceType)
         {
@@ -53,7 +53,7 @@ public:
         int ret = -1;
         for(int i = VAT; i <= BILL; ++i)
         {
-            if(0 == (str.compare(InvoiceTypeToString(i))))
+            if(0 == (str.compare(names(i))))
             {
                 ret = i;
                 break;

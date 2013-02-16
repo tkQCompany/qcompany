@@ -32,7 +32,7 @@ void InvoiceNumberFormatExamplesDialog::init_()
 
         ptrExample.reset(new QTableWidgetItem(db_->modelInvoice()->generateInvoiceNumber(invoiceNumFormat_,
                                                                                          date,
-                                                                                         InvoiceTypeData::InvoiceTypeToString(InvoiceTypeData::VAT))));
+                                                                                         InvoiceTypeData::names(InvoiceTypeData::VAT))));
         ui->tableWidgetMain->setItem(i, COL_EXAMPLE, ptrExample.take());
 
         date = date.addDays(1);

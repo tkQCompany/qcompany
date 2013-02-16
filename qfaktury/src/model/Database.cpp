@@ -511,7 +511,7 @@ bool Database::insertDataIfNotInserted()
 
     for(int i = InvoiceTypeData::VAT; i <= InvoiceTypeData::BILL; ++i)
     {
-        if(!sqlInsertIf("invoice_type", "type", InvoiceTypeData::InvoiceTypeToString(i), __LINE__))
+        if(!sqlInsertIf("invoice_type", "type", InvoiceTypeData::names(i), __LINE__))
             return false;
     }
 
@@ -559,10 +559,16 @@ bool Database::invoiceWithCommoditiesInsertTransact(const InvoiceData &invoice, 
             QSqlQuery queryInv(modelInvoice()->query());
             const QString dateFormat("yyyy-MM-dd");
             const QString queryInvStr(QString("INSERT INTO invoice(inv_number, selling_date, type_id, counterparty_id, issuance_date, payment_date, payment_id, currency_id, additional_text, discount) VALUES('%1', '%2', %3, %4, '%5', '%6', %7, %8, '%9', %10)")
-                                      .arg(invoice.invNumber).arg(invoice.sellingDate.toString(dateFormat)).arg(invoice.typeID)
-                                      .arg(invoice.counterpartyID).arg(invoice.issuanceDate.toString(dateFormat))
-                                      .arg(invoice.paymentDate.toString(dateFormat)).arg(invoice.paymentID).arg(invoice.currencyID)
-                                      .arg(invoice.additText).arg(invoice.discount));
+                                      .arg(invoice.field(InvoiceFields::INV_NUMBER).toString())
+                                      .arg(invoice.field(InvoiceFields::SELLING_DATE).toDate().toString(dateFormat))
+                                      .arg(invoice.field(InvoiceFields::TYPE_ID).toString())
+                                      .arg(invoice.field(InvoiceFields::COUNTERPARTY_ID).toString())
+                                      .arg(invoice.field(InvoiceFields::ISSUANCE_DATE).toDate().toString(dateFormat))
+                                      .arg(invoice.field(InvoiceFields::PAYMENT_DATE).toDate().toString(dateFormat))
+                                      .arg(invoice.field(InvoiceFields::PAYMENT_ID).toString())
+                                      .arg(invoice.field(InvoiceFields::CURRENCY_ID).toString())
+                                      .arg(invoice.field(InvoiceFields::ADDIT_TEXT).toString())
+                                      .arg(invoice.field(InvoiceFields::DISCOUNT).toString()));
 
             if(queryInv.exec(queryInvStr))
             {

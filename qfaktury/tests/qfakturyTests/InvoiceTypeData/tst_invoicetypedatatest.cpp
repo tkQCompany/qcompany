@@ -70,7 +70,7 @@ void InvoiceTypeDataTest::testCaseCheckTypesNames()
     QFETCH(int, input_num);
     QFETCH(QString, output_name);
 
-    QVERIFY2(InvoiceTypeData::InvoiceTypeToString(input_num) == output_name, "Mismatch between numbers and names or between names");
+    QVERIFY2(InvoiceTypeData::names(input_num) == output_name, "Mismatch between numbers and names or between names");
 }
 
 

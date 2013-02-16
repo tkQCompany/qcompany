@@ -92,8 +92,8 @@ void InvoiceDialog::init_()
 
     for(int i = InvoiceTypeData::VAT; i <= InvoiceTypeData::BILL; ++i)
     {
-        comboBoxInvoiceType->addItem(InvoiceTypeData::InvoiceTypeToString(i));
-        comboBoxInvoiceType->setItemData(i, InvoiceTypeData::InvoiceTypeToString(i));
+        comboBoxInvoiceType->addItem(InvoiceTypeData::names(i));
+        comboBoxInvoiceType->setItemData(i, InvoiceTypeData::names(i));
     }
 
     comboBoxCounterparties->setModel(db_->modelCounterparty());
@@ -319,7 +319,7 @@ void InvoiceDialog::canQuit()
 void InvoiceDialog::genInvoiceNumber_(const QString& invNumFormat, const QDate& issuanceDate, const int invoiceType, const QString& counterpartyName)
 {
     const QString invNum(db_->modelInvoice()->generateInvoiceNumber(invNumFormat, issuanceDate,
-                                                                    InvoiceTypeData::InvoiceTypeToString(invoiceType),
+                                                                    InvoiceTypeData::names(invoiceType),
                                                                     counterpartyName));
     lineEditInvNumber->setText(invNum);
 }
@@ -485,6 +485,7 @@ void InvoiceDialog::printInvoice()
         const QString stampStr(logo.isEmpty() ? trUtf8("Pieczęć wystawcy") : QString("<img src=\"%1\">").arg(logo));
 
         QString sellerAttrList;
+
         s.beginGroup("printpos");
         if(s.value(s.keyName(s.USER_NAME)).toBool())
             sellerAttrList += QString("<li>%1</li>").arg(s.value(s.keyName(s.USER_NAME)).toString());
@@ -1364,19 +1365,19 @@ void InvoiceDialog::fillTableCommodity_(const QList<CommodityVisualData> &commod
 InvoiceData InvoiceDialog::getInvoiceData_() const
 {
     InvoiceData ret;
-    ret.additText = lineEditAdditionalText->text();
+    ret.setField(InvoiceFields::ADDIT_TEXT, lineEditAdditionalText->text());
+    ret.setField(InvoiceFields::COUNTERPARTY_ID, db_->modelCounterparty()->
+                 data(db_->modelCounterparty()->index(comboBoxCounterparties->currentIndex(),
+                            CounterpartyFields::ID)).toLongLong());
+    ret.setField(InvoiceFields::CURRENCY_ID, comboBoxCurrency->currentIndex() + 1);
+    ret.setField(InvoiceFields::DISCOUNT, spinBoxDiscount->value());
+    ret.setField(InvoiceFields::INV_NUMBER, lineEditInvNumber->text());
+    ret.setField(InvoiceFields::ISSUANCE_DATE, dateEditDateOfIssuance->date());
+    ret.setField(InvoiceFields::PAYMENT_DATE, dateEditDayOfPayment->date());
+    ret.setField(InvoiceFields::PAYMENT_ID, comboBoxPayment->currentIndex() + 1);
+    ret.setField(InvoiceFields::SELLING_DATE, dateEditDateOfSell->date());
+    ret.setField(InvoiceFields::TYPE_ID, comboBoxInvoiceType->currentIndex() + 1);
 
-    ret.counterpartyID = db_->modelCounterparty()->data(db_->modelCounterparty()->index(comboBoxCounterparties->currentIndex(),
-                                                                                        CounterpartyFields::ID)).toLongLong();
-
-    ret.currencyID = comboBoxCurrency->currentIndex() + 1;
-    ret.discount = spinBoxDiscount->value();
-    ret.invNumber = lineEditInvNumber->text();
-    ret.issuanceDate = dateEditDateOfIssuance->date();
-    ret.paymentDate = dateEditDayOfPayment->date();
-    ret.paymentID = comboBoxPayment->currentIndex() + 1;
-    ret.sellingDate = dateEditDateOfSell->date();
-    ret.typeID = comboBoxInvoiceType->currentIndex() + 1;
     return ret;
 }
 

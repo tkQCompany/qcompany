@@ -11,7 +11,7 @@
 InvoiceGrossDialog::InvoiceGrossDialog(QWidget *parent, Database *db) :
     InvoiceDialog(parent, db)
 {
-    setWindowTitle(InvoiceTypeData::InvoiceTypeToString(InvoiceTypeData::GROSS));
+    setWindowTitle(InvoiceTypeData::names(InvoiceTypeData::GROSS));
     comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::GROSS - 1);
 }
 

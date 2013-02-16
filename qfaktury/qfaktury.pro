@@ -10,13 +10,16 @@ DEPENDPATH += . \
               ui \
               src/model \
               src/model/models \
-              src/model/models_data
+              src/model/models_data \
+              ../qdecimal/decnumber
+
 INCLUDEPATH += . \
                src \
                src/model \
                src/model/models \
                src/model/models_data \
-               ui
+               ui \
+              ../qdecimal/decnumber
 
 # Input
 SOURCES += main.cpp

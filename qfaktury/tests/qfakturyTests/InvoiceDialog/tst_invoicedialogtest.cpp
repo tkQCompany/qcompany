@@ -51,8 +51,8 @@ void InvoiceDialogTest::testGUI_InitialState()
 {
     Database db;
     InvoiceDialog invoiceDialog(0, &db);
-    QCOMPARE(invoiceDialog.windowTitle(), InvoiceTypeData::InvoiceTypeToString(InvoiceTypeData::VAT));
-    QCOMPARE(invoiceDialog.comboBoxInvoiceType->currentText(), InvoiceTypeData::InvoiceTypeToString(InvoiceTypeData::VAT));
+    QCOMPARE(invoiceDialog.windowTitle(), InvoiceTypeData::names(InvoiceTypeData::VAT));
+    QCOMPARE(invoiceDialog.comboBoxInvoiceType->currentText(), InvoiceTypeData::names(InvoiceTypeData::VAT));
     QCOMPARE(invoiceDialog.dateEditDateOfIssuance->date(), QDate::currentDate());
     QCOMPARE(invoiceDialog.dateEditDateOfSell->date(), QDate::currentDate());
     QCOMPARE(invoiceDialog.dateEditDayOfPayment->date(), QDate::currentDate());

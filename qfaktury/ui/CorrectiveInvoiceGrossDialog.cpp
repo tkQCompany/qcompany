@@ -17,7 +17,7 @@ CorrectiveInvoiceGrossDialog::CorrectiveInvoiceGrossDialog(QWidget *parent, Data
 
 void CorrectiveInvoiceGrossDialog::init_()
 {
-    setWindowTitle(InvoiceTypeData::InvoiceTypeToString(InvoiceTypeData::CORRECTIVE_GROSS));
+    setWindowTitle(InvoiceTypeData::names(InvoiceTypeData::CORRECTIVE_GROSS));
     comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::CORRECTIVE_GROSS - 1);
 }
 

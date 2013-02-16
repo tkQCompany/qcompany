@@ -10,6 +10,8 @@
 
 #include "CommodityData.h"
 #include "../../CustomPaymData.h"
+#include "../../../qdecimal/src/QDecNumber.hh"
+#include "../../../qdecimal/src/QDecContext.hh"
 
 namespace InvoiceFields
 {
@@ -41,36 +43,77 @@ public:
         QVariant var;
         switch(i)
         {
-        case InvoiceFields::ID_INVOICE: return id;
-        case InvoiceFields::INV_NUMBER: return invNumber;
-        case InvoiceFields::SELLING_DATE: return sellingDate;
-        case InvoiceFields::TYPE_ID: return typeID;
-        case InvoiceFields::COUNTERPARTY_ID: return counterpartyID;
-        case InvoiceFields::ISSUANCE_DATE: return issuanceDate;
-        case InvoiceFields::PAYMENT_DATE: return paymentDate;
-        case InvoiceFields::PAYMENT_ID: return paymentID;
-        case InvoiceFields::CURRENCY_ID: return currencyID;
-        case InvoiceFields::ADDIT_TEXT: return additText;
-        case InvoiceFields::DISCOUNT: return discount;
+        case InvoiceFields::ID_INVOICE:         return id_;
+        case InvoiceFields::INV_NUMBER:         return invNumber_;
+        case InvoiceFields::SELLING_DATE:       return sellingDate_;
+        case InvoiceFields::TYPE_ID:            return typeID_;
+        case InvoiceFields::COUNTERPARTY_ID:    return counterpartyID_;
+        case InvoiceFields::ISSUANCE_DATE:      return issuanceDate_;
+        case InvoiceFields::PAYMENT_DATE:       return paymentDate_;
+        case InvoiceFields::PAYMENT_ID:         return paymentID_;
+        case InvoiceFields::CURRENCY_ID:        return currencyID_;
+        case InvoiceFields::ADDIT_TEXT:         return additText_;
+        case InvoiceFields::DISCOUNT:           return discount_;
         default:
-            qDebug("Unknown field of 'InvoiceData' class");
+            qDebug() << QString("Unknown field of 'InvoiceData' class detected in %1, line=%2.").arg(__FILE__).arg(__LINE__);
             return var;
         }
     }
-public:
-    qint64 id; /**< TODO */
-    QString invNumber; /**< TODO */
-    QDate sellingDate; /**< TODO */
-    qint64 typeID; /**< TODO */
-    qint64 counterpartyID; /**< TODO */
-    QDate issuanceDate; /**< TODO */
-    QDate paymentDate; /**< TODO */
-    qint64 paymentID; /**< TODO */
-    qint64 currencyID; /**< TODO */
-    QString additText; /**< TODO */
-    short int discount; /**< TODO */
 
-    //this field is not present in the above list of fields, because it's not for direct displaying
-    QMap<int, CommodityData> products; /**< TODO */
+    void setField(const int i, QVariant val)
+    {
+        switch(i)
+        {
+        case InvoiceFields::ID_INVOICE:         id_ = val.toLongLong();
+        case InvoiceFields::INV_NUMBER:         invNumber_ = val.toString();
+        case InvoiceFields::SELLING_DATE:       sellingDate_ = val.toDate();
+        case InvoiceFields::TYPE_ID:            typeID_ = val.toLongLong();
+        case InvoiceFields::COUNTERPARTY_ID:    counterpartyID_ = val.toLongLong();
+        case InvoiceFields::ISSUANCE_DATE:      issuanceDate_ = val.toDate();
+        case InvoiceFields::PAYMENT_DATE:       paymentDate_ = val.toDate();
+        case InvoiceFields::PAYMENT_ID:         paymentID_ = val.toLongLong();
+        case InvoiceFields::CURRENCY_ID:        currencyID_ = val.toLongLong();
+        case InvoiceFields::ADDIT_TEXT:         additText_ = val.toString();
+        case InvoiceFields::DISCOUNT:           discount_ = val.toInt();
+        default:
+            qDebug() << QString("Unknown field of 'InvoiceData' class detected in %1, line=%2.").arg(__FILE__).arg(__LINE__);
+        }
+    }
+
+    static QString header(const int i)
+    {
+        switch(i)
+        {
+        case InvoiceFields::ID_INVOICE:         return QObject::trUtf8("L.p.");
+        case InvoiceFields::INV_NUMBER:         return QObject::trUtf8("Numer faktury");
+        case InvoiceFields::SELLING_DATE:       return QObject::trUtf8("Data sprzedaży");
+        case InvoiceFields::TYPE_ID:            return QObject::trUtf8("Rodzaj faktury");
+        case InvoiceFields::COUNTERPARTY_ID:    return QObject::trUtf8("Nazwa kontrahenta");
+        case InvoiceFields::ISSUANCE_DATE:      return QObject::trUtf8("Data wydania");
+        case InvoiceFields::PAYMENT_DATE:       return QObject::trUtf8("Data płatności");
+        case InvoiceFields::PAYMENT_ID:         return QObject::trUtf8("Rodzaj płatności");
+        case InvoiceFields::CURRENCY_ID:        return QObject::trUtf8("Waluta");
+        case InvoiceFields::ADDIT_TEXT:         return QObject::trUtf8("Tekst dodatkowy");
+        case InvoiceFields::DISCOUNT:           return QObject::trUtf8("Zniżka");
+
+        default:
+            qDebug() << QString("File: %1, line: %2 - Unknown header of invoices' table: %3").arg(__FILE__).arg(__LINE__).arg(i);
+            return QString();
+        }
+    }
+
+
+private:
+    qint64 id_; /**< TODO */
+    QString invNumber_; /**< TODO */
+    QDate sellingDate_; /**< TODO */
+    qint64 typeID_; /**< TODO */
+    qint64 counterpartyID_; /**< TODO */
+    QDate issuanceDate_; /**< TODO */
+    QDate paymentDate_; /**< TODO */
+    qint64 paymentID_; /**< TODO */
+    qint64 currencyID_; /**< TODO */
+    QString additText_; /**< TODO */
+    short int discount_; /**< TODO */
 };
 #endif

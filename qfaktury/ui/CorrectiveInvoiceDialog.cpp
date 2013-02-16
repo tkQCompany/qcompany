@@ -29,7 +29,7 @@ void CorrectiveInvoiceDialog::init_ (/*const bool mode*/)
     labelDiscount2->setText(trUtf8("Wartość faktury:"));
     labelSumGross->setText(trUtf8("Do zapłaty:"));
 
-    setWindowTitle(InvoiceTypeData::InvoiceTypeToString(InvoiceTypeData::CORRECTIVE_VAT));
+    setWindowTitle(InvoiceTypeData::names(InvoiceTypeData::CORRECTIVE_VAT));
     comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::CORRECTIVE_VAT - 1);
     origGrossTotal = -1;
 
@@ -146,11 +146,11 @@ void CorrectiveInvoiceDialog::readCorrData(const QString &invFileName)
     dateEditDateOfSell->setDate(QDate::fromString(root.attribute("sellingDate"), s.getDateFormat()));
     dateEditDateOfIssuance->setDate(QDate::fromString(root.attribute("issueDate"),	s.getDateFormat()));
 
-    invData.invNumber = root.attribute("originalInvoiceNo");
+    //invData.invNumber_ = root.attribute("originalInvoiceNo");
 
     QDomNode tmp(root.firstChild());
     tmp = tmp.toElement().nextSibling(); // buyer
-    const QDomElement buyer(tmp.toElement());
+    //const QDomElement buyer(tmp.toElement());
 //    lineEditCounterpartyName->setText(buyer.attribute("name") + "," + buyer.attribute(
 //                           "city") + "," + buyer.attribute("street") + "," + trUtf8("NIP: ")
 //                       + buyer.attribute("tic"));
@@ -189,16 +189,16 @@ void CorrectiveInvoiceDialog::readCorrData(const QString &invFileName)
 
     // those fields are not stored in correction xml... for now
     //invData.counterpartyName = lineEditCounterpartyName->text();
-    invData.paymentDate = dateEditDayOfPayment->date();
-    invData.sellingDate = dateEditDateOfSell->date();
-    invData.issuanceDate = dateEditDateOfIssuance->date();
-    invData.paymentID = comboBoxPayment->currentIndex();
-    invData.currencyID = comboBoxCurrency->currentIndex();
-    invData.additText = lineEditAdditionalText->text();
+//    invData.paymentDate_ = dateEditDayOfPayment->date();
+//    invData.sellingDate_ = dateEditDateOfSell->date();
+//    invData.issuanceDate_ = dateEditDateOfIssuance->date();
+//    invData.paymentID_ = comboBoxPayment->currentIndex();
+//    invData.currencyID_ = comboBoxCurrency->currentIndex();
+//    invData.additText_ = lineEditAdditionalText->text();
 
     for (int i = 0; i < towCount; ++i)
     {
-        CommodityData commodity;
+        //CommodityData commodity;
 //        commodity.id = towar.attribute(towarColumns[0]).toInt();
 //        commodity.name = towar.attribute(towarColumns[1]);
 //        //commodity.postalCode = towar.attribute(towarColumns[2]);
@@ -210,7 +210,7 @@ void CorrectiveInvoiceDialog::readCorrData(const QString &invFileName)
 //        commodity.net1 = towar.attribute(towarColumns[8]).toDouble();
 //        commodity.vat = towar.attribute(towarColumns[9]).toInt();
 //        commodity.gross = towar.attribute(towarColumns[10]).toDouble();
-        invData.products[i] = commodity;
+        //invData.products[i] = commodity;
         towar = towar.nextSibling().toElement();
     }
 
@@ -314,13 +314,13 @@ void CorrectiveInvoiceDialog::createOriginalInv()
 //        invData.products[i] = commodity;
 //    }
 
-    invData.paymentDate = dateEditDayOfPayment->date();
-    invData.sellingDate = dateEditDateOfSell->date();
-    invData.issuanceDate = dateEditDateOfIssuance->date();
-    invData.invNumber  = lineEditInvNumber->text();
-    invData.paymentID = comboBoxPayment->currentIndex();
-    invData.currencyID = comboBoxCurrency->currentIndex();
-    invData.additText = lineEditAdditionalText->text();
+//    invData.paymentDate_ = dateEditDayOfPayment->date();
+//    invData.sellingDate_ = dateEditDateOfSell->date();
+//    invData.issuanceDate_ = dateEditDateOfIssuance->date();
+//    invData.invNumber_  = lineEditInvNumber->text();
+//    invData.paymentID_ = comboBoxPayment->currentIndex();
+//    invData.currencyID_ = comboBoxCurrency->currentIndex();
+//    invData.additText_ = lineEditAdditionalText->text();
 }
 
 /** Not used in this class
@@ -360,8 +360,8 @@ void CorrectiveInvoiceDialog::calculateSum(){
         origGrossTotal = 0;
         createOriginalInv();
 
-        for (QMap<int, CommodityData>::const_iterator iter =
-             invData.products.begin(); iter != invData.products.end(); ++iter)
+//        for (QMap<int, CommodityData>::const_iterator iter =
+//             invData.products.begin(); iter != invData.products.end(); ++iter)
         {
             //origGrossTotal += iter.value().gross;
             //origDiscTotal += iter.value().discount;
