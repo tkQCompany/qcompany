@@ -55,7 +55,7 @@ public:
         case InvoiceFields::ADDIT_TEXT:         return additText_;
         case InvoiceFields::DISCOUNT:           return discount_;
         default:
-            qDebug() << QString("Unknown field of 'InvoiceData' class detected in %1, line=%2.").arg(__FILE__).arg(__LINE__);
+            qDebug() << QString("Unknown index in field(): (index=%1) detected in %2, line=%3.").arg(i).arg(__FILE__).arg(__LINE__);
             return var;
         }
     }
@@ -64,19 +64,41 @@ public:
     {
         switch(i)
         {
-        case InvoiceFields::ID_INVOICE:         id_ = val.toLongLong();
-        case InvoiceFields::INV_NUMBER:         invNumber_ = val.toString();
-        case InvoiceFields::SELLING_DATE:       sellingDate_ = val.toDate();
-        case InvoiceFields::TYPE_ID:            typeID_ = val.toLongLong();
-        case InvoiceFields::COUNTERPARTY_ID:    counterpartyID_ = val.toLongLong();
-        case InvoiceFields::ISSUANCE_DATE:      issuanceDate_ = val.toDate();
-        case InvoiceFields::PAYMENT_DATE:       paymentDate_ = val.toDate();
-        case InvoiceFields::PAYMENT_ID:         paymentID_ = val.toLongLong();
-        case InvoiceFields::CURRENCY_ID:        currencyID_ = val.toLongLong();
-        case InvoiceFields::ADDIT_TEXT:         additText_ = val.toString();
-        case InvoiceFields::DISCOUNT:           discount_ = val.toInt();
+        case InvoiceFields::ID_INVOICE:
+            id_ = val.toLongLong();
+            break;
+        case InvoiceFields::INV_NUMBER:
+            invNumber_ = val.toString();
+            break;
+        case InvoiceFields::SELLING_DATE:
+            sellingDate_ = val.toDate();
+            break;
+        case InvoiceFields::TYPE_ID:
+            typeID_ = val.toLongLong();
+            break;
+        case InvoiceFields::COUNTERPARTY_ID:
+            counterpartyID_ = val.toLongLong();
+            break;
+        case InvoiceFields::ISSUANCE_DATE:
+            issuanceDate_ = val.toDate();
+            break;
+        case InvoiceFields::PAYMENT_DATE:
+            paymentDate_ = val.toDate();
+            break;
+        case InvoiceFields::PAYMENT_ID:
+            paymentID_ = val.toLongLong();
+            break;
+        case InvoiceFields::CURRENCY_ID:
+            currencyID_ = val.toLongLong();
+            break;
+        case InvoiceFields::ADDIT_TEXT:
+            additText_ = val.toString();
+            break;
+        case InvoiceFields::DISCOUNT:
+            discount_ = val.toInt();
+            break;
         default:
-            qDebug() << QString("Unknown field of 'InvoiceData' class detected in %1, line=%2.").arg(__FILE__).arg(__LINE__);
+            qDebug() << QString("Unknown index in setField(): (index = %1, val=%2) detected in %3, line=%4.").arg(i).arg(val.toString()).arg(__FILE__).arg(__LINE__);
         }
     }
 
@@ -97,7 +119,7 @@ public:
         case InvoiceFields::DISCOUNT:           return QObject::trUtf8("Zniżka");
 
         default:
-            qDebug() << QString("File: %1, line: %2 - Unknown header of invoices' table: %3").arg(__FILE__).arg(__LINE__).arg(i);
+            qDebug() << QString("Value:%1, file: %2, line: %3 - Unknown header of invoices' table: %3").arg(i).arg(__FILE__).arg(__LINE__).arg(i);
             return QString();
         }
     }
