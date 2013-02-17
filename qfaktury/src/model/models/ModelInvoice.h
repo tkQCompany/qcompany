@@ -41,6 +41,7 @@ public:
      */
     QString generateInvoiceNumber(const QString& invoiceNumFormat, const QDate &issuanceDate, const QString& invoiceTypeName, const QString& counterpartyName = QString()) const;
     QString getInvoiceNumberFormat(const QString &counterpartyName) const;
+    void setDataRange(const QDate &from, const QDate &to);
 
 private:
     QString getNextInvNumberFromDB_(const QString& invoiceNumFormat, const QDate &issuanceDate, const int periodId, const int periodLocationInFormat, const QString& counterpartyName = QString()) const;

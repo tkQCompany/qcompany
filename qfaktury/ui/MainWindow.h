@@ -60,12 +60,13 @@ private slots:
     void showTableMenuHistory_(const QPoint &) const;
     void pluginSlot_();
     void pluginInfoSlot_();
+    void reReadInvHistory_();
     void retranslateUi_();
     void keyPressEvent(QKeyEvent*);
 
 private:
     void createInvoice_(const InvoiceTypeData::Type type);
-    bool firstRun_();
+    bool firstRun_() const;
     void init_();
     void setActions_(const bool counterpartiesEditEnabled, const bool counterpartiesRemoveEnable, const bool, const bool, const bool historyEditEnabled, const bool historyRemoveEnabled);
     void setupDir_() const;

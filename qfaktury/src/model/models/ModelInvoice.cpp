@@ -125,6 +125,22 @@ QString ModelInvoice::getInvoiceNumberFormat(const QString &counterpartyName) co
 }
 
 
+void ModelInvoice::setDataRange(const QDate &from, const QDate &to)
+{
+    if(from.isValid() && to.isValid())
+    {
+        const QString dateFormat("yyyy-MM-dd");
+        setFilter(QString("issuance_date <= \"%1\" AND issuance_date >= \"%2\"")
+                  .arg(to.toString(dateFormat))
+                  .arg(from.toString(dateFormat)));
+    }
+    else
+    {
+        setFilter("");
+    }
+}
+
+
 QString ModelInvoice::getNextInvNumberFromDB_(const QString &invoiceNumFormat, const QDate &issuanceDate, const int periodId, const int numberLocationInFormat, const QString &counterpartyName) const
 {
     QString ret("1");

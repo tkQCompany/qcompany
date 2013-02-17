@@ -36,6 +36,10 @@ void MainWindow::init_()
         dateEditFilterEnd->setDisplayFormat(s.getDateFormat());
     }
 
+    dateEditFilterStart->setDate(QDate::currentDate());
+    dateEditFilterEnd->setDate(QDate::currentDate());
+    db_.modelInvoice()->setDataRange(QDate(), QDate());//full range
+
     tableViewCounterparties->setModel(db_.modelCounterparty());
     tableViewCounterparties->setItemDelegate(new QSqlRelationalDelegate(tableViewCounterparties));
     tableViewCounterparties->hideColumn(0);
@@ -55,7 +59,7 @@ void MainWindow::init_()
 
     // connect slots
     connect(actionHelp_BugReport, SIGNAL (activated ()), this, SLOT(reportBug_()));
-    //connect(toolButtonApply, SIGNAL (clicked()), this, SLOT(rereadHistory()));
+    connect(toolButtonApply, SIGNAL (clicked()), this, SLOT(reReadInvHistory_()));
     connect(actionProgram_CompanyInfo, SIGNAL(activated()), this, SLOT(editCompanyInfo_()));
     connect(actionProgram_Exit, SIGNAL(activated()), this, SLOT(close()));
     connect(actionCounterparties_Add, SIGNAL(activated()), this, SLOT(addCounterparty_()));
@@ -150,13 +154,10 @@ void MainWindow::createInvoice_(const InvoiceTypeData::Type type)
         break;
     case InvoiceTypeData::PRO_FORMA:
         invoice.reset(new InvoiceDialog(this, &db_));
-        //invoice->proForma = true;
         invoice->setWindowTitle(trUtf8("Faktura Pro Forma"));
-        //invoice->pushButtonBackClick();
         break;
     case InvoiceTypeData::BILL:
         invoice.reset(new BillDialog(this, &db_));
-        //invoice->init_();
         break;
     case InvoiceTypeData::CORRECTIVE_VAT:
     case InvoiceTypeData::CORRECTIVE_GROSS:
@@ -168,9 +169,6 @@ void MainWindow::createInvoice_(const InvoiceTypeData::Type type)
         {
             invoice.reset(new CorrectiveInvoiceGrossDialog(this, &db_));
         }
-        //invoice->init_();
-        //invoice->readData(tableViewInvoices->item(tableViewInvoices->selectedItems()[0]->row(), 0)->text(), type);
-        //invoice->setWindowTitle(trUtf8("Nowa korekta"));
         break;
     case InvoiceTypeData::GROSS:
         invoice.reset(new InvoiceGrossDialog(this, &db_));
@@ -179,9 +177,13 @@ void MainWindow::createInvoice_(const InvoiceTypeData::Type type)
 
     if(!invoice.isNull())
     {
-        invoice->exec();
-        tableViewInvoices->selectionModel()->setCurrentIndex(db_.modelInvoice()->index(db_.modelInvoice()->rowCount() - 1,
+        if(QDialog::Accepted == invoice->exec())
+        {
+            tableViewInvoices->selectionModel()->setCurrentIndex(db_.modelInvoice()->index(db_.modelInvoice()->rowCount() - 1,
                                                                            InvoiceFields::ID_INVOICE), QItemSelectionModel::Rows | QItemSelectionModel::Select);
+            dateEditFilterStart->setDate(QDate::currentDate()); //otherwise our new invoice couldn't be shown
+            dateEditFilterEnd->setDate(QDate::currentDate());
+        }
     }
 }
 
@@ -191,18 +193,10 @@ void MainWindow::createInvoice_(const InvoiceTypeData::Type type)
  *
  * @return bool
  */
-bool MainWindow::firstRun_()
+bool MainWindow::firstRun_() const
 {
     SettingsGlobal s;
-
-    const bool ok = s.value(s.keyName(s.FIRST_RUN), true).toBool();
-    if(ok)
-    {
-        // set dates for filter
-        dateEditFilterStart->setDate(QDate::currentDate());
-        dateEditFilterEnd->setDate(QDate::currentDate());
-    }
-    return ok;
+    return s.value(s.keyName(s.FIRST_RUN), true).toBool();
 }
 
 
@@ -312,6 +306,12 @@ void MainWindow::pluginInfoSlot_()
     QMessageBox::information(this, qApp->applicationName(),
                              trUtf8("To menu służy do obsługi pluginów pythona,\nnp. archiwizacji danych, generowania raportów etc.\n\n"
                                     "Skrypty Pythona sa czytane z folderu \"~/elinux/plugins/\"."));
+}
+
+
+void MainWindow::reReadInvHistory_()
+{
+    db_.modelInvoice()->setDataRange(dateEditFilterStart->date(), dateEditFilterEnd->date());
 }
 
 
