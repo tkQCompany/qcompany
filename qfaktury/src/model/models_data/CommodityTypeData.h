@@ -21,7 +21,7 @@ public:
      * @brief
      *
      */
-    enum CommodityType {GOODS = 1, SERVICES}; // "= 1" because SQL starts counting from 1
+    enum CommodityType {GOODS, SERVICES};
 
     /**
      * @brief

@@ -22,7 +22,7 @@ struct PaymentTypeData
      * @brief
      *
      */
-    enum PaymentTypes {CASH = 1, PREPAYMENT, TRANSFER}; // "= 1" because SQL starts counting from 1
+    enum PaymentTypes {CASH, PREPAYMENT, TRANSFER};
 
     /**
      * @brief

@@ -6,8 +6,7 @@ CounterpartyTypeDialog::CounterpartyTypeDialog(QWidget *parent, Database *db) :
     ui(new Ui::CounterpartyTypeDialog), db_(db)
 {
     ui->setupUi(this);
-    db_->modelCounterpartyType()->setFilter(QString("id_counterparty_type != %1").arg(CounterpartyTypeData::MY_COMPANY));
-    db_->modelCounterpartyType()->select();
+    db_->modelCounterpartyType()->setMyCompanyVisibility(false);
     ui->listView->setModel(db_->modelCounterpartyType());
     ui->listView->setModelColumn(CounterpartyTypeFields::TYPE);
 
@@ -15,7 +14,5 @@ CounterpartyTypeDialog::CounterpartyTypeDialog(QWidget *parent, Database *db) :
 
 CounterpartyTypeDialog::~CounterpartyTypeDialog()
 {
-    db_->modelCounterpartyType()->setFilter("");
-    db_->modelCounterpartyType()->select();
     delete ui;
 }

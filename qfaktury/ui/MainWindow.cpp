@@ -606,9 +606,9 @@ void MainWindow::delInvoice_()
  */
 void MainWindow::editCompanyInfo_()
 {
-    db_.modelCounterparty()->setFilter(QString("type_id = %1").arg(CounterpartyTypeData::MY_COMPANY));
+    db_.modelCounterparty()->setFilter(QString("type_id = %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
     db_.modelCounterparty()->select();
-    db_.modelCounterpartyType()->setFilter(QString("id_counterparty_type = %1").arg(CounterpartyTypeData::MY_COMPANY));
+    db_.modelCounterpartyType()->setFilter(QString("id_counterparty_type = %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
     db_.modelCounterpartyType()->select();
 
     CounterpartyDialog dialog(this, &db_, db_.modelCounterparty()->index(0, CounterpartyFields::ID));
@@ -622,9 +622,9 @@ void MainWindow::editCompanyInfo_()
         }
     }
 
-    db_.modelCounterparty()->setFilter(QString("type_id != %1").arg(CounterpartyTypeData::MY_COMPANY));
+    db_.modelCounterparty()->setFilter(QString("type_id != %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
     db_.modelCounterparty()->select();
-    db_.modelCounterpartyType()->setFilter(QString("id_counterparty_type != %1").arg(CounterpartyTypeData::MY_COMPANY));
+    db_.modelCounterpartyType()->setFilter(QString("id_counterparty_type != %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
     db_.modelCounterpartyType()->select();
 }
 

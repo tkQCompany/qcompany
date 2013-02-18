@@ -1409,6 +1409,6 @@ QList<CommodityVisualData> InvoiceDialog::getCommoditiesVisualData_() const
  */
 void InvoiceDialog::setInitialComboBoxIndexes_()
 {
-    comboBoxPayment->setCurrentIndex(PaymentTypeData::CASH - 1);
+    comboBoxPayment->setCurrentIndex(comboBoxPayment->findText(PaymentTypeData::name(PaymentTypeData::CASH)));
     comboBoxCurrency->setCurrentIndex(CurrencyData::PLN - 1); //TODO: i18n
 }

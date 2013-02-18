@@ -21,7 +21,7 @@ struct CounterpartyTypeData
      * @brief
      *
      */
-    enum CounterpartyType {MY_COMPANY = 1, COMPANY, OFFICE}; // "= 1" because SQL starts counting from 1
+    enum CounterpartyType {MY_COMPANY, COMPANY, OFFICE};
 
     /**
      * @brief

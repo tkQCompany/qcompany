@@ -21,7 +21,7 @@ public:
      * @brief
      *
      */
-    enum Type {VAT = 1, PRO_FORMA, CORRECTIVE_VAT, GROSS, CORRECTIVE_GROSS, BILL}; // "= 1" because SQL starts counting from 1
+    enum Type {VAT, PRO_FORMA, CORRECTIVE_VAT, GROSS, CORRECTIVE_GROSS, BILL};
 
     /**
       *  Return invoice type

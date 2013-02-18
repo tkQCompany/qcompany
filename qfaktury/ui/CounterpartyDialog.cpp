@@ -23,7 +23,7 @@ CounterpartyDialog::CounterpartyDialog(QWidget *parent, Database *db, const QMod
 
         db_->modelCounterparty()->insertRow(db_->modelCounterparty()->rowCount());
         mapper_.toLast();
-        comboBoxType->setCurrentIndex(CounterpartyTypeData::COMPANY - 1);
+        comboBoxType->setCurrentIndex(comboBoxType->findText(CounterpartyTypeData::name(CounterpartyTypeData::COMPANY)));
         comboBoxCountry->setCurrentIndex(0); //TODO: i18n
     }
     connect(pushButtonOK, SIGNAL(clicked()), this, SLOT(okClick_()));
@@ -48,6 +48,7 @@ CounterpartyDialog::~CounterpartyDialog()
 void CounterpartyDialog::init()
 {
     SettingsGlobal s;
+    db_->modelCounterpartyType()->setMyCompanyVisibility(true);
     comboBoxType->setModel(db_->modelCounterpartyType());
     comboBoxType->setModelColumn(CounterpartyTypeFields::TYPE);
     comboBoxType->setEditable(false);
@@ -135,6 +136,21 @@ bool CounterpartyDialog::validateForm_(QString &missing) {
         return false;
     }
 
+    if(comboBoxType->currentIndex() == -1)
+    {
+        missing = labelType->text();
+        comboBoxType->setFocus();
+        return false;
+    }
+
+    const QString myCompany(CounterpartyTypeData::name(CounterpartyTypeData::MY_COMPANY));
+    if(comboBoxType->currentText() == myCompany)
+    {
+        missing = trUtf8("%1 - własna firma nie może być użyta jako własny kontrahent").arg(labelType->text());
+        comboBoxType->setFocus();
+        return false;
+    }
+
     return true;
 }
 
@@ -184,6 +200,7 @@ void CounterpartyDialog::editCountryList_()
 void CounterpartyDialog::editCounterpartyTypeList_()
 {
     CounterpartyTypeDialog dialog(this, db_);
+    db_->modelCounterpartyType()->setMyCompanyVisibility(false);
     if(dialog.exec() == QDialog::Accepted)
     {
         if(!db_->modelCounterpartyType()->submitAll())
@@ -195,6 +212,7 @@ void CounterpartyDialog::editCounterpartyTypeList_()
             QMessageBox::warning(this, trUtf8("Lista typów kontrahentów"), msg);
         }
     }
+    db_->modelCounterpartyType()->setMyCompanyVisibility(true);
 }
 
 

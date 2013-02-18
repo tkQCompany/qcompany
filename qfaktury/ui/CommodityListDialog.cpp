@@ -19,7 +19,7 @@ void CommodityListDialog::init()
     comboBoxCommodities->setModelColumn(CommodityTypeFields::TYPE);
 
     widgetMapper_.setModel(db_->modelCommodity());
-    db_->modelCommodity()->setFilter(QString("`type_id` = %1").arg(CommodityTypeData::GOODS));
+    db_->modelCommodity()->setFilter(QString("`type_id` = %1").arg(CommodityTypeData::GOODS + 1));
     widgetMapper_.addMapping(comboBoxCommodities, CommodityFields::TYPE_ID);
     widgetMapper_.addMapping(lineEditName, CommodityFields::NAME);
     widgetMapper_.addMapping(doubleSpinBoxPriceNet1, CommodityFields::NET1);

@@ -20,7 +20,7 @@ struct CurrencyData
      * @brief
      *
      */
-    enum Currencies {EUR = 1, PLN, USD}; // "= 1" because SQL starts counting from 1
+    enum Currencies {EUR, PLN, USD};
 
     /**
      * @brief

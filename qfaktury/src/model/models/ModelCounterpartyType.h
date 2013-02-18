@@ -19,6 +19,7 @@ public:
      * @param parent
      */
     explicit ModelCounterpartyType(QObject *parent);
+    void setMyCompanyVisibility(const bool yes);
 };
 
 #endif // MODELCOUNTERPARTYTYPE_H
