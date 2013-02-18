@@ -1,9 +1,10 @@
 #include "InvoiceNumberFormatEditDialog.h"
 #include "ui_InvoiceNumberFormatEditDialog.h"
 
-InvoiceNumberFormatEditDialog::InvoiceNumberFormatEditDialog(QWidget *parent, const QString &format) :
+InvoiceNumberFormatEditDialog::InvoiceNumberFormatEditDialog(QWidget *parent, Database *db, const QString &format) :
     QDialog(parent),
-    ui(new Ui::InvoiceNumberFormatEditDialog)
+    ui(new Ui::InvoiceNumberFormatEditDialog),
+    db_(db)
 {
     ui->setupUi(this);
     init_();
@@ -114,6 +115,6 @@ void InvoiceNumberFormatEditDialog::fieldRemove_()
 
 void InvoiceNumberFormatEditDialog::showExamples_()
 {
-    InvoiceNumberFormatExamplesDialog dialog(this, listToString_());
+    InvoiceNumberFormatExamplesDialog dialog(this, db_, listToString_());
     dialog.exec();
 }

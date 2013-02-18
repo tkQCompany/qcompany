@@ -634,7 +634,7 @@ void MainWindow::editCompanyInfo_()
  */
 void MainWindow::editSettings_()
 {
-    SettingsDialog settWindow(this);
+    SettingsDialog settWindow(this, &db_);
     if(QDialog::Accepted == settWindow.exec())
     {
         retranslateUi_();

@@ -47,8 +47,8 @@ void BillDialogTest::testGUI_InitialState()
 {
     Database db;
     BillDialog billDialog(0, &db);
-    QCOMPARE(billDialog.windowTitle(), InvoiceTypeData::names(InvoiceTypeData::BILL));
-    QCOMPARE(billDialog.comboBoxInvoiceType->currentText(), InvoiceTypeData::names(InvoiceTypeData::BILL));
+    QCOMPARE(billDialog.windowTitle(), InvoiceTypeData::name(InvoiceTypeData::BILL));
+    QCOMPARE(billDialog.comboBoxInvoiceType->currentText(), InvoiceTypeData::name(InvoiceTypeData::BILL));
     QCOMPARE(billDialog.dateEditDateOfIssuance->date(), QDate::currentDate());
     QCOMPARE(billDialog.dateEditDateOfSell->date(), QDate::currentDate());
     QCOMPARE(billDialog.dateEditDayOfPayment->date(), QDate::currentDate());

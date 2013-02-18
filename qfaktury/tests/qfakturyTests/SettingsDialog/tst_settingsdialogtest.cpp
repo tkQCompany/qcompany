@@ -19,6 +19,7 @@ private Q_SLOTS:
 
 SettingsDialogTest::SettingsDialogTest()
 {
+
 }
 
 void SettingsDialogTest::initTestCase()
@@ -33,9 +34,10 @@ void SettingsDialogTest::testGUIChangeLanguage()
 {
     QString currLang, nextLang;
     int currInd = 0;
+    Database db;
 
     {
-        SettingsDialog sdialog;
+        SettingsDialog sdialog(0, &db);
 
         const int langCount = sdialog.comboBoxLanguage->count();
         QVERIFY(langCount > 0);
@@ -48,7 +50,7 @@ void SettingsDialogTest::testGUIChangeLanguage()
 
         QTest::mouseClick(sdialog.pushButtonApply,Qt::LeftButton);
     }
-    SettingsDialog sdialog;
+    SettingsDialog sdialog(0, &db);
     QVERIFY(sdialog.comboBoxLanguage->count() > 0);
     QCOMPARE(sdialog.comboBoxLanguage->currentText(), nextLang);
 

@@ -1,6 +1,6 @@
 #include "SettingsDialog.h"
 
-SettingsDialog::SettingsDialog(QWidget *parent) :QDialog(parent)
+SettingsDialog::SettingsDialog(QWidget *parent, Database *db) :QDialog(parent), db_(db)
 {
     setupUi(this);
     init_();
@@ -128,7 +128,7 @@ void SettingsDialog::setDefaultClick_()
 
 void SettingsDialog::showExamples_()
 {
-    InvoiceNumberFormatExamplesDialog dialog(this, lineEditFormat->text());
+    InvoiceNumberFormatExamplesDialog dialog(this, db_, lineEditFormat->text());
     dialog.exec();
 }
 
@@ -447,7 +447,7 @@ QStringList SettingsDialog::getTranslations_() const
 
 void SettingsDialog::editFormat_()
 {
-    InvoiceNumberFormatEditDialog dialog(this, lineEditFormat->text());
+    InvoiceNumberFormatEditDialog dialog(this, db_, lineEditFormat->text());
     if(QDialog::Accepted == dialog.exec())
         lineEditFormat->setText(dialog.format());
 }

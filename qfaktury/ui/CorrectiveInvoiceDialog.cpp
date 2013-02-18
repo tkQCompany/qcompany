@@ -29,7 +29,7 @@ void CorrectiveInvoiceDialog::init_ (/*const bool mode*/)
     labelDiscount2->setText(trUtf8("Wartość faktury:"));
     labelSumGross->setText(trUtf8("Do zapłaty:"));
 
-    setWindowTitle(InvoiceTypeData::names(InvoiceTypeData::CORRECTIVE_VAT));
+    setWindowTitle(InvoiceTypeData::name(InvoiceTypeData::CORRECTIVE_VAT));
     comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::CORRECTIVE_VAT - 1);
     origGrossTotal = -1;
 

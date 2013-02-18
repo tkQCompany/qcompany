@@ -478,7 +478,7 @@ bool Database::insertDataIfNotInserted()
 {
     for(int i = CounterpartyTypeData::MY_COMPANY; i <= CounterpartyTypeData::OFFICE; ++i)
     {
-        if(!sqlInsertIf("counterparty_type", "type", CounterpartyTypeData::names(i), __LINE__))
+        if(!sqlInsertIf("counterparty_type", "type", CounterpartyTypeData::name(i), __LINE__))
             return false;
     }
 
@@ -487,7 +487,7 @@ bool Database::insertDataIfNotInserted()
 
     for(int i = CommodityTypeData::GOODS; i <= CommodityTypeData::SERVICES; ++i)
     {
-        if(!sqlInsertIf("commodity_type", "type", CommodityTypeData::names(i), __LINE__))
+        if(!sqlInsertIf("commodity_type", "type", CommodityTypeData::name(i), __LINE__))
             return false;
     }
 
@@ -511,7 +511,7 @@ bool Database::insertDataIfNotInserted()
 
     for(int i = InvoiceTypeData::VAT; i <= InvoiceTypeData::BILL; ++i)
     {
-        if(!sqlInsertIf("invoice_type", "type", InvoiceTypeData::names(i), __LINE__))
+        if(!sqlInsertIf("invoice_type", "type", InvoiceTypeData::name(i), __LINE__))
             return false;
     }
 

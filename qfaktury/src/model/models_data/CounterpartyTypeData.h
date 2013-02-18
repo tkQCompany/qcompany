@@ -29,7 +29,7 @@ struct CounterpartyTypeData
      * @param type
      * @return QString
      */
-    static QString names(const int type)
+    static QString name(const int type)
     {
         switch(type)
         {
@@ -37,7 +37,7 @@ struct CounterpartyTypeData
         case COMPANY: return QObject::trUtf8("Firma");
         case OFFICE: return QObject::trUtf8("Urząd");
         default:
-            qDebug("CounterpartyTypeData::names(): Unknown commodity's type.");
+            qDebug("CounterpartyTypeData::name(): Unknown commodity's type.");
             return QString();
         }
     }

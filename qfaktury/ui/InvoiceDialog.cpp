@@ -92,8 +92,8 @@ void InvoiceDialog::init_()
 
     for(int i = InvoiceTypeData::VAT; i <= InvoiceTypeData::BILL; ++i)
     {
-        comboBoxInvoiceType->addItem(InvoiceTypeData::names(i));
-        comboBoxInvoiceType->setItemData(i, InvoiceTypeData::names(i));
+        comboBoxInvoiceType->addItem(InvoiceTypeData::name(i));
+        comboBoxInvoiceType->setItemData(i, InvoiceTypeData::name(i));
     }
 
     comboBoxCounterparties->setModel(db_->modelCounterparty());
@@ -319,14 +319,12 @@ void InvoiceDialog::canQuit()
 void InvoiceDialog::genInvoiceNumber_(const QString& invNumFormat, const QDate& issuanceDate, const int invoiceType, const QString& counterpartyName)
 {
     const QString invNum(db_->modelInvoice()->generateInvoiceNumber(invNumFormat, issuanceDate,
-                                                                    InvoiceTypeData::names(invoiceType),
+                                                                    InvoiceTypeData::name(invoiceType),
                                                                     counterpartyName));
     lineEditInvNumber->setText(invNum);
 }
 
-/** Slot tableActivated
- *  Enable/Disable buttons
- */
+
 /**
  * @brief
  *
@@ -334,7 +332,7 @@ void InvoiceDialog::genInvoiceNumber_(const QString& invNumFormat, const QDate& 
  */
 void InvoiceDialog::tableActivated_(QTableWidgetItem * item)
 {
-    if (item != NULL || !item->text().isEmpty())
+    if (item != NULL && !item->text().isEmpty())
     {
         pushButtonRemoveCommodity->setEnabled(true);
         pushButtonEditCommodity->setEnabled(true);

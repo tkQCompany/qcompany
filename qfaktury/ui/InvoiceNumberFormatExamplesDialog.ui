@@ -15,7 +15,16 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTableWidget" name="tableWidgetMain"/>
+    <widget class="QTableWidget" name="tableWidgetMain">
+     <property name="columnCount">
+      <number>2</number>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <column/>
+     <column/>
+    </widget>
    </item>
    <item>
     <widget class="QPushButton" name="pushButtonOK">

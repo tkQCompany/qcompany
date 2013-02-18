@@ -234,7 +234,7 @@ void CounterpartyDialog::editPhoneList_()
 
 void CounterpartyDialog::editFormat_()
 {
-    InvoiceNumberFormatEditDialog dialog(this, lineEditInvNumberFormat->text());
+    InvoiceNumberFormatEditDialog dialog(this, db_, lineEditInvNumberFormat->text());
     if(QDialog::Accepted == dialog.exec())
     {
         this->lineEditInvNumberFormat->setText(dialog.format());
@@ -244,6 +244,6 @@ void CounterpartyDialog::editFormat_()
 
 void CounterpartyDialog::showExamples_()
 {
-    InvoiceNumberFormatExamplesDialog dialog(this, lineEditInvNumberFormat->text());
+    InvoiceNumberFormatExamplesDialog dialog(this, db_, lineEditInvNumberFormat->text(), lineEditName->text());
     dialog.exec();
 }

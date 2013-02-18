@@ -13,7 +13,7 @@ class InvoiceNumberFormatExamplesDialog : public QDialog
     Q_OBJECT
     
 public:
-    explicit InvoiceNumberFormatExamplesDialog(QWidget *parent = 0, const QString &invoiceNumFormat = QString());
+    explicit InvoiceNumberFormatExamplesDialog(QWidget *parent, Database *db, const QString &invoiceNumFormat = QString(), const QString &counterpartyName = QString());
     ~InvoiceNumberFormatExamplesDialog();
 
 private:
@@ -21,7 +21,7 @@ private:
     
 private:
     Ui::InvoiceNumberFormatExamplesDialog *ui;
-
+    const QString counterpartyName_;
     const QString invoiceNumFormat_;
     Database *db_;
 };

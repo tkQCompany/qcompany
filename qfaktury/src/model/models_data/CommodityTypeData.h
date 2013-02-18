@@ -29,14 +29,14 @@ public:
      * @param type
      * @return QString
      */
-    static QString names(const int type)
+    static QString name(const int type)
     {
         switch(type)
         {
         case GOODS: return QObject::trUtf8("Towar");
         case SERVICES: return QObject::trUtf8("Usługa");
         default:
-            qDebug("CommodityTypeData::names(): Unknown commodity's type.");
+            qDebug("CommodityTypeData::name(): Unknown commodity's type.");
             return QString();
         }
     }

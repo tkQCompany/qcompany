@@ -65,10 +65,10 @@ void CommodityTypeDataTest::testCaseCheckDBFields_data()
 
 void CommodityTypeDataTest::testCaseCheckNames()
 {
-    QVERIFY2(CommodityTypeData::names(0).isEmpty(), "Bad input (0) is allowed");
-    QVERIFY2(!CommodityTypeData::names(1).isEmpty(), "Good input (1) is NOT allowed");
-    QVERIFY2(!CommodityTypeData::names(2).isEmpty(), "Good input (2) is NOT allowed");
-    QVERIFY2(CommodityTypeData::names(3).isEmpty(), "Bad input (3) is allowed");
+    QVERIFY2(CommodityTypeData::name(0).isEmpty(), "Bad input (0) is allowed");
+    QVERIFY2(!CommodityTypeData::name(1).isEmpty(), "Good input (1) is NOT allowed");
+    QVERIFY2(!CommodityTypeData::name(2).isEmpty(), "Good input (2) is NOT allowed");
+    QVERIFY2(CommodityTypeData::name(3).isEmpty(), "Bad input (3) is allowed");
 }
 
 QTEST_APPLESS_MAIN(CommodityTypeDataTest)

@@ -16,6 +16,6 @@ BillDialog::BillDialog(QWidget *parent, Database *db):
 
 void BillDialog::init_()
 {
-    setWindowTitle(InvoiceTypeData::names(InvoiceTypeData::BILL));
+    setWindowTitle(InvoiceTypeData::name(InvoiceTypeData::BILL));
     comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::BILL - 1);
 }

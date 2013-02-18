@@ -32,7 +32,7 @@ public:
      * @param invoiceType
      * @return QString
      */
-    static QString names(const int invoiceType)
+    static QString name(const int invoiceType)
     {
         switch (invoiceType)
         {
@@ -43,7 +43,7 @@ public:
         case CORRECTIVE_GROSS:  return QObject::trUtf8("Korekta brutto");
         case BILL:              return QObject::trUtf8("Rachunek");
         default:
-            qDebug("InvoiceTypeData::InvoiceTypeToString(): Unknown type of invoice");
+            qDebug("InvoiceTypeData::name(): Unknown type of invoice");
             return QString();
         }
     }
@@ -53,7 +53,7 @@ public:
         int ret = -1;
         for(int i = VAT; i <= BILL; ++i)
         {
-            if(0 == (str.compare(names(i))))
+            if(0 == (str.compare(name(i))))
             {
                 ret = i;
                 break;

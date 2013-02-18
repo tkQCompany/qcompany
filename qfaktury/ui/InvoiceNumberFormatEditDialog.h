@@ -16,7 +16,7 @@ class InvoiceNumberFormatEditDialog : public QDialog
     Q_PROPERTY(QString invNumFormat_ READ format)
     
 public:
-    explicit InvoiceNumberFormatEditDialog(QWidget *parent = 0, const QString &format = QString());
+    explicit InvoiceNumberFormatEditDialog(QWidget *parent, Database *db, const QString &format = QString());
     ~InvoiceNumberFormatEditDialog();
     QString format() const {return invNumFormat_;}
 
@@ -38,6 +38,7 @@ private:
 private:
     Ui::InvoiceNumberFormatEditDialog *ui;
     QString invNumFormat_;
+    Database *db_;
 };
 
 #endif // INVOICENUMBERFORMATEDITDIALOG_H

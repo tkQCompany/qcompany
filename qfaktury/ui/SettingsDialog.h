@@ -11,6 +11,7 @@
 
 #include "ui_SettingsDialog.h"
 #include "../SettingsGlobal.h"
+#include "Database.h"
 #include "InvoiceNumberFormatEditDialog.h"
 #include "InvoiceNumberFormatExamplesDialog.h"
 
@@ -28,7 +29,7 @@ public:
  *
  * @param
  */
-    SettingsDialog(QWidget *parent  = 0);
+    SettingsDialog(QWidget *parent, Database *db);
 private slots:
     /**
      * @brief
@@ -185,5 +186,8 @@ private:
     void delFromListWidget_(QListWidget *list);
     void moveUpElement_(QListWidget *list);
     void moveDownElement_(QListWidget *list);
+
+private:
+    Database *db_;
 };
 #endif

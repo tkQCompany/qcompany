@@ -40,7 +40,11 @@ QString ModelInvoice::generateInvoiceNumber(const QString& invoiceNumFormat, con
     QString ret;
     SettingsGlobal s;
 
-    const QVector<int> parse(InvoiceNumberFormatData::Parse(invoiceNumFormat));
+    const QString numFormat(invoiceNumFormat.isEmpty()
+                            ?s.value(s.keyName(s.DEFAULT_INV_NUM_FORMAT)).toString()
+                           :invoiceNumFormat);
+
+    const QVector<int> parse(InvoiceNumberFormatData::Parse(numFormat));
     for(int i = 0; i < parse.size(); ++i)
     {
         switch(parse.at(i))
@@ -49,16 +53,16 @@ QString ModelInvoice::generateInvoiceNumber(const QString& invoiceNumFormat, con
             ret += QString("%1").arg(this->rowCount()); //the "rowCount()" includes the newly added empty row
             break;
         case InvoiceNumberFormatData::NR_Y:
-            ret += getNextInvNumberFromDB_(invoiceNumFormat, issuanceDate, InvoiceNumberFormatData::NR_Y, i+1, counterpartyName);
+            ret += getNextInvNumberFromDB_(numFormat, issuanceDate, InvoiceNumberFormatData::NR_Y, i+1, counterpartyName);
             break;
         case InvoiceNumberFormatData::NR_M:
-            ret += getNextInvNumberFromDB_(invoiceNumFormat, issuanceDate, InvoiceNumberFormatData::NR_M, i+1, counterpartyName);
+            ret += getNextInvNumberFromDB_(numFormat, issuanceDate, InvoiceNumberFormatData::NR_M, i+1, counterpartyName);
             break;
         case InvoiceNumberFormatData::NR_D:
-            ret += getNextInvNumberFromDB_(invoiceNumFormat, issuanceDate, InvoiceNumberFormatData::NR_D, i+1, counterpartyName);
+            ret += getNextInvNumberFromDB_(numFormat, issuanceDate, InvoiceNumberFormatData::NR_D, i+1, counterpartyName);
             break;
         case InvoiceNumberFormatData::NR_Q:
-            ret += getNextInvNumberFromDB_(invoiceNumFormat, issuanceDate, InvoiceNumberFormatData::NR_Q, i+1, counterpartyName);
+            ret += getNextInvNumberFromDB_(numFormat, issuanceDate, InvoiceNumberFormatData::NR_Q, i+1, counterpartyName);
             break;
         case InvoiceNumberFormatData::INVOICE_TYPE:
             ret += invoiceTypeName;
@@ -141,24 +145,43 @@ void ModelInvoice::setDataRange(const QDate &from, const QDate &to)
 }
 
 
-QString ModelInvoice::getNextInvNumberFromDB_(const QString &invoiceNumFormat, const QDate &issuanceDate, const int periodId, const int numberLocationInFormat, const QString &counterpartyName) const
+QString ModelInvoice::getNextInvNumberFromDB_(const QString &invoiceNumFormat, const QDate &issuanceDate,
+                                              const int periodId, const int numberLocationInFormat,
+                                              const QString &counterpartyName) const
 {
     QString ret("1");
+    SettingsGlobal s;
+    const bool defaultInvNumFormat = (s.value(s.keyName(s.DEFAULT_INV_NUM_FORMAT)).toString() == invoiceNumFormat);
 
-    if(invoiceNumFormat.isEmpty() || !issuanceDate.isValid() ||
-            (periodId != InvoiceNumberFormatData::NR_D && periodId != InvoiceNumberFormatData::NR_M &&
-            periodId != InvoiceNumberFormatData::NR_Q && periodId != InvoiceNumberFormatData::NR_Y) ||
-            counterpartyName.isEmpty())
+    if(invoiceNumFormat.isEmpty())
     {
-        qDebug() << "ModelInvoice::getNextInvNumberFromDB_(): Improper values of parameters";
+        qDebug() << "ModelInvoice::getNextInvNumberFromDB_(): Empty string in invoiceNumFormat";
         return ret;
     }
 
-    QSqlQuery q(query());
-    SettingsGlobal s;
+    if(!issuanceDate.isValid())
+    {
+        qDebug() << "ModelInvoice::getNextInvNumberFromDB_(): Supplied issuanceDate is not valid: " << issuanceDate;
+        return ret;
+    }
 
-    database().transaction();
-    if(s.value(s.keyName(s.DEFAULT_INV_NUM_FORMAT)).toString() == invoiceNumFormat)
+    if( (periodId != InvoiceNumberFormatData::NR_D) && (periodId != InvoiceNumberFormatData::NR_M) &&
+            (periodId != InvoiceNumberFormatData::NR_Q) && (periodId != InvoiceNumberFormatData::NR_Y))
+    {
+        qDebug() << "ModelInvoice::getNextInvNumberFromDB_(): periodId is not valid: " << periodId;
+        return ret;
+    }
+
+    if( (!defaultInvNumFormat) && counterpartyName.isEmpty())
+    {
+        qDebug() << "ModelInvoice::getNextInvNumberFromDB_(): Empty string in counterpartyName";
+        return ret;
+    }
+
+    QSqlQuery q(this->query());
+
+    this->database().transaction();
+    if(defaultInvNumFormat)
     {
         const QString sql("SELECT invoice.inv_number, MAX(issuance_date) FROM invoice JOIN counterparty ON invoice.counterparty_id=counterparty.id_counterparty WHERE counterparty.inv_number_format =\"\"");
         q.exec(sql);
@@ -168,7 +191,7 @@ QString ModelInvoice::getNextInvNumberFromDB_(const QString &invoiceNumFormat, c
         const QString sql("SELECT inv_number, issuance_date FROM 'invoice' WHERE id_invoice = (SELECT MAX(id_invoice) FROM 'invoice' WHERE counterparty_id = (SELECT id_counterparty FROM 'counterparty' WHERE name = \"%1\"))");
         q.exec(sql.arg(counterpartyName));
     }
-    database().commit();
+    this->database().commit();
 
     if(q.isActive())
     {

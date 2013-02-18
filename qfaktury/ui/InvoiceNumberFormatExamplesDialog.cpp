@@ -1,10 +1,14 @@
 #include "InvoiceNumberFormatExamplesDialog.h"
 #include "ui_InvoiceNumberFormatExamplesDialog.h"
 
-InvoiceNumberFormatExamplesDialog::InvoiceNumberFormatExamplesDialog(QWidget *parent, const QString &invoiceNumFormat) :
+InvoiceNumberFormatExamplesDialog::InvoiceNumberFormatExamplesDialog(QWidget *parent, Database *db,
+                                                                     const QString &invoiceNumFormat,
+                                                                     const QString &counterpartyName) :
     QDialog(parent),
     ui(new Ui::InvoiceNumberFormatExamplesDialog),
-    invoiceNumFormat_(invoiceNumFormat)
+    counterpartyName_(counterpartyName),
+    invoiceNumFormat_(invoiceNumFormat),
+    db_(db)
 {
     ui->setupUi(this);
     init_();
@@ -24,7 +28,6 @@ void InvoiceNumberFormatExamplesDialog::init_()
     enum COLS {COL_DATE, COL_EXAMPLE};
 
     ui->tableWidgetMain->setRowCount(size);
-    ui->tableWidgetMain->setColumnCount(2);
     for(int i = 0; i < size; ++i)
     {
         ptrDate.reset(new QTableWidgetItem(date.toString("yyyy-MM-dd")));
@@ -32,10 +35,12 @@ void InvoiceNumberFormatExamplesDialog::init_()
 
         ptrExample.reset(new QTableWidgetItem(db_->modelInvoice()->generateInvoiceNumber(invoiceNumFormat_,
                                                                                          date,
-                                                                                         InvoiceTypeData::names(InvoiceTypeData::VAT))));
+                                                                                         InvoiceTypeData::name(InvoiceTypeData::VAT),
+                                                                                         counterpartyName_)));
         ui->tableWidgetMain->setItem(i, COL_EXAMPLE, ptrExample.take());
 
         date = date.addDays(1);
     }
+    ui->tableWidgetMain->setHorizontalHeaderLabels(QStringList() << trUtf8("Data") << trUtf8("Numeracja dla daty"));
     ui->tableWidgetMain->resizeColumnsToContents();
 }
