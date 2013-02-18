@@ -136,8 +136,8 @@ void SettingsDialog::showExamples_()
  */
 void SettingsDialog::workingDirBtnClick_()
 {
-    const QString dir(QFileDialog::getExistingDirectory(this, trUtf8("Open Directory"),
-                                                    "/home", QFileDialog::ShowDirsOnly
+    const QString dir(QFileDialog::getExistingDirectory(this, trUtf8("Wybierz katalog"),
+                                                        QString(), QFileDialog::ShowDirsOnly
                                                     | QFileDialog::DontResolveSymlinks));
     lineEditWorkDir->setText(dir);
     pushButtonApply->setEnabled(true);
