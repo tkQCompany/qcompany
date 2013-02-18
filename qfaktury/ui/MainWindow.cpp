@@ -151,10 +151,12 @@ void MainWindow::createInvoice_(const InvoiceTypeData::Type type)
     {
     case InvoiceTypeData::VAT:
         invoice.reset(new InvoiceDialog(this, &db_));
+        invoice->comboBoxInvoiceType->setCurrentIndex(type - 1);
         break;
     case InvoiceTypeData::PRO_FORMA:
         invoice.reset(new InvoiceDialog(this, &db_));
         invoice->setWindowTitle(trUtf8("Faktura Pro Forma"));
+        invoice->comboBoxInvoiceType->setCurrentIndex(type - 1);
         break;
     case InvoiceTypeData::BILL:
         invoice.reset(new BillDialog(this, &db_));

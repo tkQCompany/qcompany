@@ -1,8 +1,6 @@
 #include "InvoiceDialog.h"
 
 
-/** Constructor
- */
 /**
  * @brief
  *
@@ -429,6 +427,8 @@ bool InvoiceDialog::saveInvoice()
         if(!result)
         {
             qDebug() << "InvoiceDialog::saveInvoice() - lastError: " << db_->modelInvoice()->lastError().text();
+            saveFailed = true;
+            unsaved = true;
         }
         pushButtonSave->setEnabled(false);
         pushButtonRemoveCommodity->setEnabled(false);
@@ -1409,7 +1409,6 @@ QList<CommodityVisualData> InvoiceDialog::getCommoditiesVisualData_() const
  */
 void InvoiceDialog::setInitialComboBoxIndexes_()
 {
-    comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::VAT - 1);
     comboBoxPayment->setCurrentIndex(PaymentTypeData::CASH - 1);
     comboBoxCurrency->setCurrentIndex(CurrencyData::PLN - 1); //TODO: i18n
 }
