@@ -47,22 +47,16 @@ QString ModelInvoice::generateInvoiceNumber(const QString& invoiceNumFormat, con
     const QVector<int> parse(InvoiceNumberFormatData::Parse(numFormat));
     for(int i = 0; i < parse.size(); ++i)
     {
-        switch(parse.at(i))
+        switch(const int j = parse.at(i))
         {
         case InvoiceNumberFormatData::NR:
             ret += QString("%1").arg(this->rowCount()); //the "rowCount()" includes the newly added empty row
             break;
         case InvoiceNumberFormatData::NR_Y:
-            ret += getNextInvNumberFromDB_(numFormat, issuanceDate, InvoiceNumberFormatData::NR_Y, i+1, counterpartyName);
-            break;
         case InvoiceNumberFormatData::NR_M:
-            ret += getNextInvNumberFromDB_(numFormat, issuanceDate, InvoiceNumberFormatData::NR_M, i+1, counterpartyName);
-            break;
         case InvoiceNumberFormatData::NR_D:
-            ret += getNextInvNumberFromDB_(numFormat, issuanceDate, InvoiceNumberFormatData::NR_D, i+1, counterpartyName);
-            break;
         case InvoiceNumberFormatData::NR_Q:
-            ret += getNextInvNumberFromDB_(numFormat, issuanceDate, InvoiceNumberFormatData::NR_Q, i+1, counterpartyName);
+            ret += getNextInvNumberFromDB_(numFormat, issuanceDate, j, i+1, counterpartyName);
             break;
         case InvoiceNumberFormatData::INVOICE_TYPE:
             ret += invoiceTypeName;
