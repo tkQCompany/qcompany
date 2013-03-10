@@ -2,6 +2,17 @@
 #define MODELCURRENCY_H
 
 #include <QSqlTableModel>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QSqlDriver>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QUrl>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
+#include <QDate>
+#include <QRegExp>
+#include <QStringList>
+#include <QDomDocument>
 
 #include "../models_data/CurrencyData.h"
 
@@ -19,6 +30,15 @@ public:
      * @param parent
      */
     explicit ModelCurrency(QObject *parent);
+
+    void updateCurrenciesRates();
+
+private slots:
+    void netReplyFinished_();
+    void updateDBsCurrenciesRates_();
+
+private:
+    QNetworkAccessManager *netMgr_;
 };
 
 #endif // MODELCURRENCY_H

@@ -21,7 +21,6 @@
 #include "models/ModelPhone.h"
 #include "models/ModelUnit.h"
 #include "models/ModelVat.h"
-#include "DB_Constants.h"
 #include "../../ui/CommodityVisualData.h"
 
 /**
@@ -160,7 +159,21 @@ private:
      *
      * @return bool
      */
-    bool createTablesIfNotExist();
+    bool createTablesIfNotExist_();
+
+    /**
+     * @brief
+     *
+     */
+    void initModels_();
+
+    /**
+     * @brief
+     *
+     * @return bool
+     */
+    bool insertDataIfNotInserted_();
+
     /**
      * @brief
      *
@@ -168,7 +181,7 @@ private:
      * @param line
      * @return bool
      */
-    bool sqlExecute(const QString &sqlQuery, const int line);
+    bool sqlExecute_(const QString &sqlQuery, const int line);
     /**
      * @brief
      *
@@ -178,18 +191,7 @@ private:
      * @param line
      * @return bool
      */
-    bool sqlInsertIf(const QString &table, const QString &column, const QString &condition, const int line);
-    /**
-     * @brief
-     *
-     * @return bool
-     */
-    bool insertDataIfNotInserted();
-    /**
-     * @brief
-     *
-     */
-    void initModels();
+    bool sqlInsertIf_(const QString &table, const QString &column, const QString &condition, const int line);
 private:
     QSqlDatabase db_; /**< TODO */
     ModelCommodity *modelCommodity_; /**< TODO */

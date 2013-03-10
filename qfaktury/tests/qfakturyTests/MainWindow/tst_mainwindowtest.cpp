@@ -1,8 +1,7 @@
-#include <QtCore/QString>
 #include <QtTest/QtTest>
-#include <QtCore/QCoreApplication>
 #include <QSettings>
 
+#include "../TestsCommon.h"
 #include "MainWindow.h"
 #include "CounterpartyDialog.h"
 
@@ -32,10 +31,8 @@ MainWindowTest::MainWindowTest()
 
 void MainWindowTest::initTestCase()
 {
-    QCoreApplication::setApplicationName("QFaktury");
-    QCoreApplication::setOrganizationName("www.e-linux.pl");
-    QCoreApplication::setOrganizationDomain("www.e-linux.pl");
-    QCoreApplication::setApplicationVersion(APP_VERSION);
+    TestsCommon::setAppData();
+    TestsCommon::removeDBFile();
 }
 
 void MainWindowTest::cleanupTestCase()

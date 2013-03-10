@@ -1,6 +1,7 @@
-#include <QtCore/QString>
 #include <QtTest/QtTest>
-#include <QtCore/QCoreApplication>
+
+#include "../TestsCommon.h"
+#include "CounterpartyDialog.h"
 
 class CounterpartyDialogTest : public QObject
 {
@@ -12,6 +13,7 @@ public:
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
+    void testCaseInitialValues();
     void testCase1();
     void testCase1_data();
 };
@@ -22,10 +24,22 @@ CounterpartyDialogTest::CounterpartyDialogTest()
 
 void CounterpartyDialogTest::initTestCase()
 {
+    TestsCommon::setAppData();
+    TestsCommon::removeDBFile();
 }
 
 void CounterpartyDialogTest::cleanupTestCase()
 {
+}
+
+
+void CounterpartyDialogTest::testCaseInitialValues()
+{
+    Database db;
+    SettingsGlobal s;
+    CounterpartyDialog dialog(0, &db, QModelIndex());
+    QCOMPARE(dialog.comboBoxType->currentText(), CounterpartyTypeData::name(CounterpartyTypeData::COMPANY));
+    QCOMPARE(dialog.comboBoxCountry->currentText(), s.value(s.keyName(s.COUNTRY)).toString());
 }
 
 void CounterpartyDialogTest::testCase1()

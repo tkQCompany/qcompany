@@ -1,6 +1,6 @@
-#include <QtCore/QString>
 #include <QtTest/QtTest>
 
+#include "../TestsCommon.h"
 #include "Database.h"
 
 
@@ -50,17 +50,8 @@ DatabaseTest::DatabaseTest()
 
 void DatabaseTest::initTestCase()
 {
-    QCoreApplication::setApplicationName("QFaktury");
-    QCoreApplication::setOrganizationName("www.e-linux.pl");
-    QCoreApplication::setOrganizationDomain("www.e-linux.pl");
-    QCoreApplication::setApplicationVersion(APP_VERSION);
-
-    dbFilename_ = QString("%1-%2.db3").arg(QCoreApplication::applicationName()).arg(APP_VERSION);
-    if(QFile::exists(dbFilename_))
-    {
-        QDir dir;
-        dir.remove(dbFilename_);
-    }
+    TestsCommon::setAppData();
+    TestsCommon::removeDBFile();
 }
 
 void DatabaseTest::cleanupTestCase()

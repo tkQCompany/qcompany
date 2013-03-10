@@ -1,0 +1,1 @@
+HEADERS += TestsCommon.h

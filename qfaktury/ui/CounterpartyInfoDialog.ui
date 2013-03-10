@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>197</width>
-    <height>277</height>
+    <width>171</width>
+    <height>233</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,22 +22,48 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <item>
       <layout class="QFormLayout" name="formLayout">
+       <property name="fieldGrowthPolicy">
+        <enum>QFormLayout::ExpandingFieldsGrow</enum>
+       </property>
        <property name="formAlignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
        </property>
+       <property name="horizontalSpacing">
+        <number>0</number>
+       </property>
+       <property name="verticalSpacing">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelType">
+         <property name="text">
+          <string>Typ:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="labelTypeVal">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="labelName">
          <property name="minimumSize">
           <size>
-           <width>80</width>
+           <width>0</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>80</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
@@ -69,13 +95,13 @@
         <widget class="QLabel" name="labelAddress">
          <property name="minimumSize">
           <size>
-           <width>80</width>
+           <width>0</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>80</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
@@ -103,25 +129,6 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="labelLocation">
-         <property name="minimumSize">
-          <size>
-           <width>90</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>80</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Miejscowość:</string>
-         </property>
-        </widget>
-       </item>
        <item row="3" column="1">
         <widget class="QLabel" name="labelCityE">
          <property name="sizePolicy">
@@ -145,13 +152,13 @@
         <widget class="QLabel" name="labelTaxID">
          <property name="minimumSize">
           <size>
-           <width>80</width>
+           <width>0</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>80</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
@@ -183,13 +190,13 @@
         <widget class="QLabel" name="labelAccountName">
          <property name="minimumSize">
           <size>
-           <width>80</width>
+           <width>0</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>80</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
@@ -221,13 +228,13 @@
         <widget class="QLabel" name="labelPhone">
          <property name="minimumSize">
           <size>
-           <width>80</width>
+           <width>0</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>80</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
@@ -259,13 +266,13 @@
         <widget class="QLabel" name="labelEmail">
          <property name="minimumSize">
           <size>
-           <width>80</width>
+           <width>0</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>80</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
@@ -297,13 +304,13 @@
         <widget class="QLabel" name="labelWWW">
          <property name="minimumSize">
           <size>
-           <width>80</width>
+           <width>0</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>80</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
@@ -338,17 +345,22 @@ color: rgb(0, 85, 255);</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="labelType">
-         <property name="text">
-          <string>Typ:</string>
+       <item row="3" column="0">
+        <widget class="QLabel" name="labelLocation">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
          </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="labelTypeVal">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="text">
-          <string/>
+          <string>Miejscowość:</string>
          </property>
         </widget>
        </item>

@@ -1,6 +1,6 @@
-#include <QtCore/QString>
 #include <QtTest/QtTest>
 
+#include "../TestsCommon.h"
 #include "Database.h"
 
 class CounterpartyDataTest : public QObject
@@ -23,17 +23,8 @@ CounterpartyDataTest::CounterpartyDataTest()
 
 void CounterpartyDataTest::initTestCase()
 {
-    QCoreApplication::setApplicationName("QFaktury");
-    QCoreApplication::setOrganizationName("www.e-linux.pl");
-    QCoreApplication::setOrganizationDomain("www.e-linux.pl");
-    QCoreApplication::setApplicationVersion(APP_VERSION);
-
-    const QString dbFilename(QString("%1-%2.db3").arg(QCoreApplication::applicationName()).arg(APP_VERSION));
-    if(QFile::exists(dbFilename))
-    {
-        QDir dir;
-        dir.remove(dbFilename);
-    }
+    TestsCommon::setAppData();
+    TestsCommon::removeDBFile();
 }
 
 void CounterpartyDataTest::cleanupTestCase()
@@ -61,7 +52,7 @@ void CounterpartyDataTest::testCaseCheckDBFields_data()
     QTest::newRow("id_counterparty") << QString("id_counterparty") << (int)CounterpartyFields::ID;
     QTest::newRow("name") << QString("name") << (int)CounterpartyFields::NAME;
     QTest::newRow("type_id") << QString("type_id") << (int)CounterpartyFields::TYPE_ID;
-    QTest::newRow("country_id") << QString("country_id") << (int)CounterpartyFields::COUNTRY_ID;
+    QTest::newRow("country_id") << QString("country_id") << (int)CounterpartyFields::COUNTRY;
     QTest::newRow("location") << QString("location") << (int)CounterpartyFields::LOCATION;
     QTest::newRow("postal_code") << QString("postal_code") << (int)CounterpartyFields::POSTAL_CODE;
     QTest::newRow("street") << QString("street") << (int)CounterpartyFields::STREET;

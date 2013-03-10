@@ -1,6 +1,6 @@
-#include <QtCore/QString>
 #include <QtTest/QtTest>
-#include <QtCore/QCoreApplication>
+
+#include "../TestsCommon.h"
 
 class ChangeAmountDialogTest : public QObject
 {
@@ -22,6 +22,8 @@ ChangeAmountDialogTest::ChangeAmountDialogTest()
 
 void ChangeAmountDialogTest::initTestCase()
 {
+    TestsCommon::setAppData();
+    TestsCommon::removeDBFile();
 }
 
 void ChangeAmountDialogTest::cleanupTestCase()

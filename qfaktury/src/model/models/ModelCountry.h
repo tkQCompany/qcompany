@@ -1,7 +1,7 @@
 #ifndef MODELCOUNTRY_H
 #define MODELCOUNTRY_H
 
-#include <QSqlTableModel>
+#include <QStringListModel>
 
 #include "../models_data/CountryData.h"
 
@@ -9,7 +9,7 @@
  * @brief
  *
  */
-class ModelCountry : public QSqlTableModel
+class ModelCountry : public QStringListModel
 {
     Q_OBJECT
 public:

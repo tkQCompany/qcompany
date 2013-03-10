@@ -98,13 +98,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPushButton" name="pushButtonEditCountryList">
-         <property name="text">
-          <string>Edytuj listę krajów...</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
      <item row="3" column="0">
@@ -457,7 +450,6 @@
   <tabstop>comboBoxType</tabstop>
   <tabstop>pushButtonEditTypeList</tabstop>
   <tabstop>comboBoxCountry</tabstop>
-  <tabstop>pushButtonEditCountryList</tabstop>
   <tabstop>lineEditLocation</tabstop>
   <tabstop>lineEditPostalCode</tabstop>
   <tabstop>lineEditAddress</tabstop>

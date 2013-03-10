@@ -28,3 +28,5 @@ SUBDIRS += \
     PhoneData \
     UnitData \
     SettingsDialog
+
+include(qfakturyTestsCommon.pri)

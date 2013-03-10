@@ -1,6 +1,6 @@
-#include <QtCore/QString>
 #include <QtTest/QtTest>
-#include <QtCore/QCoreApplication>
+
+#include "../TestsCommon.h"
 
 class CounterpartyInfoDialogTest : public QObject
 {
@@ -22,6 +22,8 @@ CounterpartyInfoDialogTest::CounterpartyInfoDialogTest()
 
 void CounterpartyInfoDialogTest::initTestCase()
 {
+    TestsCommon::setAppData();
+    TestsCommon::removeDBFile();
 }
 
 void CounterpartyInfoDialogTest::cleanupTestCase()

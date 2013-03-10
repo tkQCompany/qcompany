@@ -150,13 +150,8 @@ void MainWindow::createInvoice_(const InvoiceTypeData::Type type)
     switch(type)
     {
     case InvoiceTypeData::VAT:
-        invoice.reset(new InvoiceDialog(this, &db_));
-        invoice->comboBoxInvoiceType->setCurrentIndex(type - 1);
-        break;
     case InvoiceTypeData::PRO_FORMA:
-        invoice.reset(new InvoiceDialog(this, &db_));
-        invoice->setWindowTitle(trUtf8("Faktura Pro Forma"));
-        invoice->comboBoxInvoiceType->setCurrentIndex(type - 1);
+        invoice.reset(new InvoiceDialog(this, &db_, type));
         break;
     case InvoiceTypeData::BILL:
         invoice.reset(new BillDialog(this, &db_));
@@ -507,7 +502,7 @@ void MainWindow::editInvoice_()
     case InvoiceTypeData::VAT:
     case InvoiceTypeData::PRO_FORMA:
     {
-        InvoiceDialog dialog(this, &db_, list.at(0));
+        InvoiceDialog dialog(this, &db_, invType, list.at(0));
         //InvoiceData::InvoiceType type = InvoiceData::PRO_FORMA;
         //if (tableViewInvoices->item(row, IVF::TYPE)->text() == InvoiceData::InvoiceTypeToString(InvoiceData::VAT))
         //{

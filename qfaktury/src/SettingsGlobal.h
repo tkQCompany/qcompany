@@ -18,11 +18,15 @@ class SettingsGlobal: public QSettings
     Q_OBJECT
 
 public:
-    enum KEYS {VAT_RATES, LANG, CURRENCIES, ADDIT_TEXT, EDIT, EDIT_NAME, EDIT_SYMBOL,
-              NUMBER_OF_COPIES, TAXID_MASK, ACCOUNT_MASK, FIRST_RUN, UNITS, LOGO, PAYMENT_TYPE, CORRECTION_REASON,
-              ORDER_NUMBER, NAME, CODE, PKWIU, QUANTITY, INTERNAT_UNIT, UNIT_PRICE, NET_VAL, DISCOUNT, DISCOUNT_VAL,
-              NET_AFTER, VAT_VAL, VAT_PRICE, GROSS_VAL, USER_NAME, USER_LOCATION, USER_ADDRESS, USER_ACCOUNT,
-              USER_TAXID, USER_PHONE, USER_MAIL, USER_WWW, WORKING_DIR, CSS, DEFAULT_INV_NUM_FORMAT, TEXT1, TEXT2, TEXT3};
+    enum KEYS {VAT_RATES, LANG, ADDIT_TEXT, EDIT, EDIT_NAME,
+               EDIT_SYMBOL, NUMBER_OF_COPIES, TAXID_MASK, ACCOUNT_MASK, FIRST_RUN,
+               UNITS, LOGO, PAYMENT_TYPE, CORRECTION_REASON, ORDER_NUMBER,
+               NAME, CODE, PKWIU, QUANTITY, INTERNAT_UNIT,
+               UNIT_PRICE, NET_VAL, DISCOUNT, DISCOUNT_VAL, NET_AFTER,
+               VAT_VAL, VAT_PRICE, GROSS_VAL, USER_NAME, USER_LOCATION,
+               USER_ADDRESS, USER_ACCOUNT, USER_TAXID, USER_PHONE, USER_MAIL,
+               USER_WWW, WORKING_DIR, CSS, DEFAULT_INV_NUM_FORMAT, DEFAULT_CURRENCY,
+               COUNTRY, TEXT1, TEXT2, TEXT3};
 
     SettingsGlobal()
     {
@@ -35,7 +39,6 @@ public:
         {
         case VAT_RATES: return QString("stawki");
         case LANG: return QString("lang");
-        case CURRENCIES: return QString("waluty");
         case ADDIT_TEXT: return QString("addText");
         case EDIT: return QString("edit");
         case EDIT_NAME: return QString("editName");
@@ -73,6 +76,8 @@ public:
         case WORKING_DIR: return QString("working_dir");
         case CSS: return QString("css");
         case DEFAULT_INV_NUM_FORMAT: return QString("default_inv_num_format");
+        case DEFAULT_CURRENCY: return QString("default_currency");
+        case COUNTRY: return QString("country");
         case TEXT1: return QString("inv_num_text1");
         case TEXT2: return QString("inv_num_text2");
         case TEXT3: return QString("inv_num_text3");
@@ -102,10 +107,9 @@ public:
      * @brief
      *
      */
-    void resetSettings()
+    void resetSettings() //TODO: make sure it won't damage sth (like individual invoice numbering scheme)
     {
         setValue(keyName(LANG), trUtf8("pl"));
-        setValue(keyName(CURRENCIES), trUtf8("PLN|EUR|USD"));
         setValue(keyName(ADDIT_TEXT), trUtf8("Towar odebrałem zgodnie z fakturą"));
         setValue(keyName(EDIT), "false");
         setValue(keyName(EDIT_NAME), "false");
@@ -122,6 +126,8 @@ public:
         setValue(keyName(WORKING_DIR), QString("%1/elinux").arg(QDir::homePath()));
         setValue(keyName(CSS), QString("style.css"));
         setValue(keyName(DEFAULT_INV_NUM_FORMAT), trUtf8("{TEKST1}/{R}-{M}-{D}/{NR_R}"));
+        setValue(keyName(DEFAULT_CURRENCY), trUtf8("PLN"));
+        setValue(keyName(COUNTRY), trUtf8("Polska"));
         setValue(keyName(TEXT1), trUtf8("F"));
         setValue(keyName(TEXT2), trUtf8(""));
         setValue(keyName(TEXT3), trUtf8(""));

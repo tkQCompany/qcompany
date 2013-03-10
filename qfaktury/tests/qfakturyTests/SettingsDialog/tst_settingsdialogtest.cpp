@@ -1,7 +1,6 @@
-#include <QString>
 #include <QtTest>
-#include <QCoreApplication>
 
+#include "../TestsCommon.h"
 #include "SettingsDialog.h"
 
 class SettingsDialogTest : public QObject
@@ -24,6 +23,8 @@ SettingsDialogTest::SettingsDialogTest()
 
 void SettingsDialogTest::initTestCase()
 {
+    TestsCommon::setAppData();
+    TestsCommon::removeDBFile();
 }
 
 void SettingsDialogTest::cleanupTestCase()

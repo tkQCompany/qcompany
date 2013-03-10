@@ -35,7 +35,7 @@ public:
  * @param db
  * @param id_edit
  */
-    InvoiceDialog(QWidget *parent, Database *db, const QModelIndex &id_edit = QModelIndex());
+    InvoiceDialog(QWidget *parent, Database *db, const int invoiceType = InvoiceTypeData::VAT, const QModelIndex &id_edit = QModelIndex());
     /**
      * @brief
      *
@@ -232,7 +232,9 @@ private:
      * @brief
      *
      */
-    void setInitialComboBoxIndexes_();
+    void setInitialComboBoxIndexes_(const QString &invoiceType,
+                                    const QString &paymentType,
+                                    const QString &defaultCurrency);
     /**
      * @brief
      *

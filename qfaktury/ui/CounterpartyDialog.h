@@ -5,7 +5,6 @@
 #include <QDataWidgetMapper>
 
 #include "ui_CounterpartyDialog.h"
-#include "../ui/CountryDialog.h"
 #include "../ui/CounterpartyTypeDialog.h"
 #include "../ui/EmailDialog.h"
 #include "../ui/InvoiceNumberFormatEditDialog.h"
@@ -42,11 +41,7 @@ private slots:
      *
      */
     void editCounterpartyTypeList_();
-    /**
-     * @brief
-     *
-     */
-    void editCountryList_();
+
     /**
      * @brief
      *

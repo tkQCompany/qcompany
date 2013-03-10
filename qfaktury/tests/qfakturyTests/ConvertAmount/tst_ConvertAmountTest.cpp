@@ -1,4 +1,3 @@
-#include <QtCore/QString>
 #include <QtTest/QtTest>
 
 #include "ConvertAmount.h"

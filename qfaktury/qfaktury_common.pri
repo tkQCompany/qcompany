@@ -1,4 +1,4 @@
-QT += sql xml
+QT += sql xml network
 
 SOURCES +=     ui/BillDialog.cpp \
     ui/ChangeAmountDialog.cpp \
@@ -11,7 +11,6 @@ SOURCES +=     ui/BillDialog.cpp \
     ui/CounterpartyDialog.cpp \
     ui/CounterpartyInfoDialog.cpp \
     ui/CounterpartyTypeDialog.cpp \
-    ui/CountryDialog.cpp \
     ui/CustomPaymentDialog.cpp \
     ui/DuplicateDialog.cpp \
     ui/EmailDialog.cpp \
@@ -51,7 +50,6 @@ HEADERS += ui/BillDialog.h \
     ui/CounterpartyDialog.h \
     ui/CounterpartyInfoDialog.h \
     ui/CounterpartyTypeDialog.h \
-    ui/CountryDialog.h \
     ui/CustomPaymentDialog.h \
     ui/DuplicateDialog.h \
     ui/EmailDialog.h \
@@ -65,7 +63,6 @@ HEADERS += ui/BillDialog.h \
     src/ConvertAmount.h \
     src/CustomPaymData.h \
     src/model/Database.h \
-    src/model/DB_Constants.h \
     src/model/models_data/UnitData.h \
     src/model/models_data/PhoneData.h \
     src/model/models_data/PaymentTypeData.h \

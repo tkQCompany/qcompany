@@ -298,9 +298,9 @@ void SettingsDialog::saveSettings_()
     s.setValue(s.keyName(s.LOGO), lineEditLogo->text());
     s.setValue(s.keyName(s.UNITS), getItemsToString_(listWidgetUnit));
     s.setValue(s.keyName(s.VAT_RATES), getItemsToString_(listWidgetVAT).remove("%"));
-    s.setValue(s.keyName(s.CURRENCIES), getItemsToString_(listWidgetCurrency));
+    //s.setValue(s.keyName(s.CURRENCIES), getItemsToString_(listWidgetCurrency));
     s.setValue(s.keyName(s.CORRECTION_REASON), getItemsToString_(listWidgetCorrectionReason));
-    s.setValue(s.keyName(s.PAYMENT_TYPE), getItemsToString_(listWidgetPayment)); //TODO: uwaga!! get first
+    s.setValue(s.keyName(s.PAYMENT_TYPE), getItemsToString_(listWidgetPayment));
     s.setValue(s.keyName(s.ADDIT_TEXT), textEditAdditionalText->toPlainText());
 
     s.setValue(s.keyName(s.EDIT), checkBoxInvEdit->isChecked());
@@ -346,7 +346,7 @@ void SettingsDialog::readSettings_()
     listWidgetVAT->clear();
     listWidgetVAT->addItems(s.value(s.keyName(s.VAT_RATES)).toString().split("|"));
     listWidgetCurrency->clear();
-    listWidgetCurrency->addItems(s.value(s.keyName(s.CURRENCIES)).toString().split("|"));
+    //listWidgetCurrency->addItems(s.value(s.keyName(s.CURRENCIES)).toString().split("|"));
     listWidgetPayment->clear();
     listWidgetPayment->addItems(s.value(s.keyName(s.PAYMENT_TYPE)).toString().split("|"));
 

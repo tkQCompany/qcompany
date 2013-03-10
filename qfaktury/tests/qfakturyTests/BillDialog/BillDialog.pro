@@ -36,3 +36,5 @@ include(../../../qfaktury_common.pri)
 
 OBJECTS_DIR = ../obj
 MOC_DIR = ../obj
+
+HEADERS +=

@@ -25,7 +25,6 @@ INCLUDEPATH += . \
 SOURCES += main.cpp
 
 FORMS += ui/CounterpartyTypeDialog.ui \
-         ui/CountryDialog.ui \
          ui/CustomPaymentDialog.ui \
          ui/EmailDialog.ui \
          ui/MainWindow.ui \
@@ -48,7 +47,7 @@ TRANSLATIONS += translations/qfaktury_de.ts \
 
 RESOURCES += qfaktury.qrc
 
-QT += gui xml sql
+QT += gui
 
 UI_DIR = ./ui
 

@@ -13,17 +13,17 @@ Database::Database(QObject *parent): QObject(parent)
 
     db_.exec("PRAGMA foreign_keys = ON");
 
-    if(!createTablesIfNotExist())
+    if(!createTablesIfNotExist_())
     {                    
         exit(EXIT_FAILURE);
     }
 
-    if(!insertDataIfNotInserted())
+    if(!insertDataIfNotInserted_())
     {
         exit(EXIT_FAILURE);
     }
 
-    initModels();
+    initModels_();
 }
 
 Database::~Database()
@@ -139,16 +139,9 @@ ModelVat* Database::modelVat() const
 }
 
 
-bool Database::createTablesIfNotExist()
+bool Database::createTablesIfNotExist_()
 {
-    if(!sqlExecute(QString("CREATE TABLE IF NOT EXISTS `%1` ("
-               "`id_country` INTEGER PRIMARY KEY AUTOINCREMENT,"
-               "`name` VARCHAR(80) NOT NULL UNIQUE)").arg("country"), __LINE__))
-    {
-        return false;
-    }
-
-    if(!sqlExecute(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
+    if(!sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
                            "`id_counterparty_type` INTEGER PRIMARY KEY AUTOINCREMENT ,"
                            "`type` VARCHAR(45) NOT NULL UNIQUE)"
                            ).arg("counterparty_type"), __LINE__))
@@ -157,11 +150,11 @@ bool Database::createTablesIfNotExist()
     }
 
 
-    if(!sqlExecute(QString("CREATE TABLE IF NOT EXISTS `%1` ("
+    if(!sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
                            "`id_counterparty` INTEGER PRIMARY KEY AUTOINCREMENT,"
                            "`name` VARCHAR(45) NOT NULL UNIQUE,"
                            "`type_id` INTEGER NOT NULL ,"
-                           "`country_id` INTEGER NOT NULL ,"
+                           "`country` VARCHAR(100) NOT NULL DEFAULT '',"
                            "`location` VARCHAR(45) NOT NULL ,"
                            "`postal_code` VARCHAR(10) NOT NULL ,"
                            "`street` VARCHAR(45) NOT NULL ,"
@@ -171,11 +164,6 @@ bool Database::createTablesIfNotExist()
                            "`primary_email` VARCHAR(45) NOT NULL,"
                            "`primary_phone` VARCHAR(45) NOT NULL,"
                            "`inv_number_format` VARCHAR(100) NOT NULL,"
-                           "CONSTRAINT `country_id` "
-                             "FOREIGN KEY (`country_id` ) "
-                             "REFERENCES `country` (`id_country` )"
-                             "ON DELETE RESTRICT "
-                             "ON UPDATE CASCADE,"
                            "CONSTRAINT `type_id` "
                              "FOREIGN KEY (`type_id` ) "
                              "REFERENCES `counterparty_type` (`id_counterparty_type` )"
@@ -185,7 +173,7 @@ bool Database::createTablesIfNotExist()
         return false;
     }
 
-    if(!sqlExecute(QString("CREATE TABLE IF NOT EXISTS `%1` ("
+    if(!sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
                            "`id_phone` INTEGER PRIMARY KEY AUTOINCREMENT,"
                            "`counterparty_id` INTEGER NOT NULL,"
                            "`number` VARCHAR(30) NOT NULL UNIQUE,"
@@ -199,7 +187,7 @@ bool Database::createTablesIfNotExist()
         return false;
     }
 
-    if(!sqlExecute(QString("CREATE TABLE IF NOT EXISTS `%1` ("
+    if(!sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
                "`id_email` INTEGER PRIMARY KEY AUTOINCREMENT,"
                "`counterparty_id` INTEGER NOT NULL,"
                "`email` VARCHAR(45) NOT NULL UNIQUE, "
@@ -215,7 +203,7 @@ bool Database::createTablesIfNotExist()
 
 
 
-    if(!sqlExecute(QString("CREATE TABLE IF NOT EXISTS `%1` ("
+    if(!sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
                "id_unit INTEGER PRIMARY KEY AUTOINCREMENT ,"
                "name VARCHAR(15) NOT NULL UNIQUE)"
                            ).arg("unit"), __LINE__))
@@ -224,7 +212,7 @@ bool Database::createTablesIfNotExist()
     }
 
 
-    if(!sqlExecute(QString("CREATE TABLE IF NOT EXISTS `%1` ("
+    if(!sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
                "id_commodity_type INTEGER PRIMARY KEY AUTOINCREMENT ,"
                "type VARCHAR(45) NOT NULL UNIQUE)"
                ).arg("commodity_type"), __LINE__))
@@ -234,7 +222,7 @@ bool Database::createTablesIfNotExist()
 
 
 
-    if(!sqlExecute(QString("CREATE TABLE IF NOT EXISTS `%1` ("
+    if(!sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
                            "id_commodity INTEGER PRIMARY KEY AUTOINCREMENT ,"
                            "name VARCHAR(100) NOT NULL UNIQUE,"
                            "abbreviation VARCHAR(45) NOT NULL ,"
@@ -262,16 +250,19 @@ bool Database::createTablesIfNotExist()
         return false;
     }
 
-    if(!sqlExecute(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
-               "`id_currency` INTEGER PRIMARY KEY AUTOINCREMENT,"
-               "`name` VARCHAR(25) NOT NULL UNIQUE)"
-               ).arg("currency"), __LINE__))
+
+    if(!sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
+                           "`id_currency` INTEGER PRIMARY KEY AUTOINCREMENT,"
+                           "`code` VARCHAR(5) NOT NULL UNIQUE,"
+                            "`code_unit` INTEGER NOT NULL DEFAULT 1,"
+                           "`exchange_rate_pln` DECIMAL(10,16) NOT NULL)"
+                           ).arg("currency"), __LINE__))
     {
         return false;
     }
 
 
-    if(!sqlExecute(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
+    if(!sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
                            "`id_invoice_type` INTEGER PRIMARY KEY NOT NULL ,"
                            "`type` VARCHAR(20) NOT NULL UNIQUE)")
                    .arg("invoice_type"), __LINE__))
@@ -280,7 +271,7 @@ bool Database::createTablesIfNotExist()
     }
 
 
-    if(!sqlExecute(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
+    if(!sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
                            "`id_payment_type` INTEGER PRIMARY KEY NOT NULL ,"
                            "`type` VARCHAR(45) NOT NULL UNIQUE)")
                    .arg("payment_type"), __LINE__))
@@ -289,7 +280,7 @@ bool Database::createTablesIfNotExist()
     }
 
 
-    if(!sqlExecute(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
+    if(!sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
                            "`id_invoice` INTEGER PRIMARY KEY AUTOINCREMENT ,"
                            "`inv_number` VARCHAR(100) NOT NULL UNIQUE,"
                            "`selling_date` DATE NOT NULL ,"
@@ -298,7 +289,7 @@ bool Database::createTablesIfNotExist()
                            "`issuance_date` DATE NOT NULL ,"
                            "`payment_date` DATE NOT NULL ,"
                            "`payment_id` INTEGER NOT NULL ,"
-                           "`currency_id` INTEGER NOT NULL ,"
+                           "`currency_id` INTEGER NOT NULL,"
                            "`additional_text` VARCHAR(200) NOT NULL ,"
                            "`discount` INTEGER NOT NULL ,"
                            "CONSTRAINT `type_id`"
@@ -326,7 +317,7 @@ bool Database::createTablesIfNotExist()
         return false;
     }
 
-    if(!sqlExecute(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
+    if(!sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
                            "`id` INTEGER PRIMARY KEY NOT NULL ,"
                            "`invoice_id` INTEGER NOT NULL,"
                            "`commodity_id` INTEGER NOT NULL,"
@@ -352,7 +343,7 @@ bool Database::createTablesIfNotExist()
 }
 
 
-bool Database::sqlExecute(const QString &sqlQuery, const int line)
+bool Database::sqlExecute_(const QString &sqlQuery, const int line)
 {
     QSqlQuery query(db_);
 
@@ -365,7 +356,7 @@ bool Database::sqlExecute(const QString &sqlQuery, const int line)
     return true;
 }
 
-bool Database::sqlInsertIf(const QString &table, const QString &column, const QString &condition, const int line)
+bool Database::sqlInsertIf_(const QString &table, const QString &column, const QString &condition, const int line)
 {
     bool ret = true;
     QSqlQuery query(db_);
@@ -381,7 +372,7 @@ bool Database::sqlInsertIf(const QString &table, const QString &column, const QS
     {
          if(!query.next())
          {
-             if(!sqlExecute(QString("INSERT OR IGNORE INTO `%1`(`%2`) VALUES('%3')").arg(table).arg(column).arg(condition), line))
+             if(!sqlExecute_(QString("INSERT OR IGNORE INTO `%1`(`%2`) VALUES('%3')").arg(table).arg(column).arg(condition), line))
              {
                  QMessageBox::critical(0, trUtf8("Błąd SQL INSERT"), QString("Detected at line %1: %2").arg(line).arg(query.lastError().text()));
                  ret = false;
@@ -393,7 +384,7 @@ bool Database::sqlInsertIf(const QString &table, const QString &column, const QS
 }
 
 
-void Database::initModels()
+void Database::initModels_()
 {
     modelCommodityType_ = new ModelCommodityType(this->parent());
     modelCommodityType_->setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -401,9 +392,6 @@ void Database::initModels()
     modelCommodityType_->select();
 
     modelCountry_ = new ModelCountry(this->parent());
-    modelCountry_->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    modelCountry_->setSort(CountryFields::ID_COUNTRY, Qt::AscendingOrder);
-    modelCountry_->select();
 
     modelEmail_ = new ModelEmail(this->parent(), "");
     modelEmail_->setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -439,7 +427,6 @@ void Database::initModels()
     modelCounterparty_ = new ModelCounterparty(this->parent());
     modelCounterparty_->setEditStrategy(QSqlTableModel::OnManualSubmit);
     modelCounterparty_->setSort(CounterpartyFields::ID, Qt::AscendingOrder);
-    modelCounterparty_->setRelation(CounterpartyFields::COUNTRY_ID, QSqlRelation("country", "id_country", "name"));
     modelCounterparty_->setRelation(CounterpartyFields::TYPE_ID, QSqlRelation("counterparty_type", "id_counterparty_type", "type"));
     modelCounterparty_->setFilter(QString("type_id != %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
     modelCounterparty_->select();
@@ -450,7 +437,7 @@ void Database::initModels()
     modelInvoice_->setRelation(InvoiceFields::TYPE_ID, QSqlRelation("invoice_type", "id_invoice_type", "type"));
     modelInvoice_->setRelation(InvoiceFields::COUNTERPARTY_ID, QSqlRelation("counterparty", "id_counterparty", "name"));
     modelInvoice_->setRelation(InvoiceFields::PAYMENT_ID, QSqlRelation("payment_type", "id_payment_type", "type"));
-    modelInvoice_->setRelation(InvoiceFields::CURRENCY_ID, QSqlRelation("currency", "id_currency", "name"));
+    modelInvoice_->setRelation(InvoiceFields::CURRENCY_ID, QSqlRelation("currency", "id_currency", "code"));
     modelInvoice_->select();
 
     modelCurrency_ = new ModelCurrency(this->parent());
@@ -464,6 +451,8 @@ void Database::initModels()
     modelPaymentType_->select();
 
     modelInvoiceType_ = new ModelInvoiceType(this->parent());
+    modelInvoiceType_->select();
+
     modelInvoiceWithCommodities_ = new ModelInvoiceWithCommodities(this->parent());
 
     if(!db_.isValid())
@@ -474,48 +463,56 @@ void Database::initModels()
 
 
 
-bool Database::insertDataIfNotInserted()
+bool Database::insertDataIfNotInserted_()
 {
     for(int i = CounterpartyTypeData::MY_COMPANY; i <= CounterpartyTypeData::OFFICE; ++i)
     {
-        if(!sqlInsertIf("counterparty_type", "type", CounterpartyTypeData::name(i), __LINE__))
+        if(!sqlInsertIf_("counterparty_type", "type", CounterpartyTypeData::name(i), __LINE__))
             return false;
     }
 
-    if(!sqlInsertIf("country", "name", DB_Constants::My_Country, __LINE__))
-        return false;
-
     for(int i = CommodityTypeData::GOODS; i <= CommodityTypeData::SERVICES; ++i)
     {
-        if(!sqlInsertIf("commodity_type", "type", CommodityTypeData::name(i), __LINE__))
+        if(!sqlInsertIf_("commodity_type", "type", CommodityTypeData::name(i), __LINE__))
             return false;
     }
 
     for(int i = UnitData::UNIT; i <= UnitData::PACKAGE; ++i)
     {
-        if(!sqlInsertIf("unit", "name", UnitData::name(i), __LINE__))
-            return false;
-    }
-
-    for(int i = CurrencyData::EUR; i <= CurrencyData::USD; ++i)
-    {
-        if(!sqlInsertIf("currency", "name", CurrencyData::name(i), __LINE__))
+        if(!sqlInsertIf_("unit", "name", UnitData::name(i), __LINE__))
             return false;
     }
 
     for(int i = PaymentTypeData::CASH; i <= PaymentTypeData::TRANSFER; ++i)
     {
-        if(!sqlInsertIf("payment_type", "type", PaymentTypeData::name(i), __LINE__))
-            return false;
-    }
-
-    for(int i = InvoiceTypeData::VAT; i <= InvoiceTypeData::BILL; ++i)
-    {
-        if(!sqlInsertIf("invoice_type", "type", InvoiceTypeData::name(i), __LINE__))
+        if(!sqlInsertIf_("payment_type", "type", PaymentTypeData::name(i), __LINE__))
             return false;
     }
 
     QSqlQuery query(db_);
+    db_.transaction();
+    for(int i = CurrencyData::AUD; i <= CurrencyData::IDR; ++i)
+    {
+        query.exec(QString("INSERT OR IGNORE INTO '%1'(`code`, `code_unit`, `exchange_rate_pln`) VALUES('%2', %3, %4)")
+                   .arg("currency")
+                   .arg(CurrencyData::codeName(i))
+                   .arg(CurrencyData::codeUnit(i))
+                   .arg(0));
+        if(!query.isActive())
+        {
+            QMessageBox::critical(0, trUtf8("Błąd SQL SELECT"), QString("Detected at line %1: %2").arg(__LINE__).arg(query.lastError().text()));
+            return false;
+        }
+    }
+    db_.commit();
+
+    for(int i = InvoiceTypeData::VAT; i <= InvoiceTypeData::BILL; ++i)
+    {
+        if(!sqlInsertIf_("invoice_type", "type", InvoiceTypeData::name(i), __LINE__))
+            return false;
+    }
+
+    db_.transaction();
     query.exec(QString("SELECT `name` FROM `counterparty` LEFT JOIN `counterparty_type` ON `type_id` = `id_counterparty_type`"));
     if(!query.isActive())
     {
@@ -524,11 +521,10 @@ bool Database::insertDataIfNotInserted()
     }
     if(!query.next())
     {
-        const QString selectCountry(QString("(SELECT `id_country` FROM `country` WHERE `name` = \"%1\")").arg(DB_Constants::My_Country));
-        query.exec(QString("INSERT INTO `counterparty`(`name`, `type_id`, `country_id`, `location`, `postal_code`, "
+        query.exec(QString("INSERT INTO `counterparty`(`name`, `type_id`, `country`, `location`, `postal_code`, "
                            "`street`, `tax_ident`, `account_name`, `www`, `primary_email`, `primary_phone`, 'inv_number_format') "
-                   "VALUES(\"%1\", %2, %3, \"%4\", \"%5\", \"%6\", \"%7\", \"%8\", \"%9\", \"%10\", \"%11\", \"%12\")")
-                   .arg(trUtf8("Brak nazwy firmy")).arg(CounterpartyTypeData::MY_COMPANY + 1).arg(selectCountry)
+                   "VALUES(\"%1\", %2, \"%3\", \"%4\", \"%5\", \"%6\", \"%7\", \"%8\", \"%9\", \"%10\", \"%11\", \"%12\")")
+                   .arg(trUtf8("Brak nazwy firmy")).arg(CounterpartyTypeData::MY_COMPANY + 1).arg(QLocale::system().nativeCountryName())
                    .arg(trUtf8("Brak nazwy miejscowości")).arg(trUtf8("Brak kodu pocztowego")).arg(trUtf8("Brak nazwy ulicy"))
                    .arg(trUtf8("Brak NIP")).arg(trUtf8("Brak numeru konta")).arg("").arg("").arg("").arg(""));
         if(!query.isActive())
@@ -539,10 +535,10 @@ bool Database::insertDataIfNotInserted()
             return false;
         }
     }
+    db_.commit();
 
     return true;
 }
-
 
 
 bool Database::invoiceWithCommoditiesInsertTransact(const InvoiceData &invoice, const QList<CommodityVisualData> &commodities)

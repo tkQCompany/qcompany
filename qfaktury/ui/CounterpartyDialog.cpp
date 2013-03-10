@@ -24,11 +24,12 @@ CounterpartyDialog::CounterpartyDialog(QWidget *parent, Database *db, const QMod
         db_->modelCounterparty()->insertRow(db_->modelCounterparty()->rowCount());
         mapper_.toLast();
         comboBoxType->setCurrentIndex(comboBoxType->findText(CounterpartyTypeData::name(CounterpartyTypeData::COMPANY)));
-        comboBoxCountry->setCurrentIndex(0); //TODO: i18n
+
+        SettingsGlobal s;
+        comboBoxCountry->setCurrentIndex(comboBoxCountry->findText(s.value(s.keyName(s.COUNTRY)).toString()));
     }
     connect(pushButtonOK, SIGNAL(clicked()), this, SLOT(okClick_()));
     connect(pushButtonEditTypeList, SIGNAL(clicked()), this, SLOT(editCounterpartyTypeList_()));
-    connect(pushButtonEditCountryList, SIGNAL(clicked()), this, SLOT(editCountryList_()));
     connect(pushButtonEditEmailList, SIGNAL(clicked()), this, SLOT(editEmailList_()));
     connect(pushButtonEditFormat, SIGNAL(clicked()), this, SLOT(editFormat_()));
     connect(pushButtonEditPhoneList, SIGNAL(clicked()), this, SLOT(editPhoneList_()));
@@ -47,21 +48,19 @@ CounterpartyDialog::~CounterpartyDialog()
  */
 void CounterpartyDialog::init()
 {
-    SettingsGlobal s;
     db_->modelCounterpartyType()->setMyCompanyVisibility(true);
     comboBoxType->setModel(db_->modelCounterpartyType());
-    comboBoxType->setModelColumn(CounterpartyTypeFields::TYPE);
     comboBoxType->setEditable(false);
+    comboBoxType->setModelColumn(CounterpartyTypeFields::TYPE);
 
     comboBoxCountry->setModel(db_->modelCountry());
-    comboBoxCountry->setModelColumn(CountryFields::NAME);
 
     mapper_.setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
     mapper_.setItemDelegate(new QSqlRelationalDelegate(this));
     mapper_.setModel(db_->modelCounterparty());
     mapper_.addMapping(lineEditName, CounterpartyFields::NAME);
     mapper_.addMapping(comboBoxType, CounterpartyFields::TYPE_ID);
-    mapper_.addMapping(comboBoxCountry, CounterpartyFields::COUNTRY_ID);
+    mapper_.addMapping(comboBoxCountry, CounterpartyFields::COUNTRY);
     mapper_.addMapping(lineEditLocation, CounterpartyFields::LOCATION);
     mapper_.addMapping(lineEditPostalCode, CounterpartyFields::POSTAL_CODE);
     mapper_.addMapping(lineEditAddress, CounterpartyFields::STREET);
@@ -72,6 +71,7 @@ void CounterpartyDialog::init()
     mapper_.addMapping(lineEditPrimaryPhone, CounterpartyFields::PRIMARY_PHONE);
     mapper_.addMapping(lineEditInvNumberFormat, CounterpartyFields::INV_NUM_FORMAT);
 
+    SettingsGlobal s;
     lineEditTaxID->setInputMask(s.value(s.keyName(s.TAXID_MASK)).toString());
     lineEditAccountName->setInputMask(s.value(s.keyName(s.ACCOUNT_MASK)).toString());
 }
@@ -177,23 +177,6 @@ QString CounterpartyDialog::isEmpty_(const QString &in)
 {
     if (in.isEmpty()) return "-";
     return in;
-}
-
-
-void CounterpartyDialog::editCountryList_()
-{
-    CountryDialog dialog(this, db_);
-    if(dialog.exec() == QDialog::Accepted)
-    {
-        if(!db_->modelCountry()->submitAll())
-        {
-            db_->modelCountry()->revertAll();
-            const QString msg(QString("%1\n%2")
-                              .arg(trUtf8("Błąd edycji listy krajów"))
-                              .arg(db_->modelCounterpartyType()->lastError().text()));
-            QMessageBox::warning(this, trUtf8("Lista krajów"), msg);
-        }
-    }
 }
 
 

@@ -239,8 +239,8 @@ void CorrectiveInvoiceDialog::readCorrData(const QString &invFileName)
     }
 
     dateEditDayOfPayment->setDate(QDate::fromString(additional.attribute("liabDate"), s.getDateFormat()));
-    int curCurrency = s.value(s.keyName(s.CURRENCIES)).toString().split("|").indexOf(additional.attribute("currency"));
-    comboBoxCurrency->setCurrentIndex(curCurrency);
+    //int curCurrency = s.value(s.keyName(s.CURRENCIES)).toString().split("|").indexOf(additional.attribute("currency"));
+    //comboBoxCurrency->setCurrentIndex(curCurrency);
 
     int corrReason = s.value(s.keyName(s.CORRECTION_REASON)).toString().split("|").indexOf(additional.attribute("reason"));
     reasonCombo->setCurrentIndex(corrReason);

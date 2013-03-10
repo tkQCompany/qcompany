@@ -8,7 +8,7 @@
  * @param db
  * @param id_edit
  */
-InvoiceDialog::InvoiceDialog(QWidget *parent, Database *db, const QModelIndex &id_edit) : QDialog(parent), db_(db)
+InvoiceDialog::InvoiceDialog(QWidget *parent, Database *db, const int invoiceType, const QModelIndex &id_edit) : QDialog(parent), db_(db)
 {
     setupUi(this);
     init_();
@@ -23,11 +23,14 @@ InvoiceDialog::InvoiceDialog(QWidget *parent, Database *db, const QModelIndex &i
     {
         db_->modelInvoice()->insertRow(db_->modelInvoice()->rowCount());
         mapper_.toLast();
-        setInitialComboBoxIndexes_();
+
+        SettingsGlobal s;
+        const QString invoiceTypeStr(InvoiceTypeData::name(invoiceType));
+        setInitialComboBoxIndexes_(invoiceTypeStr, PaymentTypeData::name(PaymentTypeData::CASH), s.value(s.keyName(s.DEFAULT_CURRENCY)).toString());
+        setWindowTitle(invoiceTypeStr);
 
         updateInvoiceNumber();
 
-        SettingsGlobal s;
         const QString additText(s.value(s.keyName(s.ADDIT_TEXT)).toString());
         if(!additText.isEmpty())
         {
@@ -88,11 +91,8 @@ void InvoiceDialog::init_()
     dateEditDayOfPayment->setEnabled(false);
     spinBoxDiscount->setEnabled(false);
 
-    for(int i = InvoiceTypeData::VAT; i <= InvoiceTypeData::BILL; ++i)
-    {
-        comboBoxInvoiceType->addItem(InvoiceTypeData::name(i));
-        comboBoxInvoiceType->setItemData(i, InvoiceTypeData::name(i));
-    }
+    comboBoxInvoiceType->setModel(db_->modelInvoiceType());
+    comboBoxInvoiceType->setModelColumn(InvoiceTypeFields::TYPE);
 
     comboBoxCounterparties->setModel(db_->modelCounterparty());
     comboBoxCounterparties->setModelColumn(CounterpartyFields::NAME);
@@ -100,24 +100,23 @@ void InvoiceDialog::init_()
     comboBoxPayment->setModel(db_->modelPaymentType());
     comboBoxPayment->setModelColumn(PaymentTypeFields::TYPE);
     comboBoxCurrency->setModel(db_->modelCurrency());
-    comboBoxCurrency->setModelColumn(CurrencyFields::NAME);
+    comboBoxCurrency->setModelColumn(CurrencyFields::CODE);
 
     mapper_.setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
     mapper_.setItemDelegate(new QSqlRelationalDelegate(this));
     mapper_.setModel(db_->modelInvoice());
     mapper_.addMapping(lineEditInvNumber, InvoiceFields::INV_NUMBER);
     mapper_.addMapping(dateEditDateOfSell, InvoiceFields::SELLING_DATE);
-    mapper_.addMapping(comboBoxInvoiceType, InvoiceFields::TYPE_ID);
+    mapper_.addMapping(comboBoxInvoiceType, InvoiceFields::TYPE_ID, "currentIndex");
     mapper_.addMapping(comboBoxCounterparties, InvoiceFields::COUNTERPARTY_ID, "currentIndex");
     mapper_.addMapping(dateEditDateOfIssuance, InvoiceFields::ISSUANCE_DATE);
     mapper_.addMapping(dateEditDayOfPayment, InvoiceFields::PAYMENT_DATE);
     mapper_.addMapping(comboBoxPayment, InvoiceFields::PAYMENT_ID);
-    mapper_.addMapping(comboBoxCurrency, InvoiceFields::CURRENCY_ID);
+    mapper_.addMapping(comboBoxCurrency, InvoiceFields::CURRENCY_ID, "currentIndex");
     mapper_.addMapping(lineEditAdditionalText, InvoiceFields::ADDIT_TEXT);
     mapper_.addMapping(spinBoxDiscount, InvoiceFields::DISCOUNT);
 
     unsaved = false;
-
     retranslateUi_();
 }
 
@@ -752,7 +751,7 @@ bool InvoiceDialog::validateForm_()
 //void InvoiceDialog::makeInvoiceHeaderHTML(const int invoiceType)
 //{
 //    invStrList += "<html><head>";
-//    invStrList += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"; //TODO: remove mixing logic and view
+//    invStrList += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
 //    invStrList += "<meta name=\"creator\" value=\"http://www.e-linux.pl\" />";
 //    invStrList += "</head>";
 
@@ -1407,8 +1406,11 @@ QList<CommodityVisualData> InvoiceDialog::getCommoditiesVisualData_() const
  * @brief
  *
  */
-void InvoiceDialog::setInitialComboBoxIndexes_()
+void InvoiceDialog::setInitialComboBoxIndexes_(const QString &invoiceType,
+                                               const QString &paymentType,
+                                               const QString &defaultCurrency)
 {
-    comboBoxPayment->setCurrentIndex(comboBoxPayment->findText(PaymentTypeData::name(PaymentTypeData::CASH)));
-    comboBoxCurrency->setCurrentIndex(CurrencyData::PLN - 1); //TODO: i18n
+    comboBoxInvoiceType->setCurrentIndex(comboBoxInvoiceType->findText(invoiceType));
+    comboBoxPayment->setCurrentIndex(comboBoxPayment->findText(paymentType));
+    comboBoxCurrency->setCurrentIndex(comboBoxCurrency->findText(defaultCurrency));
 }

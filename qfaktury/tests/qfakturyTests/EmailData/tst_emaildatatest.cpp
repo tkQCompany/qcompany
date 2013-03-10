@@ -1,6 +1,6 @@
-#include <QtCore/QString>
 #include <QtTest/QtTest>
 
+#include "../TestsCommon.h"
 #include "Database.h"
 
 class EmailDataTest : public QObject
@@ -23,17 +23,8 @@ EmailDataTest::EmailDataTest()
 
 void EmailDataTest::initTestCase()
 {
-    QCoreApplication::setApplicationName("QFaktury");
-    QCoreApplication::setOrganizationName("www.e-linux.pl");
-    QCoreApplication::setOrganizationDomain("www.e-linux.pl");
-    QCoreApplication::setApplicationVersion(APP_VERSION);
-
-    const QString dbFilename(QString("%1-%2.db3").arg(QCoreApplication::applicationName()).arg(APP_VERSION));
-    if(QFile::exists(dbFilename))
-    {
-        QDir dir;
-        dir.remove(dbFilename);
-    }
+    TestsCommon::setAppData();
+    TestsCommon::removeDBFile();
 }
 
 void EmailDataTest::cleanupTestCase()

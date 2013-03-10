@@ -1,6 +1,6 @@
-#include <QtCore/QString>
 #include <QtTest/QtTest>
-#include <QtCore/QCoreApplication>
+
+#include "../TestsCommon.h"
 
 class CommodityListDialogTest : public QObject
 {
@@ -22,6 +22,8 @@ CommodityListDialogTest::CommodityListDialogTest()
 
 void CommodityListDialogTest::initTestCase()
 {
+    TestsCommon::setAppData();
+    TestsCommon::removeDBFile();
 }
 
 void CommodityListDialogTest::cleanupTestCase()

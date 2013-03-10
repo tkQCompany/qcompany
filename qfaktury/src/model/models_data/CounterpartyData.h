@@ -14,7 +14,7 @@ namespace CounterpartyFields
      * @brief
      *
      */
-enum Fields {ID, NAME, TYPE_ID, COUNTRY_ID, LOCATION, POSTAL_CODE, STREET, TAX_IDENT, ACCOUNT_NAME, WWW, PRIMARY_EMAIL, PRIMARY_PHONE, INV_NUM_FORMAT};
+enum Fields {ID, NAME, TYPE_ID, COUNTRY, LOCATION, POSTAL_CODE, STREET, TAX_IDENT, ACCOUNT_NAME, WWW, PRIMARY_EMAIL, PRIMARY_PHONE, INV_NUM_FORMAT};
 }
 
 
@@ -29,7 +29,7 @@ public:
         case CounterpartyFields::ID: return QObject::trUtf8("L.p.");
         case CounterpartyFields::NAME: return QObject::trUtf8("Nazwa");
         case CounterpartyFields::TYPE_ID: return QObject::trUtf8("Firma/Urząd");
-        case CounterpartyFields::COUNTRY_ID: return QObject::trUtf8("Kraj");
+        case CounterpartyFields::COUNTRY: return QObject::trUtf8("Kraj");
         case CounterpartyFields::LOCATION: return QObject::trUtf8("Miejscowość");
         case CounterpartyFields::POSTAL_CODE: return QObject::trUtf8("Kod pocztowy");
         case CounterpartyFields::STREET: return QObject::trUtf8("Ulica");
