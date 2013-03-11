@@ -101,3 +101,5 @@ MOC_DIR = moc_files
 VERSION = 0.7.5
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+
+QMAKE_CXXFLAGS += -std=c++11 -Wall

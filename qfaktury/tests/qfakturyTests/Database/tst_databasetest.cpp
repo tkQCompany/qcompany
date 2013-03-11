@@ -76,14 +76,14 @@ void DatabaseTest::testCaseCheckDBStructure()
 void DatabaseTest::testCaseCheckModelCommodity()
 {
     Database db;
-    QVERIFY(db.modelCommodity() != NULL);
+    QVERIFY(db.modelCommodity() != nullptr);
 }
 
 
 void DatabaseTest::testCaseCheckModelCommodityType()
 {
     Database db;
-    QVERIFY(db.modelCommodityType() != NULL);
+    QVERIFY(db.modelCommodityType() != nullptr);
 
 
 }
@@ -92,84 +92,84 @@ void DatabaseTest::testCaseCheckModelCommodityType()
 void DatabaseTest::testCaseCheckModelCounterparty()
 {
     Database db;
-    QVERIFY(db.modelCounterparty()!= NULL);
+    QVERIFY(db.modelCounterparty()!= nullptr);
 }
 
 
 void DatabaseTest::testCaseCheckModelCounterpartyType()
 {
     Database db;
-    QVERIFY(db.modelCounterpartyType() != NULL);
+    QVERIFY(db.modelCounterpartyType() != nullptr);
 }
 
 
 void DatabaseTest::testCaseCheckModelCountry()
 {
     Database db;
-    QVERIFY(db.modelCountry() != NULL);
+    QVERIFY(db.modelCountry() != nullptr);
 }
 
 
 void DatabaseTest::testCaseCheckModelCurrency()
 {
     Database db;
-    QVERIFY(db.modelCurrency() != NULL);
+    QVERIFY(db.modelCurrency() != nullptr);
 }
 
 
 void DatabaseTest::testCaseCheckModelEmail()
 {
     Database db;
-    QVERIFY(db.modelEmail() != NULL);
+    QVERIFY(db.modelEmail() != nullptr);
 }
 
 
 void DatabaseTest::testCaseCheckModelInvoice()
 {
     Database db;
-    QVERIFY(db.modelInvoice() != NULL);
+    QVERIFY(db.modelInvoice() != nullptr);
 }
 
 
 void DatabaseTest::testCaseCheckModelInvoiceType()
 {
     Database db;
-    QVERIFY(db.modelInvoiceType() != NULL);
+    QVERIFY(db.modelInvoiceType() != nullptr);
 }
 
 
 void DatabaseTest::testCaseCheckModelInvoiceWithCommodities()
 {
     Database db;
-    QVERIFY(db.modelInvoiceWithCommodities() != NULL);
+    QVERIFY(db.modelInvoiceWithCommodities() != nullptr);
 }
 
 
 void DatabaseTest::testCaseCheckModelPaymentType()
 {
     Database db;
-    QVERIFY(db.modelPaymentType() != NULL);
+    QVERIFY(db.modelPaymentType() != nullptr);
 }
 
 
 void DatabaseTest::testCaseCheckModelPhone()
 {
     Database db;
-    QVERIFY(db.modelPhone() != NULL);
+    QVERIFY(db.modelPhone() != nullptr);
 }
 
 
 void DatabaseTest::testCaseCheckModelUnit()
 {
     Database db;
-    QVERIFY(db.modelUnit() != NULL);
+    QVERIFY(db.modelUnit() != nullptr);
 }
 
 
 void DatabaseTest::testCaseCheckModelVat()
 {
     Database db;
-    QVERIFY(db.modelVat() != NULL);
+    QVERIFY(db.modelVat() != nullptr);
 }
 
 

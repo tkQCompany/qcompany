@@ -329,7 +329,7 @@ void InvoiceDialog::genInvoiceNumber_(const QString& invNumFormat, const QDate& 
  */
 void InvoiceDialog::tableActivated_(QTableWidgetItem * item)
 {
-    if (item != NULL && !item->text().isEmpty())
+    if (item != nullptr && !item->text().isEmpty())
     {
         pushButtonRemoveCommodity->setEnabled(true);
         pushButtonEditCommodity->setEnabled(true);
@@ -553,7 +553,7 @@ void InvoiceDialog::printInvoice()
             summaryHTML += trUtf8("forma płatności: ") + comboBoxPayment->currentText() + "<b>";
             summaryHTML += trUtf8("Zapłacono gotówką");
         }
-        else if((comboBoxPayment->currentIndex() == comboBoxPayment->count() -1) && (custPaymData != NULL))
+        else if((comboBoxPayment->currentIndex() == comboBoxPayment->count() -1) && (custPaymData != nullptr))
         {
             summaryHTML += "<span style=\"toPay\">";
             summaryHTML += QString(trUtf8("Zapłacono: ") + custPaymData->payment1 + ": "
