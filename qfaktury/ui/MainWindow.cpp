@@ -601,26 +601,29 @@ void MainWindow::delInvoice_()
  */
 void MainWindow::editCompanyInfo_()
 {
-    db_.modelCounterparty()->setFilter(QString("type_id = %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
+    db_.modelCounterparty()->setFilter(QString("`type_id` = %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
     db_.modelCounterparty()->select();
-    db_.modelCounterpartyType()->setFilter(QString("id_counterparty_type = %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
-    db_.modelCounterpartyType()->select();
+    db_.modelCounterpartyType()->setMyCompanyVisibility(true, true);
 
     CounterpartyDialog dialog(this, &db_, db_.modelCounterparty()->index(0, CounterpartyFields::ID));
     dialog.pushButtonEditTypeList->setEnabled(false);
     dialog.setWindowTitle(trUtf8("Moja firma"));
     if (dialog.exec() == QDialog::Accepted)
     {
+        const QString title("Edycja mojej firmy");
         if(!db_.modelCounterparty()->submitAll())
         {
-            QMessageBox::critical(this, trUtf8("Edycja mojej firmy"), db_.modelCounterparty()->lastError().text());
+            QMessageBox::critical(this, title, db_.modelCounterparty()->lastError().text());
+        }
+        else
+        {
+            QMessageBox::information(this, title, trUtf8("Edycja danych firmy zakończyła się sukcesem."));
         }
     }
 
-    db_.modelCounterparty()->setFilter(QString("type_id != %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
+    db_.modelCounterparty()->setFilter(QString("`type_id` != %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
     db_.modelCounterparty()->select();
-    db_.modelCounterpartyType()->setFilter(QString("id_counterparty_type != %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
-    db_.modelCounterpartyType()->select();
+    db_.modelCounterpartyType()->setMyCompanyVisibility(false);
 }
 
 

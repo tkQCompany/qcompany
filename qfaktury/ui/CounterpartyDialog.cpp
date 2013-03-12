@@ -48,7 +48,6 @@ CounterpartyDialog::~CounterpartyDialog()
  */
 void CounterpartyDialog::init()
 {
-    db_->modelCounterpartyType()->setMyCompanyVisibility(true);
     comboBoxType->setModel(db_->modelCounterpartyType());
     comboBoxType->setEditable(false);
     comboBoxType->setModelColumn(CounterpartyTypeFields::TYPE);
@@ -139,14 +138,6 @@ bool CounterpartyDialog::validateForm_(QString &missing) {
     if(comboBoxType->currentIndex() == -1)
     {
         missing = labelType->text();
-        comboBoxType->setFocus();
-        return false;
-    }
-
-    const QString myCompany(CounterpartyTypeData::name(CounterpartyTypeData::MY_COMPANY));
-    if(comboBoxType->currentText() == myCompany)
-    {
-        missing = trUtf8("%1 - własna firma nie może być użyta jako własny kontrahent").arg(labelType->text());
         comboBoxType->setFocus();
         return false;
     }
