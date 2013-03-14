@@ -3,6 +3,7 @@
 
 #include <QMessageBox>
 #include <QDataWidgetMapper>
+#include <QSortFilterProxyModel>
 
 #include "ui_CounterpartyDialog.h"
 #include "../ui/CounterpartyTypeDialog.h"
@@ -12,6 +13,7 @@
 #include "../ui/PhoneDialog.h"
 #include "../src/model/Database.h"
 #include "../src/SettingsGlobal.h"
+#include "../ui/CounterpartyTypeDelegate.h"
 
 /**
  * @brief
@@ -28,7 +30,7 @@ public:
  * @param db
  * @param id
  */
-    CounterpartyDialog(QWidget *parent, Database *db, const QModelIndex &id = QModelIndex());
+    CounterpartyDialog(QWidget *parent, Database *db, const QModelIndex &id = QModelIndex(), const bool myCompany = false);
     /**
      * @brief
      *
@@ -41,7 +43,6 @@ private slots:
      *
      */
     void editCounterpartyTypeList_();
-
     /**
      * @brief
      *
@@ -91,5 +92,7 @@ private:
     Database *db_; /**< TODO */
     const QModelIndex id_; /**< TODO */
     QDataWidgetMapper mapper_; /**< TODO */
+    QSortFilterProxyModel proxyModelCounterpartyType_;
+
 };
 #endif

@@ -603,9 +603,9 @@ void MainWindow::editCompanyInfo_()
 {
     db_.modelCounterparty()->setFilter(QString("`type_id` = %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
     db_.modelCounterparty()->select();
-    db_.modelCounterpartyType()->setMyCompanyVisibility(true, true);
+    db_.modelCounterpartyType()->setMyCompanyVisibility(true, true); //TODO: is the function necessary?
 
-    CounterpartyDialog dialog(this, &db_, db_.modelCounterparty()->index(0, CounterpartyFields::ID));
+    CounterpartyDialog dialog(this, &db_, db_.modelCounterparty()->index(0, CounterpartyFields::ID), true);
     dialog.pushButtonEditTypeList->setEnabled(false);
     dialog.setWindowTitle(trUtf8("Moja firma"));
     if (dialog.exec() == QDialog::Accepted)

@@ -233,6 +233,9 @@
        <property name="prefix">
         <string/>
        </property>
+       <property name="maximum">
+        <double>999999.989999999990687</double>
+       </property>
       </widget>
      </item>
     </layout>

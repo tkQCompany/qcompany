@@ -37,7 +37,8 @@ SOURCES +=     ui/BillDialog.cpp \
     src/model/models/ModelCurrency.cpp \
     src/model/models/ModelPaymentType.cpp \
     src/model/models/ModelInvoiceType.cpp \
-    src/model/models/ModelInvoiceWithCommodities.cpp
+    src/model/models/ModelInvoiceWithCommodities.cpp \
+    ui/CounterpartyTypeDelegate.cpp
 
 HEADERS += ui/BillDialog.h \
     ui/ChangeAmountDialog.h \
@@ -91,7 +92,8 @@ HEADERS += ui/BillDialog.h \
     src/model/models/ModelCommodityType.h \
     src/model/models/ModelCommodity.h \
     src/ConvertAmount.h \
-    src/SettingsGlobal.h
+    src/SettingsGlobal.h \
+    ui/CounterpartyTypeDelegate.h
 
 
 OBJECTS_DIR = obj

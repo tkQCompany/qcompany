@@ -2,7 +2,7 @@
 
 /** Constructor
  */
-CounterpartyDialog::CounterpartyDialog(QWidget *parent, Database *db, const QModelIndex &id) :
+CounterpartyDialog::CounterpartyDialog(QWidget *parent, Database *db, const QModelIndex &id, const bool myCompany) :
     QDialog(parent), db_(db), id_(id)
 {
     setupUi(this);
@@ -10,6 +10,12 @@ CounterpartyDialog::CounterpartyDialog(QWidget *parent, Database *db, const QMod
 
     if(id.isValid())
     {
+        if(myCompany)
+        {
+            proxyModelCounterpartyType_.setFilterRegExp(
+                        QRegExp(QString("%1").arg(proxyModelCounterpartyType_.mapToSource(proxyModelCounterpartyType_.index(CounterpartyTypeData::MY_COMPANY, CounterpartyTypeFields::ID)).row()
+                                         )));
+        }
         setWindowTitle(trUtf8("Edytuj kontrahenta"));
         comboBoxAdditionalPhones->setModel(db_->modelPhone());
         comboBoxAdditionalPhones->setModelColumn(PhoneFields::NUMBER);
@@ -48,14 +54,18 @@ CounterpartyDialog::~CounterpartyDialog()
  */
 void CounterpartyDialog::init()
 {
-    comboBoxType->setModel(db_->modelCounterpartyType());
+    proxyModelCounterpartyType_.setSourceModel(db_->modelCounterpartyType());
+    proxyModelCounterpartyType_.setFilterKeyColumn(CounterpartyTypeFields::ID);
+    proxyModelCounterpartyType_.setFilterRegExp(QRegExp(QString("[02-9]+")));
+
+    comboBoxType->setModel(&proxyModelCounterpartyType_);
     comboBoxType->setEditable(false);
     comboBoxType->setModelColumn(CounterpartyTypeFields::TYPE);
 
     comboBoxCountry->setModel(db_->modelCountry());
 
     mapper_.setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
-    mapper_.setItemDelegate(new QSqlRelationalDelegate(this));
+    mapper_.setItemDelegate(new CounterpartyTypeDelegate(this)); //was: new QSqlRelationalDelegate(this)
     mapper_.setModel(db_->modelCounterparty());
     mapper_.addMapping(lineEditName, CounterpartyFields::NAME);
     mapper_.addMapping(comboBoxType, CounterpartyFields::TYPE_ID);
