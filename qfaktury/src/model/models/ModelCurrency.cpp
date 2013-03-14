@@ -128,7 +128,10 @@ void ModelCurrency::updateDBsCurrenciesRates_()
             qDebug() << "ModelCurrency::updateDBsCurrenciesRates_(): " << q.lastError().text();
             break;
         }
-        database().commit();
+        if(database().commit())
+        {
+            emit updatingCurrenciesRatesFinished();
+        }
     }
     reply->deleteLater();
 }

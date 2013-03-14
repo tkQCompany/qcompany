@@ -85,21 +85,7 @@ private slots:
      * @brief
      *
      */
-    void vatDownBtnClick_();
-    /**
-     * @brief
-     *
-     */
-    void currencyAddBtnClick_();
-    /**
-     * @brief
-     *
-     */
-    void currencyDelBtnClick_();
-    /**
-     * @brief
-     *
-     */
+    void vatDownBtnClick_();    
     void paymUpBtnClick_();
     /**
      * @brief
@@ -134,6 +120,8 @@ private slots:
      *
      */
     void maskHelpClick_();
+    void updateCurrenciesRates_();
+    void updateCurrenciesTableView_();
     /**
      * @brief
      *

@@ -14,8 +14,6 @@ void SettingsDialog::init_()
     connect(pushButtonOK, SIGNAL(clicked()), this, SLOT(okButtonClick_()));
     connect(pushButtonUnitAdd, SIGNAL(clicked()), this, SLOT(currAddBtnClick_()));
     connect(pushButtonUnitRemove, SIGNAL(clicked()), this, SLOT(currDelBtnClick_()));
-    connect(pushButtonCurrencyAdd, SIGNAL(clicked()), this, SLOT(currencyAddBtnClick_()));
-    connect(pushButtonCurrencyRemove, SIGNAL(clicked()), this, SLOT(currencyDelBtnClick_()));
     connect(pushButtonPaymentAdd, SIGNAL(clicked()), this, SLOT(paymAddBtnClick_()));
     connect(pushButtonPaymentRemove, SIGNAL(clicked()), this, SLOT(paymDelBtnClick_()));
     connect(pushButtonPaymentDown, SIGNAL(clicked()), this, SLOT(paymDownBtnClick_()));
@@ -32,41 +30,44 @@ void SettingsDialog::init_()
     connect(pushButtonDefault, SIGNAL(clicked()), this, SLOT(setDefaultClick_()));
     connect(pushButtonMaskHelp, SIGNAL(clicked()), this, SLOT(maskHelpClick_()));
     connect(pushButtonFormatEdit, SIGNAL(clicked()), this, SLOT(editFormat_()));
+    connect(pushButtonUpdateRates, SIGNAL(clicked()), this, SLOT(updateCurrenciesRates_()));
 
-    connect( comboBoxCSS, SIGNAL( currentIndexChanged (int)), this, SLOT( applyBtnEnable_() ) );
-    connect( comboBoxLanguage, SIGNAL( currentIndexChanged (int)), this, SLOT( applyBtnEnable_() ) );
-    connect( lineEditLogo, SIGNAL(  textChanged (const QString &)), this, SLOT( applyBtnEnable_() ) );
-    connect( lineEditWorkDir, SIGNAL(  textChanged (const QString &)), this, SLOT( applyBtnEnable_() ) );
-    connect( lineEditTaxIDMask, SIGNAL(  textChanged (const QString &)), this, SLOT( applyBtnEnable_() ) );
-    connect( lineEditAccountMask, SIGNAL(  textChanged (const QString &)), this, SLOT( applyBtnEnable_() ) );
-    connect( spinBoxNumCopies, SIGNAL(  valueChanged (const QString &) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxInvEdit, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxInvSymbolEdit, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxProductNameEdit, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( textEditAdditionalText,  SIGNAL( textChanged() ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxName, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxLocation, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxAddress, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxAccountName, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxTaxID, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxPhone, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxEmail, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxWWW, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(comboBoxCSS, SIGNAL( currentIndexChanged (int)), this, SLOT( applyBtnEnable_() ) );
+    connect(comboBoxLanguage, SIGNAL( currentIndexChanged (int)), this, SLOT( applyBtnEnable_() ) );
+    connect(lineEditLogo, SIGNAL(  textChanged (const QString &)), this, SLOT( applyBtnEnable_() ) );
+    connect(lineEditWorkDir, SIGNAL(  textChanged (const QString &)), this, SLOT( applyBtnEnable_() ) );
+    connect(lineEditTaxIDMask, SIGNAL(  textChanged (const QString &)), this, SLOT( applyBtnEnable_() ) );
+    connect(lineEditAccountMask, SIGNAL(  textChanged (const QString &)), this, SLOT( applyBtnEnable_() ) );
+    connect(spinBoxNumCopies, SIGNAL(  valueChanged (const QString &) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxInvEdit, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxInvSymbolEdit, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxProductNameEdit, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(textEditAdditionalText,  SIGNAL( textChanged() ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxName, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxLocation, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxAddress, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxAccountName, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxTaxID, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxPhone, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxEmail, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxWWW, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
 
-    connect( checkBoxFieldID, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxFieldName, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxFieldPostalCode, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxFieldPKWIU, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxFieldAmount, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxFieldUnit, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxFieldUnitPrice, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxFieldNetVal, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxFieldDiscount, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxFieldDiscountVal, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxFieldNetAfterDiscount, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxFieldVAT, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxFieldVATVal, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
-    connect( checkBoxFieldGrossVal, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxFieldID, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxFieldName, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxFieldPostalCode, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxFieldPKWIU, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxFieldAmount, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxFieldUnit, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxFieldUnitPrice, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxFieldNetVal, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxFieldDiscount, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxFieldDiscountVal, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxFieldNetAfterDiscount, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxFieldVAT, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxFieldVATVal, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+    connect(checkBoxFieldGrossVal, SIGNAL( stateChanged(int) ), this, SLOT( applyBtnEnable_() ) );
+
+    connect(db_->modelCurrency(), SIGNAL(updatingCurrenciesRatesFinished()), this, SLOT(updateCurrenciesTableView_()));
 
     comboBoxLanguage->clear();
     comboBoxLanguage->insertItems(0, getTranslations_());
@@ -78,6 +79,8 @@ void SettingsDialog::init_()
 
     pushButtonApply->setEnabled(false);
 
+    tableViewCurrency->setModel(db_->modelCurrency());
+    tableViewCurrency->hideColumn(CurrencyFields::ID_CURRENCY);
 }
 
 /** Slot - maskHelpClick
@@ -130,6 +133,20 @@ void SettingsDialog::showExamples_()
 {
     InvoiceNumberFormatExamplesDialog dialog(this, db_, lineEditFormat->text());
     dialog.exec();
+}
+
+
+void SettingsDialog::updateCurrenciesRates_()
+{
+    db_->modelCurrency()->updateCurrenciesRates();
+    dateEditLastUpdate->setDate(QDate::currentDate()); //TODO: improve the code
+}
+
+
+void SettingsDialog::updateCurrenciesTableView_()
+{
+    db_->modelCurrency()->select();
+    QMessageBox::information(this, trUtf8("Status aktualizacji"), trUtf8("Aktualizacja kursów średnich walut NBP zakończona sukcesem."));
 }
 
 /** Slot used to change location of invoiced
@@ -198,20 +215,6 @@ void SettingsDialog::vatAddBtnClick_()
 void SettingsDialog::vatDelBtnClick_()
 {
     delFromListWidget_(listWidgetVAT);
-}
-
-/** Slot add currency
- */
-void SettingsDialog::currencyAddBtnClick_()
-{
-    addToListWidget_(listWidgetCurrency, lineEditCurrency);
-}
-
-/** Slot del currency
- */
-void SettingsDialog::currencyDelBtnClick_()
-{
-    delFromListWidget_(listWidgetCurrency);
 }
 
 /** Slot delete payment type click
@@ -345,7 +348,6 @@ void SettingsDialog::readSettings_()
     listWidgetUnit->addItems(s.value(s.keyName(s.UNITS)).toString().split("|"));
     listWidgetVAT->clear();
     listWidgetVAT->addItems(s.value(s.keyName(s.VAT_RATES)).toString().split("|"));
-    listWidgetCurrency->clear();
     //listWidgetCurrency->addItems(s.value(s.keyName(s.CURRENCIES)).toString().split("|"));
     listWidgetPayment->clear();
     listWidgetPayment->addItems(s.value(s.keyName(s.PAYMENT_TYPE)).toString().split("|"));

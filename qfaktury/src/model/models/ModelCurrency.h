@@ -33,6 +33,9 @@ public:
 
     void updateCurrenciesRates();
 
+signals:
+    void updatingCurrenciesRatesFinished();
+
 private slots:
     void netReplyFinished_();
     void updateDBsCurrenciesRates_();
