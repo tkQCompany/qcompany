@@ -12,8 +12,8 @@ void SettingsDialog::init_()
     connect(pushButtonApply, SIGNAL(clicked()), this, SLOT(apply_()));
     connect(pushButtonCancel, SIGNAL(clicked()), this, SLOT(close()));
     connect(pushButtonOK, SIGNAL(clicked()), this, SLOT(okButtonClick_()));
-    connect(pushButtonUnitAdd, SIGNAL(clicked()), this, SLOT(currAddBtnClick_()));
-    connect(pushButtonUnitRemove, SIGNAL(clicked()), this, SLOT(currDelBtnClick_()));
+    connect(pushButtonUnitAdd, SIGNAL(clicked()), this, SLOT(unitAddBtnClick_()));
+    connect(pushButtonUnitRemove, SIGNAL(clicked()), this, SLOT(unitDelBtnClick_()));
     connect(pushButtonPaymentAdd, SIGNAL(clicked()), this, SLOT(paymAddBtnClick_()));
     connect(pushButtonPaymentRemove, SIGNAL(clicked()), this, SLOT(paymDelBtnClick_()));
     connect(pushButtonPaymentDown, SIGNAL(clicked()), this, SLOT(paymDownBtnClick_()));
@@ -81,6 +81,9 @@ void SettingsDialog::init_()
 
     tableViewCurrency->setModel(db_->modelCurrency());
     tableViewCurrency->hideColumn(CurrencyFields::ID_CURRENCY);
+
+    listViewUnit->setModel(db_->modelUnit());
+    listViewUnit->setModelColumn(UnitFields::NAME);
 }
 
 /** Slot - maskHelpClick
@@ -173,20 +176,44 @@ void SettingsDialog::addLogoBtnClick_()
 }
 
 
-
-/** Slot add currency
- */
-void SettingsDialog::currAddBtnClick_()
+void SettingsDialog::unitAddBtnClick_()
 {
-    addToListWidget_(listWidgetUnit, lineEditUnit);
+    const QString title(trUtf8("Dodawanie jednostki"));
+    if(lineEditUnit->text().isEmpty())
+    {
+        QMessageBox::warning(this, title, trUtf8("Wpisz jednostkę, by ją dodać"));
+    }
+    else
+    {
+        if(db_->modelUnit()->addUnit(lineEditUnit->text()))
+        {
+            QMessageBox::information(this, title,
+                                     trUtf8("Dodawanie jednostki '%1' zakończyło się sukcesem")
+                                     .arg(lineEditUnit->text()));
+        }
+    }
 }
 
 
-/** Slot del currency
- */
-void SettingsDialog::currDelBtnClick_()
+void SettingsDialog::unitDelBtnClick_()
 {
-    delFromListWidget_(listWidgetUnit);
+    const QString title(trUtf8("Usuwanie jednostki"));
+    const QModelIndexList choice(listViewUnit->selectionModel()->selectedIndexes());
+    if(choice.isEmpty())
+    {
+        QMessageBox::information(this, title,
+                                 trUtf8("Wybierz jednostkę do skasowania"));
+    }
+    else
+    {
+        const QString unit(choice.at(0).data().toString());
+        if(db_->modelUnit()->deleteUnit(unit))
+        {
+            QMessageBox::information(this, title,
+                                     trUtf8("Usuwanie jednostki '%1' zakończyło się sukcesem")
+                                     .arg(unit));
+        }
+    }
 }
 
 /** Slot korekty reason add
@@ -299,7 +326,7 @@ void SettingsDialog::saveSettings_()
 
     s.setValue(s.keyName(s.FIRST_RUN), false);
     s.setValue(s.keyName(s.LOGO), lineEditLogo->text());
-    s.setValue(s.keyName(s.UNITS), getItemsToString_(listWidgetUnit));
+    //s.setValue(s.keyName(s.UNITS), getItemsToString_(listWidgetUnit));
     s.setValue(s.keyName(s.VAT_RATES), getItemsToString_(listWidgetVAT).remove("%"));
     //s.setValue(s.keyName(s.CURRENCIES), getItemsToString_(listWidgetCurrency));
     s.setValue(s.keyName(s.CORRECTION_REASON), getItemsToString_(listWidgetCorrectionReason));
@@ -344,8 +371,8 @@ void SettingsDialog::readSettings_()
     lineEditAccountMask->setText(s.value(s.keyName(s.ACCOUNT_MASK)).toString());
     lineEditFormat->setText(s.value(s.keyName(s.DEFAULT_INV_NUM_FORMAT)).toString());
 
-    listWidgetUnit->clear();
-    listWidgetUnit->addItems(s.value(s.keyName(s.UNITS)).toString().split("|"));
+    //listWidgetUnit->clear();
+    //listWidgetUnit->addItems(s.value(s.keyName(s.UNITS)).toString().split("|"));
     listWidgetVAT->clear();
     listWidgetVAT->addItems(s.value(s.keyName(s.VAT_RATES)).toString().split("|"));
     //listWidgetCurrency->addItems(s.value(s.keyName(s.CURRENCIES)).toString().split("|"));
@@ -455,7 +482,7 @@ void SettingsDialog::editFormat_()
 }
 
 
-void SettingsDialog::addToListWidget_(QListWidget *listTo, QLineEdit *lineEditFrom)
+bool SettingsDialog::addToListWidget_(QListWidget *listTo, QLineEdit *lineEditFrom)
 {
     if (!lineEditFrom->text().isEmpty())
     {
@@ -465,9 +492,10 @@ void SettingsDialog::addToListWidget_(QListWidget *listTo, QLineEdit *lineEditFr
     else
     {
         QMessageBox::information(this, trUtf8("Uwaga!!"),trUtf8("Nie można dodać. Pole jest puste."), QMessageBox::Ok);
-        return;
+        return false;
     }
     pushButtonApply->setEnabled(true);
+    return true;
 }
 
 

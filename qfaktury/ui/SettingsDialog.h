@@ -50,12 +50,12 @@ private slots:
      * @brief
      *
      */
-    void currAddBtnClick_();
+    void unitAddBtnClick_();
     /**
      * @brief
      *
      */
-    void currDelBtnClick_();
+    void unitDelBtnClick_();
     /**
      * @brief
      *
@@ -170,7 +170,7 @@ private:
      */
     QString getItemsToString_(const QListWidget *);
 
-    void addToListWidget_(QListWidget *listTo, QLineEdit *lineEditFrom);
+    bool addToListWidget_(QListWidget *listTo, QLineEdit *lineEditFrom);
     void delFromListWidget_(QListWidget *list);
     void moveUpElement_(QListWidget *list);
     void moveDownElement_(QListWidget *list);
