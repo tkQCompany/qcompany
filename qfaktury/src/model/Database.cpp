@@ -13,14 +13,18 @@ Database::Database(QObject *parent): QObject(parent)
 
     db_.exec("PRAGMA foreign_keys = ON");
 
-    if(!createTablesIfNotExist_())
-    {                    
-        exit(EXIT_FAILURE);
-    }
-
-    if(!insertDataIfNotInserted_())
+    SettingsGlobal s;
+    if(s.value(s.keyName(s.FIRST_RUN), true).toBool())
     {
-        exit(EXIT_FAILURE);
+        if(!createTablesIfNotExist_())
+        {
+            exit(EXIT_FAILURE);
+        }
+
+        if(!insertDataIfNotInserted_())
+        {
+            exit(EXIT_FAILURE);
+        }
     }
 
     initModels_();
@@ -141,16 +145,19 @@ ModelVat* Database::modelVat() const
 
 bool Database::createTablesIfNotExist_()
 {
-    if(!sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
+    bool ret = true;
+    db_.transaction();
+
+    if(ret && !sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
                            "`id_counterparty_type` INTEGER PRIMARY KEY AUTOINCREMENT ,"
                            "`type` VARCHAR(45) NOT NULL UNIQUE)"
                            ).arg("counterparty_type"), __LINE__))
     {
-        return false;
+        ret = false;
     }
 
 
-    if(!sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
+    if(ret && !sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
                            "`id_counterparty` INTEGER PRIMARY KEY AUTOINCREMENT,"
                            "`name` VARCHAR(45) NOT NULL UNIQUE,"
                            "`type_id` INTEGER NOT NULL ,"
@@ -170,10 +177,10 @@ bool Database::createTablesIfNotExist_()
                              "ON DELETE RESTRICT "
                            "ON UPDATE CASCADE)").arg("counterparty"), __LINE__))
     {
-        return false;
+        ret = false;
     }
 
-    if(!sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
+    if(ret && !sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
                            "`id_phone` INTEGER PRIMARY KEY AUTOINCREMENT,"
                            "`counterparty_id` INTEGER NOT NULL,"
                            "`number` VARCHAR(30) NOT NULL UNIQUE,"
@@ -184,10 +191,10 @@ bool Database::createTablesIfNotExist_()
                            "ON UPDATE CASCADE)"
                        ).arg("additional_phone"), __LINE__))
     {
-        return false;
+        ret = false;
     }
 
-    if(!sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
+    if(ret && !sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
                "`id_email` INTEGER PRIMARY KEY AUTOINCREMENT,"
                "`counterparty_id` INTEGER NOT NULL,"
                "`email` VARCHAR(45) NOT NULL UNIQUE, "
@@ -198,31 +205,31 @@ bool Database::createTablesIfNotExist_()
                "ON UPDATE CASCADE)"
                ).arg("additional_email"), __LINE__))
     {
-        return false;
+        ret = false;
     }
 
 
 
-    if(!sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
+    if(ret && !sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
                "id_unit INTEGER PRIMARY KEY AUTOINCREMENT ,"
                "name VARCHAR(15) NOT NULL UNIQUE)"
                            ).arg("unit"), __LINE__))
     {
-        return false;
+        ret = false;
     }
 
 
-    if(!sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
+    if(ret && !sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
                "id_commodity_type INTEGER PRIMARY KEY AUTOINCREMENT ,"
                "type VARCHAR(45) NOT NULL UNIQUE)"
                ).arg("commodity_type"), __LINE__))
     {
-        return false;
+        ret = false;
     }
 
 
 
-    if(!sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
+    if(ret && !sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
                            "id_commodity INTEGER PRIMARY KEY AUTOINCREMENT ,"
                            "name VARCHAR(100) NOT NULL UNIQUE,"
                            "abbreviation VARCHAR(45) NOT NULL ,"
@@ -247,40 +254,40 @@ bool Database::createTablesIfNotExist_()
                              "ON UPDATE CASCADE)"
                            ).arg("commodity"), __LINE__))
     {
-        return false;
+        ret = false;
     }
 
 
-    if(!sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
+    if(ret && !sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
                            "`id_currency` INTEGER PRIMARY KEY AUTOINCREMENT,"
                            "`code` VARCHAR(5) NOT NULL UNIQUE,"
                             "`code_unit` INTEGER NOT NULL DEFAULT 1,"
                            "`exchange_rate_pln` DECIMAL(10,16) NOT NULL)"
                            ).arg("currency"), __LINE__))
     {
-        return false;
+        ret = false;
     }
 
 
-    if(!sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
+    if(ret && !sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
                            "`id_invoice_type` INTEGER PRIMARY KEY NOT NULL ,"
                            "`type` VARCHAR(20) NOT NULL UNIQUE)")
                    .arg("invoice_type"), __LINE__))
     {
-        return false;
+        ret = false;
     }
 
 
-    if(!sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
+    if(ret && !sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
                            "`id_payment_type` INTEGER PRIMARY KEY NOT NULL ,"
                            "`type` VARCHAR(45) NOT NULL UNIQUE)")
                    .arg("payment_type"), __LINE__))
     {
-        return false;
+        ret = false;
     }
 
 
-    if(!sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
+    if(ret && !sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
                            "`id_invoice` INTEGER PRIMARY KEY AUTOINCREMENT ,"
                            "`inv_number` VARCHAR(100) NOT NULL UNIQUE,"
                            "`selling_date` DATE NOT NULL ,"
@@ -314,10 +321,10 @@ bool Database::createTablesIfNotExist_()
                              "ON UPDATE CASCADE)")
                    .arg("invoice"), __LINE__))
     {
-        return false;
+        ret = false;
     }
 
-    if(!sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
+    if(ret && !sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
                            "`id` INTEGER PRIMARY KEY NOT NULL ,"
                            "`invoice_id` INTEGER NOT NULL,"
                            "`commodity_id` INTEGER NOT NULL,"
@@ -336,10 +343,19 @@ bool Database::createTablesIfNotExist_()
                              "ON UPDATE CASCADE)"
                            ).arg("table_invoice_commodity"), __LINE__))
     {
-        return false;
+        ret = false;
     }
 
-    return true;
+    if(ret)
+    {
+        db_.commit();
+    }
+    else
+    {
+        db_.rollback();
+    }
+
+    return ret;
 }
 
 
@@ -501,6 +517,7 @@ bool Database::insertDataIfNotInserted_()
         if(!query.isActive())
         {
             QMessageBox::critical(0, trUtf8("Błąd SQL SELECT"), QString("Detected at line %1: %2").arg(__LINE__).arg(query.lastError().text()));
+            db_.rollback();
             return false;
         }
     }
