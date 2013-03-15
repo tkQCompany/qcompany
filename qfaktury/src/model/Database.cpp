@@ -262,7 +262,8 @@ bool Database::createTablesIfNotExist_()
                            "`id_currency` INTEGER PRIMARY KEY AUTOINCREMENT,"
                            "`code` VARCHAR(5) NOT NULL UNIQUE,"
                             "`code_unit` INTEGER NOT NULL DEFAULT 1,"
-                           "`exchange_rate_pln` DECIMAL(10,16) NOT NULL)"
+                           "`exchange_rate_pln` DECIMAL(10,16) NOT NULL,"
+                           "`localized_name` VARCHAR(50) NOT NULL DEFAULT '')"
                            ).arg("currency"), __LINE__))
     {
         ret = false;
@@ -509,11 +510,12 @@ bool Database::insertDataIfNotInserted_()
     db_.transaction();
     for(int i = CurrencyData::AUD; i <= CurrencyData::IDR; ++i)
     {
-        query.exec(QString("INSERT OR IGNORE INTO '%1'(`code`, `code_unit`, `exchange_rate_pln`) VALUES('%2', %3, %4)")
+        query.exec(QString("INSERT OR IGNORE INTO '%1'(`code`, `code_unit`, `exchange_rate_pln`, `localized_name`) VALUES('%2', %3, %4, '%5')")
                    .arg("currency")
                    .arg(CurrencyData::codeName(i))
-                   .arg(CurrencyData::codeUnit(i))
-                   .arg(0));
+                   .arg(1)
+                   .arg(1)
+                   .arg(CurrencyData::name(i)));
         if(!query.isActive())
         {
             QMessageBox::critical(0, trUtf8("Błąd SQL SELECT"), QString("Detected at line %1: %2").arg(__LINE__).arg(query.lastError().text()));

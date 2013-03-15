@@ -20,10 +20,9 @@ enum Fields {ID_UNIT, NAME};
 struct UnitData
 {
     /**
-     * @brief
+     * @brief Default values when the app is launched for the first time. Later they can be useless.
      *
      */
-    //TODO: remove the bug when we can add unit list and we have this fixed enum at the same time
     enum Names {UNIT, KG, G, M, KM, HOUR, PACKAGE};
 
     /**

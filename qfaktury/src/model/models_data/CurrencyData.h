@@ -70,59 +70,6 @@ static QString codeName(const int currency_code)
 }
 
 
-
-static int codeUnit(const int currency_code)
-{
-    switch(currency_code)
-    {
-    case AUD:
-    case BGN:
-    case BRL:
-    case CAD:
-    case CHF:
-    case CNY:
-    case CZK:
-    case DKK:
-    case EUR:
-    case GBP:
-    case HKD:
-    case HRK:
-    case ILS:
-    case LTL:
-    case LVL:
-    case MXN:
-    case MYR:
-    case NOK:
-    case NZD:
-    case PHP:
-    case PLN:
-    case RON:
-    case RUB:
-    case SEK:
-    case SGD:
-    case THB:
-    case TRY:
-    case UAH:
-    case USD:
-    case XDR:
-    case ZAR:
-        return 1;
-    case CLP:
-    case HUF:
-    case INR:
-    case ISK:
-    case JPY:
-    case KRW:
-        return 100;
-    case IDR:
-        return 10000;
-    default:
-        qDebug() << "Bad currency_code in CurrencyData::codeUnit(): " << currency_code;
-    }
-    return 1;
-}
-
-
 static QString name(const int currency_code)
 {
     switch(currency_code)

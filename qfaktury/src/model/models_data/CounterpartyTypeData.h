@@ -18,7 +18,7 @@ namespace CounterpartyTypeFields
 struct CounterpartyTypeData
 {
     /**
-     * @brief
+     * @brief Default values for the first start of the application. Later these values can change with the exception for MY_COMPANY.
      *
      */
     enum CounterpartyType {MY_COMPANY, COMPANY, OFFICE};
