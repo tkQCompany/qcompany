@@ -6,7 +6,7 @@ ModelCounterpartyType::ModelCounterpartyType(QObject *parent) :
     setTable("counterparty_type");
 }
 
-void ModelCounterpartyType::setMyCompanyVisibility(const bool yes,
+void ModelCounterpartyType::setMyCompanyVisible(const bool yes,
                                                    const bool onlyMyCompany)
 {
     if(yes)

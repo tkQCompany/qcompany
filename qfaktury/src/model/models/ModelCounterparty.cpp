@@ -17,3 +17,17 @@ QVariant ModelCounterparty::headerData(int section, Qt::Orientation orientation,
 
     return CounterpartyData::header(section);
 }
+
+
+void ModelCounterparty::setOnlyMyCompanyVisible(const bool yes)
+{
+    if(yes)
+    {
+        setFilter(QString("`type_id` = %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
+    }
+    else
+    {
+        setFilter(QString("`type_id` != %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
+    }
+    select();
+}

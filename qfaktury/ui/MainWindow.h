@@ -44,7 +44,7 @@ private slots:
     void editCounterparty_();
     void editInvoice_();
     void delInvoice_();
-    void editCompanyInfo_();
+    void editMyCompanyInfo_();
     void editSettings_();
     void newInvoice_();
     void newProFormaInvoice_();

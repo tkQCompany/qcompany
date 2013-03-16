@@ -6,7 +6,7 @@ CounterpartyTypeDialog::CounterpartyTypeDialog(QWidget *parent, Database *db) :
     ui(new Ui::CounterpartyTypeDialog), db_(db)
 {
     ui->setupUi(this);
-    db_->modelCounterpartyType()->setMyCompanyVisibility(false);
+    db_->modelCounterpartyType()->setMyCompanyVisible(false);
     ui->listView->setModel(db_->modelCounterpartyType());
     ui->listView->setModelColumn(CounterpartyTypeFields::TYPE);
 

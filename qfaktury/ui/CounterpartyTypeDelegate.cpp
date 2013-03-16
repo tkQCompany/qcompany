@@ -14,7 +14,8 @@ void CounterpartyTypeDelegate::setModelData(QWidget *editor,
     QComboBox *comboBox = dynamic_cast<QComboBox*>(editor);
     if(comboBox && (comboBox->objectName().compare("comboBoxType") == 0) )
     {
-        model->setData(index, index.row()+2, Qt::EditRole); //+2 - skips my company and adds 1 because SQL starts from 1 TODO: maybe better code is possible?
+        const int myCompany = ( (comboBox->count() > 1) ? 1 : 0) + 1;//skips my company and adds 1 because SQL starts from 1
+        model->setData(index, comboBox->currentIndex() + myCompany, Qt::EditRole); //TODO: make sure it won't be possible to have only My_COMPANY in the combobox
         return;
     }
     QSqlRelationalDelegate::setModelData(editor, model, index);

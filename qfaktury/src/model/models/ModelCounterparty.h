@@ -5,6 +5,7 @@
 #include <QDebug>
 
 #include "../models_data/CounterpartyData.h"
+#include "../models_data/CounterpartyTypeData.h"
 
 /**
  * @brief
@@ -30,7 +31,7 @@ public:
      */
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
-    CounterpartyData myCompany() const;
+    void setOnlyMyCompanyVisible(const bool yes);
 };
 
 #endif

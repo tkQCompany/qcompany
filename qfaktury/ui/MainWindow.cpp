@@ -27,7 +27,7 @@ void MainWindow::init_()
     if (firstRun_())
     {
         s.resetSettings();
-        editCompanyInfo_();
+        editMyCompanyInfo_();
     }
     else
     {
@@ -60,7 +60,7 @@ void MainWindow::init_()
     // connect slots
     connect(actionHelp_BugReport, SIGNAL (activated ()), this, SLOT(reportBug_()));
     connect(toolButtonApply, SIGNAL (clicked()), this, SLOT(reReadInvHistory_()));
-    connect(actionProgram_CompanyInfo, SIGNAL(activated()), this, SLOT(editCompanyInfo_()));
+    connect(actionProgram_CompanyInfo, SIGNAL(activated()), this, SLOT(editMyCompanyInfo_()));
     connect(actionProgram_Exit, SIGNAL(activated()), this, SLOT(close()));
     connect(actionCounterparties_Add, SIGNAL(activated()), this, SLOT(addCounterparty_()));
     connect(actionCounterparties_Remove, SIGNAL(activated()), this, SLOT(delCounterparty_()));
@@ -599,11 +599,10 @@ void MainWindow::delInvoice_()
  * @brief
  *
  */
-void MainWindow::editCompanyInfo_()
+void MainWindow::editMyCompanyInfo_()
 {
-    db_.modelCounterparty()->setFilter(QString("`type_id` = %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
-    db_.modelCounterparty()->select();
-    db_.modelCounterpartyType()->setMyCompanyVisibility(true, true); //TODO: is the function necessary?
+    db_.modelCounterparty()->setOnlyMyCompanyVisible(true);
+    db_.modelCounterpartyType()->setMyCompanyVisible(true, true);
 
     CounterpartyDialog dialog(this, &db_, db_.modelCounterparty()->index(0, CounterpartyFields::ID), true);
     dialog.pushButtonEditTypeList->setEnabled(false);
@@ -613,7 +612,7 @@ void MainWindow::editCompanyInfo_()
         const QString title("Edycja mojej firmy");
         if(!db_.modelCounterparty()->submitAll())
         {
-            QMessageBox::critical(this, title, db_.modelCounterparty()->lastError().text());
+            QMessageBox::warning(this, title, db_.modelCounterparty()->lastError().text());
         }
         else
         {
@@ -621,9 +620,8 @@ void MainWindow::editCompanyInfo_()
         }
     }
 
-    db_.modelCounterparty()->setFilter(QString("`type_id` != %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
-    db_.modelCounterparty()->select();
-    db_.modelCounterpartyType()->setMyCompanyVisibility(false);
+    db_.modelCounterparty()->setOnlyMyCompanyVisible(false);
+    db_.modelCounterpartyType()->setMyCompanyVisible(false);
 }
 
 

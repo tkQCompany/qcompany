@@ -19,7 +19,7 @@ public:
      * @param parent
      */
     explicit ModelCounterpartyType(QObject *parent);
-    void setMyCompanyVisibility(const bool yes, const bool onlyMyCompany = false);
+    void setMyCompanyVisible(const bool yes, const bool onlyMyCompany = false);
 };
 
 #endif // MODELCOUNTERPARTYTYPE_H

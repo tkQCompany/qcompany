@@ -13,8 +13,7 @@ CounterpartyDialog::CounterpartyDialog(QWidget *parent, Database *db, const QMod
         if(myCompany)
         {
             proxyModelCounterpartyType_.setFilterRegExp(
-                        QRegExp(QString("%1").arg(proxyModelCounterpartyType_.mapToSource(proxyModelCounterpartyType_.index(CounterpartyTypeData::MY_COMPANY, CounterpartyTypeFields::ID)).row()
-                                         )));
+                        QRegExp(QString("%1").arg(CounterpartyTypeData::MY_COMPANY + 1)));
         }
         setWindowTitle(trUtf8("Edytuj kontrahenta"));
         comboBoxAdditionalPhones->setModel(db_->modelPhone());
@@ -65,7 +64,7 @@ void CounterpartyDialog::init()
     comboBoxCountry->setModel(db_->modelCountry());
 
     mapper_.setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
-    mapper_.setItemDelegate(new CounterpartyTypeDelegate(this)); //was: new QSqlRelationalDelegate(this)
+    mapper_.setItemDelegate(new CounterpartyTypeDelegate(this));
     mapper_.setModel(db_->modelCounterparty());
     mapper_.addMapping(lineEditName, CounterpartyFields::NAME);
     mapper_.addMapping(comboBoxType, CounterpartyFields::TYPE_ID);
@@ -184,7 +183,7 @@ QString CounterpartyDialog::isEmpty_(const QString &in)
 void CounterpartyDialog::editCounterpartyTypeList_()
 {
     CounterpartyTypeDialog dialog(this, db_);
-    db_->modelCounterpartyType()->setMyCompanyVisibility(false);
+    db_->modelCounterpartyType()->setMyCompanyVisible(false);
     if(dialog.exec() == QDialog::Accepted)
     {
         if(!db_->modelCounterpartyType()->submitAll())
@@ -196,7 +195,7 @@ void CounterpartyDialog::editCounterpartyTypeList_()
             QMessageBox::warning(this, trUtf8("Lista typów kontrahentów"), msg);
         }
     }
-    db_->modelCounterpartyType()->setMyCompanyVisibility(true);
+    db_->modelCounterpartyType()->setMyCompanyVisible(true);
 }
 
 
