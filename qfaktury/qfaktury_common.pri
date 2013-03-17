@@ -95,10 +95,6 @@ HEADERS += ui/BillDialog.h \
     src/SettingsGlobal.h \
     ui/CounterpartyTypeDelegate.h
 
-
-OBJECTS_DIR = obj
-MOC_DIR = moc_files
-
 # The application version
 VERSION = 0.7.5
 # Define the preprocessor macro to get the application version in our application.

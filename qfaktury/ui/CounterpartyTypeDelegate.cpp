@@ -15,7 +15,7 @@ void CounterpartyTypeDelegate::setModelData(QWidget *editor,
     if(comboBox && (comboBox->objectName().compare("comboBoxType") == 0) && (comboBox->count() > 0))
     {
         const int myCompany = ( (comboBox->count() > 1) ? 1 : 0) + 1;//skips my company and adds 1 because SQL starts from 1
-        model->setData(index, comboBox->currentIndex() + myCompany, Qt::EditRole); //TODO: make sure it won't be possible to have only My_COMPANY in the combobox
+        model->setData(index, comboBox->currentIndex() + myCompany, Qt::EditRole);
     }
     else
     {

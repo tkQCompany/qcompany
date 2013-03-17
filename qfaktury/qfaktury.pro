@@ -51,6 +51,9 @@ QT += gui
 
 UI_DIR = ./ui
 
+OBJECTS_DIR = obj
+MOC_DIR = moc_files
+
 OTHER_FILES += \
     doc/Doxyfile \
     templates/template.html \

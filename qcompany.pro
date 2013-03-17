@@ -1,8 +1,9 @@
 TEMPLATE = subdirs
 
-SUBDIRS += qfaktury \
-    qfaktury/tests/qfakturyTests \
-    qdecimal
+SUBDIRS += qdecimal \
+    qfaktury \
+    qfaktury/tests/qfakturyTests
+
 
 TRANSLATIONS += qfaktury/translations/qcompany_de.ts \
                  qfaktury/translations/qcompany_en.ts

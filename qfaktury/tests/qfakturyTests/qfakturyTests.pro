@@ -29,4 +29,4 @@ SUBDIRS += \
     UnitData \
     SettingsDialog
 
-include(qfakturyTestsCommon.pri)
+CONFIG += ordered

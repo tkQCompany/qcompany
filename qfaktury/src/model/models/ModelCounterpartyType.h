@@ -2,6 +2,8 @@
 #define MODELCOUNTERPARTYTYPE_H
 
 #include <QSqlTableModel>
+#include <QSqlQuery>
+#include <QSqlError>
 
 #include "../models_data/CounterpartyTypeData.h"
 
@@ -19,7 +21,12 @@ public:
      * @param parent
      */
     explicit ModelCounterpartyType(QObject *parent);
+    bool addType(const QString &type);
+    bool delType(const QString &type);
     void setMyCompanyVisible(const bool yes, const bool onlyMyCompany = false);
+
+private:
+    bool addDelType_(const QString &type, const bool addType);
 };
 
 #endif // MODELCOUNTERPARTYTYPE_H

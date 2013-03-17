@@ -30,10 +30,15 @@ public:
      *
      */
     ~CounterpartyTypeDialog();
+
+private slots:
+    bool addType_();
+    bool delType_();
     
 private:
     Ui::CounterpartyTypeDialog *ui; /**< TODO */
     Database *db_; /**< TODO */
+    QAction *actionAddType_, *actionDelType_;
 };
 
 #endif // COUNTERPARTYTYPEDIALOG_H
