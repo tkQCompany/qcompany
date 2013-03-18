@@ -466,7 +466,7 @@ void InvoiceDialog::printInvoice()
         invoiceHTMLTemplate = stream.readAll();
         file.close();
 
-        file.setFileName(s.getTemplate() + "style.css");
+        file.setFileName(s.templateDir() + "style.css");
         if(file.open(QIODevice::ReadOnly))
         {
             stream.setDevice(&file);
@@ -558,17 +558,17 @@ void InvoiceDialog::printInvoice()
             summaryHTML += "<span style=\"toPay\">";
             summaryHTML += QString(trUtf8("Zapłacono: ") + custPaymData->payment1 + ": "
                                   +  s.numberToString(custPaymData->amount1) + " " + comboBoxCurrency->currentText() + " "
-                                  + custPaymData->date1.toString(s.getDateFormat()) + "<br>");
+                                  + custPaymData->date1.toString(s.dateFormatExternal()) + "<br>");
             summaryHTML += QString(trUtf8("Zaległości: ") + custPaymData->payment2 + ": "
                                   +  s.numberToString(custPaymData->amount2) + " " + comboBoxCurrency->currentText() + " "
-                                  + custPaymData->date2.toString(s.getDateFormat()));
+                                  + custPaymData->date2.toString(s.dateFormatExternal()));
             summaryHTML += "</span>";
         }
         else
         {
             summaryHTML += trUtf8("forma płatności: ") + comboBoxPayment->currentText() + "<b>";
             summaryHTML += "<span style=\"payDate\">";
-            summaryHTML += trUtf8("termin płatności: ") + dateEditDayOfPayment->date().toString(s.getDateFormat());
+            summaryHTML += trUtf8("termin płatności: ") + dateEditDayOfPayment->date().toString(s.dateFormatExternal());
             summaryHTML += "</span></b>";
         }
 
@@ -601,8 +601,8 @@ void InvoiceDialog::printInvoice()
                                   .arg(stampStr)
                                   .arg(comboBoxInvoiceType->currentText())
                                   .arg(trUtf8("Nr: %1").arg(lineEditInvNumber->text()))
-                                  .arg(trUtf8("Data wystawienia: %1").arg(dateEditDateOfIssuance->date().toString(s.getDateFormat())))
-                                  .arg(trUtf8("Data sprzedaży: %1").arg(dateEditDateOfSell->date().toString(s.getDateFormat())))
+                                  .arg(trUtf8("Data wystawienia: %1").arg(dateEditDateOfIssuance->date().toString(s.dateFormatExternal())))
+                                  .arg(trUtf8("Data sprzedaży: %1").arg(dateEditDateOfSell->date().toString(s.dateFormatExternal())))
                                   .arg(trUtf8("ORYGINAŁ"))
                                   .arg(sellerHTML)
                                   .arg(trUtf8("<h1>Nabywca:</h1><ul><li>%1</li></ul>").arg(comboBoxCounterparties->currentText()) )

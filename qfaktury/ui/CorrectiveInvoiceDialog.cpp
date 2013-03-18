@@ -125,7 +125,7 @@ void CorrectiveInvoiceDialog::readCorrData(const QString &invFileName)
     //fName = invFileName;
 
     SettingsGlobal s;
-    QFile file(s.getWorkingDir() + s.getDataDir() + "/" + invFileName);
+    QFile file(s.workingDir() + s.dataDir() + "/" + invFileName);
     if (!file.open(QIODevice::ReadOnly))
     {
         qDebug("file doesn't exist"); //TODO
@@ -143,8 +143,8 @@ void CorrectiveInvoiceDialog::readCorrData(const QString &invFileName)
 
     const QDomElement root(doc.documentElement());
     lineEditInvNumber->setText(root.attribute("no"));
-    dateEditDateOfSell->setDate(QDate::fromString(root.attribute("sellingDate"), s.getDateFormat()));
-    dateEditDateOfIssuance->setDate(QDate::fromString(root.attribute("issueDate"),	s.getDateFormat()));
+    dateEditDateOfSell->setDate(QDate::fromString(root.attribute("sellingDate"), s.dateFormatExternal()));
+    dateEditDateOfIssuance->setDate(QDate::fromString(root.attribute("issueDate"),	s.dateFormatExternal()));
 
     //invData.invNumber_ = root.attribute("originalInvoiceNo");
 
@@ -228,17 +228,17 @@ void CorrectiveInvoiceDialog::readCorrData(const QString &invFileName)
         custPaymData = new CustomPaymData();
         custPaymData->payment1 = additional.attribute("payment1");
         custPaymData->amount1  = additional.attribute("amount1").toDouble();
-        custPaymData->date1    = QDate::fromString(additional.attribute("liabDate1"), s.getDateFormat());
+        custPaymData->date1    = QDate::fromString(additional.attribute("liabDate1"), s.dateFormatExternal());
         custPaymData->payment2 = additional.attribute("payment2");
         custPaymData->amount2  = additional.attribute("amount2").toDouble();
-        custPaymData->date2    = QDate::fromString(additional.attribute("liabDate2"), s.getDateFormat());
+        custPaymData->date2    = QDate::fromString(additional.attribute("liabDate2"), s.dateFormatExternal());
 
         connect(comboBoxPayment, SIGNAL(currentIndexChanged (QString)), this, SLOT(payTextChanged(QString)));
     } else {
         comboBoxPayment->setCurrentIndex(curPayment);
     }
 
-    dateEditDayOfPayment->setDate(QDate::fromString(additional.attribute("liabDate"), s.getDateFormat()));
+    dateEditDayOfPayment->setDate(QDate::fromString(additional.attribute("liabDate"), s.dateFormatExternal()));
     //int curCurrency = s.value(s.keyName(s.CURRENCIES)).toString().split("|").indexOf(additional.attribute("currency"));
     //comboBoxCurrency->setCurrentIndex(curCurrency);
 

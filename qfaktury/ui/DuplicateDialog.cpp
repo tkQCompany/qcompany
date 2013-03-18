@@ -26,7 +26,7 @@ void DuplicateDialog::init_()
     duplicateDate = new QDateEdit(this);
     duplicateDate->setObjectName(QString::fromUtf8("duplicateDate"));
     duplicateDate->setCalendarPopup(true);
-    duplicateDate->setDisplayFormat(s.getDateFormat());
+    duplicateDate->setDisplayFormat(s.dateFormatExternal());
     duplicateDate->setDate(QDate::currentDate());
     //addData->addWidget(duplicateDate);
 

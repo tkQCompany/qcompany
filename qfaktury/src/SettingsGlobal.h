@@ -26,11 +26,12 @@ public:
                VAT_VAL, VAT_PRICE, GROSS_VAL, USER_NAME, USER_LOCATION,
                USER_ADDRESS, USER_ACCOUNT, USER_TAXID, USER_PHONE, USER_MAIL,
                USER_WWW, WORKING_DIR, CSS, DEFAULT_INV_NUM_FORMAT, DEFAULT_CURRENCY,
-               COUNTRY, TEXT1, TEXT2, TEXT3};
+               COUNTRY, TEXT1, TEXT2, TEXT3,
+               LAST_UPDATE_EXCHANGE_RATES, LAST_UPDATE_EXCHANGE_RATES_CENTRAL_BANK};
 
-    SettingsGlobal()
+    SettingsGlobal() : dateFormatInternal_("yyyy-MM-dd"),
+        dateFormatExternal_("dd/MM/yyyy")
     {
-        dateFormat = "dd/MM/yyyy";
     }
 
     static QString keyName(const int key)
@@ -81,6 +82,8 @@ public:
         case TEXT1: return QString("inv_num_text1");
         case TEXT2: return QString("inv_num_text2");
         case TEXT3: return QString("inv_num_text3");
+        case LAST_UPDATE_EXCHANGE_RATES: return QString("last_update_exchange_rates");
+        case LAST_UPDATE_EXCHANGE_RATES_CENTRAL_BANK: return QString("last_update_exchange_rates_central_bank");
         default:
             qDebug() << "SettingsGlobal::keyName(): improper value of the argument key: " << key;
             return QString();
@@ -88,19 +91,6 @@ public:
     }
 
 public:
-    // returns date format used for all dates
-    /**
-     * @brief
-     *
-     * @return QString
-     */
-    QString getDateFormat() const
-    {
-        // it's better to have a full year... so
-        return dateFormat;
-    }
-
-
     /** Reset all settings to default values
      */
     /**
@@ -131,6 +121,8 @@ public:
         setValue(keyName(TEXT1), trUtf8("F"));
         setValue(keyName(TEXT2), trUtf8(""));
         setValue(keyName(TEXT3), trUtf8(""));
+        setValue(keyName(LAST_UPDATE_EXCHANGE_RATES), QString(""));
+        setValue(keyName(LAST_UPDATE_EXCHANGE_RATES_CENTRAL_BANK), QString(""));
 
         setValue(keyName(ORDER_NUMBER), true);
         setValue(keyName(NAME), true);
@@ -164,7 +156,7 @@ public:
      *
      * @return QString
      */
-    QString getWorkingDir() const
+    QString workingDir() const
     {
         return value(keyName(WORKING_DIR)).toString();
     }
@@ -175,10 +167,10 @@ public:
      *
      * @return QString
      */
-    QString getTemplate() const
+    QString templateDir() const
     {
         const QString style = value(keyName(CSS)).toString();
-        QString ret = getWorkingDir() + "/templates/" + style;
+        QString ret = workingDir() + "/templates/" + style;
 
         QFile f;
         f.setFileName(ret);
@@ -201,7 +193,7 @@ public:
      *
      * @return QString
      */
-    QString getDataDir() const
+    QString dataDir() const
     {
         //TODO: Changed name of the folder to avoid overwriting the files.
         //TODO: This may require conversion script.
@@ -214,9 +206,31 @@ public:
      *
      * @return QString
      */
-    QString getDecimalPointStr() const
+    QString dateFormatExternal() const
     {
-        return QString(locale.decimalPoint());
+        return dateFormatExternal_;
+    }
+
+
+    /**
+     * @brief
+     *
+     * @return QString
+     */
+    QString dateFormatInternal() const
+    {
+        return dateFormatInternal_;
+    }
+
+
+    /**
+     * @brief
+     *
+     * @return QString
+     */
+    QString decimalPointStr() const
+    {
+        return QString(locale_.decimalPoint());
     }
 
     /**
@@ -224,9 +238,9 @@ public:
      *
      * @return QString
      */
-    QString getTPointStr() const
+    QString tPointStr() const
     {
-        return QString(locale.groupSeparator());
+        return QString(locale_.groupSeparator());
     }
 
     /**
@@ -239,7 +253,7 @@ public:
      */
     QString numberToString(const double i, const char f = 'f', const int prec = 2) const
     {
-        return locale.toString(i, f, prec);
+        return locale_.toString(i, f, prec);
     }
 
     /**
@@ -250,7 +264,7 @@ public:
      */
     QString numberToString(const int i) const
     {
-        return locale.toString(i);
+        return locale_.toString(i);
     }
 
     /**
@@ -261,12 +275,13 @@ public:
      */
     double stringToDouble(const QString &s) const
     {
-        return locale.toDouble(s);
+        return locale_.toDouble(s);
     }
 
 private:
-    QString dateFormat; /**< TODO */
-    QLocale locale; /**< TODO */
+    const QString dateFormatInternal_; /**< TODO */
+    const QString dateFormatExternal_; /**< TODO */
+    QLocale locale_; /**< TODO */
 };
 
 #endif

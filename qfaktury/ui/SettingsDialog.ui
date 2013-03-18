@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>549</width>
-    <height>753</height>
+    <width>530</width>
+    <height>663</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -534,7 +534,7 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="0">
         <widget class="QToolBox" name="toolBox">
          <property name="currentIndex">
-          <number>2</number>
+          <number>4</number>
          </property>
          <widget class="QWidget" name="page_6">
           <property name="geometry">
@@ -1115,8 +1115,8 @@ korekt:</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>515</width>
-            <height>504</height>
+            <width>497</width>
+            <height>397</height>
            </rect>
           </property>
           <attribute name="label">
@@ -1144,7 +1144,7 @@ korekt:</string>
                 <item row="0" column="0">
                  <widget class="QLabel" name="labelLastUpdate">
                   <property name="text">
-                   <string>Data ostatniej aktualizacji kursów:</string>
+                   <string>Data ostatniej aktualizacji kursów w programie:</string>
                   </property>
                   <property name="buddy">
                    <cstring>dateEditLastUpdate</cstring>

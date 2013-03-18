@@ -31,6 +31,7 @@ public:
      */
     explicit ModelCurrency(QObject *parent);
 
+    const QDate lastUpdateByCentralBank() const {return lastUpdateByCentralBank_;}
     void updateCurrenciesRates();
 
 signals:
@@ -41,6 +42,7 @@ private slots:
     void updateDBsCurrenciesRates_();
 
 private:
+    QDate lastUpdateByCentralBank_;
     QNetworkAccessManager *netMgr_;
 };
 

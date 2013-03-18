@@ -142,13 +142,19 @@ void SettingsDialog::showExamples_()
 void SettingsDialog::updateCurrenciesRates_()
 {
     db_->modelCurrency()->updateCurrenciesRates();
-    dateEditLastUpdate->setDate(QDate::currentDate()); //TODO: improve the code
 }
 
 
 void SettingsDialog::updateCurrenciesTableView_()
 {
     db_->modelCurrency()->select();
+    SettingsGlobal s;
+    s.setValue(s.keyName(s.LAST_UPDATE_EXCHANGE_RATES),
+               QDate::currentDate().toString(s.dateFormatInternal()));
+    s.setValue(s.keyName(s.LAST_UPDATE_EXCHANGE_RATES_CENTRAL_BANK),
+               db_->modelCurrency()->lastUpdateByCentralBank());
+    dateEditLastUpdate->setDate(QDate::currentDate());
+    dateEditLastUpdateByCentralBank->setDate(db_->modelCurrency()->lastUpdateByCentralBank());
     QMessageBox::information(this, trUtf8("Status aktualizacji"), trUtf8("Aktualizacja kursów średnich walut NBP zakończona sukcesem."));
 }
 
@@ -418,6 +424,10 @@ void SettingsDialog::readSettings_()
     checkBoxPhone->setChecked(s.value(s.keyName(s.USER_PHONE)).toBool());
     checkBoxEmail->setChecked(s.value(s.keyName(s.USER_MAIL)).toBool());
     checkBoxWWW->setChecked(s.value(s.keyName(s.USER_WWW)).toBool());
+
+    dateEditLastUpdate->setDate(s.value(s.keyName(s.LAST_UPDATE_EXCHANGE_RATES)).toDate());
+    dateEditLastUpdateByCentralBank->setDate(
+                s.value(s.keyName(s.LAST_UPDATE_EXCHANGE_RATES_CENTRAL_BANK)).toDate());
 }
 
 
@@ -426,7 +436,7 @@ QStringList SettingsDialog::getTemplates_()
     QStringList templates;
     QString ret;
     SettingsGlobal s;
-    QString path = s.getWorkingDir() + "/templates/";
+    QString path = s.workingDir() + "/templates/";
 
     if (templates.isEmpty())
     {

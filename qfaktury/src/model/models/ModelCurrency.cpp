@@ -77,10 +77,30 @@ void ModelCurrency::updateDBsCurrenciesRates_()
         }
     }
 
+    bool ret = true;
     int currencyUnit;
     double currencyRate;
     QString currencyName, currencyCode;
-    const QString updateSqlTemplate("UPDATE `currency` SET `code_unit` = %1, exchange_rate_pln = %2 WHERE `code` = '%3'");
+    const QString lastUpdateElementName("data_publikacji");
+    const QDomNodeList lastUpdate(xmlDoc.documentElement()
+                                  .elementsByTagName(lastUpdateElementName));
+    if(lastUpdate.length() > 0)
+    {
+        const QDomNodeList lastUpdateChild(lastUpdate.at(0).childNodes());
+        if(lastUpdateChild.length() > 0)
+        {
+            lastUpdateByCentralBank_ = QDate::fromString(lastUpdateChild.at(0).nodeValue(), "yyyy-MM-dd");
+        }
+        else
+        {
+            qDebug() << "Can't extract node value from '" << lastUpdateElementName << "' element.";
+        }
+    }
+    else
+    {
+        qDebug() << "Can't find '" << lastUpdateElementName << "' element.";
+    }
+
     const QDomNodeList elements(xmlDoc.documentElement()
                                 .elementsByTagName("pozycja"));
     for(size_t i = 0; i < elements.length(); ++i)
@@ -92,46 +112,44 @@ void ModelCurrency::updateDBsCurrenciesRates_()
             {
                 QDomElement e = children.item(j).toElement();
                 currencyName = e.firstChild().nodeValue();
-                qDebug() << e.nodeName() << ": " <<
-                            currencyName;
             }
             else
             if(children.item(j).nodeName() == "przelicznik")
             {
                 QDomElement e = children.item(j).toElement();
                 currencyUnit = e.firstChild().nodeValue().toInt();
-                qDebug() << e.nodeName() << ": " <<
-                            currencyUnit;
             }
             else
             if(children.item(j).nodeName() == "kod_waluty")
             {
                 QDomElement e = children.item(j).toElement();
                 currencyCode = e.firstChild().nodeValue();
-                qDebug() << e.nodeName() << ": " <<
-                            currencyCode;
             }
             else
             if(children.item(j).nodeName() == "kurs_sredni")
             {
                 QDomElement e = children.item(j).toElement();
                 currencyRate = e.firstChild().nodeValue().toDouble();
-                qDebug() << e.nodeName() << ": " <<
-                            currencyRate;
             }
         }
         QSqlQuery q(query());
+        const QString updateSqlTemplate("UPDATE `currency` SET `code_unit` = %1, `exchange_rate_pln` = %2, `localized_name` = '%4' WHERE `code` = '%3'");
         database().transaction();
-        q.exec(updateSqlTemplate.arg(currencyUnit).arg(currencyRate).arg(currencyCode));
+        q.exec(updateSqlTemplate.arg(currencyUnit).arg(currencyRate).arg(currencyCode).arg(currencyName));
         if(!q.isActive())
         {
             qDebug() << "ModelCurrency::updateDBsCurrenciesRates_(): " << q.lastError().text();
+            ret = false;
             break;
         }
-        if(database().commit())
+
+        if(!database().commit())
         {
-            emit updatingCurrenciesRatesFinished();
+            ret = false;
+            break;
         }
     }
+    if(ret)
+        emit updatingCurrenciesRatesFinished();
     reply->deleteLater();
 }

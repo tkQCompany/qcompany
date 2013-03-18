@@ -32,8 +32,8 @@ void MainWindow::init_()
     else
     {
         setupDir_();
-        dateEditFilterStart->setDisplayFormat(s.getDateFormat());
-        dateEditFilterEnd->setDisplayFormat(s.getDateFormat());
+        dateEditFilterStart->setDisplayFormat(s.dateFormatExternal());
+        dateEditFilterEnd->setDisplayFormat(s.dateFormatExternal());
     }
 
     dateEditFilterStart->setDate(QDate::currentDate());
@@ -107,7 +107,7 @@ void MainWindow::loadPlugins()
     QDir allFiles;
     SettingsGlobal s;
 
-    const QString path = s.getWorkingDir() + "/plugins/";
+    const QString path = s.workingDir() + "/plugins/";
     allFiles.setPath(path);
     allFiles.setFilter(QDir::Files);
     QStringList filters;
@@ -230,16 +230,16 @@ void MainWindow::setupDir_() const
 {
     SettingsGlobal s;
 
-    const QString workingDir(s.getWorkingDir());
+    const QString workingDir(s.workingDir());
     const QDir dir(workingDir);
     if (!dir.exists())
     {
         dir.mkdir(workingDir);
     }
 
-    if (!dir.exists(workingDir + s.getDataDir()))
+    if (!dir.exists(workingDir + s.dataDir()))
     {
-        dir.mkdir(workingDir + s.getDataDir());
+        dir.mkdir(workingDir + s.dataDir());
     }
 }
 
