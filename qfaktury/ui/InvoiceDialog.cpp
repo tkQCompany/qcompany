@@ -26,12 +26,12 @@ InvoiceDialog::InvoiceDialog(QWidget *parent, Database *db, const int invoiceTyp
 
         SettingsGlobal s;
         const QString invoiceTypeStr(InvoiceTypeData::name(invoiceType));
-        setInitialComboBoxIndexes_(invoiceTypeStr, PaymentTypeData::name(PaymentTypeData::CASH), s.value(s.keyName(s.DEFAULT_CURRENCY)).toString());
+        setInitialComboBoxIndexes_(invoiceTypeStr, PaymentTypeData::name(PaymentTypeData::CASH), s.value(s.DEFAULT_CURRENCY).toString());
         setWindowTitle(invoiceTypeStr);
 
         updateInvoiceNumber();
 
-        const QString additText(s.value(s.keyName(s.ADDIT_TEXT)).toString());
+        const QString additText(s.value(s.ADDIT_TEXT).toString());
         if(!additText.isEmpty())
         {
             lineEditAdditionalText->setText(additText);
@@ -478,22 +478,22 @@ void InvoiceDialog::printInvoice()
             qDebug() << "File " << file.fileName() << " couldn't be opened.";
         }
 
-        const QString logo(s.value(s.keyName(s.LOGO)).toString());
+        const QString logo(s.value(s.LOGO).toString());
         const QString stampStr(logo.isEmpty() ? trUtf8("Pieczęć wystawcy") : QString("<img src=\"%1\">").arg(logo));
 
         QString sellerAttrList;
 
         s.beginGroup("printpos");
-        if(s.value(s.keyName(s.USER_NAME)).toBool())
-            sellerAttrList += QString("<li>%1</li>").arg(s.value(s.keyName(s.USER_NAME)).toString());
-        if(s.value(s.keyName(s.USER_ADDRESS)).toBool())
-            sellerAttrList += QString("<li>%1</li>").arg(s.value(s.keyName(s.USER_ADDRESS)).toString());
-        if(s.value(s.keyName(s.USER_LOCATION)).toBool())
-            sellerAttrList += QString("<li>%1</li>").arg(s.value(s.keyName(s.USER_LOCATION)).toString());
-        if(s.value(s.keyName(s.USER_TAXID)).toBool())
-            sellerAttrList += trUtf8("<li>NIP: %1</li>").arg(s.value(s.keyName(s.USER_TAXID)).toString());
-        if(s.value(s.keyName(s.USER_ACCOUNT)).toBool())
-            sellerAttrList += trUtf8("<li>Nr konta: %1</li>").arg(s.value(s.keyName(s.USER_ACCOUNT)).toString().replace("-", " "));
+        if(s.value(s.SELLER_NAME).toBool())
+            sellerAttrList += QString("<li>%1</li>").arg(s.value(s.SELLER_NAME).toString());
+        if(s.value(s.SELLER_ADDRESS).toBool())
+            sellerAttrList += QString("<li>%1</li>").arg(s.value(s.SELLER_ADDRESS).toString());
+        if(s.value(s.SELLER_LOCATION).toBool())
+            sellerAttrList += QString("<li>%1</li>").arg(s.value(s.SELLER_LOCATION).toString());
+        if(s.value(s.SELLER_TAXID).toBool())
+            sellerAttrList += trUtf8("<li>NIP: %1</li>").arg(s.value(s.SELLER_TAXID).toString());
+        if(s.value(s.SELLER_ACCOUNT).toBool())
+            sellerAttrList += trUtf8("<li>Nr konta: %1</li>").arg(s.value(s.SELLER_ACCOUNT).toString().replace("-", " "));
         s.endGroup();
         const QString sellerHTML(QString("<h1>Sprzedawca:</h1><ul>%1</ul>").arg(sellerAttrList));
 
@@ -595,7 +595,7 @@ void InvoiceDialog::printInvoice()
         summaryHTML += "</td></tr>";
 
 
-        docHTML = invoiceHTMLTemplate.arg(s.value(s.keyName(s.LANG)).toString())
+        docHTML = invoiceHTMLTemplate.arg(s.value(s.LANG).toString())
                                   .arg(comboBoxInvoiceType->currentText())
                                   .arg(styleCSS)
                                   .arg(stampStr)
@@ -644,7 +644,7 @@ void InvoiceDialog::printInvoice()
     //makeInvoiceSummAll();
     //makeInvoiceFooter();
 
-    const int numberOfCopies = s.value(s.keyName(s.NUMBER_OF_COPIES), 2).toInt();
+    const int numberOfCopies = s.value(s.NUMBER_OF_COPIES, 2).toInt();
     for (int i = 0; i < numberOfCopies; ++i)
     {
         // print copy
@@ -674,7 +674,7 @@ void InvoiceDialog::retranslateUi_()
 {
     QTranslator appTranslator;
     SettingsGlobal s;
-    appTranslator.load(QString("translations/qfaktury_") + s.value(s.keyName(s.LANG)).toString());
+    appTranslator.load(QString("translations/qfaktury_") + s.value(s.LANG).toString());
     qApp->installTranslator(&appTranslator);
     retranslateUi(this);
 }
@@ -798,7 +798,7 @@ bool InvoiceDialog::validateForm_()
 //    invStrList += "<span class=\"stamp\">";
 
 //    SettingsGlobal s;
-//    const QString logo(s.value(s.keyName(s.LOGO)).toString());
+//    const QString logo(s.value(s.LOGO)).toString());
 //    if (!logo.isEmpty())
 //    {
 //        invStrList += "<img src=\"" + logo + "\" width=\"100\" " + " height=\"100\"+ >";
@@ -856,19 +856,19 @@ bool InvoiceDialog::validateForm_()
 //    SettingsGlobal s;
 
 //    s.beginGroup("printpos");
-//    if (s.value(s.keyName(s.USER_NAME)).toBool())
-//        invStrList += s.value(s.keyName(s.USER_NAME)).toString() + "<br>";
-//    if (s.value(s.keyName(s.USER_ADDRESS)).toBool())
-//        invStrList += s.value(s.keyName(s.USER_ADDRESS)).toString() + "<br>"; // trUtf8("Ul. ") +
+//    if (s.value(s.USER_NAME)).toBool())
+//        invStrList += s.value(s.USER_NAME)).toString() + "<br>";
+//    if (s.value(s.USER_ADDRESS)).toBool())
+//        invStrList += s.value(s.USER_ADDRESS)).toString() + "<br>"; // trUtf8("Ul. ") +
 ////    if (settings.value("usermiejscowosc").toBool())
 ////        invStrList += userSettings.value("zip").toString() + " ";
-//    if (s.value(s.keyName(s.USER_LOCATION)).toBool())
-//        invStrList += s.value(s.keyName(s.USER_LOCATION)).toString() + "<br>";
-//    if (s.value(s.keyName(s.USER_TAXID)).toBool())
-//        invStrList += trUtf8("NIP: ") + s.value(s.keyName(s.USER_TAXID)).toString() + "<br>";
-//    if (s.value(s.keyName(s.USER_ACCOUNT)).toBool())
+//    if (s.value(s.USER_LOCATION)).toBool())
+//        invStrList += s.value(s.USER_LOCATION)).toString() + "<br>";
+//    if (s.value(s.USER_TAXID)).toBool())
+//        invStrList += trUtf8("NIP: ") + s.value(s.USER_TAXID)).toString() + "<br>";
+//    if (s.value(s.USER_ACCOUNT)).toBool())
 //        invStrList += trUtf8("Nr konta: ")
-//                + s.value(s.keyName(s.USER_ACCOUNT)).toString().replace("-", " ") + "<br>";
+//                + s.value(s.USER_ACCOUNT)).toString().replace("-", " ") + "<br>";
 //    s.endGroup();
 
 //    invStrList += "</td>";
@@ -893,7 +893,7 @@ bool InvoiceDialog::validateForm_()
 //    int currentPercent = 0;
 //    invStrList += "<tr align=\"center\" valign=\"middle\" class=\"productsHeader\" >";
 
-//    if (s.value(s.keyName(s.ORDER_NUMBER)).toBool())
+//    if (s.value(s.ORDER_NUMBER)).toBool())
 //    {
 //        currentPercent = 3;
 //        invStrList += "<td align=\"center\" width=\""+ s.numberToString(currentPercent) + "%\">" + trUtf8("Lp.") + "</td>";
@@ -901,7 +901,7 @@ bool InvoiceDialog::validateForm_()
 //    } else {
 //        currentPercent += 3;
 //    }
-//    if (s.value(s.keyName(s.NAME)).toBool())
+//    if (s.value(s.NAME)).toBool())
 //    {
 //        currentPercent += 25;
 //        invStrList += "<td align=\"center\" width=\""+ s.numberToString(currentPercent) + "%\">" + trUtf8("Nazwa") + "</td>";
@@ -909,7 +909,7 @@ bool InvoiceDialog::validateForm_()
 //    } else {
 //        currentPercent += 25;
 //    }
-//    if (s.value(s.keyName(s.CODE)).toBool())
+//    if (s.value(s.CODE)).toBool())
 //    {
 //        currentPercent += 7;
 //        invStrList += "<td align=\"center\" width=\""+ s.numberToString(currentPercent) + "%\">" + trUtf8("Kod") + "</td>";
@@ -917,7 +917,7 @@ bool InvoiceDialog::validateForm_()
 //    } else {
 //        currentPercent += 7;
 //    }
-//    if (s.value(s.keyName(s.PKWIU)).toBool())
+//    if (s.value(s.PKWIU)).toBool())
 //    {
 //        currentPercent += 7;
 //        invStrList += "<td align=\"center\" width=\""+ s.numberToString(currentPercent) + "%\">" + trUtf8("PKWiU") + "</td>";
@@ -925,19 +925,19 @@ bool InvoiceDialog::validateForm_()
 //    } else {
 //        currentPercent += 7;
 //    }
-//    if (s.value(s.keyName(s.QUANTITY)).toBool())
+//    if (s.value(s.QUANTITY)).toBool())
 //    {
 //        invStrList += "<td align=\"center\" width=\""+ s.numberToString(7) + "%\">" + trUtf8("Ilość") + "</td>";
 //    } else {
 //        currentPercent += 7;
 //    }
-//    if (s.value(s.keyName(s.INTERNAT_UNIT)).toBool())
+//    if (s.value(s.INTERNAT_UNIT)).toBool())
 //    {
 //        invStrList += "<td align=\"center\" width=\""+ s.numberToString(3) + "%\">" + trUtf8("jm.") + "</td>";
 //    } else {
 //        currentPercent += 3;
 //    }
-//    if (s.value(s.keyName(s.UNIT_PRICE)).toBool())
+//    if (s.value(s.UNIT_PRICE)).toBool())
 //    {
 //        currentPercent += 7;
 //        invStrList += "<td align=\"center\" width=\""+ s.numberToString(currentPercent) + "%\">" + trUtf8("Cena jdn.") + "</td>";
@@ -945,7 +945,7 @@ bool InvoiceDialog::validateForm_()
 //    } else {
 //        currentPercent += 7;
 //    }
-//    if (s.value(s.keyName(s.NET_VAL)).toBool())
+//    if (s.value(s.NET_VAL)).toBool())
 //    {
 //        currentPercent += 7;
 //        invStrList += "<td align=\"center\" width=\""+ s.numberToString(currentPercent) + "%\">" + trUtf8("Wartość Netto") + "</td>";
@@ -953,13 +953,13 @@ bool InvoiceDialog::validateForm_()
 //    } else {
 //        currentPercent += 7;
 //    }
-//    if (s.value(s.keyName(s.DISCOUNT)).toBool())
+//    if (s.value(s.DISCOUNT)).toBool())
 //    {
 //        invStrList += "<td align=\"center\" width=\""+ s.numberToString(3) + "%\">" + trUtf8("Rabat %") + "</td>";
 //    } else {
 //        currentPercent += 3;
 //    }
-//    if (s.value(s.keyName(s.DISCOUNT_VAL)).toBool())
+//    if (s.value(s.DISCOUNT_VAL)).toBool())
 //    {
 //        currentPercent += 3;
 //        invStrList += "<td align=\"center\" width=\""+ s.numberToString(currentPercent) + "%\">" + trUtf8("Rabat Wartość") + "</td>";
@@ -967,7 +967,7 @@ bool InvoiceDialog::validateForm_()
 //    } else {
 //        currentPercent += 3;
 //    }
-//    if (s.value(s.keyName(s.NET_AFTER)).toBool())
+//    if (s.value(s.NET_AFTER)).toBool())
 //    {
 //        currentPercent += 7;
 //        invStrList += "<td align=\"center\" width=\""+ s.numberToString(currentPercent) + "%\">" + trUtf8("Netto po rabacie") + "</td>";
@@ -975,13 +975,13 @@ bool InvoiceDialog::validateForm_()
 //    } else {
 //        currentPercent += 7;
 //    }
-//    if (s.value(s.keyName(s.VAT_VAL)).toBool())
+//    if (s.value(s.VAT_VAL)).toBool())
 //    {
 //        invStrList += "<td align=\"center\" width=\""+ s.numberToString(7) + "%\">" + trUtf8("Stawka VAT") + "</td>";
 //    } else {
 //        currentPercent += 7;
 //    }
-//    if (s.value(s.keyName(s.VAT_PRICE)).toBool())
+//    if (s.value(s.VAT_PRICE)).toBool())
 //    {
 //        currentPercent += 7;
 //        invStrList += "<td align=\"center\" width=\""+ s.numberToString(currentPercent) + "%\">" + trUtf8("Kwota Vat") + "</td>";
@@ -989,7 +989,7 @@ bool InvoiceDialog::validateForm_()
 //    } else {
 //        currentPercent += 7;
 //    }
-//    if (s.value(s.keyName(s.GROSS_VAL)).toBool())
+//    if (s.value(s.GROSS_VAL)).toBool())
 //    {
 //        currentPercent += 7;
 //        invStrList += "<td align=\"center\" width=\""+ s.numberToString(currentPercent) + "%\">" + trUtf8("Wartość Brutto") + "</td>";
@@ -1017,38 +1017,38 @@ bool InvoiceDialog::validateForm_()
 //    {
 //        invStrList += "<tr valign=\"middle\" align=\"center\" class=\"products\">";
 //        // lp, nazwa, kod, pkwiu, ilosc, jm, rabat, cena jm., netto, vat, brutto
-//        if (s.value(s.keyName(s.ORDER_NUMBER)).toBool())
+//        if (s.value(s.ORDER_NUMBER)).toBool())
 //            invStrList += "<td align=\"center\" >" + s.numberToString(i + 1) + "</td>";
-//        if (s.value(s.keyName(s.NAME)).toBool())
+//        if (s.value(s.NAME)).toBool())
 //            invStrList += "<td align=\"left\">" + tableWidgetCommodities->item(i, CommodityVisualFields::NAME)->text() + "</td>";
-//        //if (s.value(s.keyName(s.CODE)).toBool())
+//        //if (s.value(s.CODE)).toBool())
 //          //  invStrList += "<td align=\"center\" >" + tableWidgetCommodities->item(i, CommodityVisualFields::)->text() + "</td>";
-//        if (s.value(s.keyName(s.PKWIU)).toBool())
+//        if (s.value(s.PKWIU)).toBool())
 //            invStrList += "<td align=\"center\" >" + tableWidgetCommodities->item(i, CommodityVisualFields::PKWIU)->text() + "</td>";
-//        if (s.value(s.keyName(s.QUANTITY)).toBool())
+//        if (s.value(s.QUANTITY)).toBool())
 //            invStrList += "<td align=\"center\" >" + tableWidgetCommodities->item(i, CommodityVisualFields::QUANTITY)->text() + "</td>";
-//        if (s.value(s.keyName(s.INTERNAT_UNIT)).toBool())
+//        if (s.value(s.INTERNAT_UNIT)).toBool())
 //            invStrList += "<td align=\"center\" >" + tableWidgetCommodities->item(i, CommodityVisualFields::UNIT)->text() + "</td>";
-//        //if (s.value(s.keyName(s.UNIT_PRICE)).toBool())
+//        //if (s.value(s.UNIT_PRICE)).toBool())
 //          //  invStrList += "<td align=\"center\" >" + tableWidgetCommodities->item(i, CommodityVisualFields::)->text() + "</td>";
 //        const double discountVal = s.stringToDouble(tableWidgetCommodities->item(i, CommodityVisualFields::NET)->text()) *
 //                (tableWidgetCommodities->item(i, 6)->text().toDouble() * 0.01);
 //        const double nettMinusDisc = s.stringToDouble(tableWidgetCommodities->item(i, CommodityVisualFields::NET)->text()) - discountVal;
-//        if (s.value(s.keyName(s.NET_VAL)).toBool())
+//        if (s.value(s.NET_VAL)).toBool())
 //            invStrList += "<td align=\"center\" >" + tableWidgetCommodities->item(i, CommodityVisualFields::NET)->text()	+ "</td>"; // netto
-//        if (s.value(s.keyName(s.DISCOUNT)).toBool())
+//        if (s.value(s.DISCOUNT)).toBool())
 //            invStrList += "<td align=\"center\" >" + tableWidgetCommodities->item(i, CommodityVisualFields::DISCOUNT)->text()	+ "%</td>"; // rabat
-//        if (s.value(s.keyName(s.DISCOUNT_VAL)).toBool())
+//        if (s.value(s.DISCOUNT_VAL)).toBool())
 //            invStrList += "<td align=\"center\" >" + s.numberToString(discountVal, 'f',  2)	+ "</td>";
-//        if (s.value(s.keyName(s.NET_AFTER)).toBool())
+//        if (s.value(s.NET_AFTER)).toBool())
 //            invStrList += "<td align=\"center\" >" + s.numberToString(nettMinusDisc, 'f', 2) + "</td>";
-//        if (s.value(s.keyName(s.VAT_VAL)).toBool())
+//        if (s.value(s.VAT_VAL)).toBool())
 //            invStrList += "<td align=\"center\" >" + tableWidgetCommodities->item(i, CommodityVisualFields::VAT)->text()	+ "%</td>";
 //        const double vatPrice = s.stringToDouble(tableWidgetCommodities->item(i, 10)->text())
 //                - s.stringToDouble(tableWidgetCommodities->item(i, CommodityVisualFields::VAT)->text()); // brutt-nett :)
-//        if (s.value(s.keyName(s.VAT_PRICE)).toBool())
+//        if (s.value(s.VAT_PRICE)).toBool())
 //            invStrList += "<td align=\"center\" >" + s.numberToString(vatPrice, 'f', 2) + "</td>";
-//        if (s.value(s.keyName(s.GROSS_VAL)).toBool())
+//        if (s.value(s.GROSS_VAL)).toBool())
 //            invStrList += "<td align=\"center\" >" + tableWidgetCommodities->item(i, 10)->text() + "</td>";
 //        invStrList += "</tr>";
 //    }
@@ -1208,7 +1208,7 @@ QString InvoiceDialog::getGroupedSums()
 {
     QStringList out;
     SettingsGlobal s;
-    const QStringList rates = s.value(s.keyName(s.VAT_RATES)).toString().split("|");
+    const QStringList rates = s.value(s.VAT_RATES).toString().split("|");
 
     QMap<int, double> rateNet;
     QMap<int, double> rateVat;

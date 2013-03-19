@@ -100,13 +100,13 @@ struct InvoiceNumberFormatData
                 ret += QString("(\\w+)");
                 break;
             case TEXT1:
-                ret += QString("(%1)").arg(s.value(s.keyName(s.TEXT1)).toString());
+                ret += QString("(%1)").arg(s.value(s.TEXT1).toString());
                 break;
             case TEXT2:
-                ret += QString("(%1)").arg(s.value(s.keyName(s.TEXT2)).toString());
+                ret += QString("(%1)").arg(s.value(s.TEXT2).toString());
                 break;
             case TEXT3:
-                ret += QString("(%1)").arg(s.value(s.keyName(s.TEXT3)).toString());
+                ret += QString("(%1)").arg(s.value(s.TEXT3).toString());
                 break;
             case PERIOD_YEAR:
                 ret += QString("(\\d{4})");

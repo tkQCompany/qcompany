@@ -23,9 +23,9 @@ public:
                UNITS, LOGO, PAYMENT_TYPE, CORRECTION_REASON, ORDER_NUMBER,
                NAME, CODE, PKWIU, QUANTITY, INTERNAT_UNIT,
                UNIT_PRICE, NET_VAL, DISCOUNT, DISCOUNT_VAL, NET_AFTER,
-               VAT_VAL, VAT_PRICE, GROSS_VAL, USER_NAME, USER_LOCATION,
-               USER_ADDRESS, USER_ACCOUNT, USER_TAXID, USER_PHONE, USER_MAIL,
-               USER_WWW, WORKING_DIR, CSS, DEFAULT_INV_NUM_FORMAT, DEFAULT_CURRENCY,
+               VAT_VAL, VAT_PRICE, GROSS_VAL, SELLER_NAME, SELLER_LOCATION,
+               SELLER_ADDRESS, SELLER_ACCOUNT, SELLER_TAXID, SELLER_PHONE, SELLER_MAIL,
+               SELLER_WWW, WORKING_DIR, CSS, DEFAULT_INV_NUM_FORMAT, DEFAULT_CURRENCY,
                COUNTRY, TEXT1, TEXT2, TEXT3,
                LAST_UPDATE_EXCHANGE_RATES, LAST_UPDATE_EXCHANGE_RATES_CENTRAL_BANK};
 
@@ -34,7 +34,7 @@ public:
     {
     }
 
-    static QString keyName(const int key)
+    static const QString keyName(const int key)
     {
         switch(key)
         {
@@ -66,14 +66,14 @@ public:
         case VAT_VAL: return QString("faktury_pozycje/vatval");
         case VAT_PRICE: return QString("faktury_pozycje/vatprice");
         case GROSS_VAL: return QString("faktury_pozycje/bruttoval");
-        case USER_NAME: return QString("printpos/usernazwa");
-        case USER_LOCATION: return QString("printpos/usermiejscowosc");
-        case USER_ADDRESS: return QString("printpos/useradres");
-        case USER_ACCOUNT: return QString("printpos/userkonto");
-        case USER_TAXID: return QString("printpos/usernip");
-        case USER_PHONE: return QString("printpos/userphone");
-        case USER_MAIL: return QString("printpos/usermail");
-        case USER_WWW: return QString("printpos/userwww");
+        case SELLER_NAME: return QString("printpos/display_seller_name");
+        case SELLER_LOCATION: return QString("printpos/display_seller_location");
+        case SELLER_ADDRESS: return QString("printpos/display_seller_address");
+        case SELLER_ACCOUNT: return QString("printpos/display_seller_account");
+        case SELLER_TAXID: return QString("printpos/display_seller_taxid");
+        case SELLER_PHONE: return QString("printpos/display_seller_phone");
+        case SELLER_MAIL: return QString("printpos/display_seller_email");
+        case SELLER_WWW: return QString("printpos/display_seller_www");
         case WORKING_DIR: return QString("working_dir");
         case CSS: return QString("css");
         case DEFAULT_INV_NUM_FORMAT: return QString("default_inv_num_format");
@@ -139,14 +139,14 @@ public:
         setValue(keyName(VAT_PRICE), true);
         setValue(keyName(GROSS_VAL), true);
 
-        setValue(keyName(USER_NAME), "true");
-        setValue(keyName(USER_LOCATION), "true");
-        setValue(keyName(USER_ADDRESS), "true");
-        setValue(keyName(USER_ACCOUNT), "true");
-        setValue(keyName(USER_TAXID), "true");
-        setValue(keyName(USER_PHONE), "true");
-        setValue(keyName(USER_MAIL), "true");
-        setValue(keyName(USER_WWW), "true");
+        setValue(keyName(SELLER_NAME), "true");
+        setValue(keyName(SELLER_LOCATION), "true");
+        setValue(keyName(SELLER_ADDRESS), "true");
+        setValue(keyName(SELLER_ACCOUNT), "true");
+        setValue(keyName(SELLER_TAXID), "true");
+        setValue(keyName(SELLER_PHONE), "true");
+        setValue(keyName(SELLER_MAIL), "true");
+        setValue(keyName(SELLER_WWW), "true");
     }
 
 
@@ -156,9 +156,9 @@ public:
      *
      * @return QString
      */
-    QString workingDir() const
+    const QString workingDir() const
     {
-        return value(keyName(WORKING_DIR)).toString();
+        return value(WORKING_DIR).toString();
     }
 
     // returns templates directory
@@ -167,9 +167,9 @@ public:
      *
      * @return QString
      */
-    QString templateDir() const
+    const QString templateDir() const
     {
-        const QString style = value(keyName(CSS)).toString();
+        const QString style(value(CSS).toString());
         QString ret = workingDir() + "/templates/" + style;
 
         QFile f;
@@ -193,7 +193,7 @@ public:
      *
      * @return QString
      */
-    QString dataDir() const
+    const QString dataDir() const
     {
         //TODO: Changed name of the folder to avoid overwriting the files.
         //TODO: This may require conversion script.
@@ -206,7 +206,7 @@ public:
      *
      * @return QString
      */
-    QString dateFormatExternal() const
+    const QString dateFormatExternal() const
     {
         return dateFormatExternal_;
     }
@@ -217,7 +217,7 @@ public:
      *
      * @return QString
      */
-    QString dateFormatInternal() const
+    const QString dateFormatInternal() const
     {
         return dateFormatInternal_;
     }
@@ -228,7 +228,7 @@ public:
      *
      * @return QString
      */
-    QString decimalPointStr() const
+    const QString decimalPointStr() const
     {
         return QString(locale_.decimalPoint());
     }
@@ -238,9 +238,23 @@ public:
      *
      * @return QString
      */
-    QString tPointStr() const
+    const QString tPointStr() const
     {
         return QString(locale_.groupSeparator());
+    }
+
+    using QSettings::value;
+
+    const QVariant value(KEYS key, const QVariant &default_val = QVariant()) const
+    {
+        if(default_val.isValid())
+        {
+            return QSettings::value(keyName(key), default_val);
+        }
+        else
+        {
+            return QSettings::value(keyName(key));
+        }
     }
 
     /**
@@ -251,7 +265,7 @@ public:
      * @param prec
      * @return QString
      */
-    QString numberToString(const double i, const char f = 'f', const int prec = 2) const
+    const QString numberToString(const double i, const char f = 'f', const int prec = 2) const
     {
         return locale_.toString(i, f, prec);
     }
@@ -262,7 +276,7 @@ public:
      * @param i
      * @return QString
      */
-    QString numberToString(const int i) const
+    const QString numberToString(const int i) const
     {
         return locale_.toString(i);
     }

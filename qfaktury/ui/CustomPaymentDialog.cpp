@@ -32,7 +32,7 @@ void CustomPaymentDialog::init()
     connect( doubleSpinBoxAmount1, SIGNAL(valueChanged(double)), this, SLOT(doubleSpinBoxAmount1Changed(double)));
     connect( doubleSpinBoxAmount2, SIGNAL(valueChanged(double)), this, SLOT(doubleSpinBoxAmount2Changed(double)));
 
-    const QStringList payments(s.value(s.keyName(s.PAYMENT_TYPE)).toString().split("|"));
+    const QStringList payments(s.value(s.PAYMENT_TYPE).toString().split("|"));
     comboBoxPayment1->insertItems(0, payments);
     const int removeLast = comboBoxPayment1->count() - 1;
     comboBoxPayment1->removeItem(removeLast);

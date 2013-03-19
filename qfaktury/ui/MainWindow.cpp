@@ -193,7 +193,7 @@ void MainWindow::createInvoice_(const InvoiceTypeData::Type type)
 bool MainWindow::firstRun_() const
 {
     SettingsGlobal s;
-    return s.value(s.keyName(s.FIRST_RUN), true).toBool();
+    return s.value(s.FIRST_RUN, true).toBool();
 }
 
 
@@ -316,7 +316,7 @@ void MainWindow::retranslateUi_()
 {
     QTranslator appTranslator;
     SettingsGlobal s;
-    appTranslator.load(QString("translations/qfaktury_") + s.value(s.keyName(s.LANG)).toString());
+    appTranslator.load(QString("translations/qfaktury_") + s.value(s.LANG).toString());
     qApp->installTranslator(&appTranslator);
     retranslateUi(this);
 }

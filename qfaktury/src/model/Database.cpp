@@ -14,7 +14,7 @@ Database::Database(QObject *parent): QObject(parent)
     db_.exec("PRAGMA foreign_keys = ON");
 
     SettingsGlobal s;
-    if(s.value(s.keyName(s.FIRST_RUN), true).toBool())
+    if(s.value(s.FIRST_RUN, true).toBool())
     {
         if(!createTablesIfNotExist_())
         {

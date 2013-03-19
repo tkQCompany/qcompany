@@ -41,7 +41,7 @@ QString ModelInvoice::generateInvoiceNumber(const QString& invoiceNumFormat, con
     SettingsGlobal s;
 
     const QString numFormat(invoiceNumFormat.isEmpty()
-                            ?s.value(s.keyName(s.DEFAULT_INV_NUM_FORMAT)).toString()
+                            ?s.value(s.DEFAULT_INV_NUM_FORMAT).toString()
                            :invoiceNumFormat);
 
     const QVector<int> parse(InvoiceNumberFormatData::Parse(numFormat));
@@ -62,13 +62,13 @@ QString ModelInvoice::generateInvoiceNumber(const QString& invoiceNumFormat, con
             ret += invoiceTypeName;
             break;
         case InvoiceNumberFormatData::TEXT1:
-            ret += s.value(s.keyName(s.TEXT1)).toString();
+            ret += s.value(s.TEXT1).toString();
             break;
         case InvoiceNumberFormatData::TEXT2:
-            ret += s.value(s.keyName(s.TEXT2)).toString();
+            ret += s.value(s.TEXT2).toString();
             break;
         case InvoiceNumberFormatData::TEXT3:
-            ret += s.value(s.keyName(s.TEXT3)).toString();
+            ret += s.value(s.TEXT3).toString();
             break;
         case InvoiceNumberFormatData::PERIOD_YEAR:
             ret += issuanceDate.toString("yyyy");
@@ -96,7 +96,7 @@ QString ModelInvoice::generateInvoiceNumber(const QString& invoiceNumFormat, con
 QString ModelInvoice::getInvoiceNumberFormat(const QString &counterpartyName) const
 {
     SettingsGlobal s;
-    QString ret = s.value(s.keyName(s.DEFAULT_INV_NUM_FORMAT)).toString();
+    QString ret = s.value(s.DEFAULT_INV_NUM_FORMAT).toString();
 
     if(!counterpartyName.isEmpty())
     {
@@ -145,7 +145,7 @@ QString ModelInvoice::getNextInvNumberFromDB_(const QString &invoiceNumFormat, c
 {
     QString ret("1");
     SettingsGlobal s;
-    const bool defaultInvNumFormat = (s.value(s.keyName(s.DEFAULT_INV_NUM_FORMAT)).toString() == invoiceNumFormat);
+    const bool defaultInvNumFormat = (s.value(s.DEFAULT_INV_NUM_FORMAT).toString() == invoiceNumFormat);
 
     if(invoiceNumFormat.isEmpty())
     {

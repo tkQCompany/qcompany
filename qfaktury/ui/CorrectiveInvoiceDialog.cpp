@@ -22,7 +22,7 @@ void CorrectiveInvoiceDialog::init_ (/*const bool mode*/)
 
     reasonCombo = new QComboBox(this);
     SettingsGlobal s;
-    reasonCombo->addItems(s.value(s.keyName(s.CORRECTION_REASON)).toString().split("|"));
+    reasonCombo->addItems(s.value(s.CORRECTION_REASON).toString().split("|"));
     //addData->addWidget(reasonCombo);
 
     labelSumNet->setText(trUtf8("Wartość korekty:"));
@@ -64,7 +64,7 @@ void CorrectiveInvoiceDialog::init_ (/*const bool mode*/)
 //    makeInvoiceFooter();
 
 //    SettingsGlobal s;
-//    const int numberOfCopies = s.value(s.keyName(s.NUMBER_OF_COPIES), 2).toInt();
+//    const int numberOfCopies = s.value(s.NUMBER_OF_COPIES), 2).toInt();
 //    for (int i = 1; i <= numberOfCopies; i++)
 //    {
 //        makeInvoiceHeader(comboBoxInvoiceType->currentIndex() + 1, false, true, false);
@@ -239,16 +239,16 @@ void CorrectiveInvoiceDialog::readCorrData(const QString &invFileName)
     }
 
     dateEditDayOfPayment->setDate(QDate::fromString(additional.attribute("liabDate"), s.dateFormatExternal()));
-    //int curCurrency = s.value(s.keyName(s.CURRENCIES)).toString().split("|").indexOf(additional.attribute("currency"));
+    //int curCurrency = s.value(s.CURRENCIES)).toString().split("|").indexOf(additional.attribute("currency"));
     //comboBoxCurrency->setCurrentIndex(curCurrency);
 
-    int corrReason = s.value(s.keyName(s.CORRECTION_REASON)).toString().split("|").indexOf(additional.attribute("reason"));
+    int corrReason = s.value(s.CORRECTION_REASON).toString().split("|").indexOf(additional.attribute("reason"));
     reasonCombo->setCurrentIndex(corrReason);
 
     unsaved = false;
     pushButtonSave->setEnabled(false);
 
-    setIsEditAllowed(s.value(s.keyName(s.EDIT)).toBool());
+    setIsEditAllowed(s.value(s.EDIT).toBool());
     calculateDiscount();
     calculateSum();
 }

@@ -320,14 +320,14 @@ void SettingsDialog::saveSettings_()
     s.setValue(s.keyName(s.WORKING_DIR), lineEditWorkDir->text());
 
     s.beginGroup("printpos");
-    s.setValue(s.keyName(s.USER_NAME), checkBoxName->isChecked());
-    s.setValue(s.keyName(s.USER_LOCATION), checkBoxLocation->isChecked());
-    s.setValue(s.keyName(s.USER_ADDRESS), checkBoxAddress->isChecked());
-    s.setValue(s.keyName(s.USER_ACCOUNT), checkBoxAccountName->isChecked());
-    s.setValue(s.keyName(s.USER_TAXID), checkBoxTaxID->isChecked());
-    s.setValue(s.keyName(s.USER_PHONE), checkBoxPhone->isChecked());
-    s.setValue(s.keyName(s.USER_MAIL), checkBoxEmail->isChecked());
-    s.setValue(s.keyName(s.USER_WWW), checkBoxWWW->isChecked());
+    s.setValue(s.keyName(s.SELLER_NAME), checkBoxName->isChecked());
+    s.setValue(s.keyName(s.SELLER_LOCATION), checkBoxLocation->isChecked());
+    s.setValue(s.keyName(s.SELLER_ADDRESS), checkBoxAddress->isChecked());
+    s.setValue(s.keyName(s.SELLER_ACCOUNT), checkBoxAccountName->isChecked());
+    s.setValue(s.keyName(s.SELLER_TAXID), checkBoxTaxID->isChecked());
+    s.setValue(s.keyName(s.SELLER_PHONE), checkBoxPhone->isChecked());
+    s.setValue(s.keyName(s.SELLER_MAIL), checkBoxEmail->isChecked());
+    s.setValue(s.keyName(s.SELLER_WWW), checkBoxWWW->isChecked());
     s.endGroup();
 
     s.setValue(s.keyName(s.FIRST_RUN), false);
@@ -371,63 +371,63 @@ void SettingsDialog::readSettings_()
     int curr = 0;
     SettingsGlobal s;
 
-    lineEditLogo->setText(s.value(s.keyName(s.LOGO)).toString());
-    lineEditWorkDir->setText(s.value(s.keyName(s.WORKING_DIR)).toString());
-    lineEditTaxIDMask->setText(s.value(s.keyName(s.TAXID_MASK)).toString());
-    lineEditAccountMask->setText(s.value(s.keyName(s.ACCOUNT_MASK)).toString());
-    lineEditFormat->setText(s.value(s.keyName(s.DEFAULT_INV_NUM_FORMAT)).toString());
+    lineEditLogo->setText(s.value(s.LOGO).toString());
+    lineEditWorkDir->setText(s.value(s.WORKING_DIR).toString());
+    lineEditTaxIDMask->setText(s.value(s.TAXID_MASK).toString());
+    lineEditAccountMask->setText(s.value(s.ACCOUNT_MASK).toString());
+    lineEditFormat->setText(s.value(s.DEFAULT_INV_NUM_FORMAT).toString());
 
     //listWidgetUnit->clear();
-    //listWidgetUnit->addItems(s.value(s.keyName(s.UNITS)).toString().split("|"));
+    //listWidgetUnit->addItems(s.value(s.UNITS)).toString().split("|"));
     listWidgetVAT->clear();
-    listWidgetVAT->addItems(s.value(s.keyName(s.VAT_RATES)).toString().split("|"));
-    //listWidgetCurrency->addItems(s.value(s.keyName(s.CURRENCIES)).toString().split("|"));
+    listWidgetVAT->addItems(s.value(s.VAT_RATES).toString().split("|"));
+    //listWidgetCurrency->addItems(s.value(s.CURRENCIES)).toString().split("|"));
     listWidgetPayment->clear();
-    listWidgetPayment->addItems(s.value(s.keyName(s.PAYMENT_TYPE)).toString().split("|"));
+    listWidgetPayment->addItems(s.value(s.PAYMENT_TYPE).toString().split("|"));
 
     listWidgetCorrectionReason->clear();
-    listWidgetCorrectionReason->addItems(s.value(s.keyName(s.CORRECTION_REASON)).toString().split("|"));
+    listWidgetCorrectionReason->addItems(s.value(s.CORRECTION_REASON).toString().split("|"));
 
-    curr = getTranslations_().indexOf(s.value(s.keyName(s.LANG)).toString());
+    curr = getTranslations_().indexOf(s.value(s.LANG).toString());
     comboBoxLanguage->setCurrentIndex(curr);
 
-    curr = getTemplates_().indexOf(s.value(s.keyName(s.CSS)).toString());
+    curr = getTemplates_().indexOf(s.value(s.CSS).toString());
     comboBoxCSS->setCurrentIndex(curr);
 
-    checkBoxFieldID->setChecked(s.value(s.keyName(s.ORDER_NUMBER)).toBool());
-    checkBoxFieldName->setChecked(s.value(s.keyName(s.NAME)).toBool());
-    checkBoxFieldPostalCode->setChecked(s.value(s.keyName(s.CODE)).toBool());
-    checkBoxFieldPKWIU->setChecked(s.value(s.keyName(s.PKWIU)).toBool());
-    checkBoxFieldAmount->setChecked(s.value(s.keyName(s.QUANTITY)).toBool());
-    checkBoxFieldUnit->setChecked(s.value(s.keyName(s.INTERNAT_UNIT)).toBool());
-    checkBoxFieldUnitPrice->setChecked(s.value(s.keyName(s.UNIT_PRICE)).toBool());
-    checkBoxFieldNetVal->setChecked(s.value(s.keyName(s.NET_VAL)).toBool());
-    checkBoxFieldDiscount->setChecked(s.value(s.keyName(s.DISCOUNT)).toBool());
-    checkBoxFieldDiscountVal->setChecked(s.value(s.keyName(s.DISCOUNT_VAL)).toBool());
-    checkBoxFieldNetAfterDiscount->setChecked(s.value(s.keyName(s.NET_AFTER)).toBool());
-    checkBoxFieldVAT->setChecked(s.value(s.keyName(s.VAT_VAL)).toBool());
-    checkBoxFieldVATVal->setChecked(s.value(s.keyName(s.VAT_PRICE)).toBool());
-    checkBoxFieldGrossVal->setChecked(s.value(s.keyName(s.GROSS_VAL)).toBool());
+    checkBoxFieldID->setChecked(s.value(s.ORDER_NUMBER).toBool());
+    checkBoxFieldName->setChecked(s.value(s.NAME).toBool());
+    checkBoxFieldPostalCode->setChecked(s.value(s.CODE).toBool());
+    checkBoxFieldPKWIU->setChecked(s.value(s.PKWIU).toBool());
+    checkBoxFieldAmount->setChecked(s.value(s.QUANTITY).toBool());
+    checkBoxFieldUnit->setChecked(s.value(s.INTERNAT_UNIT).toBool());
+    checkBoxFieldUnitPrice->setChecked(s.value(s.UNIT_PRICE).toBool());
+    checkBoxFieldNetVal->setChecked(s.value(s.NET_VAL).toBool());
+    checkBoxFieldDiscount->setChecked(s.value(s.DISCOUNT).toBool());
+    checkBoxFieldDiscountVal->setChecked(s.value(s.DISCOUNT_VAL).toBool());
+    checkBoxFieldNetAfterDiscount->setChecked(s.value(s.NET_AFTER).toBool());
+    checkBoxFieldVAT->setChecked(s.value(s.VAT_VAL).toBool());
+    checkBoxFieldVATVal->setChecked(s.value(s.VAT_PRICE).toBool());
+    checkBoxFieldGrossVal->setChecked(s.value(s.GROSS_VAL).toBool());
 
-    textEditAdditionalText->setText(s.value(s.keyName(s.ADDIT_TEXT)).toString());
-    checkBoxInvEdit->setChecked(s.value(s.keyName(s.EDIT)).toBool());
-    checkBoxInvSymbolEdit->setChecked(s.value(s.keyName(s.EDIT_SYMBOL)).toBool());
-    checkBoxProductNameEdit->setChecked(s.value(s.keyName(s.EDIT_NAME)).toBool());
+    textEditAdditionalText->setText(s.value(s.ADDIT_TEXT).toString());
+    checkBoxInvEdit->setChecked(s.value(s.EDIT).toBool());
+    checkBoxInvSymbolEdit->setChecked(s.value(s.EDIT_SYMBOL).toBool());
+    checkBoxProductNameEdit->setChecked(s.value(s.EDIT_NAME).toBool());
 
-    spinBoxNumCopies->setValue(s.value(s.keyName(s.NUMBER_OF_COPIES)).toInt());
+    spinBoxNumCopies->setValue(s.value(s.NUMBER_OF_COPIES).toInt());
 
-    checkBoxName->setChecked(s.value(s.keyName(s.USER_NAME)).toBool());
-    checkBoxLocation->setChecked(s.value(s.keyName(s.USER_LOCATION)).toBool());
-    checkBoxAddress->setChecked(s.value(s.keyName(s.USER_ADDRESS)).toBool());
-    checkBoxAccountName->setChecked(s.value(s.keyName(s.USER_ACCOUNT)).toBool());
-    checkBoxTaxID->setChecked(s.value(s.keyName(s.USER_TAXID)).toBool());
-    checkBoxPhone->setChecked(s.value(s.keyName(s.USER_PHONE)).toBool());
-    checkBoxEmail->setChecked(s.value(s.keyName(s.USER_MAIL)).toBool());
-    checkBoxWWW->setChecked(s.value(s.keyName(s.USER_WWW)).toBool());
+    checkBoxName->setChecked(s.value(s.SELLER_NAME).toBool());
+    checkBoxLocation->setChecked(s.value(s.SELLER_LOCATION).toBool());
+    checkBoxAddress->setChecked(s.value(s.SELLER_ADDRESS).toBool());
+    checkBoxAccountName->setChecked(s.value(s.SELLER_ACCOUNT).toBool());
+    checkBoxTaxID->setChecked(s.value(s.SELLER_TAXID).toBool());
+    checkBoxPhone->setChecked(s.value(s.SELLER_PHONE).toBool());
+    checkBoxEmail->setChecked(s.value(s.SELLER_MAIL).toBool());
+    checkBoxWWW->setChecked(s.value(s.SELLER_WWW).toBool());
 
-    dateEditLastUpdate->setDate(s.value(s.keyName(s.LAST_UPDATE_EXCHANGE_RATES)).toDate());
+    dateEditLastUpdate->setDate(s.value(s.LAST_UPDATE_EXCHANGE_RATES).toDate());
     dateEditLastUpdateByCentralBank->setDate(
-                s.value(s.keyName(s.LAST_UPDATE_EXCHANGE_RATES_CENTRAL_BANK)).toDate());
+                s.value(s.LAST_UPDATE_EXCHANGE_RATES_CENTRAL_BANK).toDate());
 }
 
 

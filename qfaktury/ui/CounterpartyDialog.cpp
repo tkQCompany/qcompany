@@ -31,7 +31,7 @@ CounterpartyDialog::CounterpartyDialog(QWidget *parent, Database *db, const QMod
         comboBoxType->setCurrentIndex(comboBoxType->findText(CounterpartyTypeData::name(CounterpartyTypeData::COMPANY)));
 
         SettingsGlobal s;
-        comboBoxCountry->setCurrentIndex(comboBoxCountry->findText(s.value(s.keyName(s.COUNTRY)).toString()));
+        comboBoxCountry->setCurrentIndex(comboBoxCountry->findText(s.value(s.COUNTRY).toString()));
     }
     connect(pushButtonOK, SIGNAL(clicked()), this, SLOT(okClick_()));
     connect(pushButtonEditTypeList, SIGNAL(clicked()), this, SLOT(editCounterpartyTypeList_()));
@@ -80,8 +80,8 @@ void CounterpartyDialog::init()
     mapper_.addMapping(lineEditInvNumberFormat, CounterpartyFields::INV_NUM_FORMAT);
 
     SettingsGlobal s;
-    lineEditTaxID->setInputMask(s.value(s.keyName(s.TAXID_MASK)).toString());
-    lineEditAccountName->setInputMask(s.value(s.keyName(s.ACCOUNT_MASK)).toString());
+    lineEditTaxID->setInputMask(s.value(s.TAXID_MASK).toString());
+    lineEditAccountName->setInputMask(s.value(s.ACCOUNT_MASK).toString());
 }
 
 // --------- SLOTS START --

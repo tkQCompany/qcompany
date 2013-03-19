@@ -46,7 +46,7 @@ void DuplicateDialog::init_()
 //    invStrList += "<tr>";
 //    invStrList += "<td width=\"60%\" align=\"center\" valign=\"bottom\">";
 //    invStrList += "<span class=\"stamp\">";
-//    const QString logo(s.value(s.keyName(s.LOGO)).toString());
+//    const QString logo(s.value(s.LOGO)).toString());
 //    if (!logo.isEmpty())
 //    {
 //        invStrList += "<img src=\"" + logo + "\" width=\"100\" " + " height=\"100\"+ >";

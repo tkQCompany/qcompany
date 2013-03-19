@@ -39,7 +39,7 @@ void CounterpartyDialogTest::testCaseInitialValues()
     SettingsGlobal s;
     CounterpartyDialog dialog(0, &db, QModelIndex());
     QCOMPARE(dialog.comboBoxType->currentText(), CounterpartyTypeData::name(CounterpartyTypeData::COMPANY));
-    QCOMPARE(dialog.comboBoxCountry->currentText(), s.value(s.keyName(s.COUNTRY)).toString());
+    QCOMPARE(dialog.comboBoxCountry->currentText(), s.value(s.COUNTRY).toString());
 }
 
 void CounterpartyDialogTest::testCase1()
