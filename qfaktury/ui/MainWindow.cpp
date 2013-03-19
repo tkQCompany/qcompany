@@ -464,19 +464,23 @@ void MainWindow::aboutQt_()
  */
 void MainWindow::about_()
 {
-    QMessageBox::about(
-                this,
-                trUtf8("O programie"),
-                trUtf8("Program do wystawiania faktur.\n\n ") + QString("%1 - %2").arg(qApp->applicationName()).arg(qApp->applicationVersion()) +
-                trUtf8("\n\nKoordynator projektu:\n\tGrzegorz Rękawek\t\t\n\nProgramiści: \n\tTomasz Pielech\n\t") +
-                trUtf8("Rafał Rusin http://people.apache.org/~rr/\n\tSławomir Patyk \n\nIkony:\n\tDariusz Arciszewski\n\n") +
-                trUtf8("UWAGA!!!\n") +
-                trUtf8("Ten program komputerowy dostarczany jest przez autora w formie \"takiej, jaki jest\". ") +
-                trUtf8("Autor nie udziela żadnej gwarancji oraz rękojmi, że program będzie działał ") +
-                trUtf8("prawidłowo, jest odpowiedniej jakości oraz że spełni oczekiwania ") +
-                trUtf8("użytkownika. Autor nie odpowiada za jakiekolwiek straty wynikające z użytkowania ") +
-                trUtf8("programu, w tym utratą spodziewanych korzyści, danych, informacji ") +
-                trUtf8("gospodarczych lub koszt urządzeń lub programów zastępczych."));
+    const QString msgAbout(trUtf8("Program do wystawiania faktur.\n\n%1 - %2\n\n"
+                                  "Koordynator projektu:\n\tGrzegorz Rękawek\t\t\n\n"
+                                  "Programiści: \n\tTomasz Pielech"
+                                  "\n\tRafał Rusin http://people.apache.org/~rr/"
+                                  "\n\tSławomir Patyk"
+                                  "\n\tTomasz Krzal"
+                                  "\n\nIkony:"
+                                  "\n\tDariusz Arciszewski\n\n"
+                                  "UWAGA!!!\n"
+                                  "Ten program komputerowy dostarczany jest przez autora w formie \"takiej, jaki jest\". "
+                                  "Autor nie udziela żadnej gwarancji oraz rękojmi, że program będzie działał "
+                                  "prawidłowo, jest odpowiedniej jakości oraz że spełni oczekiwania "
+                                  "użytkownika. Autor nie odpowiada za jakiekolwiek straty wynikające z użytkowania "
+                                  "programu, w tym utraty spodziewanych korzyści, danych, informacji "
+                                  "gospodarczych lub koszt urządzeń lub programów zastępczych.")
+                           .arg(qApp->applicationName()).arg(qApp->applicationVersion()));
+    QMessageBox::about(this, trUtf8("O programie"), msgAbout);
 }
 
 
