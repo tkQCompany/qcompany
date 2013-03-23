@@ -4,55 +4,45 @@
 
 TEMPLATE = app
 TARGET = qfaktury
-DEPENDPATH += . \
-              src \
-              translations \
-              ui \
-              src/model \
-              src/model/models \
-              src/model/models_data \
-              ../qdecimal/decnumber
+DEPENDPATH += src
 
-INCLUDEPATH += . \
-               src \
+INCLUDEPATH += src \
                src/model \
                src/model/models \
                src/model/models_data \
-               ui \
-              ../qdecimal/decnumber
+               src/ui \
+               ../qdecimal/decnumber \
+               ../qdecimal/src
 
-# Input
-SOURCES += main.cpp
 
-FORMS += ui/CounterpartyTypeDialog.ui \
-         ui/CustomPaymentDialog.ui \
-         ui/EmailDialog.ui \
-         ui/MainWindow.ui \
-         ui/PhoneDialog.ui \
-         ui/CounterpartyInfoDialog.ui \
-         ui/InvoiceDialog.ui \
-         ui/ChangeAmountDialog.ui \
-         ui/CommodityDialog.ui \
-         ui/CommodityListDialog.ui \
-         ui/CounterpartyDialog.ui \
-         ui/SettingsDialog.ui \
-         ui/InvoiceNumberFormatEditDialog.ui \
-         ui/InvoiceNumberFormatExamplesDialog.ui
+FORMS += src/ui/InvoiceDialog.ui \
+         src/ui/CounterpartyTypeDialog.ui \
+         src/ui/CustomPaymentDialog.ui \
+         src/ui/EmailDialog.ui \
+         src/ui/MainWindow.ui \
+         src/ui/PhoneDialog.ui \
+         src/ui/CounterpartyInfoDialog.ui \
+         src/ui/ChangeAmountDialog.ui \
+         src/ui/CommodityDialog.ui \
+         src/ui/CommodityListDialog.ui \
+         src/ui/CounterpartyDialog.ui \
+         src/ui/SettingsDialog.ui \
+         src/ui/InvoiceNumberFormatEditDialog.ui \
+         src/ui/InvoiceNumberFormatExamplesDialog.ui
 
 CODECFORTR = UTF-8
 CODECFORSRC = UTF-8
 
-TRANSLATIONS += translations/qfaktury_de.ts \
-                 translations/qfaktury_en.ts
+TRANSLATIONS += res/translations/qfaktury_de.ts \
+                 res/translations/qfaktury_en.ts
 
-RESOURCES += qfaktury.qrc
+RESOURCES += res/qfaktury.qrc
 
 QT += gui
 
-UI_DIR = ./ui
-
-OBJECTS_DIR = obj
 MOC_DIR = moc_files
+OBJECTS_DIR = obj
+UI_DIR = ui_files
 
 OTHER_FILES += \
     doc/Doxyfile \
@@ -60,3 +50,4 @@ OTHER_FILES += \
     templates/style.css
 
 include(qfaktury_common.pri)
+include(qfaktury_files.pri)

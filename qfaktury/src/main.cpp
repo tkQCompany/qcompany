@@ -8,6 +8,8 @@
 #include "MainWindow.h"
 #include "SettingsGlobal.h"
 
+#ifndef MAIN_CPP
+#define MAIN_CPP
 
 int main(int argc, char **argv)
 {
@@ -45,3 +47,5 @@ int main(int argc, char **argv)
 
 	return a.exec();
 }
+
+#endif

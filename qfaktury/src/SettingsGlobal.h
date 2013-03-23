@@ -25,7 +25,7 @@ public:
                UNIT_PRICE, NET_VAL, DISCOUNT, DISCOUNT_VAL, NET_AFTER,
                VAT_VAL, VAT_PRICE, GROSS_VAL, SELLER_NAME, SELLER_LOCATION,
                SELLER_ADDRESS, SELLER_ACCOUNT, SELLER_TAXID, SELLER_PHONE, SELLER_MAIL,
-               SELLER_WWW, WORKING_DIR, CSS, DEFAULT_INV_NUM_FORMAT, DEFAULT_CURRENCY,
+               SELLER_WWW, CSS, DEFAULT_INV_NUM_FORMAT, DEFAULT_CURRENCY,
                COUNTRY, TEXT1, TEXT2, TEXT3,
                LAST_UPDATE_EXCHANGE_RATES, LAST_UPDATE_EXCHANGE_RATES_CENTRAL_BANK};
 
@@ -74,7 +74,6 @@ public:
         case SELLER_PHONE: return QString("printpos/display_seller_phone");
         case SELLER_MAIL: return QString("printpos/display_seller_email");
         case SELLER_WWW: return QString("printpos/display_seller_www");
-        case WORKING_DIR: return QString("working_dir");
         case CSS: return QString("css");
         case DEFAULT_INV_NUM_FORMAT: return QString("default_inv_num_format");
         case DEFAULT_CURRENCY: return QString("default_currency");
@@ -97,7 +96,7 @@ public:
      * @brief
      *
      */
-    void resetSettings() //TODO: make sure it won't damage sth (like individual invoice numbering scheme)
+    void resetSettings()
     {
         setValue(keyName(LANG), trUtf8("pl"));
         setValue(keyName(ADDIT_TEXT), trUtf8("Towar odebrałem zgodnie z fakturą"));
@@ -113,7 +112,6 @@ public:
         setValue(keyName(PAYMENT_TYPE), trUtf8("gotówka|przelew|zaliczka"));
         setValue(keyName(CORRECTION_REASON), trUtf8("zmiana ilości") );
         setValue(keyName(VAT_RATES), trUtf8("23|8|5|0|zw."));
-        setValue(keyName(WORKING_DIR), QString("%1/elinux").arg(QDir::homePath()));
         setValue(keyName(CSS), QString("style.css"));
         setValue(keyName(DEFAULT_INV_NUM_FORMAT), trUtf8("{TEKST1}/{R}-{M}-{D}/{NR_R}"));
         setValue(keyName(DEFAULT_CURRENCY), trUtf8("PLN"));
@@ -147,57 +145,6 @@ public:
         setValue(keyName(SELLER_PHONE), "true");
         setValue(keyName(SELLER_MAIL), "true");
         setValue(keyName(SELLER_WWW), "true");
-    }
-
-
-    // returns working directory
-    /**
-     * @brief
-     *
-     * @return QString
-     */
-    const QString workingDir() const
-    {
-        return value(WORKING_DIR).toString();
-    }
-
-    // returns templates directory
-    /**
-     * @brief
-     *
-     * @return QString
-     */
-    const QString templateDir() const
-    {
-        const QString style(value(CSS).toString());
-        QString ret = workingDir() + "/templates/" + style;
-
-        QFile f;
-        f.setFileName(ret);
-        if (!f.exists()) {
-            ret = QDir::currentPath() + "/templates/" + style;
-        }
-
-        f.setFileName(ret);
-        if (!f.exists()) {
-            ret = "/usr/local/share/qfaktury/templates/style.css";
-        }
-
-        return ret;
-    }
-
-
-    // return invoices dir
-    /**
-     * @brief
-     *
-     * @return QString
-     */
-    const QString dataDir() const
-    {
-        //TODO: Changed name of the folder to avoid overwriting the files.
-        //TODO: This may require conversion script.
-        return "/invoices";
     }
 
 

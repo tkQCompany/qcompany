@@ -10,8 +10,8 @@
 
 #include "CommodityData.h"
 #include "../../CustomPaymData.h"
-#include "../../../qdecimal/src/QDecNumber.hh"
-#include "../../../qdecimal/src/QDecContext.hh"
+#include "QDecNumber.hh"
+#include "QDecContext.hh"
 
 namespace InvoiceFields
 {

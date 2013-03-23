@@ -2,7 +2,9 @@ TEMPLATE = subdirs
 
 SUBDIRS += qdecimal \
     qfaktury \
-    qfaktury/tests/qfakturyTests
+    qfakturyTests
+
+CONFIG += ordered
 
 
 TRANSLATIONS += qfaktury/translations/qcompany_de.ts \
