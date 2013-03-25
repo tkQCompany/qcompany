@@ -34,7 +34,7 @@ void CorrectiveInvoiceDialog::init_ (/*const bool mode*/)
 
     setWindowTitle(InvoiceTypeData::name(InvoiceTypeData::CORRECTIVE_VAT));
     ui_->comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::CORRECTIVE_VAT - 1);
-    origGrossTotal = -1;
+    //origGrossTotal = -1;
 
     //editMode = mode;
 
@@ -128,7 +128,7 @@ void CorrectiveInvoiceDialog::setIsEditAllowed(bool isAllowed)
 //        unsaved = true;
 //    }
 
-    isEdit = true;
+    //isEdit = true;
     ui_->lineEditInvNumber->setEnabled(isAllowed);
     ui_->dateEditDateOfSell->setEnabled(isAllowed);
     ui_->dateEditDateOfIssuance->setEnabled(isAllowed);
@@ -154,7 +154,6 @@ void CorrectiveInvoiceDialog::setIsEditAllowed(bool isAllowed)
     }
     reasonCombo->setEnabled(isAllowed);
 
-    //TODO: move it somewhere else, needs to be called after readData
     createOriginalInv();
 }
 

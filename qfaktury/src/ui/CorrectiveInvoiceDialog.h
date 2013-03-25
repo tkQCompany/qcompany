@@ -105,9 +105,9 @@ private:
 private:
     Ui::InvoiceDialog *ui_;
     Database *db_;
-    bool editMode, isEdit; /**< TODO */
+    //bool editMode, isEdit; /**< TODO */
     double origDiscTotal, origNettTotal, origGrossTotal, diffTotal; /**< TODO */
-    InvoiceData invData; /**< TODO */
+    //InvoiceData invData; /**< TODO */
     QComboBox *reasonCombo; /**< TODO */
     QLabel *labelReason1; /**< TODO */
 };
