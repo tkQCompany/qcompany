@@ -2,11 +2,11 @@
 #include "ui_InvoiceDialog.h"
 
 // constructor
-CorrectiveInvoiceDialog::CorrectiveInvoiceDialog(QWidget *parent, Database *db):
+CorrectiveInvoiceDialog::CorrectiveInvoiceDialog(QWidget *parent, Database *db, const QModelIndex &idInvoice):
     QDialog(parent), ui_(new Ui::InvoiceDialog), db_(db)
 {
     ui_->setupUi(this);
-    init_();
+    init_(idInvoice);
 }
 
 CorrectiveInvoiceDialog::~CorrectiveInvoiceDialog()
@@ -16,17 +16,13 @@ CorrectiveInvoiceDialog::~CorrectiveInvoiceDialog()
 
 /* Init
  */
-void CorrectiveInvoiceDialog::init_ (/*const bool mode*/)
+void CorrectiveInvoiceDialog::init_(const QModelIndex &idInvoice)
 {
-    labelReason1 = new QLabel(this);
-    labelReason1->setText(trUtf8("Przyczyna korekty:"));
-    labelReason1->setAlignment(Qt::AlignRight);
-    //addDataLabels->addWidget(labelReason1);
-
-    reasonCombo = new QComboBox(this);
     SettingsGlobal s;
-    reasonCombo->addItems(s.value(s.CORRECTION_REASON).toString().split("|"));
-    //addData->addWidget(reasonCombo);
+    ui_->comboBoxReasonOfCorrection->addItems(s.value(s.CORRECTION_REASONS)
+                                              .toString().split("|"));
+    ui_->comboBoxReasonOfCorrection->setEnabled(true);
+    ui_->labelReasonOfCorrection->setEnabled(true);
 
     ui_->labelSumNet->setText(trUtf8("Wartość korekty:"));
     ui_->labelDiscount2->setText(trUtf8("Wartość faktury:"));
@@ -34,12 +30,13 @@ void CorrectiveInvoiceDialog::init_ (/*const bool mode*/)
 
     setWindowTitle(InvoiceTypeData::name(InvoiceTypeData::CORRECTIVE_VAT));
     ui_->comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::CORRECTIVE_VAT - 1);
-    //origGrossTotal = -1;
 
     //editMode = mode;
+    qDebug() << "CorrectiveInvDialog";
 
     // connects
-    connect(reasonCombo, SIGNAL(currentIndexChanged (QString)), this, SLOT(textChanged(QString)));
+    connect(ui_->comboBoxReasonOfCorrection, SIGNAL(currentIndexChanged (QString)),
+            this, SLOT(textChanged(QString)));
 }
 
 //*********************************************** SLOTS START ****************************************/
@@ -152,7 +149,7 @@ void CorrectiveInvoiceDialog::setIsEditAllowed(bool isAllowed)
     } else {
         ui_->dateEditDayOfPayment->setEnabled(false);
     }
-    reasonCombo->setEnabled(isAllowed);
+    ui_->comboBoxReasonOfCorrection->setEnabled(isAllowed);
 
     createOriginalInv();
 }

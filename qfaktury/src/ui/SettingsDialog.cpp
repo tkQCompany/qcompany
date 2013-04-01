@@ -329,7 +329,7 @@ void SettingsDialog::saveSettings_()
     //s.setValue(s.keyName(s.UNITS), getItemsToString_(listWidgetUnit));
     s.setValue(s.keyName(s.VAT_RATES), getItemsToString_(ui_->listWidgetVAT).remove("%"));
     //s.setValue(s.keyName(s.CURRENCIES), getItemsToString_(listWidgetCurrency));
-    s.setValue(s.keyName(s.CORRECTION_REASON), getItemsToString_(ui_->listWidgetCorrectionReason));
+    s.setValue(s.keyName(s.CORRECTION_REASONS), getItemsToString_(ui_->listWidgetCorrectionReason));
     s.setValue(s.keyName(s.PAYMENT_TYPE), getItemsToString_(ui_->listWidgetPayment));
     s.setValue(s.keyName(s.ADDIT_TEXT), ui_->textEditAdditionalText->toPlainText());
 
@@ -379,7 +379,7 @@ void SettingsDialog::readSettings_()
     ui_->listWidgetPayment->addItems(s.value(s.PAYMENT_TYPE).toString().split("|"));
 
     ui_->listWidgetCorrectionReason->clear();
-    ui_->listWidgetCorrectionReason->addItems(s.value(s.CORRECTION_REASON).toString().split("|"));
+    ui_->listWidgetCorrectionReason->addItems(s.value(s.CORRECTION_REASONS).toString().split("|"));
 
     curr = getTranslations_().indexOf(s.value(s.LANG).toString());
     ui_->comboBoxLanguage->setCurrentIndex(curr);

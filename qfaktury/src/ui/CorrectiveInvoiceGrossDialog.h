@@ -25,7 +25,7 @@ public:
  * @param parent
  * @param db
  */
-    CorrectiveInvoiceGrossDialog(QWidget *parent, Database *db);
+    CorrectiveInvoiceGrossDialog(QWidget *parent, Database *db, const QModelIndex &idInvoice);
     ~CorrectiveInvoiceGrossDialog();
     /**
      * @brief

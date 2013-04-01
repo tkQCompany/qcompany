@@ -21,7 +21,7 @@ public:
  * @param
  * @param db
  */
-    CorrectiveInvoiceDialog(QWidget *parent, Database *db);
+    CorrectiveInvoiceDialog(QWidget *parent, Database *db, const QModelIndex &idInvoice);
     /**
      * @brief
      *
@@ -89,26 +89,19 @@ private:
      * @brief
      *
      */
-    void init_();
+    void init_(const QModelIndex &idInvoice);
 
     /**
      * @brief
      *
      */
     //void makeBeforeCorrSumm();
-    /**
-     * @brief
-     *
-     * @param short
-     */
-    void makeInvoceProductsTitle(const short);
+
 private:
     Ui::InvoiceDialog *ui_;
     Database *db_;
     //bool editMode, isEdit; /**< TODO */
     double origDiscTotal, origNettTotal, origGrossTotal, diffTotal; /**< TODO */
     //InvoiceData invData; /**< TODO */
-    QComboBox *reasonCombo; /**< TODO */
-    QLabel *labelReason1; /**< TODO */
 };
 #endif

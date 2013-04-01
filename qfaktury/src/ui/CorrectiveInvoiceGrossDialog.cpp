@@ -10,7 +10,7 @@
 
 /* Constructor
  */
-CorrectiveInvoiceGrossDialog::CorrectiveInvoiceGrossDialog(QWidget *parent, Database *db):
+CorrectiveInvoiceGrossDialog::CorrectiveInvoiceGrossDialog(QWidget *parent, Database *db, const QModelIndex &idInvoice):
     QDialog(parent), ui_(new Ui::InvoiceDialog), db_(db)
 {
     ui_->setupUi(this);

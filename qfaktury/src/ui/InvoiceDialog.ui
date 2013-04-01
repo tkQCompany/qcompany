@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>933</width>
-    <height>574</height>
+    <width>932</width>
+    <height>668</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string/>
   </property>
   <property name="windowIcon">
-   <iconset resource="../qfaktury.qrc">
+   <iconset resource="../../res/qfaktury.qrc">
     <normaloff>:/res/icons/nowa_faktura.png</normaloff>:/res/icons/nowa_faktura.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -89,6 +89,12 @@
        </item>
        <item row="0" column="1">
         <widget class="QDateEdit" name="dateEditDateOfSell">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="focusPolicy">
           <enum>Qt::NoFocus</enum>
          </property>
@@ -135,6 +141,12 @@
        </item>
        <item row="0" column="1">
         <widget class="QDateEdit" name="dateEditDateOfIssuance">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="focusPolicy">
           <enum>Qt::NoFocus</enum>
          </property>
@@ -239,7 +251,14 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QComboBox" name="comboBoxCounterparties"/>
+        <widget class="QComboBox" name="comboBoxCounterparties">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -294,6 +313,36 @@
        <attribute name="horizontalHeaderStretchLastSection">
         <bool>true</bool>
        </attribute>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_8">
+     <item>
+      <widget class="QLabel" name="labelReasonOfCorrection">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Powód korekty:</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBoxReasonOfCorrection</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBoxReasonOfCorrection">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
       </widget>
      </item>
     </layout>
@@ -426,7 +475,14 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QComboBox" name="comboBoxPayment"/>
+        <widget class="QComboBox" name="comboBoxPayment">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="labelDateOfPayment">
@@ -446,6 +502,12 @@
        </item>
        <item row="1" column="1">
         <widget class="QDateEdit" name="dateEditDayOfPayment">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="displayFormat">
           <string>dd/MM/yyyy</string>
          </property>
@@ -472,6 +534,12 @@
        </item>
        <item row="2" column="1">
         <widget class="QComboBox" name="comboBoxCurrency">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
            <width>80</width>
@@ -801,8 +869,8 @@
   <tabstop>tableWidgetCommodities</tabstop>
  </tabstops>
  <resources>
-  <include location="../qfaktury.qrc"/>
-  <include location="../qfaktury.qrc"/>
+  <include location="../../res/qfaktury.qrc"/>
+  <include location="../../res/qfaktury.qrc"/>
  </resources>
  <connections/>
 </ui>

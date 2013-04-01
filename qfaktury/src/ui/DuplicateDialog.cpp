@@ -9,11 +9,11 @@
 #include "ui_InvoiceDialog.h"
 
 // constructor
-DuplicateDialog::DuplicateDialog(QDialog *parent):
-    QDialog(parent), ui_(new Ui::InvoiceDialog)
+DuplicateDialog::DuplicateDialog(QWidget *parent, Database *db, const QModelIndex &idInvoice):
+    QDialog(parent), ui_(new Ui::InvoiceDialog), db_(db)
 {
     ui_->setupUi(this);
-    init_();
+    init_(idInvoice);
 }
 
 
@@ -22,7 +22,7 @@ DuplicateDialog::~DuplicateDialog()
     delete ui_;
 }
 
-void DuplicateDialog::init_()
+void DuplicateDialog::init_(const QModelIndex &idInvoice)
 {
     SettingsGlobal s;
 

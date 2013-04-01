@@ -154,20 +154,11 @@ void MainWindow::createInvoice_(const InvoiceTypeData::Type type)
     case InvoiceTypeData::BILL:
         invoice.reset(new BillDialog(this, &db_));
         break;
-    case InvoiceTypeData::CORRECTIVE_VAT:
-    case InvoiceTypeData::CORRECTIVE_GROSS:
-        if(type == InvoiceTypeData::CORRECTIVE_VAT)
-        {
-            invoice.reset(new CorrectiveInvoiceDialog(this, &db_));
-        }
-        else
-        {
-            invoice.reset(new CorrectiveInvoiceGrossDialog(this, &db_));
-        }
-        break;
     case InvoiceTypeData::GROSS:
         invoice.reset(new InvoiceGrossDialog(this, &db_));
         break;
+    default:
+        return;
     }
 
     if(!invoice.isNull())
@@ -482,58 +473,31 @@ void MainWindow::editInvoice_()
     case InvoiceTypeData::PRO_FORMA:
     {
         InvoiceDialog dialog(this, &db_, invType, list.at(0));
-        //InvoiceData::InvoiceType type = InvoiceData::PRO_FORMA;
-        //if (tableViewInvoices->item(row, IVF::TYPE)->text() == InvoiceData::InvoiceTypeToString(InvoiceData::VAT))
-        //{
-        //    type = InvoiceData::VAT;
-        //}
-        //dialog.readData(tableViewInvoices->item(row, IVF::FILE_NAME)->text(), type);
-        if (dialog.exec() == QDialog::Accepted)
-        {
-
-        }
+        dialog.exec();
     }
         break;
     case InvoiceTypeData::CORRECTIVE_VAT:
     {
-        CorrectiveInvoiceDialog dialog(this, &db_);
-        //dialog.init_(/*true*/);
-        //dialog.readCorrData(tableViewInvoices->item(row, IVF::FILE_NAME)->text());
-        if (dialog.exec() == QDialog::Accepted)
-        {
-            // edit window shouln't return anything
-        }
+        CorrectiveInvoiceDialog dialog(this, &db_, list.at(0));
+        dialog.exec();  // edit window shouln't return anything
     }
         break;
     case InvoiceTypeData::GROSS:
     {
         InvoiceGrossDialog dialog(this, &db_);
-        //dialog.readData(tableViewInvoices->item(row, IVF::FILE_NAME)->text(), InvoiceData::GROSS);
-        if (dialog.exec() == QDialog::Accepted)
-        {
-        }
+        dialog.exec();
     }
         break;
     case InvoiceTypeData::CORRECTIVE_GROSS:
     {
-        CorrectiveInvoiceGrossDialog dialog(this, &db_);
-        //dialog.init_(/*true*/);
-        //dialog.readCorrData(tableViewInvoices->item(row, IVF::FILE_NAME)->text());
-        if (dialog.exec() == QDialog::Accepted)
-        {
-            // edit window shouln't return anything
-        }
+        CorrectiveInvoiceGrossDialog dialog(this, &db_, list.at(0));
+        dialog.exec(); // edit window shouln't return anything
     }
         break;
     case InvoiceTypeData::BILL:
     {
         BillDialog dialog(this, &db_);
-        //dialog.readData(tableViewInvoices->item(row, IVF::FILE_NAME)->text(), InvoiceData::BILL);
-        //dialog.setWindowTitle(trUtf8("Edytuje Rachunek"));
-        if (dialog.exec() == QDialog::Accepted)
-        {
-            // edit window shouln't return anything
-        }
+        dialog.exec(); // edit window shouln't return anything
     }
         break;
     default:
@@ -759,32 +723,41 @@ void MainWindow::newProFormaInvoice_()
  *
  */
 void MainWindow::newCorrection_()
-{
-    /*if(!areTableItemsSelected(tableViewInvoices, trUtf8("Żadna faktura nie jest wybrana.") + QChar(' ') +
-                              trUtf8("Wybierz fakturę, do której chcesz wystawić korektę.")))
+{//TODO: remove redundancy here and in edit* methods (hint: areTableItemsSelected())
+    const QModelIndexList list(tableViewInvoices->selectionModel()->selectedIndexes());
+    if(list.size() <= 0)
+    {
+        QMessageBox::information(this, qApp->applicationName(), trUtf8("Żadna faktura nie jest wybrana.") + QChar(' ') + trUtf8("Nie można edytować."));
         return;
-
-    const int row = tableViewInvoices->selectedItems()[0]->row();
-
-    const QStringList invTypes(QStringList() << InvoiceData::InvoiceTypeToString(InvoiceData::VAT)
-                               << InvoiceData::InvoiceTypeToString(InvoiceData::GROSS));
-    if (invTypes.contains(tableViewInvoices->item(row, IVF::TYPE)->text()))
-    {
-
-        if (tableViewInvoices->item(row, IVF::TYPE)->text().contains(InvoiceData::InvoiceTypeToString(InvoiceData::VAT)))
-        {
-            createInvoice(InvoiceData::CORRECTIVE_VAT);
-        }
-        else
-        {
-            createInvoice(InvoiceData::CORRECTIVE_GROSS);
-        }
     }
-    else
+
+    const QString invTypeStr(db_.modelInvoice()->data(db_.modelInvoice()->
+                             index(list.at(0).row(), InvoiceFields::TYPE_ID)).
+                             toString());
+    const int invType = InvoiceTypeData::StringToInvoiceType(invTypeStr);
+    switch(invType)
     {
-        QMessageBox::information(this, qApp->applicationName(), trUtf8("Do faktury typu %1 nie wystawiamy korekt.")
-                                 .arg(tableViewInvoices->item(row, IVF::TYPE)->text()), QMessageBox::Ok);
-    }*/
+    case InvoiceTypeData::VAT:
+    {
+        CorrectiveInvoiceDialog dialog(this, &db_, db_.modelInvoice()->
+                            index(list.at(0).row(), InvoiceFields::ID_INVOICE));
+        dialog.exec();
+    }
+        break;
+    case InvoiceTypeData::GROSS:
+    {
+        CorrectiveInvoiceGrossDialog dialog(this, &db_, db_.modelInvoice()->
+                            index(list.at(0).row(), InvoiceFields::ID_INVOICE));
+        dialog.exec();
+    }
+        break;
+    default:
+        QMessageBox::information(this, qApp->applicationName(),
+                                 trUtf8("Do faktury typu %1 nie wystawiamy korekt.")
+                                 .arg(invTypeStr),
+                                 QMessageBox::Ok);
+        break;
+    }
 }
 
 
@@ -793,33 +766,35 @@ void MainWindow::newCorrection_()
  *
  */
 void MainWindow::newDuplicate_()
-{
-    /*if(!areTableItemsSelected(tableViewInvoices, trUtf8("Żadna faktura nie jest wybrana.") + QChar(' ') +
-                              trUtf8("Wybierz fakturę, do której chcesz wystawić duplikat.")))
+{//TODO: remove redundancy here and in edit* methods (hint: areTableItemsSelected())
+    const QModelIndexList list(tableViewInvoices->selectionModel()->selectedIndexes());
+    if(list.size() <= 0)
+    {
+        QMessageBox::information(this, qApp->applicationName(), trUtf8("Żadna faktura nie jest wybrana.") + QChar(' ') + trUtf8("Nie można edytować."));
         return;
-
-    const int row = tableViewInvoices->selectedItems()[0]->row();
-
-    // types of invoices for which it's ok to issue a duplicate
-    const QStringList invTypes(QStringList() << InvoiceData::InvoiceTypeToString(InvoiceData::VAT)
-                               << InvoiceData::InvoiceTypeToString(InvoiceData::GROSS));
-
-    if (invTypes.contains(tableViewInvoices->item(row, IVF::TYPE)->text()))
-    {
-        DuplicateDialog dupWindow(this, model);
-        dupWindow.readData(tableViewInvoices->item(row, IVF::FILE_NAME)->text(), InvoiceData::VAT);
-        dupWindow.setWindowTitle(trUtf8("Nowy duplikat"));
-        dupWindow.init();
-        if (dupWindow.exec() == QDialog::Accepted)
-        {
-            // not saving duplicate
-        }
     }
-    else
+
+    const QString invTypeStr(db_.modelInvoice()->data(db_.modelInvoice()->
+                             index(list.at(0).row(), InvoiceFields::TYPE_ID)).
+                             toString());
+    const int invType = InvoiceTypeData::StringToInvoiceType(invTypeStr);
+    switch(invType)
     {
-        QMessageBox::information(this, qApp->applicationName(), trUtf8("Do faktury typu %1 nie wystawiamy duplikatów.")
-                                 .arg(tableViewInvoices->item(row, IVF::TYPE)->text()), QMessageBox::Ok);
-    }*/
+    case InvoiceTypeData::VAT:
+    case InvoiceTypeData::GROSS:
+    {
+        DuplicateDialog dialog(this, &db_, db_.modelInvoice()->
+                                index(list.at(0).row(), InvoiceFields::ID_INVOICE));
+        dialog.exec(); // not saving duplicates
+    }
+        break;
+    default:
+        QMessageBox::information(this, qApp->applicationName(),
+                                 trUtf8("Do faktury typu %1 nie wystawiamy duplikatów.")
+                                 .arg(invTypeStr),
+                                 QMessageBox::Ok);
+        break;
+    }
 }
 
 
@@ -923,5 +898,3 @@ void MainWindow::reportBug_() const
 {
     QDesktopServices::openUrl(QUrl("https://sourceforge.net/tracker2/?func=add&group_id=154610&atid=792471"));
 }
-
-// ----------------------------------------  SLOTS ---------------------------------//

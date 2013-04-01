@@ -20,7 +20,7 @@ class SettingsGlobal: public QSettings
 public:
     enum KEYS {VAT_RATES, LANG, ADDIT_TEXT, EDIT, EDIT_NAME,
                EDIT_SYMBOL, NUMBER_OF_COPIES, TAXID_MASK, ACCOUNT_MASK, FIRST_RUN,
-               UNITS, LOGO, PAYMENT_TYPE, CORRECTION_REASON, ORDER_NUMBER,
+               UNITS, LOGO, PAYMENT_TYPE, CORRECTION_REASONS, ORDER_NUMBER,
                NAME, CODE, PKWIU, QUANTITY, INTERNAT_UNIT,
                UNIT_PRICE, NET_VAL, DISCOUNT, DISCOUNT_VAL, NET_AFTER,
                VAT_VAL, VAT_PRICE, GROSS_VAL, SELLER_NAME, SELLER_LOCATION,
@@ -51,7 +51,7 @@ public:
         case UNITS: return QString("jednostki");
         case LOGO: return QString("logo");
         case PAYMENT_TYPE: return QString("payments");
-        case CORRECTION_REASON: return QString("pkorekty");
+        case CORRECTION_REASONS: return QString("pkorekty");
         case ORDER_NUMBER: return QString("faktury_pozycje/Lp");
         case NAME: return QString("faktury_pozycje/Nazwa");
         case CODE: return QString("faktury_pozycje/Kod");
@@ -110,7 +110,25 @@ public:
         setValue(keyName(UNITS), trUtf8("szt.|kg.|g.|m.|km.|godz."));
         setValue(keyName(LOGO), "");
         setValue(keyName(PAYMENT_TYPE), trUtf8("gotówka|przelew|zaliczka"));
-        setValue(keyName(CORRECTION_REASON), trUtf8("zmiana ilości") );
+        setValue(keyName(CORRECTION_REASONS), trUtf8("Pomyłka w rabacie|"
+                                                    "Podwyższenie ceny|"
+                                                    "Pomyłka w cenie|"
+                                                    "Pomyłka w stawce VAT|"
+                                                    "Pomyłka w kwocie VAT|"
+                                                    "Pomyłka w miarze i ilości (liczbie) dostarczonych towarów lub zakresie wykonanych usług|"
+                                                    "Pomyłka w cenie jednostkowej towaru lub usługi bez kwoty podatku (cenie jednostkowej netto)|"
+                                                    "Pomyłka w kwocie wszelkich rabatów, w tym za wcześniejsze otrzymanie należności, o ile nie zostały one uwzględnione w cenie jednostkowej netto|"
+                                                    "Pomyłka w wartości dostarczonych towarów lub wykonanych usług, objętych transakcją, bez kwoty podatku (wartość sprzedaży netto)|"
+                                                    "Pomyłka w sumie wartości sprzedaży netto z podziałem na sprzedaż objętą poszczególnymi stawkami podatku i sprzedaż zwolnioną od podatku|"
+                                                    "Pomyłka w kwocie należności ogółem|"
+                                                     "Pomyłka w numerze faktury|"
+                                                     "Pomyłka w dacie sprzedaży|"
+                                                     "Pomyłka w dacie wystawienia|"
+                                                     "Pomyłka w typie faktury|"
+                                                     "Pomyłka w typie płatności|"
+                                                     "Pomyłka w terminie płatności|"
+                                                     "Pomyłka w wybranej walucie|"
+                                                     "Pomyłka w uwagach") );
         setValue(keyName(VAT_RATES), trUtf8("23|8|5|0|zw."));
         setValue(keyName(CSS), QString("style.css"));
         setValue(keyName(DEFAULT_INV_NUM_FORMAT), trUtf8("{TEKST1}/{R}-{M}-{D}/{NR_R}"));
