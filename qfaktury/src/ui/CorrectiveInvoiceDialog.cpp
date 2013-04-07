@@ -1,41 +1,49 @@
+#include <QMessageBox>
+
 #include "CorrectiveInvoiceDialog.h"
 #include "ui_InvoiceDialog.h"
+#include "InvoiceDialogImpl.h"
+#include "SettingsGlobal.h"
+#include "Database.h"
 
-// constructor
-CorrectiveInvoiceDialog::CorrectiveInvoiceDialog(QWidget *parent, Database *db, const QModelIndex &idInvoice):
-    QDialog(parent), ui_(new Ui::InvoiceDialog), db_(db)
+
+class CorrectiveInvoiceDialog::CorrectiveInvoiceDialogImpl: public InvoiceDialogImpl
 {
-    ui_->setupUi(this);
-    init_(idInvoice);
+public:
+    CorrectiveInvoiceDialogImpl(QWidget *parent, Database *database) :
+        InvoiceDialogImpl(parent, database) {}
+};
+
+
+CorrectiveInvoiceDialog::CorrectiveInvoiceDialog(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType, const QModelIndex &idInvoice):
+    InvoiceDialog(parent, db, invoiceType, idInvoice, false), pImpl_(new CorrectiveInvoiceDialogImpl(parent, db))
+{
+    setPImpl(pImpl_);
+    init_();
 }
 
 CorrectiveInvoiceDialog::~CorrectiveInvoiceDialog()
 {
-    delete ui_;
+    delete pImpl_;
 }
 
-/* Init
- */
-void CorrectiveInvoiceDialog::init_(const QModelIndex &idInvoice)
+
+void CorrectiveInvoiceDialog::init_()
 {
     SettingsGlobal s;
-    ui_->comboBoxReasonOfCorrection->addItems(s.value(s.CORRECTION_REASONS)
+    pImpl_->ui->comboBoxReasonOfCorrection->addItems(s.value(s.CORRECTION_REASONS)
                                               .toString().split("|"));
-    ui_->comboBoxReasonOfCorrection->setEnabled(true);
-    ui_->labelReasonOfCorrection->setEnabled(true);
+    pImpl_->ui->comboBoxReasonOfCorrection->setEnabled(true);
+    pImpl_->ui->labelReasonOfCorrection->setEnabled(true);
 
-    ui_->labelSumNet->setText(trUtf8("Wartość korekty:"));
-    ui_->labelDiscount2->setText(trUtf8("Wartość faktury:"));
-    ui_->labelSumGross->setText(trUtf8("Do zapłaty:"));
+    pImpl_->ui->labelSumNet->setText(trUtf8("Wartość korekty:"));
+    pImpl_->ui->labelDiscount2->setText(trUtf8("Wartość faktury:"));
+    pImpl_->ui->labelSumGross->setText(trUtf8("Do zapłaty:"));
 
     setWindowTitle(InvoiceTypeData::name(InvoiceTypeData::CORRECTIVE_VAT));
-    ui_->comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::CORRECTIVE_VAT - 1);
+    pImpl_->ui->comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::CORRECTIVE_VAT - 1);
 
-    //editMode = mode;
-    qDebug() << "CorrectiveInvDialog";
-
-    // connects
-    connect(ui_->comboBoxReasonOfCorrection, SIGNAL(currentIndexChanged (QString)),
+    connect(pImpl_->ui->comboBoxReasonOfCorrection, SIGNAL(currentIndexChanged (QString)),
             this, SLOT(textChanged(QString)));
 }
 
@@ -126,30 +134,30 @@ void CorrectiveInvoiceDialog::setIsEditAllowed(bool isAllowed)
 //    }
 
     //isEdit = true;
-    ui_->lineEditInvNumber->setEnabled(isAllowed);
-    ui_->dateEditDateOfSell->setEnabled(isAllowed);
-    ui_->dateEditDateOfIssuance->setEnabled(isAllowed);
+    pImpl_->ui->lineEditInvNumber->setEnabled(isAllowed);
+    pImpl_->ui->dateEditDateOfSell->setEnabled(isAllowed);
+    pImpl_->ui->dateEditDateOfIssuance->setEnabled(isAllowed);
     //tableWidgetCommodities->setEnabled(isAllowed);
-    ui_->spinBoxDiscount->setEnabled(false); // don't allow for now
-    ui_->labelDiscount1->setEnabled(false); // don't allow for now
-    ui_->comboBoxPayment->setEnabled(isAllowed);
-    ui_->dateEditDayOfPayment->setEnabled(isAllowed);
-    ui_->lineEditAdditionalText->setEnabled(isAllowed);
-    ui_->pushButtonAddCommodity->setEnabled(isAllowed);
-    ui_->pushButtonRemoveCommodity->setEnabled(isAllowed);
-    ui_->pushButtonEditCommodity->setEnabled(isAllowed);
-    ui_->checkBoxDiscount->setEnabled(false); // don't allow for now
-    ui_->comboBoxCounterparties->setEnabled(false); // don't allow to change kontrahent
-    ui_->comboBoxCurrency->setEnabled(isAllowed);
-    ui_->pushButtonSave->setEnabled(isAllowed);
-    ui_->dateEditDayOfPayment->setEnabled(isAllowed);
+    pImpl_->ui->spinBoxDiscount->setEnabled(false); // don't allow for now
+    pImpl_->ui->labelDiscount1->setEnabled(false); // don't allow for now
+    pImpl_->ui->comboBoxPayment->setEnabled(isAllowed);
+    pImpl_->ui->dateEditDayOfPayment->setEnabled(isAllowed);
+    pImpl_->ui->lineEditAdditionalText->setEnabled(isAllowed);
+    pImpl_->ui->pushButtonAddCommodity->setEnabled(isAllowed);
+    pImpl_->ui->pushButtonRemoveCommodity->setEnabled(isAllowed);
+    pImpl_->ui->pushButtonEditCommodity->setEnabled(isAllowed);
+    pImpl_->ui->checkBoxDiscount->setEnabled(false); // don't allow for now
+    pImpl_->ui->comboBoxCounterparties->setEnabled(false); // don't allow to change kontrahent
+    pImpl_->ui->comboBoxCurrency->setEnabled(isAllowed);
+    pImpl_->ui->pushButtonSave->setEnabled(isAllowed);
+    pImpl_->ui->dateEditDayOfPayment->setEnabled(isAllowed);
 
-    if (!isAllowed && ui_->comboBoxPayment->currentIndex() > 0) {
-        ui_->dateEditDayOfPayment->setEnabled(true);
+    if (!isAllowed && pImpl_->ui->comboBoxPayment->currentIndex() > 0) {
+        pImpl_->ui->dateEditDayOfPayment->setEnabled(true);
     } else {
-        ui_->dateEditDayOfPayment->setEnabled(false);
+        pImpl_->ui->dateEditDayOfPayment->setEnabled(false);
     }
-    ui_->comboBoxReasonOfCorrection->setEnabled(isAllowed);
+    pImpl_->ui->comboBoxReasonOfCorrection->setEnabled(isAllowed);
 
     createOriginalInv();
 }
@@ -439,4 +447,3 @@ void CorrectiveInvoiceDialog::calculateOneDiscount(const int) {
 //    invStrList += "</td></tr></table>";
 //}
 //*************** HTML methods END  *** *****************************
-

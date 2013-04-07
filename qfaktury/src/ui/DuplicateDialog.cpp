@@ -7,22 +7,29 @@
 
 #include "DuplicateDialog.h"
 #include "ui_InvoiceDialog.h"
+#include "InvoiceDialogImpl.h"
 
-// constructor
-DuplicateDialog::DuplicateDialog(QWidget *parent, Database *db, const QModelIndex &idInvoice):
-    QDialog(parent), ui_(new Ui::InvoiceDialog), db_(db)
+class DuplicateDialog::DuplicateDialogImpl: public InvoiceDialogImpl
 {
-    ui_->setupUi(this);
-    init_(idInvoice);
+public:
+    DuplicateDialogImpl(QWidget *parent, Database *database) :
+        InvoiceDialogImpl(parent, database) {}
+};
+
+DuplicateDialog::DuplicateDialog(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType, const QModelIndex &idInvoice):
+    InvoiceDialog(parent, db, invoiceType, idInvoice, false), pImpl_(new DuplicateDialogImpl(parent, db))
+{
+    setPImpl(pImpl_);
+    init_();
 }
 
 
 DuplicateDialog::~DuplicateDialog()
 {
-    delete ui_;
+    delete pImpl_;
 }
 
-void DuplicateDialog::init_(const QModelIndex &idInvoice)
+void DuplicateDialog::init_()
 {
     SettingsGlobal s;
 
@@ -31,15 +38,15 @@ void DuplicateDialog::init_(const QModelIndex &idInvoice)
     labelDupDate->setAlignment(Qt::AlignRight);
     //addDataLabels->addWidget(labelDupDate);
 
-    duplicateDate = new QDateEdit(this);
-    duplicateDate->setObjectName(QString::fromUtf8("duplicateDate"));
-    duplicateDate->setCalendarPopup(true);
-    duplicateDate->setDisplayFormat(s.dateFormatExternal());
-    duplicateDate->setDate(QDate::currentDate());
+    duplicateDate_ = new QDateEdit(this);
+    duplicateDate_->setObjectName(QString::fromUtf8("duplicateDate"));
+    duplicateDate_->setCalendarPopup(true);
+    duplicateDate_->setDisplayFormat(s.dateFormatExternal());
+    duplicateDate_->setDate(QDate::currentDate());
     //addData->addWidget(duplicateDate);
 
     //setIsEditAllowed(false); // since it's a duplikat
-    ui_->pushButtonSave->setEnabled(false);
+    pImpl_->ui->pushButtonSave->setEnabled(false);
 }
 
 /** Adds duplicate requirements

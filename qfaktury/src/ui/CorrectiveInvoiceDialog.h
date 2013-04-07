@@ -7,11 +7,12 @@
 
 #include "InvoiceDialog.h"
 
+
 /**
  * @brief
  *
  */
-class CorrectiveInvoiceDialog: public QDialog
+class CorrectiveInvoiceDialog: public InvoiceDialog
 {
     Q_OBJECT
 public:
@@ -21,7 +22,7 @@ public:
  * @param
  * @param db
  */
-    CorrectiveInvoiceDialog(QWidget *parent, Database *db, const QModelIndex &idInvoice);
+    CorrectiveInvoiceDialog(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType, const QModelIndex &idInvoice = QModelIndex());
     /**
      * @brief
      *
@@ -89,7 +90,7 @@ private:
      * @brief
      *
      */
-    void init_(const QModelIndex &idInvoice);
+    void init_();
 
     /**
      * @brief
@@ -98,8 +99,8 @@ private:
     //void makeBeforeCorrSumm();
 
 private:
-    Ui::InvoiceDialog *ui_;
-    Database *db_;
+    class CorrectiveInvoiceDialogImpl;
+    CorrectiveInvoiceDialogImpl *pImpl_;
     //bool editMode, isEdit; /**< TODO */
     double origDiscTotal, origNettTotal, origGrossTotal, diffTotal; /**< TODO */
     //InvoiceData invData; /**< TODO */

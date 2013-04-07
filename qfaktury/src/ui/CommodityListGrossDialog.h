@@ -9,7 +9,7 @@
 #define COMMODITYLISTGROSSDIALOG_H
 
 #include "CommodityListDialog.h"
-#include "../model/models/ModelCommodity.h"
+//#include "../model/models/ModelCommodity.h"
 
 /**
  * @brief

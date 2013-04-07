@@ -34,7 +34,7 @@ void CorrectiveInvoiceDialogTest::cleanupTestCase()
 void CorrectiveInvoiceDialogTest::testGUI_InitialState()
 {
     Database db;
-    CorrectiveInvoiceDialog corrInvoiceDialog(0, &db);
+    CorrectiveInvoiceDialog corrInvoiceDialog(0, &db, InvoiceTypeData::CORRECTIVE_VAT);
     QCOMPARE(corrInvoiceDialog.windowTitle(), InvoiceTypeData::name(InvoiceTypeData::CORRECTIVE_VAT));
 //    QCOMPARE(corrInvoiceDialog.comboBoxInvoiceType->currentText(), InvoiceTypeData::name(InvoiceTypeData::CORRECTIVE_VAT));
 //    QCOMPARE(corrInvoiceDialog.dateEditDateOfIssuance->date(), QDate::currentDate());

@@ -10,12 +10,13 @@
 
 #include "CommodityListGrossDialog.h"
 #include "CorrectiveInvoiceDialog.h"
+#include "InvoiceDialog.h"
 
 /**
  * @brief
  *
  */
-class CorrectiveInvoiceGrossDialog: public QDialog
+class CorrectiveInvoiceGrossDialog: public InvoiceDialog
 {
     Q_OBJECT
 public:
@@ -43,8 +44,8 @@ private:
     void init_();
 
 private:
-    Ui::InvoiceDialog *ui_;
-    Database *db_;
+    class CorrectiveInvoiceGrossDialogImpl;
+    CorrectiveInvoiceGrossDialogImpl *pImpl_;
 };
 
 #endif

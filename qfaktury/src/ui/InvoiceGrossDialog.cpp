@@ -6,19 +6,28 @@
  */
 
 #include "InvoiceGrossDialog.h"
+#include "InvoiceDialogImpl.h"
 #include "ui_InvoiceDialog.h"
 
-// constructor
-InvoiceGrossDialog::InvoiceGrossDialog(QWidget *parent, Database *db) :
-    QDialog(parent), ui_(new Ui::InvoiceDialog), db_(db)
+class InvoiceGrossDialog::InvoiceGrossDialogImpl: public InvoiceDialogImpl
+{
+public:
+    InvoiceGrossDialogImpl(QWidget *parent, Database *database) :
+        InvoiceDialogImpl(parent, database) {}
+};
+
+
+InvoiceGrossDialog::InvoiceGrossDialog(QWidget *parent, Database *db, const QModelIndex &idInvoice) :
+    InvoiceDialog(parent, db, InvoiceTypeData::GROSS, idInvoice, false), pImpl_(new InvoiceGrossDialogImpl(parent, db))
 {
     setWindowTitle(InvoiceTypeData::name(InvoiceTypeData::GROSS));
-    ui_->comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::GROSS - 1);
+    setPImpl(pImpl_);
+    pImpl_->ui->comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::GROSS - 1);
 }
 
 InvoiceGrossDialog::~InvoiceGrossDialog()
 {
-    delete ui_;
+    delete pImpl_;
 }
 
 
@@ -32,27 +41,27 @@ void InvoiceGrossDialog::calculateOneDiscount(const int i)
 
     SettingsGlobal s;
 
-    price = s.stringToDouble(ui_->tableWidgetCommodities->item(i, 7)->text());
-    if(ui_->checkBoxDiscount->isChecked()) {
-        discount = ui_->spinBoxDiscount->value() * 0.01;
+    price = s.stringToDouble(pImpl_->ui->tableWidgetCommodities->item(i, 7)->text());
+    if(pImpl_->ui->checkBoxDiscount->isChecked()) {
+        discount = pImpl_->ui->spinBoxDiscount->value() * 0.01;
     }
     else
     {
-        discount = s.stringToDouble(ui_->tableWidgetCommodities->item(i, 6)->text()) * 0.01;
+        discount = s.stringToDouble(pImpl_->ui->tableWidgetCommodities->item(i, 6)->text()) * 0.01;
 	}
-    quantity = s.stringToDouble(ui_->tableWidgetCommodities->item(i, 4)->text());
+    quantity = s.stringToDouble(pImpl_->ui->tableWidgetCommodities->item(i, 4)->text());
     price = price * quantity;
     discountValue = price * discount;
 
     gross = price - discountValue;
-    int vatValue = s.stringToDouble(ui_->tableWidgetCommodities->item(i, 9)->text());
+    int vatValue = s.stringToDouble(pImpl_->ui->tableWidgetCommodities->item(i, 9)->text());
     vat = (gross * vatValue)/(100 + vatValue);
 
     netto = gross - vat;
 
-    ui_->tableWidgetCommodities->item(i, 6)->setText(s.numberToString(discount * 100, 'f', 0)); // discount
-    ui_->tableWidgetCommodities->item(i, 8)->setText(s.numberToString(netto)); // nett
-    ui_->tableWidgetCommodities->item(i, 10)->setText(s.numberToString(gross)); // gross
+    pImpl_->ui->tableWidgetCommodities->item(i, 6)->setText(s.numberToString(discount * 100, 'f', 0)); // discount
+    pImpl_->ui->tableWidgetCommodities->item(i, 8)->setText(s.numberToString(netto)); // nett
+    pImpl_->ui->tableWidgetCommodities->item(i, 10)->setText(s.numberToString(gross)); // gross
 }
 
 /** Slot

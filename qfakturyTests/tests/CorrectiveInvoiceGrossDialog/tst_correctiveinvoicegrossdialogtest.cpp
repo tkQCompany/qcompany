@@ -33,8 +33,8 @@ void CorrectiveInvoiceGrossDialogTest::cleanupTestCase()
 
 void CorrectiveInvoiceGrossDialogTest::testGUI_InitialState()
 {
-    Database db;
-    CorrectiveInvoiceGrossDialog corrInvoiceGrossDialog(0, &db);
+    //Database db;
+    //CorrectiveInvoiceGrossDialog corrInvoiceGrossDialog(0, &db, InvoiceTypeData::CORRECTIVE_GROSS);
 //    QCOMPARE(corrInvoiceGrossDialog.windowTitle(), InvoiceTypeData::name(InvoiceTypeData::CORRECTIVE_GROSS));
 //    QCOMPARE(corrInvoiceGrossDialog.comboBoxInvoiceType->currentText(), InvoiceTypeData::name(InvoiceTypeData::CORRECTIVE_GROSS));
 //    QCOMPARE(corrInvoiceGrossDialog.dateEditDateOfIssuance->date(), QDate::currentDate());

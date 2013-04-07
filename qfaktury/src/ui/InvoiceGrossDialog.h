@@ -16,7 +16,7 @@
  * @brief
  *
  */
-class InvoiceGrossDialog: public QDialog
+class InvoiceGrossDialog: public InvoiceDialog
 {
     Q_OBJECT
 public:
@@ -26,7 +26,7 @@ public:
  * @param
  * @param db
  */
-    InvoiceGrossDialog(QWidget *, Database *db);
+    InvoiceGrossDialog(QWidget *, Database *db, const QModelIndex &idInvoice);
     ~InvoiceGrossDialog();
 public slots:
     /**
@@ -43,8 +43,8 @@ protected:
     void calculateOneDiscount(const int i);
 
 private:
-    Ui::InvoiceDialog *ui_;
-    Database *db_;
+    class InvoiceGrossDialogImpl;
+    InvoiceGrossDialogImpl *pImpl_;
 };
 
 

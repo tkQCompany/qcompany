@@ -17,7 +17,7 @@
  * @brief
  *
  */
-class DuplicateDialog: public QDialog
+class DuplicateDialog: public InvoiceDialog
 {
     Q_OBJECT
 public:
@@ -27,7 +27,7 @@ public:
  * @param
  * @param db
  */
-    DuplicateDialog(QWidget *parent, Database *db, const QModelIndex &idInvoice);
+    DuplicateDialog(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType, const QModelIndex &idInvoice = QModelIndex());
     ~DuplicateDialog();
 public slots:
     /**
@@ -49,11 +49,12 @@ private:
      * @brief
      *
      */
-    void init_(const QModelIndex &idInvoice);
+    void init_();
 
 private:
-    Ui::InvoiceDialog *ui_;
-    QDateEdit *duplicateDate; /**< TODO */
-    Database *db_;
+    class DuplicateDialogImpl;
+    DuplicateDialogImpl *pImpl_;
+
+    QDateEdit *duplicateDate_; /**< TODO */
 };
 #endif

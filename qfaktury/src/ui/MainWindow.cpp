@@ -1,5 +1,8 @@
-#include "MainWindow.h"
+#include <QProcess>
 
+#include "MainWindow.h"
+#include "CounterpartyDialog.h"
+#include "CorrectiveInvoiceDialog.h"
 
 
 /**
@@ -155,7 +158,7 @@ void MainWindow::createInvoice_(const InvoiceTypeData::Type type)
         invoice.reset(new BillDialog(this, &db_));
         break;
     case InvoiceTypeData::GROSS:
-        invoice.reset(new InvoiceGrossDialog(this, &db_));
+        invoice.reset(new InvoiceGrossDialog(this, &db_, QModelIndex()));
         break;
     default:
         return;
@@ -470,21 +473,26 @@ void MainWindow::editInvoice_()
     switch(invType)
     {
     case InvoiceTypeData::VAT:
+    {
+        InvoiceDialog dialog(this, &db_, InvoiceTypeData::VAT, list.at(0));
+        dialog.exec();
+    }
+        break;
     case InvoiceTypeData::PRO_FORMA:
     {
-        InvoiceDialog dialog(this, &db_, invType, list.at(0));
+        InvoiceDialog dialog(this, &db_, InvoiceTypeData::PRO_FORMA, list.at(0));
         dialog.exec();
     }
         break;
     case InvoiceTypeData::CORRECTIVE_VAT:
     {
-        CorrectiveInvoiceDialog dialog(this, &db_, list.at(0));
+        CorrectiveInvoiceDialog dialog(this, &db_, InvoiceTypeData::CORRECTIVE_VAT, list.at(0));
         dialog.exec();  // edit window shouln't return anything
     }
         break;
     case InvoiceTypeData::GROSS:
     {
-        InvoiceGrossDialog dialog(this, &db_);
+        InvoiceGrossDialog dialog(this, &db_, QModelIndex());
         dialog.exec();
     }
         break;
@@ -739,8 +747,7 @@ void MainWindow::newCorrection_()
     {
     case InvoiceTypeData::VAT:
     {
-        CorrectiveInvoiceDialog dialog(this, &db_, db_.modelInvoice()->
-                            index(list.at(0).row(), InvoiceFields::ID_INVOICE));
+        CorrectiveInvoiceDialog dialog(this, &db_, InvoiceTypeData::VAT);
         dialog.exec();
     }
         break;
@@ -781,10 +788,14 @@ void MainWindow::newDuplicate_()
     switch(invType)
     {
     case InvoiceTypeData::VAT:
+    {
+        DuplicateDialog dialog(this, &db_, InvoiceTypeData::VAT);
+        dialog.exec(); // not saving duplicates
+    }
+        break;
     case InvoiceTypeData::GROSS:
     {
-        DuplicateDialog dialog(this, &db_, db_.modelInvoice()->
-                                index(list.at(0).row(), InvoiceFields::ID_INVOICE));
+        DuplicateDialog dialog(this, &db_, InvoiceTypeData::GROSS);
         dialog.exec(); // not saving duplicates
     }
         break;

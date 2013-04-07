@@ -33,9 +33,9 @@ void SettingsDialogTest::cleanupTestCase()
 
 void SettingsDialogTest::testGUIChangeLanguage()
 {
-    QString currLang, nextLang;
-    int currInd = 0;
-    Database db;
+//    QString currLang, nextLang;
+//    int currInd = 0;
+//    Database db;
 
 //    {
 //        SettingsDialog sdialog(0, &db);
