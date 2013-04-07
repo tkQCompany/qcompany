@@ -471,7 +471,7 @@ void InvoiceDialogImpl::discountConstChange()
     {
         ui->spinBoxDiscount->setEnabled(true);
         ui->pushButtonSave->setEnabled(true);
-        //calculateSum(); //TODO: dokończyć
+        calculateSum();
     }
     else
     {
@@ -485,9 +485,9 @@ void InvoiceDialogImpl::discountConstChange()
  */
 void InvoiceDialogImpl::discountChange()
 {
-    //calculateSum(); //TODO: dokończyć
+    calculateSum();
     ui->pushButtonSave->setEnabled(true);
-    //unsaved = true;
+    unsaved = true;
 }
 
 
@@ -518,8 +518,8 @@ void InvoiceDialogImpl::addCommodity()
         ui->tableWidgetCommodities->resizeColumnsToContents();
 
         ui->pushButtonSave->setEnabled(true);
-        //unsaved = true;
-        //calculateSum(); //TODO: dokońcZyć
+        unsaved = true;
+        calculateSum();
     }
 }
 
