@@ -1,18 +1,18 @@
 #ifndef CORRECTIVEINVOICEDIALOG_H
 #define CORRECTIVEINVOICEDIALOG_H
 
-#include <QString>
-#include <QObject>
-#include <QDomDocument>
+#include <QDialog>
+#include <QModelIndex>
 
-#include "InvoiceDialog.h"
+#include "InvoiceTypeData.h"
 
+class Database;
 
 /**
  * @brief
  *
  */
-class CorrectiveInvoiceDialog: public InvoiceDialog
+class CorrectiveInvoiceDialog: public QDialog
 {
     Q_OBJECT
 public:
@@ -101,8 +101,6 @@ private:
 private:
     class CorrectiveInvoiceDialogImpl;
     CorrectiveInvoiceDialogImpl *pImpl_;
-    //bool editMode, isEdit; /**< TODO */
     double origDiscTotal, origNettTotal, origGrossTotal, diffTotal; /**< TODO */
-    //InvoiceData invData; /**< TODO */
 };
 #endif

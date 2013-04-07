@@ -747,7 +747,7 @@ void MainWindow::newCorrection_()
     {
     case InvoiceTypeData::VAT:
     {
-        CorrectiveInvoiceDialog dialog(this, &db_, InvoiceTypeData::VAT);
+        CorrectiveInvoiceDialog dialog(this, &db_, InvoiceTypeData::CORRECTIVE_VAT);
         dialog.exec();
     }
         break;

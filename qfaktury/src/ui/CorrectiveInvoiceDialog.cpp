@@ -1,10 +1,6 @@
-#include <QMessageBox>
-
 #include "CorrectiveInvoiceDialog.h"
 #include "ui_InvoiceDialog.h"
 #include "InvoiceDialogImpl.h"
-#include "SettingsGlobal.h"
-#include "Database.h"
 
 
 class CorrectiveInvoiceDialog::CorrectiveInvoiceDialogImpl: public InvoiceDialogImpl
@@ -16,9 +12,10 @@ public:
 
 
 CorrectiveInvoiceDialog::CorrectiveInvoiceDialog(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType, const QModelIndex &idInvoice):
-    InvoiceDialog(parent, db, invoiceType, idInvoice, false), pImpl_(new CorrectiveInvoiceDialogImpl(parent, db))
+    QDialog(parent), pImpl_(new CorrectiveInvoiceDialogImpl(parent, db))
 {
-    setPImpl(pImpl_);
+    pImpl_->ui->setupUi(this);
+    pImpl_->init(invoiceType, idInvoice);
     init_();
 }
 
@@ -40,14 +37,9 @@ void CorrectiveInvoiceDialog::init_()
     pImpl_->ui->labelDiscount2->setText(trUtf8("Wartość faktury:"));
     pImpl_->ui->labelSumGross->setText(trUtf8("Do zapłaty:"));
 
-    setWindowTitle(InvoiceTypeData::name(InvoiceTypeData::CORRECTIVE_VAT));
-    pImpl_->ui->comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::CORRECTIVE_VAT - 1);
-
-    connect(pImpl_->ui->comboBoxReasonOfCorrection, SIGNAL(currentIndexChanged (QString)),
+    connect(pImpl_->ui->comboBoxReasonOfCorrection, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(textChanged(QString)));
 }
-
-//*********************************************** SLOTS START ****************************************/
 
 
 
