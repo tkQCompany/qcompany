@@ -8,16 +8,20 @@
 #ifndef DUPLICATEDIALOG_H
 #define DUPLICATEDIALOG_H
 
-#include <QDateEdit>
+#include <QDialog>
+#include <QModelIndex>
 
-#include "InvoiceDialog.h"
+#include "InvoiceTypeData.h"
+
+class Database;
+class QDateEdit;
 
 
 /**
  * @brief
  *
  */
-class DuplicateDialog: public InvoiceDialog
+class DuplicateDialog: public QDialog
 {
     Q_OBJECT
 public:

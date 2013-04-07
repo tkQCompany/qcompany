@@ -17,9 +17,10 @@ public:
 };
 
 DuplicateDialog::DuplicateDialog(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType, const QModelIndex &idInvoice):
-    InvoiceDialog(parent, db, invoiceType, idInvoice, false), pImpl_(new DuplicateDialogImpl(parent, db))
+    QDialog(parent), pImpl_(new DuplicateDialogImpl(parent, db))
 {
-    setPImpl(pImpl_);
+    pImpl_->ui->setupUi(this);
+    pImpl_->init(invoiceType, idInvoice);
     init_();
 }
 
