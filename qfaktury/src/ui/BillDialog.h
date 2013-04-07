@@ -1,14 +1,9 @@
 #ifndef BILLDIALOG_H
 #define BILLDIALOG_H
 
-#include "../src/ConvertAmount.h"
-#include "../src/SettingsGlobal.h"
-#include "Database.h"
+#include <QDialog>
 
-namespace Ui
-{
-class InvoiceDialog;
-}
+class Database;
 
 /**
  * @brief
@@ -28,15 +23,8 @@ public:
     ~BillDialog();
 
 private:
-    /**
-     * @brief
-     *
-     */
-    void init_();
-
-private:
-    Ui::InvoiceDialog *ui_;
-    Database *db_;
+    class BillDialogImpl;
+    BillDialogImpl *pImpl_;
 };
 
 #endif

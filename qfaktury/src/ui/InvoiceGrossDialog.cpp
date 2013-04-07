@@ -22,7 +22,6 @@ InvoiceGrossDialog::InvoiceGrossDialog(QWidget *parent, Database *db, const QMod
 {
     pImpl_->ui->setupUi(this);
     pImpl_->init(InvoiceTypeData::GROSS, idInvoice);
-    pImpl_->ui->comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::GROSS);
 }
 
 InvoiceGrossDialog::~InvoiceGrossDialog()

@@ -1,22 +1,25 @@
 #include "BillDialog.h"
+#include "InvoiceDialogImpl.h"
 #include "ui_InvoiceDialog.h"
 
-// constructor
-BillDialog::BillDialog(QWidget *parent, Database *db):
-    QDialog(parent), ui_(new Ui::InvoiceDialog), db_(db)
+
+class BillDialog::BillDialogImpl: public InvoiceDialogImpl
 {
-    ui_->setupUi(this);
-    init_();
+public:
+    BillDialogImpl(QWidget *parent, Database *database) :
+        InvoiceDialogImpl(parent, database) {}
+};
+
+
+BillDialog::BillDialog(QWidget *parent, Database *db):
+    QDialog(parent), pImpl_(new BillDialogImpl(parent, db))
+{
+    pImpl_->ui->setupUi(this);
+    pImpl_->init(InvoiceTypeData::BILL, QModelIndex());
 }
 
 
 BillDialog::~BillDialog()
 {
-    delete ui_;
-}
-
-void BillDialog::init_()
-{
-    setWindowTitle(InvoiceTypeData::name(InvoiceTypeData::BILL));
-    ui_->comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::BILL - 1);
+    delete pImpl_;
 }
