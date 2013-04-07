@@ -8,15 +8,16 @@
 #ifndef INVOICEGROSSDIALOG_H
 #define INVOICEGROSSDIALOG_H
 
-#include "CommodityListGrossDialog.h"
-#include "InvoiceDialog.h"
+#include <QDialog>
+#include <QModelIndex>
 
+class Database;
 
 /**
  * @brief
  *
  */
-class InvoiceGrossDialog: public InvoiceDialog
+class InvoiceGrossDialog: public QDialog
 {
     Q_OBJECT
 public:
@@ -26,7 +27,7 @@ public:
  * @param
  * @param db
  */
-    InvoiceGrossDialog(QWidget *, Database *db, const QModelIndex &idInvoice);
+    InvoiceGrossDialog(QWidget *, Database *db, const QModelIndex &idInvoice = QModelIndex());
     ~InvoiceGrossDialog();
 public slots:
     /**

@@ -18,11 +18,11 @@ public:
 
 
 InvoiceGrossDialog::InvoiceGrossDialog(QWidget *parent, Database *db, const QModelIndex &idInvoice) :
-    InvoiceDialog(parent, db, InvoiceTypeData::GROSS, idInvoice, false), pImpl_(new InvoiceGrossDialogImpl(parent, db))
+    QDialog(parent), pImpl_(new InvoiceGrossDialogImpl(parent, db))
 {
-    setWindowTitle(InvoiceTypeData::name(InvoiceTypeData::GROSS));
-    setPImpl(pImpl_);
-    pImpl_->ui->comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::GROSS - 1);
+    pImpl_->ui->setupUi(this);
+    pImpl_->init(InvoiceTypeData::GROSS, idInvoice);
+    pImpl_->ui->comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::GROSS);
 }
 
 InvoiceGrossDialog::~InvoiceGrossDialog()

@@ -158,7 +158,7 @@ void MainWindow::createInvoice_(const InvoiceTypeData::Type type)
         invoice.reset(new BillDialog(this, &db_));
         break;
     case InvoiceTypeData::GROSS:
-        invoice.reset(new InvoiceGrossDialog(this, &db_, QModelIndex()));
+        invoice.reset(new InvoiceGrossDialog(this, &db_));
         break;
     default:
         return;
