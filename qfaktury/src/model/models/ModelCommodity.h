@@ -1,14 +1,7 @@
 #ifndef MODELCOMMODITY_H
 #define MODELCOMMODITY_H
 
-#include <QDebug>
 #include <QSqlRelationalTableModel>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlRecord>
-#include <QSqlError>
-
-#include "../models_data/CommodityData.h"
 
 /**
  * @brief

@@ -1,16 +1,12 @@
 #ifndef COMMODITYDIALOG_H
 #define COMMODITYDIALOG_H
 
-#include <QMessageBox>
-#include <QSqlRecord>
-#include <QSqlError>
-#include <QSqlQuery>
-#include <QDataWidgetMapper>
-#include <QSqlRelationalDelegate>
+#include <QModelIndex>
+#include <QDoubleValidator>
 
 #include "SettingsDialog.h"
-#include "../model/Database.h"
 
+class QDataWidgetMapper;
 
 namespace Ui
 {

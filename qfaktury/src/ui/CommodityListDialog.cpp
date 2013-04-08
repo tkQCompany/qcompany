@@ -1,8 +1,14 @@
+#include <QMessageBox>
+
 #include "CommodityListDialog.h"
 #include "ui_CommodityListDialog.h"
+#include "Database.h"
+#include "ModelCommodity.h"
+#include "ModelCommodityType.h"
+#include "CommodityData.h"
+#include "CommodityTypeData.h"
 
-/** Constructor
- */
+
 CommodityListDialog::CommodityListDialog(QWidget *parent, Database *db):
     QDialog(parent), ui(new Ui::CommodityListDialog), db(db), netVal(0.0)
 {
@@ -10,8 +16,7 @@ CommodityListDialog::CommodityListDialog(QWidget *parent, Database *db):
     init();
 }
 
-/** Init
- */
+
 void CommodityListDialog::init()
 {
     ui->listViewCommodities->setModel(db->modelCommodity());

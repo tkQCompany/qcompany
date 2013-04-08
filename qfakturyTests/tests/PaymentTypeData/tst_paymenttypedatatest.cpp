@@ -1,7 +1,10 @@
 #include <QtTest/QtTest>
+#include <QSqlQuery>
 
 #include "../TestsCommon.h"
 #include "Database.h"
+#include "ModelPaymentType.h"
+#include "PaymentTypeData.h"
 
 class PaymentTypeDataTest : public QObject
 {

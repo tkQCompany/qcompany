@@ -8,6 +8,8 @@
 #include "CorrectiveInvoiceGrossDialog.h"
 #include "ui_InvoiceDialog.h"
 #include "InvoiceDialogImpl.h"
+#include "CommodityListGrossDialog.h"
+#include "SettingsGlobal.h"
 
 
 class CorrectiveInvoiceGrossDialog::CorrectiveInvoiceGrossDialogImpl: public InvoiceDialogImpl
@@ -19,10 +21,11 @@ public:
 
 
 CorrectiveInvoiceGrossDialog::CorrectiveInvoiceGrossDialog(QWidget *parent, Database *db, const QModelIndex &idInvoice):
-    InvoiceDialog(parent, db, InvoiceTypeData::CORRECTIVE_GROSS, idInvoice, false),
-    pImpl_(new CorrectiveInvoiceGrossDialogImpl(parent, db))
+    QDialog(parent), pImpl_(new CorrectiveInvoiceGrossDialogImpl(parent, db))
 {
-    setPImpl(pImpl_);
+    pImpl_->ui->setupUi(this);
+    pImpl_->init(InvoiceTypeData::CORRECTIVE_GROSS, idInvoice);
+    init_();
 }
 
 CorrectiveInvoiceGrossDialog::~CorrectiveInvoiceGrossDialog()
@@ -33,7 +36,6 @@ CorrectiveInvoiceGrossDialog::~CorrectiveInvoiceGrossDialog()
 void CorrectiveInvoiceGrossDialog::init_()
 {
     setWindowTitle(InvoiceTypeData::name(InvoiceTypeData::CORRECTIVE_GROSS));
-    pImpl_->ui->comboBoxInvoiceType->setCurrentIndex(InvoiceTypeData::CORRECTIVE_GROSS - 1);
 }
 
 

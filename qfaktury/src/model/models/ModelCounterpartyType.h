@@ -2,10 +2,6 @@
 #define MODELCOUNTERPARTYTYPE_H
 
 #include <QSqlTableModel>
-#include <QSqlQuery>
-#include <QSqlError>
-
-#include "../models_data/CounterpartyTypeData.h"
 
 /**
  * @brief

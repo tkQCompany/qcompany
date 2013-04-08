@@ -2,9 +2,7 @@
 #define COUNTERPARTYTYPEDELEGATE_H
 
 #include <QSqlRelationalDelegate>
-#include <QComboBox>
-#include <QSortFilterProxyModel>
-#include "../models_data/CounterpartyTypeData.h"
+
 
 class CounterpartyTypeDelegate : public QSqlRelationalDelegate
 {

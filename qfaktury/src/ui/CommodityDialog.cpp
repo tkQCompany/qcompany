@@ -1,5 +1,21 @@
+#include <QDataWidgetMapper>
+#include <QSqlRelationalDelegate>
+#include <QSqlError>
+#include <QDesktopServices>
+#include <QMessageBox>
+#include <QUrl>
+
 #include "CommodityDialog.h"
 #include "ui_CommodityDialog.h"
+#include "Database.h"
+#include "ModelCommodity.h"
+#include "ModelCommodityType.h"
+#include "CommodityTypeData.h"
+#include "ModelUnit.h"
+#include "ModelCountry.h"
+#include "ModelVat.h"
+#include "UnitData.h"
+#include "CommodityData.h"
 
 /** Constructor
  */

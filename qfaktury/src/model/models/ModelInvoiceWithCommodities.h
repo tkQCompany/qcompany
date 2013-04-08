@@ -2,7 +2,6 @@
 #define MODELINVOICEWITHCOMMODITIES_H
 
 #include <QSqlTableModel>
-#include <QSqlDatabase>
 
 /**
  * @brief

@@ -3,7 +3,7 @@
 
 #include <QDebug>
 
-#include "../../SettingsGlobal.h"
+#include "SettingsGlobal.h"
 
 namespace CommodityFields
 {

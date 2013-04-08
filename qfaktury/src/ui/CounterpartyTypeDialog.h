@@ -3,11 +3,13 @@
 
 #include <QDialog>
 
-#include "../src/model/Database.h"
-
 namespace Ui {
 class CounterpartyTypeDialog;
 }
+
+
+class Database;
+
 
 /**
  * @brief

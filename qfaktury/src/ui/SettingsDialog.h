@@ -1,24 +1,19 @@
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
 
-#include <QFileDialog>
-#include <QDesktopServices>
-#include <QUrl>
-#include <QMessageBox>
-#include <QTextCodec>
-#include <QDebug>
-#include <QTranslator>
-#include <QListWidget>
+#include <QDialog>
 
-#include "../SettingsGlobal.h"
-#include "Database.h"
-#include "InvoiceNumberFormatEditDialog.h"
-#include "InvoiceNumberFormatExamplesDialog.h"
 
 namespace Ui
 {
 class SettingsDialog;
 }
+
+
+class Database;
+class QListWidget;
+class QLineEdit;
+
 
 /**
  * @brief

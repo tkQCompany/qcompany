@@ -8,15 +8,14 @@
 #ifndef CUSTOMPAYMENTDIALOG_H
 #define CUSTOMPAYMENTDIALOG_H
 
-#include <QMessageBox>
-
-#include "../src/SettingsGlobal.h"
-#include "../src/CustomPaymData.h"
+#include <QDialog>
 
 namespace Ui
 {
 class CustomPaymentDialog;
 }
+
+class CustomPaymData;
 
 /**
  * @brief

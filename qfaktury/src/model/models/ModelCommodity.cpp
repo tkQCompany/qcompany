@@ -1,4 +1,5 @@
 #include "ModelCommodity.h"
+#include "CommodityData.h"
 
 ModelCommodity::ModelCommodity(QObject *parent) :
     QSqlRelationalTableModel(parent, QSqlDatabase::database())

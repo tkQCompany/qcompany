@@ -4,9 +4,13 @@
  *  Created on: Apr 4, 2009
  *      Author: moux
  */
+#include <QMessageBox>
+
 
 #include "CustomPaymentDialog.h"
 #include "ui_CustomPaymentDialog.h"
+#include "SettingsGlobal.h"
+#include "CustomPaymData.h"
 
 
 /*

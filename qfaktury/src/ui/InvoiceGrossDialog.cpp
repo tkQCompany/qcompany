@@ -8,6 +8,7 @@
 #include "InvoiceGrossDialog.h"
 #include "InvoiceDialogImpl.h"
 #include "ui_InvoiceDialog.h"
+#include "SettingsGlobal.h"
 
 class InvoiceGrossDialog::InvoiceGrossDialogImpl: public InvoiceDialogImpl
 {

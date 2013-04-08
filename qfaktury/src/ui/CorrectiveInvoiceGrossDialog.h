@@ -8,15 +8,16 @@
 #ifndef CORRECTIVEINVOICEGROSSDIALOG_H
 #define CORRECTIVEINVOICEGROSSDIALOG_H
 
-#include "CommodityListGrossDialog.h"
-#include "CorrectiveInvoiceDialog.h"
-#include "InvoiceDialog.h"
+#include <QDialog>
+#include <QModelIndex>
+
+class Database;
 
 /**
  * @brief
  *
  */
-class CorrectiveInvoiceGrossDialog: public InvoiceDialog
+class CorrectiveInvoiceGrossDialog: public QDialog
 {
     Q_OBJECT
 public:

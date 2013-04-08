@@ -1,5 +1,18 @@
+#include <QDesktopServices>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QUrl>
+
 #include "SettingsDialog.h"
 #include "ui_SettingsDialog.h"
+#include "Database.h"
+#include "InvoiceNumberFormatExamplesDialog.h"
+#include "InvoiceNumberFormatEditDialog.h"
+#include "ModelCurrency.h"
+#include "CurrencyData.h"
+#include "UnitData.h"
+#include "ModelUnit.h"
+#include "SettingsGlobal.h"
 
 SettingsDialog::SettingsDialog(QWidget *parent, Database *db)
     :QDialog(parent), ui_(new Ui::SettingsDialog), db_(db)

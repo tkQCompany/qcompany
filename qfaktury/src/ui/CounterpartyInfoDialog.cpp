@@ -1,6 +1,12 @@
+#include <QDataWidgetMapper>
+#include <QDesktopServices>
+#include <QUrl>
+
 #include "CounterpartyInfoDialog.h"
 #include "ui_CounterpartyInfoDialog.h"
-
+#include "Database.h"
+#include "CounterpartyData.h"
+#include "ModelCounterparty.h"
 
 /** Constructor
  */

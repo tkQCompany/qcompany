@@ -1,9 +1,29 @@
 #include <QProcess>
+#include <QSqlRelationalDelegate>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QKeyEvent>
+#include <QTranslator>
+#include <QDesktopServices>
+#include <QDir>
+#include <QMessageBox>
+#include <QUrl>
 
 #include "MainWindow.h"
 #include "CounterpartyDialog.h"
+#include "InvoiceDialog.h"
+#include "InvoiceGrossDialog.h"
 #include "CorrectiveInvoiceDialog.h"
-
+#include "CorrectiveInvoiceGrossDialog.h"
+#include "DuplicateDialog.h"
+#include "BillDialog.h"
+#include "SettingsDialog.h"
+#include "CommodityDialog.h"
+#include "ModelInvoice.h"
+#include "ModelCounterparty.h"
+#include "ModelCommodity.h"
+#include "ModelInvoiceType.h"
+#include "ModelCounterpartyType.h"
 
 /**
  * @brief Default constructor

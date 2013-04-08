@@ -1,7 +1,10 @@
 #include <QtTest/QtTest>
+#include <QSqlQuery>
 
 #include "../TestsCommon.h"
 #include "Database.h"
+#include "ModelEmail.h"
+#include "EmailData.h"
 
 class EmailDataTest : public QObject
 {

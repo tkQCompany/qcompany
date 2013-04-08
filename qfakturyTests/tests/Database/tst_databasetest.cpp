@@ -2,6 +2,7 @@
 
 #include "../TestsCommon.h"
 #include "Database.h"
+#include "CommodityVisualData.h"
 
 
 class DatabaseTest : public QObject

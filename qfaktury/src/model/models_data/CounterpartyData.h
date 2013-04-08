@@ -5,6 +5,8 @@
  *      Author: moux
  */
 
+#include <QDebug>
+
 #ifndef COUNTERPARTYDATA_H
 #define COUNTERPARTYDATA_H
 

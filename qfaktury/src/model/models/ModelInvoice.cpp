@@ -1,5 +1,12 @@
-#include "ModelInvoice.h"
 #include <QDebug>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QRegExp>
+
+#include "ModelInvoice.h"
+#include "InvoiceData.h"
+#include "SettingsGlobal.h"
+#include "InvoiceNumberFormatData.h"
 
 ModelInvoice::ModelInvoice(QObject *parent) :
     QSqlRelationalTableModel(parent, QSqlDatabase::database())

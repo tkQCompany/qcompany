@@ -1,4 +1,6 @@
 #include "ModelCounterparty.h"
+#include "CounterpartyData.h"
+#include "CounterpartyTypeData.h"
 
 ModelCounterparty::ModelCounterparty(QObject *parent) :
     QSqlRelationalTableModel(parent, QSqlDatabase::database())

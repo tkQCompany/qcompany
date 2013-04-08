@@ -1,27 +1,27 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
-#include <QMessageBox>
 #include <QCoreApplication>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QDebug>
+#include <QSqlDatabase>
 
-#include "models/ModelCommodity.h"
-#include "models/ModelCommodityType.h"
-#include "models/ModelCounterparty.h"
-#include "models/ModelCounterpartyType.h"
-#include "models/ModelCountry.h"
-#include "models/ModelCurrency.h"
-#include "models/ModelEmail.h"
-#include "models/ModelInvoice.h"
-#include "models/ModelInvoiceType.h"
-#include "models/ModelInvoiceWithCommodities.h"
-#include "models/ModelPaymentType.h"
-#include "models/ModelPhone.h"
-#include "models/ModelUnit.h"
-#include "models/ModelVat.h"
-#include "../../ui/CommodityVisualData.h"
+#include "InvoiceData.h"
+
+class ModelCommodity;
+class ModelCommodityType;
+class ModelCounterparty;
+class ModelCounterpartyType;
+class ModelCountry;
+class ModelCurrency;
+class ModelEmail;
+class ModelInvoice;
+class ModelInvoiceType;
+class ModelInvoiceWithCommodities;
+class ModelPaymentType;
+class ModelPhone;
+class ModelUnit;
+class ModelVat;
+struct CommodityVisualData;
+
 
 /**
  * @brief

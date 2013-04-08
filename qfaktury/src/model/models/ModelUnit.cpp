@@ -1,5 +1,9 @@
-#include "ModelUnit.h"
 #include <QDebug>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QMessageBox>
+
+#include "ModelUnit.h"
 
 ModelUnit::ModelUnit(QObject *parent) :
     QSqlTableModel(parent, QSqlDatabase::database())

@@ -1,5 +1,9 @@
+#include <QMessageBox>
+
 #include "InvoiceNumberFormatEditDialog.h"
 #include "ui_InvoiceNumberFormatEditDialog.h"
+#include "InvoiceNumberFormatData.h"
+#include "InvoiceNumberFormatExamplesDialog.h"
 
 InvoiceNumberFormatEditDialog::InvoiceNumberFormatEditDialog(QWidget *parent, Database *db, const QString &format) :
     QDialog(parent),

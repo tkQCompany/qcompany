@@ -1,4 +1,34 @@
+#include <QMessageBox>
+#include <QSqlQuery>
+#include <QSqlError>
+
 #include "Database.h"
+#include "CommodityData.h"
+#include "CommodityTypeData.h"
+#include "CounterpartyData.h"
+#include "CounterpartyTypeData.h"
+#include "model/models_data/CurrencyData.h"
+#include "model/models_data/EmailData.h"
+#include "InvoiceTypeData.h"
+#include "PaymentTypeData.h"
+#include "model/models_data/PhoneData.h"
+#include "model/models_data/UnitData.h"
+
+#include "models/ModelCommodity.h"
+#include "models/ModelCommodityType.h"
+#include "models/ModelCounterparty.h"
+#include "models/ModelCounterpartyType.h"
+#include "models/ModelCountry.h"
+#include "models/ModelCurrency.h"
+#include "models/ModelEmail.h"
+#include "models/ModelInvoice.h"
+#include "models/ModelInvoiceType.h"
+#include "models/ModelInvoiceWithCommodities.h"
+#include "models/ModelPaymentType.h"
+#include "models/ModelPhone.h"
+#include "models/ModelUnit.h"
+#include "models/ModelVat.h"
+#include "CommodityVisualData.h"
 
 Database::Database(QObject *parent): QObject(parent)
 {

@@ -8,6 +8,7 @@
 #include "DuplicateDialog.h"
 #include "ui_InvoiceDialog.h"
 #include "InvoiceDialogImpl.h"
+#include "SettingsGlobal.h"
 
 class DuplicateDialog::DuplicateDialogImpl: public InvoiceDialogImpl
 {

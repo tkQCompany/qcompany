@@ -2,13 +2,6 @@
 #define MODELINVOICE_H
 
 #include <QSqlRelationalTableModel>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QRegExp>
-
-#include "../models_data/InvoiceData.h"
-#include "../models_data/InvoiceTypeData.h"
-#include "../models_data/InvoiceNumberFormatData.h"
 
 /**
  * @brief

@@ -2,20 +2,9 @@
 #include <QPrinter>
 
 #include "InvoiceDialog.h"
-#include "InvoiceDialogImpl.h"
 #include "ui_InvoiceDialog.h"
-#include "../src/model/Database.h"
-#include "CommodityListDialog.h"
-#include "CustomPaymentDialog.h"
-#include "ConvertAmount.h"
+#include "Database.h"
 
-/**
- * @brief
- *
- * @param parent
- * @param db
- * @param id_edit
- */
 
 InvoiceDialog::InvoiceDialog(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType, const QModelIndex &idEdit, const bool newPImpl) :
     QDialog(parent)
@@ -491,13 +480,3 @@ InvoiceDialog::~InvoiceDialog()
 //    invStrList += "</body>";
 //    invStrList += "</html>";
 //}
-
-
-
-// Generate Invoice HTML methods --- END ---
-
-
-void InvoiceDialog::setPImpl(InvoiceDialogImpl *pImpl)
-{
-    pImpl_ = pImpl;
-}

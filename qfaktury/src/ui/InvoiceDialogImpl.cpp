@@ -1,28 +1,35 @@
 #include <QSqlRelationalDelegate>
-#include <QMessageBox>
+#include <QSqlError>
 #include <QTextDocument>
 #include <QPrinter>
 #include <QPrintPreviewDialog>
 #include <QTranslator>
+#include <QFile>
+#include <QMessageBox>
 
-#include "InvoiceDialog.h"
 #include "InvoiceDialogImpl.h"
 #include "ui_InvoiceDialog.h"
 #include "Database.h"
 #include "CounterpartyInfoDialog.h"
 #include "CommodityListDialog.h"
-#include "ChangeAmountDialog.h"
-#include "../src/ConvertAmount.h"
+#include "ConvertAmount.h"
 #include "CustomPaymentDialog.h"
 #include "CounterpartyDialog.h"
-#include "InvoiceNumberFormatEditDialog.h"
+#include "ModelInvoice.h"
+#include "ModelCounterparty.h"
+#include "SettingsGlobal.h"
+#include "CounterpartyData.h"
+#include "ModelInvoiceType.h"
+#include "ModelPaymentType.h"
+#include "ModelCurrency.h"
+#include "PaymentTypeData.h"
+#include "CurrencyData.h"
+#include "CustomPaymData.h"
 
 
 InvoiceDialogImpl::InvoiceDialogImpl(QWidget *parent, Database *database)
     : QDialog(parent), ui(new Ui::InvoiceDialog()), db(database)
 {
-//    ui->setupUi(this);
-//    init(invoiceType, idEdit);
 }
 
 InvoiceDialogImpl::~InvoiceDialogImpl()

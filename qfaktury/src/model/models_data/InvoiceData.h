@@ -8,8 +8,9 @@
 #ifndef INVOICEDATA_H
 #define INVOICEDATA_H
 
-#include "CommodityData.h"
-#include "../../CustomPaymData.h"
+#include <QDate>
+#include <QDebug>
+
 #include "QDecNumber.hh"
 #include "QDecContext.hh"
 

@@ -1,7 +1,6 @@
 #ifndef CURRENCYDATA_H
 #define CURRENCYDATA_H
 
-#include <QString>
 #include <QDebug>
 
 namespace CurrencyFields

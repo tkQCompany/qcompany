@@ -2,19 +2,10 @@
 #define MODELCURRENCY_H
 
 #include <QSqlTableModel>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QSqlDriver>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QUrl>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
 #include <QDate>
-#include <QRegExp>
-#include <QStringList>
-#include <QDomDocument>
 
-#include "../models_data/CurrencyData.h"
+
+class QNetworkAccessManager;
 
 /**
  * @brief

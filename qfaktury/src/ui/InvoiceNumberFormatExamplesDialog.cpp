@@ -1,5 +1,10 @@
+#include <QDate>
+
 #include "InvoiceNumberFormatExamplesDialog.h"
 #include "ui_InvoiceNumberFormatExamplesDialog.h"
+#include "Database.h"
+#include "ModelInvoice.h"
+#include "InvoiceTypeData.h"
 
 InvoiceNumberFormatExamplesDialog::InvoiceNumberFormatExamplesDialog(QWidget *parent, Database *db,
                                                                      const QString &invoiceNumFormat,

@@ -4,8 +4,6 @@
 #include <QDialog>
 #include <QModelIndex>
 
-#include <memory>
-
 #include "InvoiceTypeData.h"
 #include "InvoiceDialogImpl.h"
 
@@ -33,9 +31,6 @@ public:
      *
      */
     virtual ~InvoiceDialog();
-
-protected:
-    virtual void setPImpl(InvoiceDialogImpl *pImpl);
 
 private:
     InvoiceDialogImpl *pImpl_;

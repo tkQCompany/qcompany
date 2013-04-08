@@ -3,6 +3,7 @@
 #include "../TestsCommon.h"
 #include "InvoiceDialog.h"
 #include "Database.h"
+#include "SettingsGlobal.h"
 
 class InvoiceDialogTest : public QObject
 {

@@ -3,8 +3,6 @@
 
 #include <QStringListModel>
 
-#include "../models_data/CountryData.h"
-
 /**
  * @brief
  *

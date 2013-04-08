@@ -4,14 +4,21 @@
 #include <QDataWidgetMapper>
 #include <QDialog>
 
-#include "../src/model/Database.h"
+#include "InvoiceData.h"
+#include "InvoiceTypeData.h"
+#include "CommodityVisualData.h"
+
 
 class QTableWidgetItem;
+class CustomPaymData;
 
 namespace Ui
 {
 class InvoiceDialog;
 }
+
+
+class Database;
 
 class InvoiceDialogImpl: public QDialog
 {

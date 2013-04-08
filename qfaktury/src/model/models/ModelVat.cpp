@@ -1,4 +1,5 @@
 #include "ModelVat.h"
+#include "SettingsGlobal.h"
 
 ModelVat::ModelVat(QObject *parent) : QStringListModel(parent)
 {

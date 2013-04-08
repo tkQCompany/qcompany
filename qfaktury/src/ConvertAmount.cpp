@@ -1,11 +1,14 @@
 /*
+ *
  * ConvertAmount.cpp
  *
  *  Created on: Mar 16, 2009
  *      Author: tpielech
  */
+#include <QStringList>
 
 #include "ConvertAmount.h"
+#include "SettingsGlobal.h"
 
 QString ConvertAmount::convertPL(QString input, const QString &currency)
 {

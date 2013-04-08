@@ -1,6 +1,9 @@
+#include <QMessageBox>
+
 #include "CorrectiveInvoiceDialog.h"
 #include "ui_InvoiceDialog.h"
 #include "InvoiceDialogImpl.h"
+#include "SettingsGlobal.h"
 
 
 class CorrectiveInvoiceDialog::CorrectiveInvoiceDialogImpl: public InvoiceDialogImpl

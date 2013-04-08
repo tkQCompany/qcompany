@@ -2,11 +2,6 @@
 #define MODELUNIT_H
 
 #include <QSqlTableModel>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QMessageBox>
-
-#include "../models_data/UnitData.h"
 
 /**
  * @brief

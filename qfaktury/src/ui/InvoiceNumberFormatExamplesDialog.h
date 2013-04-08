@@ -2,11 +2,14 @@
 #define INVOICENUMBERFORMATEXAMPLESDIALOG_H
 
 #include <QDialog>
-#include "Database.h"
 
 namespace Ui {
 class InvoiceNumberFormatExamplesDialog;
 }
+
+
+class Database;
+
 
 class InvoiceNumberFormatExamplesDialog : public QDialog
 {

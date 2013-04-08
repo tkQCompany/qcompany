@@ -2,10 +2,6 @@
 #define MODELCOUNTERPARTY_H
 
 #include <QSqlRelationalTableModel>
-#include <QDebug>
-
-#include "../models_data/CounterpartyData.h"
-#include "../models_data/CounterpartyTypeData.h"
 
 /**
  * @brief

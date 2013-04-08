@@ -4,6 +4,7 @@
 #include "../TestsCommon.h"
 #include "BillDialog.h"
 #include "Database.h"
+#include "InvoiceTypeData.h"
 
 class BillDialogTest : public QObject
 {

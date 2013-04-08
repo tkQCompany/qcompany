@@ -1,7 +1,6 @@
 #ifndef UNITDATA_H
 #define UNITDATA_H
 
-#include <QString>
 
 namespace UnitFields
 {

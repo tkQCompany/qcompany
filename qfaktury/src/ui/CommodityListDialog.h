@@ -1,17 +1,19 @@
 #ifndef COMMODITYLISTDIALOG_H
 #define COMMODITYLISTDIALOG_H
 
-#include <QMessageBox>
-#include <QScopedPointer>
-#include <QDataWidgetMapper>
 #include <QDialog>
+#include <QDataWidgetMapper>
 
-#include "../src/model/Database.h"
+#include "CommodityVisualData.h"
 
 namespace Ui
 {
     class CommodityListDialog;
 }
+
+
+class Database;
+
 
 /**
  * @brief

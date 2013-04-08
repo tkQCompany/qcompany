@@ -1,7 +1,10 @@
 #include <QtTest/QtTest>
+#include <QSqlQuery>
 
 #include "../TestsCommon.h"
 #include "Database.h"
+#include "ModelUnit.h"
+#include "UnitData.h"
 
 class UnitDataTest : public QObject
 {

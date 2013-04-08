@@ -1,7 +1,6 @@
 #ifndef PAYMENTTYPEDATA_H
 #define PAYMENTTYPEDATA_H
 
-#include <QString>
 
 namespace PaymentTypeFields
 {

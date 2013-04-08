@@ -4,6 +4,7 @@
  *  Created on: Apr 3, 2009
  *      Author: TPIELECH
  */
+#include <QMessageBox>
 
 #include "CommodityListGrossDialog.h"
 #include "ui_CommodityListDialog.h"

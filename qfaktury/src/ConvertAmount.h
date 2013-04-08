@@ -8,7 +8,7 @@
 #ifndef CONVERTAMOUNT_H
 #define CONVERTAMOUNT_H
 
-#include "SettingsGlobal.h"
+#include <QString>
 
 /**
  * @brief

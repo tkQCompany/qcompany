@@ -1,5 +1,11 @@
+#include <QMessageBox>
+
 #include "CounterpartyTypeDialog.h"
 #include "ui_CounterpartyTypeDialog.h"
+#include "Database.h"
+#include "ModelCounterpartyType.h"
+#include "CounterpartyTypeData.h"
+
 
 CounterpartyTypeDialog::CounterpartyTypeDialog(QWidget *parent, Database *db) :
     QDialog(parent),

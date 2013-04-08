@@ -2,7 +2,6 @@
 #define MODELVAT_H
 
 #include <QStringListModel>
-#include "../../SettingsGlobal.h"
 
 /**
  * @brief

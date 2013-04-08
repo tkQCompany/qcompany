@@ -1,5 +1,13 @@
+#include <QContextMenuEvent>
+#include <QMenu>
+#include <QSqlRelationalDelegate>
+#include <QSqlError>
+
 #include "EmailDialog.h"
 #include "ui_EmailDialog.h"
+#include "Database.h"
+#include "ModelEmail.h"
+#include "EmailData.h"
 
 EmailDialog::EmailDialog(QWidget *parent, Database *db, const QModelIndex &id_counterparty) :
     QDialog(parent), ui(new Ui::EmailDialog), db_(db)

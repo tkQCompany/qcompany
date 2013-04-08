@@ -1,21 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QScopedPointer>
-#include <QMessageBox>
-#include <QKeyEvent>
-#include <QSqlRelationalDelegate>
-
 #include "ui_MainWindow.h"
-#include "CorrectiveInvoiceDialog.h"
-#include "CorrectiveInvoiceGrossDialog.h"
-#include "DuplicateDialog.h"
-#include "InvoiceGrossDialog.h"
-#include "BillDialog.h"
-#include "../SettingsGlobal.h"
-#include "SettingsDialog.h"
-#include "CommodityDialog.h"
-#include "../model/Database.h"
+#include "Database.h"
+#include "InvoiceTypeData.h"
+#include "CommodityData.h"
+#include "CounterpartyData.h"
 
 
 namespace CMF = CommodityFields;

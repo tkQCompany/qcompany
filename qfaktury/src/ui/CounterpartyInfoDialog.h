@@ -1,20 +1,19 @@
 #ifndef COUNTERPARTYINFODIALOG_H
 #define COUNTERPARTYINFODIALOG_H
 
-#include <QDesktopServices>
-#include <QUrl>
-#include <QMessageBox>
-#include <QDebug>
-#include <QDataWidgetMapper>
-
-#include "../src/SettingsGlobal.h"
-#include "../src/model/Database.h"
-
+#include <QDialog>
+#include <QModelIndex>
 
 namespace Ui
 {
     class CounterpartyInfoDialog;
 }
+
+
+class Database;
+class QDataWidgetMapper;
+
+
 /**
  * @brief
  *

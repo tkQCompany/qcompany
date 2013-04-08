@@ -3,8 +3,6 @@
 
 #include <QSqlTableModel>
 
-#include "../models_data/CommodityTypeData.h"
-
 /**
  * @brief
  *

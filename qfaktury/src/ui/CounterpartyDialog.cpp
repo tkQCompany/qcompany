@@ -1,5 +1,27 @@
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QMessageBox>
+
 #include "CounterpartyDialog.h"
 #include "ui_CounterpartyDialog.h"
+#include "CounterpartyTypeData.h"
+#include "Database.h"
+#include "SettingsGlobal.h"
+#include "CounterpartyTypeDelegate.h"
+#include "CounterpartyTypeDialog.h"
+#include "EmailDialog.h"
+#include "PhoneDialog.h"
+#include "InvoiceNumberFormatEditDialog.h"
+#include "InvoiceNumberFormatExamplesDialog.h"
+#include "ModelPhone.h"
+#include "PhoneData.h"
+#include "ModelEmail.h"
+#include "EmailData.h"
+#include "ModelCounterparty.h"
+#include "ModelCounterpartyType.h"
+#include "ModelCountry.h"
+#include "CounterpartyData.h"
+
 
 /** Constructor
  */

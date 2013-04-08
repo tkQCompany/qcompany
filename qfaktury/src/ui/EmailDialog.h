@@ -2,15 +2,15 @@
 #define EMAILDIALOG_H
 
 #include <QDialog>
-#include <QContextMenuEvent>
-#include <QMenu>
-#include <QSqlRelationalDelegate>
-
-#include "../src/model/Database.h"
+#include <QModelIndex>
 
 namespace Ui {
 class EmailDialog;
 }
+
+
+class Database;
+
 
 /**
  * @brief

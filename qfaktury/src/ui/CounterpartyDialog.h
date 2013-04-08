@@ -1,24 +1,17 @@
 #ifndef COUNTERPARTYDIALOG_H
 #define COUNTERPARTYDIALOG_H
 
-#include <QMessageBox>
 #include <QDataWidgetMapper>
+#include <QDialog>
 #include <QSortFilterProxyModel>
-
-#include "../ui/CounterpartyTypeDialog.h"
-#include "../ui/EmailDialog.h"
-#include "../ui/InvoiceNumberFormatEditDialog.h"
-#include "../ui/InvoiceNumberFormatExamplesDialog.h"
-#include "../ui/PhoneDialog.h"
-#include "../src/model/Database.h"
-#include "../src/SettingsGlobal.h"
-#include "../ui/CounterpartyTypeDelegate.h"
 
 
 namespace Ui
 {
 class CounterpartyDialog;
 }
+
+class Database;
 
 /**
  * @brief

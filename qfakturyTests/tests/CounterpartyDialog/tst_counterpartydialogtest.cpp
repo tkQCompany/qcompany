@@ -2,6 +2,8 @@
 
 #include "../TestsCommon.h"
 #include "CounterpartyDialog.h"
+#include "Database.h"
+#include "SettingsGlobal.h"
 
 class CounterpartyDialogTest : public QObject
 {

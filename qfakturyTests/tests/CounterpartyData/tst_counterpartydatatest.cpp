@@ -1,7 +1,10 @@
 #include <QtTest/QtTest>
+#include <QSqlQuery>
 
 #include "../TestsCommon.h"
 #include "Database.h"
+#include "ModelCounterparty.h"
+#include "CounterpartyData.h"
 
 class CounterpartyDataTest : public QObject
 {

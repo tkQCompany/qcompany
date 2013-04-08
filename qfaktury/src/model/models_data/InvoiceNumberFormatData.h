@@ -1,9 +1,8 @@
 #ifndef INVOICENUMBERFORMATDATA_H
 #define INVOICENUMBERFORMATDATA_H
 
-#include <QStringList>
 #include <QDebug>
-#include <SettingsGlobal.h>
+#include "SettingsGlobal.h"
 
 struct InvoiceNumberFormatData
 {

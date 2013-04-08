@@ -3,8 +3,6 @@
 
 #include <QSqlRelationalTableModel>
 
-#include "../models_data/PhoneData.h"
-
 /**
  * @brief
  *

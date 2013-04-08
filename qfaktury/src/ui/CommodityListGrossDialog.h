@@ -8,8 +8,12 @@
 #ifndef COMMODITYLISTGROSSDIALOG_H
 #define COMMODITYLISTGROSSDIALOG_H
 
-#include "CommodityListDialog.h"
-//#include "../model/models/ModelCommodity.h"
+#include <QDialog>
+
+namespace Ui
+{
+    class CommodityListDialog;
+}
 
 /**
  * @brief

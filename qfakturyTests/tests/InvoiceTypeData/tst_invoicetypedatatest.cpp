@@ -1,7 +1,11 @@
 #include <QtTest/QtTest>
+#include <QSqlQuery>
 
 #include "../TestsCommon.h"
 #include "Database.h"
+#include "ModelInvoiceType.h"
+#include "InvoiceData.h"
+#include "InvoiceTypeData.h"
 
 class InvoiceTypeDataTest : public QObject
 {

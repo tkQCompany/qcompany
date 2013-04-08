@@ -1,3 +1,15 @@
+#include <QNetworkAccessManager>
+#include <QUrl>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QStringList>
+#include <QRegExp>
+#include <QObject>
+#include <QDebug>
+#include <QDomDocument>
+#include <QSqlQuery>
+#include <QSqlError>
+
 #include "ModelCurrency.h"
 
 ModelCurrency::ModelCurrency(QObject *parent) :

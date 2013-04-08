@@ -2,8 +2,6 @@
 #define SETTINGSGLOBAL_H
 
 #include <QSettings>
-#include <QDate>
-#include <QDir>
 #include <QString>
 #include <QLocale>
 #include <QDebug>

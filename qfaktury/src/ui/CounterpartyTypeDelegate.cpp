@@ -1,5 +1,4 @@
 #include "CounterpartyTypeDelegate.h"
-#include <QDebug>
 
 CounterpartyTypeDelegate::CounterpartyTypeDelegate(QObject *parent) :
     QSqlRelationalDelegate(parent)

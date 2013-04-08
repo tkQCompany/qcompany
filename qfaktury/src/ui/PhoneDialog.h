@@ -2,15 +2,14 @@
 #define PHONEDIALOG_H
 
 #include <QDialog>
-#include <QMenu>
-#include <QContextMenuEvent>
-#include <QSqlRelationalDelegate>
-
-#include "../src/model/Database.h"
+#include <QModelIndex>
 
 namespace Ui {
 class PhoneDialog;
 }
+
+
+class Database;
 
 /**
  * @brief

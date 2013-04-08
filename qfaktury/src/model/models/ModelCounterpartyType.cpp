@@ -1,5 +1,9 @@
-#include "ModelCounterpartyType.h"
 #include <QDebug>
+#include <QSqlQuery>
+#include <QSqlError>
+
+#include "ModelCounterpartyType.h"
+#include "CounterpartyTypeData.h"
 
 ModelCounterpartyType::ModelCounterpartyType(QObject *parent) :
     QSqlTableModel(parent, QSqlDatabase::database())
