@@ -447,7 +447,7 @@ void InvoiceDialogImpl::retranslateUi()
 {
     QTranslator appTranslator;
     SettingsGlobal s;
-    appTranslator.load(QString("translations/qfaktury_") + s.value(s.LANG).toString());
+    appTranslator.load(QString(":/res/translations/qfaktury_") + s.value(s.LANG).toString());
     qApp->installTranslator(&appTranslator);
     ui->retranslateUi(this);
 }

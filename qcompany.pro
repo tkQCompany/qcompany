@@ -7,7 +7,7 @@ SUBDIRS += qdecimal \
 CONFIG += ordered
 
 
-TRANSLATIONS += qfaktury/translations/qcompany_de.ts \
-                 qfaktury/translations/qcompany_en.ts
+TRANSLATIONS += qfaktury/res/translations/qcompany_de.ts \
+                 qfaktury/res/translations/qcompany_en.ts
 
 QMAKE_CXXFLAGS += -std=c++11 -Wall
