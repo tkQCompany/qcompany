@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>932</width>
+    <width>1131</width>
     <height>668</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="windowIcon">
    <iconset resource="../../res/qfaktury.qrc">
@@ -50,7 +47,7 @@
           <enum>Qt::ClickFocus</enum>
          </property>
          <property name="text">
-          <string/>
+          <string notr="true"/>
          </property>
         </widget>
        </item>
@@ -62,7 +59,7 @@
         <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
+        <enum>QSizePolicy::Preferred</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -112,6 +109,9 @@
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Preferred</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

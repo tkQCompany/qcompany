@@ -25,7 +25,9 @@ public:
  * @param db
  * @param id_edit
  */
-    InvoiceDialog(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType = InvoiceTypeData::VAT, const QModelIndex &idEdit = QModelIndex(), const bool newPImpl = true);
+    InvoiceDialog(QWidget *parent, Database *db,
+                  InvoiceTypeData::Type invoiceType = InvoiceTypeData::VAT,
+                  const QModelIndex &idEdit = QModelIndex());
     /**
      * @brief
      *

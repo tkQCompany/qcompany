@@ -20,7 +20,7 @@ class InvoiceDialog;
 
 class Database;
 
-class InvoiceDialogImpl: public QDialog
+class InvoiceDialogImpl: public QObject
 {
     Q_OBJECT
 
@@ -81,7 +81,7 @@ public:
      */
     bool validateForm();
 
-    virtual void setIsEditAllowed(const bool);
+    //virtual void setIsEditAllowed(const bool);
 
 public slots:
     /**
@@ -173,11 +173,12 @@ public slots:
     void updateInvoiceNumberFormat();
 
 public:
-    bool unsaved, saveFailed; /**< TODO */
+    QDialog *parent_;
     Ui::InvoiceDialog *ui;
     Database *db; /**< TODO */
     QDataWidgetMapper mapper; /**< TODO */
     CustomPaymData *custPaymData; /**< TODO */
+    bool isLoaded_;
     double discountTotal, netTotal, grossTotal; /**< TODO */
     QString docHTML;
 };

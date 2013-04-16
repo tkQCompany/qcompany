@@ -6,13 +6,9 @@
 #include "Database.h"
 
 
-InvoiceDialog::InvoiceDialog(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType, const QModelIndex &idEdit, const bool newPImpl) :
-    QDialog(parent)
+InvoiceDialog::InvoiceDialog(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType, const QModelIndex &idEdit) :
+    QDialog(parent), pImpl_(new InvoiceDialogImpl(this, db))
 {
-    if(newPImpl)
-    {
-        pImpl_ = new InvoiceDialogImpl(parent, db);
-    }
     pImpl_->ui->setupUi(this);
     pImpl_->init(invoiceType, idEdit);
 }

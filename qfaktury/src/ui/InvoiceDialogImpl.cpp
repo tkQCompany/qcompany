@@ -28,7 +28,8 @@
 
 
 InvoiceDialogImpl::InvoiceDialogImpl(QWidget *parent, Database *database)
-    : QDialog(parent), ui(new Ui::InvoiceDialog()), db(database)
+    : QObject(parent), parent_((QDialog*)parent), ui(new Ui::InvoiceDialog()),
+      db(database), isLoaded_(false)
 {
 }
 
@@ -162,7 +163,7 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
     ui->dateEditDateOfIssuance->setDate(QDate::currentDate());
     ui->dateEditDayOfPayment->setDate(QDate::currentDate());
 
-    QObject::connect(ui->pushButtonAddCommodity, SIGNAL(clicked()), this, SLOT(addCommodity()));
+    connect(ui->pushButtonAddCommodity, SIGNAL(clicked()), this, SLOT(addCommodity()));
     connect(ui->pushButtonMoreInfo, SIGNAL(clicked()), this, SLOT(counterpartyMoreInfo()));
     connect(ui->pushButtonRemoveCommodity, SIGNAL(clicked()), this, SLOT(delCommodity()));
     connect(ui->pushButtonEditCommodity, SIGNAL(clicked()), this, SLOT(editCommodity()));
@@ -212,7 +213,7 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
     mapper.addMapping(ui->dateEditDateOfIssuance, InvoiceFields::ISSUANCE_DATE);
     mapper.addMapping(ui->dateEditDayOfPayment, InvoiceFields::PAYMENT_DATE);
     mapper.addMapping(ui->comboBoxPayment, InvoiceFields::PAYMENT_ID);
-    mapper.addMapping(ui->comboBoxCurrency, InvoiceFields::CURRENCY_ID, "currentIndex");
+    mapper.addMapping(ui->comboBoxCurrency, InvoiceFields::CURRENCY_ID);
     mapper.addMapping(ui->lineEditAdditionalText, InvoiceFields::ADDIT_TEXT);
     mapper.addMapping(ui->spinBoxDiscount, InvoiceFields::DISCOUNT);
 
@@ -220,7 +221,8 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
     {
         mapper.setCurrentIndex(idEdit.row());
         fillTableCommodity(db->commodities(idEdit.data().toLongLong()));
-        ui->pushButtonSave->setEnabled(false);
+        ui->pushButtonSave->setEnabled(false); //TODO: sprawdzić czy ustawienia z Settings mają grać tu rolę
+        parent_->setWindowTitle(trUtf8("Edycja dokumentu - %1[*]").arg(InvoiceTypeData::name(invoiceType)));
     }
     else
     {
@@ -230,7 +232,7 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
         SettingsGlobal s;
         const QString invoiceTypeStr(InvoiceTypeData::name(invoiceType));
         setInitialComboBoxIndexes(invoiceTypeStr, PaymentTypeData::name(PaymentTypeData::CASH), s.value(s.DEFAULT_CURRENCY).toString());
-        setWindowTitle(invoiceTypeStr);
+        parent_->setWindowTitle(trUtf8("Nowy dokument - %1 [*]").arg(invoiceTypeStr));
 
         updateInvoiceNumber();
 
@@ -241,7 +243,11 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
         }
     }
 
+    //parent_->setWindowModified(false);
+
     retranslateUi();
+
+    isLoaded_ = true;
 }
 
 
@@ -278,8 +284,12 @@ void InvoiceDialogImpl::updateInvoiceNumber()
 void InvoiceDialogImpl::updateInvoiceNumberFormat()
 {
     ui->lineEditInvNumFormat->setText(db->modelInvoice()->
-                                       getInvoiceNumberFormat(ui->
-                                        comboBoxCounterparties->currentText()));
+                                   getInvoiceNumberFormat(ui->
+                                    comboBoxCounterparties->currentText()));
+    if(isLoaded_)
+    {
+        parent_->setWindowModified(true);
+    }
 }
 
 
@@ -293,51 +303,45 @@ bool InvoiceDialogImpl::validateForm()
 {
     if(ui->lineEditInvNumber->text().isEmpty())
     {
-        QMessageBox::warning(this, qApp->applicationName(), trUtf8("Brak numeru kolejnego faktury"),
+        QMessageBox::warning(parent_, qApp->applicationName(), trUtf8("Brak numeru kolejnego faktury"),
                               QMessageBox::Ok);
-        saveFailed = true;
         return false;
     }
 
     if(ui->comboBoxInvoiceType->currentIndex() == -1)
     {
-        QMessageBox::warning(this, qApp->applicationName(), trUtf8("Wybierz typ faktury."),
+        QMessageBox::warning(parent_, qApp->applicationName(), trUtf8("Wybierz typ faktury."),
                               QMessageBox::Ok);
-        saveFailed = true;
         return false;
     }
 
     if(ui->comboBoxCounterparties->currentIndex() == -1)
     {
-        QMessageBox::warning(this, qApp->applicationName(), trUtf8("Wybierz kontrahenta."),
+        QMessageBox::warning(parent_, qApp->applicationName(), trUtf8("Wybierz kontrahenta."),
                               QMessageBox::Ok);
-        saveFailed = true;
         return false;
     }
 
     if(ui->tableWidgetCommodities->rowCount() == 0)
     {
-        QMessageBox::warning(this, qApp->applicationName(), trUtf8("Wybierz towary lub usługi do sprzedania."),
+        QMessageBox::warning(parent_, qApp->applicationName(), trUtf8("Wybierz towary lub usługi do sprzedania."),
                               QMessageBox::Ok);
-        saveFailed = true;
         return false;
     }
 
 
     if(ui->comboBoxPayment->currentIndex() == -1)
     {
-        QMessageBox::warning(this, qApp->applicationName(), trUtf8("Wybierz rodzaj płatności."),
+        QMessageBox::warning(parent_, qApp->applicationName(), trUtf8("Wybierz rodzaj płatności."),
                               QMessageBox::Ok);
-        saveFailed = true;
         return false;
     }
 
 
     if(ui->comboBoxCurrency->currentIndex() == -1)
     {
-        QMessageBox::warning(this, qApp->applicationName(), trUtf8("Wybierz walutę rozliczeniową."),
+        QMessageBox::warning(parent_, qApp->applicationName(), trUtf8("Wybierz walutę rozliczeniową."),
                               QMessageBox::Ok);
-        saveFailed = true;
         return false;
     }
 
@@ -352,7 +356,7 @@ bool InvoiceDialogImpl::validateForm()
  */
 void InvoiceDialogImpl::counterpartyAdd()
 {
-    CounterpartyDialog dialog(this, db);
+    CounterpartyDialog dialog(parent_, db);
     if (dialog.exec() == QDialog::Accepted)
     {
         if(db->modelCounterparty()->submitAll())
@@ -361,7 +365,7 @@ void InvoiceDialogImpl::counterpartyAdd()
         }
         else
         {
-            QMessageBox::warning(this, trUtf8("Błąd dodawania kontrahenta"), db->modelCounterparty()->lastError().text());
+            QMessageBox::warning(parent_, trUtf8("Błąd dodawania kontrahenta"), db->modelCounterparty()->lastError().text());
         }
     }
 }
@@ -376,7 +380,7 @@ void InvoiceDialogImpl::counterpartyMoreInfo()
 {
     if(ui->comboBoxCounterparties->currentIndex() != -1)
     {
-        CounterpartyInfoDialog dialog(this, db, ui->comboBoxCounterparties->
+        CounterpartyInfoDialog dialog(parent_, db, ui->comboBoxCounterparties->
                                       model()->index(ui->comboBoxCounterparties->
                                             currentIndex(), CounterpartyFields::ID));
         dialog.exec();
@@ -392,7 +396,10 @@ void InvoiceDialogImpl::counterpartyMoreInfo()
 void InvoiceDialogImpl::dateChanged(QDate )
 {
     ui->pushButtonSave->setEnabled(true);
-    unsaved = true;
+    if(isLoaded_)
+    {
+        parent_->setWindowModified(true);
+    }
 }
 
 
@@ -405,7 +412,10 @@ void InvoiceDialogImpl::delCommodity()
     ui->tableWidgetCommodities->removeRow(ui->tableWidgetCommodities->currentRow());
     calculateSum();
     ui->pushButtonSave->setEnabled(true);
-    unsaved = true;
+    if(isLoaded_)
+    {
+        parent_->setWindowModified(true);
+    }
 }
 
 
@@ -449,7 +459,7 @@ void InvoiceDialogImpl::retranslateUi()
     SettingsGlobal s;
     appTranslator.load(QString(":/res/translations/qfaktury_") + s.value(s.LANG).toString());
     qApp->installTranslator(&appTranslator);
-    ui->retranslateUi(this);
+    ui->retranslateUi((QDialog*)parent_);
 }
 
 
@@ -492,9 +502,12 @@ void InvoiceDialogImpl::discountConstChange()
  */
 void InvoiceDialogImpl::discountChange()
 {
-    calculateSum();
-    ui->pushButtonSave->setEnabled(true);
-    unsaved = true;
+    if(isLoaded_)
+    {
+        calculateSum();
+        ui->pushButtonSave->setEnabled(true);
+        parent_->setWindowModified(true);
+    }
 }
 
 
@@ -505,7 +518,7 @@ void InvoiceDialogImpl::discountChange()
  */
 void InvoiceDialogImpl::addCommodity()
 {
-    CommodityListDialog dialog(this, db);
+    CommodityListDialog dialog(parent_, db);
     if (dialog.exec() == QDialog::Accepted)
     {
         const int rowNum = ui->tableWidgetCommodities->rowCount() == 0 ? 0 : ui->tableWidgetCommodities->rowCount() - 1;
@@ -525,7 +538,7 @@ void InvoiceDialogImpl::addCommodity()
         ui->tableWidgetCommodities->resizeColumnsToContents();
 
         ui->pushButtonSave->setEnabled(true);
-        unsaved = true;
+        parent_->setWindowModified(true);
         calculateSum();
     }
 }
@@ -537,20 +550,24 @@ void InvoiceDialogImpl::addCommodity()
  */
 void InvoiceDialogImpl::canQuit()
 {
-    // canClose == false -> data changed
-    if (unsaved || QMessageBox::warning(this, qApp->applicationName(), trUtf8("Dane zostały zmienione, czy chcesz zapisać?"),
-                                         QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes)
-            == QMessageBox::No)
+    if (((QWidget*)parent())->isWindowModified())
     {
-        reject();
+        if(QMessageBox::warning(parent_, qApp->applicationName(),
+                         trUtf8("Dane zostały zmienione, czy chcesz zapisać?"),
+                         QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes)
+           == QMessageBox::No)
+        {
+            parent_->reject();
+        }
+        else
+        {
+            saveInvoice();
+            parent_->accept();
+        }
     }
     else
     {
-        saveInvoice();
-        if (!saveFailed)
-        {
-            accept();
-        }
+        parent_->accept();
     }
 }
 
@@ -576,7 +593,7 @@ void InvoiceDialogImpl::payTextChanged(QString text)
         SettingsGlobal settings;
         if (settings.stringToDouble(ui->labelSumGrossVal->text()) == 0)
         {
-            QMessageBox::warning(this, qApp->applicationName(), trUtf8("Taki sposób płatności nie może zostać wybrany, ponieważ kwota do zapłaty wynosi 0."));
+            QMessageBox::warning(parent_, qApp->applicationName(), trUtf8("Taki sposób płatności nie może zostać wybrany, ponieważ kwota do zapłaty wynosi 0."));
             ui->comboBoxPayment->setCurrentIndex(0);
             return;
         }
@@ -596,17 +613,19 @@ void InvoiceDialogImpl::payTextChanged(QString text)
     textChanged(text);
 }
 
-/** Slot textChanged
- *  Activates buttons
- */
+
 /**
  * @brief
  *
  * @param QString
  */
-void InvoiceDialogImpl::textChanged(QString) {
-    ui->pushButtonSave->setEnabled(true);
-    unsaved = true;
+void InvoiceDialogImpl::textChanged(QString)
+{
+    if(isLoaded_)
+    {
+        ui->pushButtonSave->setEnabled(true);
+        parent_->setWindowModified(true);
+    }
 }
 
 
@@ -624,22 +643,22 @@ bool InvoiceDialogImpl::saveInvoice()
     if(result)
     {
         result = db->invoiceWithCommoditiesInsertTransact(getInvoiceData(), getCommoditiesVisualData());
-        if(!result)
+        if(result)
+        {
+            parent_->setWindowModified(false);
+            ui->pushButtonSave->setEnabled(false);
+            ui->pushButtonRemoveCommodity->setEnabled(false);
+            ui->pushButtonEditCommodity->setEnabled(false);
+        }
+        else
         {
             qDebug() << "InvoiceDialog::saveInvoice() - lastError: " << db->modelInvoice()->lastError().text();
-            saveFailed = true;
-            unsaved = true;
         }
-        ui->pushButtonSave->setEnabled(false);
-        ui->pushButtonRemoveCommodity->setEnabled(false);
-        ui->pushButtonEditCommodity->setEnabled(false);
     }
     else
     {
         qDebug() << "InvoiceDialog::saveInvoice() - mapper_submit - lastError: "
                  << db->modelInvoice()->lastError().text();
-        saveFailed = true;
-        unsaved = true;
     }
 
     return result;
@@ -825,7 +844,7 @@ void InvoiceDialogImpl::printInvoice()
         file.close();
 
         QPrinter printer(QPrinter::HighResolution);
-        QPrintPreviewDialog preview(&printer, this);
+        QPrintPreviewDialog preview(&printer, parent_);
         preview.setWindowFlags(Qt::Window);
         preview.setWindowTitle(trUtf8("%1 - Podgląd wydruku").arg(ui->comboBoxInvoiceType->currentText()));
         connect(&preview, SIGNAL(paintRequested(QPrinter*)), this, SLOT(printPaintRequested(QPrinter*)));
@@ -869,39 +888,39 @@ void InvoiceDialogImpl::printInvoice()
  *
  * @param isAllowed
  */
-void InvoiceDialogImpl::setIsEditAllowed(const bool isAllowed)
-{
-    ui->lineEditInvNumber->setEnabled(isAllowed);
-    ui->dateEditDateOfSell->setEnabled(isAllowed);
-    ui->dateEditDateOfIssuance->setEnabled(isAllowed);
-    ui->tableWidgetCommodities->setEnabled(isAllowed);
-    ui->spinBoxDiscount->setEnabled(isAllowed);
-    ui->labelDiscount1->setEnabled(isAllowed);
-    ui->comboBoxPayment->setEnabled(isAllowed);
-    ui->dateEditDayOfPayment->setEnabled(isAllowed);
-    ui->lineEditAdditionalText->setEnabled(isAllowed);
-    ui->pushButtonAddCommodity->setEnabled(isAllowed);
-    ui->pushButtonRemoveCommodity->setEnabled(isAllowed);
-    ui->pushButtonEditCommodity->setEnabled(isAllowed);
-    ui->checkBoxDiscount->setEnabled(isAllowed);
-    ui->comboBoxCounterparties->setEnabled(isAllowed);
-    ui->comboBoxCurrency->setEnabled(isAllowed);
-    ui->pushButtonSave->setEnabled(isAllowed);
-    ui->pushButtonAddCounterparty->setEnabled(isAllowed);
-    ui->dateEditDayOfPayment->setEnabled(isAllowed);
-    if (!isAllowed || ui->spinBoxDiscount->value() == 0) {
-        ui->checkBoxDiscount->setChecked(false);
-        ui->spinBoxDiscount->setEnabled(false);
-    } else {
-        ui->checkBoxDiscount->setChecked(true);
-        ui->spinBoxDiscount->setEnabled(true);
-    }
-    if (isAllowed && (ui->comboBoxPayment->currentIndex() > 0)) {
-        ui->dateEditDayOfPayment->setEnabled(true);
-    } else {
-        ui->dateEditDayOfPayment->setEnabled(false);
-    }
-}
+//void InvoiceDialogImpl::setIsEditAllowed(const bool isAllowed)
+//{
+//    ui->lineEditInvNumber->setEnabled(isAllowed);
+//    ui->dateEditDateOfSell->setEnabled(isAllowed);
+//    ui->dateEditDateOfIssuance->setEnabled(isAllowed);
+//    ui->tableWidgetCommodities->setEnabled(isAllowed);
+//    ui->spinBoxDiscount->setEnabled(isAllowed);
+//    ui->labelDiscount1->setEnabled(isAllowed);
+//    ui->comboBoxPayment->setEnabled(isAllowed);
+//    ui->dateEditDayOfPayment->setEnabled(isAllowed);
+//    ui->lineEditAdditionalText->setEnabled(isAllowed);
+//    ui->pushButtonAddCommodity->setEnabled(isAllowed);
+//    ui->pushButtonRemoveCommodity->setEnabled(isAllowed);
+//    ui->pushButtonEditCommodity->setEnabled(isAllowed);
+//    ui->checkBoxDiscount->setEnabled(isAllowed);
+//    ui->comboBoxCounterparties->setEnabled(isAllowed);
+//    ui->comboBoxCurrency->setEnabled(isAllowed);
+//    ui->pushButtonSave->setEnabled(isAllowed);
+//    ui->pushButtonAddCounterparty->setEnabled(isAllowed);
+//    ui->dateEditDayOfPayment->setEnabled(isAllowed);
+//    if (!isAllowed || ui->spinBoxDiscount->value() == 0) {
+//        ui->checkBoxDiscount->setChecked(false);
+//        ui->spinBoxDiscount->setEnabled(false);
+//    } else {
+//        ui->checkBoxDiscount->setChecked(true);
+//        ui->spinBoxDiscount->setEnabled(true);
+//    }
+//    if (isAllowed && (ui->comboBoxPayment->currentIndex() > 0)) {
+//        ui->dateEditDayOfPayment->setEnabled(true);
+//    } else {
+//        ui->dateEditDayOfPayment->setEnabled(false);
+//    }
+//}
 
 
 /**
