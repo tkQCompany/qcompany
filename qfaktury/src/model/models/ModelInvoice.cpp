@@ -184,7 +184,7 @@ QString ModelInvoice::getNextInvNumberFromDB_(const QString &invoiceNumFormat, c
     this->database().transaction();
     if(defaultInvNumFormat)
     {
-        const QString sql("SELECT invoice.inv_number, MAX(issuance_date) FROM invoice JOIN counterparty ON invoice.counterparty_id=counterparty.id_counterparty WHERE counterparty.inv_number_format =\"\"");
+        const QString sql("SELECT MAX(invoice.inv_number), MAX(issuance_date) FROM invoice JOIN counterparty ON invoice.counterparty_id=counterparty.id_counterparty WHERE counterparty.inv_number_format =\"\"");
         q.exec(sql);
     }
     else

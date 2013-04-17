@@ -18,6 +18,8 @@ public:
      */
     explicit ModelCommodity(QObject *parent);
 
+    double amount(const QString &id);
+
     /**
      * @brief
      *
@@ -27,6 +29,8 @@ public:
      * @return QVariant
      */
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
+    bool changeAmount(const QString &id, const double change);
 };
 
 #endif // MODELCOMMODITY_H

@@ -22,6 +22,7 @@
 #include "ModelInvoiceType.h"
 #include "ModelPaymentType.h"
 #include "ModelCurrency.h"
+#include "ModelCommodity.h"
 #include "PaymentTypeData.h"
 #include "CurrencyData.h"
 #include "CustomPaymData.h"
@@ -47,7 +48,6 @@ InvoiceDialogImpl::~InvoiceDialogImpl()
  */
 void InvoiceDialogImpl::fillTableCommodity(const QList<CommodityVisualData> &commodities)
 {
-    ui->tableWidgetCommodities->setColumnCount(CommodityVisualFields::DISCOUNT - CommodityVisualFields::ID + 1);
     ui->tableWidgetCommodities->setRowCount(commodities.size());
     for(int r = 0; r < commodities.size(); ++r)
     {
@@ -217,6 +217,8 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
     mapper.addMapping(ui->lineEditAdditionalText, InvoiceFields::ADDIT_TEXT);
     mapper.addMapping(ui->spinBoxDiscount, InvoiceFields::DISCOUNT);
 
+    ui->tableWidgetCommodities->setColumnCount(CommodityVisualFields::DISCOUNT - CommodityVisualFields::ID + 1);
+
     if(idEdit.isValid())
     {
         mapper.setCurrentIndex(idEdit.row());
@@ -243,10 +245,7 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
         }
     }
 
-    //parent_->setWindowModified(false);
-
     retranslateUi();
-
     isLoaded_ = true;
 }
 
@@ -409,6 +408,13 @@ void InvoiceDialogImpl::dateChanged(QDate )
  */
 void InvoiceDialogImpl::delCommodity()
 {
+    const QString idStr(ui->tableWidgetCommodities->item(
+                            ui->tableWidgetCommodities->currentRow(),
+                            CommodityVisualFields::ID)->data(Qt::DisplayRole).toString());
+    const double changeAmount = ui->tableWidgetCommodities->item(
+                ui->tableWidgetCommodities->currentRow(),
+                CommodityVisualFields::QUANTITY)->data(Qt::DisplayRole).toUInt();
+    db->modelCommodity()->changeAmount(idStr, changeAmount);
     ui->tableWidgetCommodities->removeRow(ui->tableWidgetCommodities->currentRow());
     calculateSum();
     ui->pushButtonSave->setEnabled(true);
@@ -524,8 +530,6 @@ void InvoiceDialogImpl::addCommodity()
         const int rowNum = ui->tableWidgetCommodities->rowCount() == 0 ? 0 : ui->tableWidgetCommodities->rowCount() - 1;
         ui->tableWidgetCommodities->insertRow(rowNum);
 
-        ui->tableWidgetCommodities->setColumnCount(CommodityVisualFields::DISCOUNT - CommodityVisualFields::ID + 1);
-
         QStringList headers;
         for(int i = CommodityVisualFields::ID; i <= CommodityVisualFields::DISCOUNT; ++i)
         {
@@ -540,6 +544,9 @@ void InvoiceDialogImpl::addCommodity()
         ui->pushButtonSave->setEnabled(true);
         parent_->setWindowModified(true);
         calculateSum();
+
+        db->modelCommodity()->changeAmount(dialog.ret.field(CommodityVisualFields::ID),
+                 -dialog.ret.field(CommodityVisualFields::QUANTITY).toDouble()); //TODO: introduce qDecimals here
     }
 }
 

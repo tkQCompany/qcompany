@@ -32,9 +32,9 @@ void CommodityListDialog::init()
     widgetMapper.addMapping(ui->doubleSpinBoxPriceNet2, CommodityFields::NET2);
     widgetMapper.addMapping(ui->doubleSpinBoxPriceNet3, CommodityFields::NET3);
     widgetMapper.addMapping(ui->doubleSpinBoxPriceNet4, CommodityFields::NET4);
-    widgetMapper.addMapping(ui->doubleSpinBoxAmount, CommodityFields::QUANTITY);
-    //widgetMapper_.addMapping(spinBoxDiscount, CommodityFields::DISCOUNT);
+    //widgetMapper.addMapping(ui->doubleSpinBoxAmount, CommodityFields::QUANTITY);
     widgetMapper.toFirst();
+    ui->doubleSpinBoxAmount->setValue(0.0);
 
     ui->listViewCommodities->selectionModel()->setCurrentIndex(db->modelCommodity()->index(0, 0), QItemSelectionModel::Rows);
     comboBoxChosenNetPriceChanged(ui->comboBoxChosenNetPrice->currentIndex());
@@ -108,32 +108,47 @@ void CommodityListDialog::doAccept() {
     if (!ui->lineEditName->text().isEmpty())
     {
         const QModelIndex current(ui->listViewCommodities->selectionModel()->currentIndex());
-        ret.discount = QString("%1").arg(ui->spinBoxDiscount->value());
-        ret.id = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID)).toString();
-        ret.name = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NAME)).toString();
-        switch(ui->comboBoxChosenNetPrice->currentIndex())
+        if( (db->modelCommodity()->amount(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID)).toString())
+             >= ui->doubleSpinBoxAmount->value())
+                ||
+                (db->modelCommodity()->data(db->modelCommodity()->index(current.row(),
+                                      CommodityFields::TYPE_ID)).toString() ==
+                 CommodityTypeData::name(CommodityTypeData::SERVICES))) //TODO: introduce qDecimals here
         {
-        case 0:
-            ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET1)).toString();
-            break;
-        case 1:
-            ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET2)).toString();
-            break;
-        case 2:
-            ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET3)).toString();
-            break;
-        case 3:
-            ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET4)).toString();
-            break;
+            ret.discount = QString("%1").arg(ui->spinBoxDiscount->value());
+            ret.id = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID)).toString();
+            ret.name = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NAME)).toString();
+            switch(ui->comboBoxChosenNetPrice->currentIndex())
+            {
+            case 0:
+                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET1)).toString();
+                break;
+            case 1:
+                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET2)).toString();
+                break;
+            case 2:
+                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET3)).toString();
+                break;
+            case 3:
+                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET4)).toString();
+                break;
+            }
+
+            ret.pkwiu = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::PKWIU)).toString();
+            ret.quantity = QString("%1").arg(ui->doubleSpinBoxAmount->value());
+            ret.type = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::TYPE_ID)).toString();
+            ret.unit = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::UNIT_ID)).toString();
+            ret.vat = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::VAT)).toString();
+
+            accept();
         }
+        else
+        {
+            QMessageBox::information(this, qApp->applicationName(),
+                                     trUtf8("Nie ma wystarczającej ilości towaru na stanie. Ilość towaru: %1")
+                                     .arg(db->modelCommodity()->amount(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID)).toString())), QMessageBox::Ok);
 
-        ret.pkwiu = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::PKWIU)).toString();
-        ret.quantity = QString("%1").arg(ui->doubleSpinBoxAmount->value());
-        ret.type = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::TYPE_ID)).toString();
-        ret.unit = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::UNIT_ID)).toString();
-        ret.vat = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::VAT)).toString();
-
-		accept();
+        }
     }
     else
     {
