@@ -40,18 +40,20 @@ private slots:
      * @brief
      *
      */
-    void okClick();
+    void okClick_();
     /**
      * @brief
      *
      */
-    void pkwiuGet();
+    void pkwiuGet_();
     /**
      * @brief
      *
      * @param suffix
      */
-    void addSuffix(const QString &suffix);
+    void addSuffix_(const QString &suffix);
+
+    void servicesCantBeCounted_(const QString &name);
 private:
     /**
      * @brief

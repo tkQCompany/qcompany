@@ -34,7 +34,7 @@ CommodityDialog::CommodityDialog(QWidget *parent, Database *db,
         mapper_->setCurrentIndex(id_edit.row());
         if(id_edit.row() == 0)
         {
-            addSuffix(ui_->comboBoxMeasureUnit->currentText());
+            addSuffix_(ui_->comboBoxMeasureUnit->currentText());
         }
     }
     else
@@ -90,10 +90,11 @@ void CommodityDialog::init()
     ui_->lineEditNet3->setValidator(&validator_);
     ui_->lineEditNet4->setValidator(&validator_);
 
-    connect(ui_->pushButtonOK, SIGNAL(clicked()), this, SLOT(okClick()));
+    connect(ui_->pushButtonOK, SIGNAL(clicked()), this, SLOT(okClick_()));
     connect(ui_->pushButtonCancel, SIGNAL(clicked()), this, SLOT(close()));
-    connect(ui_->toolButtonPKWIU, SIGNAL(clicked()), this, SLOT(pkwiuGet()));
-    connect(ui_->comboBoxMeasureUnit, SIGNAL(currentIndexChanged(QString)), this, SLOT(addSuffix(QString)));
+    connect(ui_->toolButtonPKWIU, SIGNAL(clicked()), this, SLOT(pkwiuGet_()));
+    connect(ui_->comboBoxMeasureUnit, SIGNAL(currentIndexChanged(QString)), this, SLOT(addSuffix_(QString)));
+    connect(ui_->comboBoxType, SIGNAL(currentIndexChanged(QString)), this, SLOT(servicesCantBeCounted_(QString)));
 }
 
 /******************** SLOTS START ***************************/
@@ -102,7 +103,7 @@ void CommodityDialog::init()
 /** Slot
  *  save data to XML file and returns row for products table
  */
-void CommodityDialog::okClick()
+void CommodityDialog::okClick_()
 {
     if (ui_->lineEditName->text().isEmpty())
     {
@@ -126,13 +127,28 @@ void CommodityDialog::okClick()
 /** Slot
  *  Find PKWIU code on the net
  */
-void CommodityDialog::pkwiuGet()
+void CommodityDialog::pkwiuGet_()
 {
     QDesktopServices::openUrl(QUrl(tr("http://www.klasyfikacje.pl/")));
 }
 
 
-void CommodityDialog::addSuffix(const QString &suffix)
+void CommodityDialog::servicesCantBeCounted_(const QString &name)
+{
+    if(name == CommodityTypeData::name(CommodityTypeData::SERVICES))
+    {
+        ui_->labelQuantity->setVisible(false);
+        ui_->doubleSpinBoxQuantity->setVisible(false);
+    }
+    else
+    {
+        ui_->labelQuantity->setVisible(true);
+        ui_->doubleSpinBoxQuantity->setVisible(true);
+    }
+}
+
+
+void CommodityDialog::addSuffix_(const QString &suffix)
 {
     ui_->doubleSpinBoxQuantity->setSuffix(QChar(' ') + suffix);
 }
