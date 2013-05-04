@@ -11,14 +11,14 @@ namespace CommodityFields
  * @brief
  *
  */
-enum Fields {ID, NAME, ABBREV, PKWIU, TYPE_ID, UNIT_ID, NET1, NET2, NET3, NET4, VAT, QUANTITY};
+enum Field {ID, NAME, ABBREV, PKWIU, TYPE_ID, UNIT_ID, NET1, NET2, NET3, NET4, VAT, QUANTITY};
 }
 
 
 class CommodityData
 {
 public:
-    static QString header(const int i)
+    static QString header(const CommodityFields::Field i)
     {
         switch(i)
         {

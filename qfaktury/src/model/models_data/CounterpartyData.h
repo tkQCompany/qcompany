@@ -16,7 +16,7 @@ namespace CounterpartyFields
      * @brief
      *
      */
-enum Fields {ID, NAME, TYPE_ID, COUNTRY, LOCATION, POSTAL_CODE, STREET, TAX_IDENT, ACCOUNT_NAME, WWW, PRIMARY_EMAIL, PRIMARY_PHONE, INV_NUM_FORMAT};
+enum Field {ID, NAME, TYPE_ID, COUNTRY, LOCATION, POSTAL_CODE, STREET, TAX_IDENT, ACCOUNT_NAME, WWW, PRIMARY_EMAIL, PRIMARY_PHONE, INV_NUM_FORMAT};
 }
 
 
@@ -24,7 +24,7 @@ enum Fields {ID, NAME, TYPE_ID, COUNTRY, LOCATION, POSTAL_CODE, STREET, TAX_IDEN
 class CounterpartyData
 {
 public:
-    static QString header(const int i)
+    static QString header(const CounterpartyFields::Field i)
     {
         switch(i)
         {

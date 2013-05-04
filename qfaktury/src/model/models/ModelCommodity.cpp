@@ -29,7 +29,7 @@ QVariant ModelCommodity::headerData(int section, Qt::Orientation orientation, in
     if(role != Qt::DisplayRole)
         return QVariant();
 
-    return CommodityData::header(section);
+    return CommodityData::header((CommodityFields::Field)section);
 }
 
 

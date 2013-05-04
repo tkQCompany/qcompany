@@ -29,7 +29,7 @@ struct PaymentTypeData
      * @param paymentType
      * @return QString
      */
-    static QString name(const int paymentType)
+    static QString name(const PaymentTypes paymentType)
     {
         switch(paymentType)
         {

@@ -2,7 +2,7 @@
 
 #include "InvoiceNumberFormatEditDialog.h"
 #include "ui_InvoiceNumberFormatEditDialog.h"
-#include "InvoiceNumberFormatData.h"
+#include "InvoiceNumberFormat_t.h"
 #include "InvoiceNumberFormatExamplesDialog.h"
 
 InvoiceNumberFormatEditDialog::InvoiceNumberFormatEditDialog(QWidget *parent, Database *db, const QString &format) :
@@ -22,10 +22,10 @@ InvoiceNumberFormatEditDialog::~InvoiceNumberFormatEditDialog()
 
 void InvoiceNumberFormatEditDialog::init_()
 {
-    for(int i = InvoiceNumberFormatData::NR; i <= InvoiceNumberFormatData::HYPHEN; ++i)
+    for(int i = InvoiceNumberFormat_t::NR; i <= InvoiceNumberFormat_t::HYPHEN; ++i)
     {
-        ui_->comboBoxFields->addItem(QString("%1 : %2").arg(InvoiceNumberFormatData::FieldName(i))
-                                    .arg(InvoiceNumberFormatData::FieldDescription(i)));
+        ui_->comboBoxFields->addItem(QString("%1 : %2").arg(InvoiceNumberFormat_t::FieldName((InvoiceNumberFormat_t::Field)i))
+                                    .arg(InvoiceNumberFormat_t::FieldDescription((InvoiceNumberFormat_t::Field)i)));
     }
 
     connect(ui_->pushButtonAddField, SIGNAL(clicked()), this, SLOT(fieldAdd_()));
@@ -35,20 +35,13 @@ void InvoiceNumberFormatEditDialog::init_()
 }
 
 
-void InvoiceNumberFormatEditDialog::initList_(const QString &format)
+void InvoiceNumberFormatEditDialog::initList_(const QString &formatStr)
 {
-    if(format.isEmpty())
+    if(formatStr.isEmpty())
         return;
 
-    QString label;
-    QVector<int> vint(InvoiceNumberFormatData::Parse(format));
-
     ui_->listWidgetFields->clear();
-    for(int i = 0; i < vint.size(); ++i)
-    {
-        label = InvoiceNumberFormatData::FieldName(vint.at(i));
-        ui_->listWidgetFields->insertItem(ui_->listWidgetFields->count(), label);
-    }
+    ui_->listWidgetFields->insertItems(0, InvoiceNumberFormat_t::Parse(formatStr)->fieldStrList());
 }
 
 
@@ -80,7 +73,7 @@ void InvoiceNumberFormatEditDialog::fieldAdd_()
         return;
     }
 
-    ui_->listWidgetFields->addItem(InvoiceNumberFormatData::FieldName(index));
+    ui_->listWidgetFields->addItem(InvoiceNumberFormat_t::FieldName((InvoiceNumberFormat_t::Field)index));
 }
 
 
@@ -100,7 +93,7 @@ void InvoiceNumberFormatEditDialog::fieldChange_()
     }
 
     const QString field(ui_->comboBoxFields->currentText().left(ui_->comboBoxFields->currentText().indexOf(QChar(':'))).trimmed());
-    ui_->listWidgetFields->item(index)->setText(InvoiceNumberFormatData::FieldName(InvoiceNumberFormatData::FieldID(field)));
+    ui_->listWidgetFields->item(index)->setText(InvoiceNumberFormat_t::FieldName(InvoiceNumberFormat_t::FieldID(field)));
 }
 
 

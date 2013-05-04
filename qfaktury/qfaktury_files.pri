@@ -28,7 +28,6 @@ HEADERS += src/ui/BillDialog.h \
     src/model/models_data/PaymentTypeData.h \
     src/model/models_data/InvoiceTypeData.h \
     src/model/models_data/InvoiceData.h \
-    src/model/models_data/InvoiceNumberFormatData.h \
     src/model/models_data/EmailData.h \
     src/model/models_data/CurrencyData.h \
     src/model/models_data/CountryData.h \
@@ -52,7 +51,8 @@ HEADERS += src/ui/BillDialog.h \
     src/model/models/ModelCommodity.h \
     src/ConvertAmount.h \
     src/SettingsGlobal.h \
-    src/ui/InvoiceDialogImpl.h
+    src/ui/InvoiceDialogImpl.h \
+    src/model/models_data/InvoiceNumberFormat_t.h
 
 
 
@@ -96,5 +96,6 @@ SOURCES += main.cpp \
     src/model/models/ModelPaymentType.cpp \
     src/model/models/ModelInvoiceType.cpp \
     src/model/models/ModelInvoiceWithCommodities.cpp \
-    src/ui/InvoiceDialogImpl.cpp
-    
+    src/ui/InvoiceDialogImpl.cpp \
+    src/model/models_data/InvoiceNumberFormat_t.cpp
+

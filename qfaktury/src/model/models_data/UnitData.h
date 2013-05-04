@@ -22,7 +22,7 @@ struct UnitData
      * @brief Default values when the app is launched for the first time. Later they can be useless.
      *
      */
-    enum Names {UNIT, KG, G, M, KM, HOUR, PACKAGE};
+    enum Name {UNIT, KG, G, M, KM, HOUR, PACKAGE};
 
     /**
      * @brief
@@ -30,7 +30,7 @@ struct UnitData
      * @param unitName
      * @return QString
      */
-    static QString name(const int unitName)
+    static QString name(const Name unitName)
     {
         switch(unitName)
         {

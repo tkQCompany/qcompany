@@ -19,7 +19,7 @@ enum Currencies{AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD, HRK, ILS,
                 LTL, LVL, MXN, MYR, NOK, NZD, PHP, PLN, RON, RUB, SEK, SGD, THB,
                 TRY, UAH, USD, XDR, ZAR, CLP, HUF, INR, ISK, JPY, KRW, IDR};
 
-static QString codeName(const int currency_code)
+static QString codeName(const Currencies currency_code)
 {
     switch(currency_code)
     {
@@ -69,7 +69,7 @@ static QString codeName(const int currency_code)
 }
 
 
-static QString name(const int currency_code)
+static QString name(const Currencies currency_code)
 {
     switch(currency_code)
     {

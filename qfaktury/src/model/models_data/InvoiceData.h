@@ -39,7 +39,7 @@ public:
      * @param i
      * @return QVariant
      */
-    QVariant field(const int i) const
+    QVariant field(const InvoiceFields::Fields i) const
     {
         QVariant var;
         switch(i)
@@ -61,7 +61,7 @@ public:
         }
     }
 
-    void setField(const int i, QVariant val)
+    void setField(const InvoiceFields::Fields i, QVariant val)
     {
         switch(i)
         {
@@ -103,7 +103,7 @@ public:
         }
     }
 
-    static QString header(const int i)
+    static QString header(const InvoiceFields::Fields i)
     {
         switch(i)
         {

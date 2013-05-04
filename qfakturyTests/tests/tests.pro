@@ -26,4 +26,5 @@ SUBDIRS += ConvertAmount \
     PaymentTypeData \
     PhoneData \
     UnitData \
-    SettingsDialog
+    SettingsDialog \
+    ModelInvoice

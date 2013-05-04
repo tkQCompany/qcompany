@@ -514,25 +514,25 @@ bool Database::insertDataIfNotInserted_()
 {
     for(int i = CounterpartyTypeData::MY_COMPANY; i <= CounterpartyTypeData::OFFICE; ++i)
     {
-        if(!sqlInsertIf_("counterparty_type", "type", CounterpartyTypeData::name(i), __LINE__))
+        if(!sqlInsertIf_("counterparty_type", "type", CounterpartyTypeData::name((CounterpartyTypeData::CounterpartyType)i), __LINE__))
             return false;
     }
 
     for(int i = CommodityTypeData::GOODS; i <= CommodityTypeData::SERVICES; ++i)
     {
-        if(!sqlInsertIf_("commodity_type", "type", CommodityTypeData::name(i), __LINE__))
+        if(!sqlInsertIf_("commodity_type", "type", CommodityTypeData::name((CommodityTypeData::CommodityType)i), __LINE__))
             return false;
     }
 
     for(int i = UnitData::UNIT; i <= UnitData::PACKAGE; ++i)
     {
-        if(!sqlInsertIf_("unit", "name", UnitData::name(i), __LINE__))
+        if(!sqlInsertIf_("unit", "name", UnitData::name((UnitData::Name)i), __LINE__))
             return false;
     }
 
     for(int i = PaymentTypeData::CASH; i <= PaymentTypeData::TRANSFER; ++i)
     {
-        if(!sqlInsertIf_("payment_type", "type", PaymentTypeData::name(i), __LINE__))
+        if(!sqlInsertIf_("payment_type", "type", PaymentTypeData::name((PaymentTypeData::PaymentTypes)i), __LINE__))
             return false;
     }
 
@@ -542,10 +542,10 @@ bool Database::insertDataIfNotInserted_()
     {
         query.exec(QString("INSERT OR IGNORE INTO '%1'(`code`, `code_unit`, `exchange_rate_pln`, `localized_name`) VALUES('%2', %3, %4, '%5')")
                    .arg("currency")
-                   .arg(CurrencyData::codeName(i))
+                   .arg(CurrencyData::codeName((CurrencyData::Currencies)i))
                    .arg(1)
                    .arg(1)
-                   .arg(CurrencyData::name(i)));
+                   .arg(CurrencyData::name((CurrencyData::Currencies)i)));
         if(!query.isActive())
         {
             QMessageBox::critical(0, trUtf8("Błąd SQL SELECT"), QString("Detected at line %1: %2").arg(__LINE__).arg(query.lastError().text()));
@@ -557,7 +557,7 @@ bool Database::insertDataIfNotInserted_()
 
     for(int i = InvoiceTypeData::VAT; i <= InvoiceTypeData::BILL; ++i)
     {
-        if(!sqlInsertIf_("invoice_type", "type", InvoiceTypeData::name(i), __LINE__))
+        if(!sqlInsertIf_("invoice_type", "type", InvoiceTypeData::name((InvoiceTypeData::Type)i), __LINE__))
             return false;
     }
 

@@ -7,6 +7,7 @@
 #include "InvoiceData.h"
 #include "InvoiceTypeData.h"
 #include "CommodityVisualData.h"
+#include "InvoiceNumberFormat_t.h"
 
 
 class QTableWidgetItem;
@@ -53,7 +54,6 @@ public:
      * @param commodities
      */
     void fillTableCommodity(const QList<CommodityVisualData> &commodities);
-    void genInvoiceNumber(const QString& invNumFormat, const QDate& issuanceDate, const int invoiceType, const QString& counterpartyName);
     /**
      * @brief
      *

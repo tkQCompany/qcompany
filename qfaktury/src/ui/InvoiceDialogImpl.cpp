@@ -68,15 +68,6 @@ void InvoiceDialogImpl::fillTableCommodity(const QList<CommodityVisualData> &com
 }
 
 
-void InvoiceDialogImpl::genInvoiceNumber(const QString& invNumFormat, const QDate& issuanceDate, const int invoiceType, const QString& counterpartyName)
-{
-    const QString invNum(db->modelInvoice()->generateInvoiceNumber(invNumFormat, issuanceDate,
-                                                                    InvoiceTypeData::name(invoiceType),
-                                                                    counterpartyName));
-    ui->lineEditInvNumber->setText(invNum);
-}
-
-
 
 /**
  * @brief
@@ -272,10 +263,20 @@ void InvoiceDialogImpl::updateInvoiceNumber()
             (ui->comboBoxInvoiceType->currentIndex() != -1) &&
             (ui->comboBoxCounterparties->currentIndex() != -1))
     {
-        genInvoiceNumber(ui->lineEditInvNumFormat->text(),
-                          ui->dateEditDateOfIssuance->date(),
-                          InvoiceTypeData::StringToInvoiceType(ui->comboBoxInvoiceType->currentText()),
-                          ui->comboBoxCounterparties->currentText());
+        SettingsGlobal s;
+        const QString invNumFormat(ui->lineEditInvNumFormat->text().isEmpty()
+                                   ?s.value(s.DEFAULT_INV_NUM_FORMAT).toString()
+                                  :ui->lineEditInvNumFormat->text());
+
+        const bool defaultInvNumFormat = (s.value(s.DEFAULT_INV_NUM_FORMAT).toString() == invNumFormat);
+        const ModelInvoice::DBData dbData(*db->modelInvoice()->getLastExistingNumberDateFromDB(defaultInvNumFormat,
+                                                                                                ui->comboBoxCounterparties->currentText()).release());
+        const QString invNum(db->modelInvoice()->generateInvoiceNumber(*(InvoiceNumberFormat_t::Parse(invNumFormat).release()),
+                                                                         dbData.invNumStr,
+                                                                         ui->dateEditDateOfIssuance->date(),
+                                                                         dbData.gotIssuanceDate,
+                                                                         (InvoiceTypeData::Type)ui->comboBoxInvoiceType->currentIndex()));
+        ui->lineEditInvNumber->setText(invNum);
     }
 }
 
@@ -476,7 +477,7 @@ void InvoiceDialogImpl::retranslateUi()
  */
 void InvoiceDialogImpl::tableActivated(QTableWidgetItem * item)
 {
-    if (item != nullptr && !item->text().isEmpty())
+    if (item != 0 && !item->text().isEmpty())
     {
         ui->pushButtonRemoveCommodity->setEnabled(true);
         ui->pushButtonEditCommodity->setEnabled(true);
@@ -781,7 +782,7 @@ void InvoiceDialogImpl::printInvoice()
             summaryHTML += trUtf8("forma płatności: ") + ui->comboBoxPayment->currentText() + "<b>";
             summaryHTML += trUtf8("Zapłacono gotówką");
         }
-        else if((ui->comboBoxPayment->currentIndex() == ui->comboBoxPayment->count() -1) && (custPaymData != nullptr))
+        else if((ui->comboBoxPayment->currentIndex() == ui->comboBoxPayment->count() -1) && (custPaymData != 0))
         {
             summaryHTML += "<span style=\"toPay\">";
             summaryHTML += QString(trUtf8("Zapłacono: ") + custPaymData->payment1 + ": "

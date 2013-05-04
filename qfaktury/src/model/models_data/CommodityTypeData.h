@@ -29,7 +29,7 @@ public:
      * @param type
      * @return QString
      */
-    static QString name(const int type)
+    static QString name(const CommodityType type)
     {
         switch(type)
         {

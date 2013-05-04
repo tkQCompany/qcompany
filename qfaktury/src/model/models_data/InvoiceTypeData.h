@@ -1,6 +1,8 @@
 #ifndef INVOICETYPEDATA_H
 #define INVOICETYPEDATA_H
 
+#include <QMetaType>
+
 namespace InvoiceTypeFields
 {
     /**
@@ -32,7 +34,7 @@ public:
      * @param invoiceType
      * @return QString
      */
-    static QString name(const int invoiceType)
+    static QString name(const Type invoiceType)
     {
         switch (invoiceType)
         {
@@ -48,19 +50,21 @@ public:
         }
     }
 
-    static int StringToInvoiceType(const QString& str)
+    static Type StringToInvoiceType(const QString& str)
     {
-        int ret = -1;
+        Type ret = VAT;
         for(int i = VAT; i <= BILL; ++i)
         {
-            if(0 == (str.compare(name(i))))
+            if(0 == (str.compare(name((Type)i))))
             {
-                ret = i;
+                ret = (Type)i;
                 break;
             }
         }
         return ret;
     }
 };
+
+Q_DECLARE_METATYPE(InvoiceTypeData::Type)
 
 #endif // INVOICETYPEDATA_H

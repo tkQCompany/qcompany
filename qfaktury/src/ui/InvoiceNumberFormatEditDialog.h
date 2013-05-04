@@ -33,7 +33,7 @@ private slots:
 
 private:
     void init_();
-    void initList_(const QString &);
+    void initList_(const QString &formatStr);
     QString listToString_() const;
     
 private:

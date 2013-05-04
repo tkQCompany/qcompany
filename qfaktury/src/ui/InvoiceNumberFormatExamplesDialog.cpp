@@ -5,6 +5,7 @@
 #include "Database.h"
 #include "ModelInvoice.h"
 #include "InvoiceTypeData.h"
+#include "SettingsGlobal.h"
 
 InvoiceNumberFormatExamplesDialog::InvoiceNumberFormatExamplesDialog(QWidget *parent, Database *db,
                                                                      const QString &invoiceNumFormat,
@@ -32,16 +33,24 @@ void InvoiceNumberFormatExamplesDialog::init_()
     QScopedPointer<QTableWidgetItem> ptrDate, ptrExample;
     enum COLS {COL_DATE, COL_EXAMPLE};
 
+    SettingsGlobal s;
+
     ui->tableWidgetMain->setRowCount(size);
+    const QString invNumFormat(invoiceNumFormat_.isEmpty()
+                               ?s.value(s.DEFAULT_INV_NUM_FORMAT).toString()
+                              :invoiceNumFormat_);
+    const QStringList simulatedNums(db_->modelInvoice()->
+                                    simulateConsecutiveInvoiceNumbers(
+                                        *InvoiceNumberFormat_t::Parse(invNumFormat).release(),
+                                        date,
+                                        InvoiceTypeData::VAT,
+                                        size));
     for(int i = 0; i < size; ++i)
     {
         ptrDate.reset(new QTableWidgetItem(date.toString("yyyy-MM-dd")));
         ui->tableWidgetMain->setItem(i, COL_DATE, ptrDate.take());
 
-        ptrExample.reset(new QTableWidgetItem(db_->modelInvoice()->generateInvoiceNumber(invoiceNumFormat_,
-                                                                                         date,
-                                                                                         InvoiceTypeData::name(InvoiceTypeData::VAT),
-                                                                                         counterpartyName_)));
+        ptrExample.reset(new QTableWidgetItem(simulatedNums.at(i)));
         ui->tableWidgetMain->setItem(i, COL_EXAMPLE, ptrExample.take());
 
         date = date.addDays(1);

@@ -17,7 +17,7 @@ QVariant ModelCounterparty::headerData(int section, Qt::Orientation orientation,
     if(role != Qt::DisplayRole)
         return QVariant();
 
-    return CounterpartyData::header(section);
+    return CounterpartyData::header((CounterpartyFields::Field)section);
 }
 
 

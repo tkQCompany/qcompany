@@ -2,6 +2,12 @@
 #define MODELINVOICE_H
 
 #include <QSqlRelationalTableModel>
+#include <QDate>
+#include <QString>
+#include <memory>
+
+#include "InvoiceTypeData.h"
+#include "InvoiceNumberFormat_t.h"
 
 /**
  * @brief
@@ -32,13 +38,19 @@ public:
      *
      * @return QString
      */
-    QString generateInvoiceNumber(const QString& invoiceNumFormat, const QDate &issuanceDate, const QString& invoiceTypeName, const QString& counterpartyName = QString()) const;
+    QString generateInvoiceNumber(const InvoiceNumberFormat_t& invoiceNumFormat, const QString &prevInvNum, const QDate &issuanceDate, const QDate &prevIssuanceDate, const InvoiceTypeData::Type invoiceType) const;
     QString getInvoiceNumberFormat(const QString &counterpartyName) const;
+    struct DBData
+    {
+        QDate gotIssuanceDate;
+        QString invNumStr;
+    };
+    std::auto_ptr<DBData> getLastExistingNumberDateFromDB(const bool defaultInvNumFormat, const QString &counterpartyName) const;
     void setDataRange(const QDate &from, const QDate &to);
+    QStringList simulateConsecutiveInvoiceNumbers(const InvoiceNumberFormat_t &invoiceNumFormat, QDate &issuanceDate, const InvoiceTypeData::Type invoiceType, const int invNumCounts = 1) const;
 
 private:
-    QString getNextInvNumberFromDB_(const QString& invoiceNumFormat, const QDate &issuanceDate, const int periodId, const int periodLocationInFormat, const QString& counterpartyName = QString()) const;
-    static QString increaseField_(const QString &invNumber, const QString& regExpStr, const int numberLocationInFormat, const int increase);
+    static long increaseNumber_(const InvoiceNumberFormat_t& invoiceNumFormat, const QString &prevInvNum, const QDate &issuanceDate, const QDate &prevIssuanceDate, const InvoiceNumberFormat_t::Field periodId, const int position);
 };
 
 #endif // MODELINVOICE_H
