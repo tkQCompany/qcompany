@@ -50,6 +50,28 @@ public:
         }
     }
 
+    /**
+     * @brief
+     *
+     * @param invoiceType
+     * @return QString
+     */
+    static QString shortName(const Type invoiceType)
+    {
+        switch (invoiceType)
+        {
+        case VAT:               return QObject::trUtf8("FVAT");
+        case PRO_FORMA:         return QObject::trUtf8("FProForma");
+        case CORRECTIVE_VAT:    return QObject::trUtf8("Korekta");
+        case GROSS:             return QObject::trUtf8("Fbrutto");
+        case CORRECTIVE_GROSS:  return QObject::trUtf8("KorektaBrutto");
+        case BILL:              return QObject::trUtf8("Rachunek");
+        default:
+            qDebug("InvoiceTypeData::shortName(): Unknown type of invoice");
+            return QString();
+        }
+    }
+
     static Type StringToInvoiceType(const QString& str)
     {
         Type ret = VAT;

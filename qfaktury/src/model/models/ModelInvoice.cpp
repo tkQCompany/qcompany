@@ -29,11 +29,12 @@ QVariant ModelInvoice::headerData(int section, Qt::Orientation orientation, int 
 }
 
 QStringList ModelInvoice::simulateConsecutiveInvoiceNumbers(const InvoiceNumberFormat_t &invoiceNumFormat,
-                                                            QDate &issuanceDate,
+                                                            const QDate &firstIssuanceDate,
                                                             const InvoiceTypeData::Type invoiceType,
                                                             const int invNumCounts) const
 {
     QStringList retList;
+    QDate issuanceDate(firstIssuanceDate);
     retList.append(""); //temporarily - for the algorithm below
     for(int i = 1; i <= invNumCounts; ++i)
     {
@@ -76,18 +77,14 @@ QString ModelInvoice::generateInvoiceNumber(const InvoiceNumberFormat_t& invoice
         switch(f)
         {
         case InvoiceNumberFormat_t::NR:
-            ret += QString("%1").arg(this->rowCount()); //the "rowCount()" includes the newly added empty row
-            break;
         case InvoiceNumberFormat_t::NR_Y:
         case InvoiceNumberFormat_t::NR_M:
         case InvoiceNumberFormat_t::NR_D:
         case InvoiceNumberFormat_t::NR_Q:
-        {
             ret += QString("%1").arg(increaseNumber_(invoiceNumFormat, prevInvNum, issuanceDate, prevIssuanceDate, f, i));
-        }
             break;
         case InvoiceNumberFormat_t::INVOICE_TYPE:
-            ret += InvoiceTypeData::name(invoiceType);
+            ret += InvoiceTypeData::shortName(invoiceType);
             break;
         case InvoiceNumberFormat_t::TEXT1:
             ret += s.value(s.TEXT1).toString();
@@ -108,7 +105,7 @@ QString ModelInvoice::generateInvoiceNumber(const InvoiceNumberFormat_t& invoice
             ret += issuanceDate.toString("dd");
             break;
         case InvoiceNumberFormat_t::PERIOD_QUARTER:
-            ret += QString("%1").arg( (issuanceDate.month() - 1)/3 + 1); //output range 1-4
+            ret += QString("0%1").arg( (issuanceDate.month() - 1)/3 + 1); //output range 01-04
             break;
         case InvoiceNumberFormat_t::SLASH:
         case InvoiceNumberFormat_t::BACKSLASH:
@@ -208,19 +205,22 @@ std::auto_ptr<ModelInvoice::DBData> ModelInvoice::getLastExistingNumberDateFromD
 
 long ModelInvoice::increaseNumber_(const InvoiceNumberFormat_t& invoiceNumFormat, const QString &prevInvNum, const QDate &issuanceDate, const QDate &prevIssuanceDate, const InvoiceNumberFormat_t::Field periodId, const int position)
 {
+    const QString capStr(invoiceNumFormat.cap(prevInvNum, position));
     switch(periodId)
     {
+    case InvoiceNumberFormat_t::NR:
+        return capStr.toLong() + 1L;
     case InvoiceNumberFormat_t::NR_Y:
         if(issuanceDate.year() == prevIssuanceDate.year())
         {
-            return invoiceNumFormat.cap(prevInvNum, position+1).toLong() + 1L;
+            return capStr.toLong() + 1L;
         }
         break;
     case InvoiceNumberFormat_t::NR_M:
         if(issuanceDate.year() == prevIssuanceDate.year() &&
                 issuanceDate.month() == prevIssuanceDate.month())
         {
-            return invoiceNumFormat.cap(prevInvNum, position+1).toLong() + 1L;
+            return capStr.toLong() + 1L;
         }
         break;
     case InvoiceNumberFormat_t::NR_D:
@@ -228,14 +228,14 @@ long ModelInvoice::increaseNumber_(const InvoiceNumberFormat_t& invoiceNumFormat
                 issuanceDate.month() == prevIssuanceDate.month() &&
                 issuanceDate.day() == prevIssuanceDate.day())
         {
-            return invoiceNumFormat.cap(prevInvNum, position+1).toLong() + 1L;
+            return capStr.toLong() + 1L;
         }
         break;
     case InvoiceNumberFormat_t::NR_Q:
         if(issuanceDate.year() == prevIssuanceDate.year() &&
                 issuanceDate.month()/4 == prevIssuanceDate.month()/4)
         {
-            return invoiceNumFormat.cap(prevInvNum, position+1).toLong() + 1L;
+            return capStr.toLong() + 1L;
         }
         break;
     default:

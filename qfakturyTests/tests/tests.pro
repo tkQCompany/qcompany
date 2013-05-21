@@ -27,4 +27,5 @@ SUBDIRS += ConvertAmount \
     PhoneData \
     UnitData \
     SettingsDialog \
-    ModelInvoice
+    ModelInvoice \
+    InvoiceNumberFormat_t

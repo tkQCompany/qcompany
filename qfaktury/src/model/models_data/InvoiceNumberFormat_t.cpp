@@ -7,19 +7,40 @@ InvoiceNumberFormat_t::InvoiceNumberFormat_t(QObject *parent) : QObject(parent)
 }
 
 
-void InvoiceNumberFormat_t::append(const Field field, const SettingsGlobal &s)
+bool InvoiceNumberFormat_t::append(const Field field, const SettingsGlobal &s)
 {
+    if(!list_.isEmpty())
+    {
+        const Field prevField = list_.at(list_.size() - 1).first;
+        if( ((field < (Field)SEPARATOR_START) || (field > (Field)SEPARATOR_END)) && ((prevField < (Field)SEPARATOR_START) || (prevField > (Field)SEPARATOR_END)))
+        {
+            qDebug() << "InvoiceNumberFormat_t::append() can't allow two non-separate fields in a row. Field1: "
+                     << FieldName(prevField) << ", field2: " << FieldName(field);
+            return false;
+        }
+    }
+
     const QString regexpStr(fieldToRegexpStr(field, s));
     list_.append(std::make_pair<pairFirstType_, pairSecondType_>(field, regexpStr));
     regexp_.setPattern(regexp_.pattern() + regexpStr);
+    return true;
 }
 
 
 QString InvoiceNumberFormat_t::cap(const QString &strIn, const int position) const
 {
     regexp_.indexIn(strIn);
-    return regexp_.cap(position);
+    const QString capStr(regexp_.cap(position+1));
+    return capStr;
 }
+
+
+void InvoiceNumberFormat_t::clearAll()
+{
+    list_.clear();
+    regexp_.setPattern("");
+}
+
 
 QList<InvoiceNumberFormat_t::Field> InvoiceNumberFormat_t::fieldList() const
 {
@@ -37,6 +58,12 @@ QList<InvoiceNumberFormat_t::Field> InvoiceNumberFormat_t::fieldList() const
 QStringList InvoiceNumberFormat_t::fieldStrList() const
 {
     QStringList ret;
+
+    const QList<Field> fields(fieldList());
+    foreach(Field f, fields)
+    {
+        ret.append(FieldName(f));
+    }
 
     return ret;
 }
@@ -126,9 +153,9 @@ QString InvoiceNumberFormat_t::fieldToRegexpStr(const Field field, const Setting
     case TEXT2: return QString("(%1)").arg(s.value(s.TEXT2).toString());
     case TEXT3: return QString("(%1)").arg(s.value(s.TEXT3).toString());
     case PERIOD_YEAR:   return QString("(\\d{4})");
-    case PERIOD_MONTH:  return QString("(\\d\\d?)");
-    case PERIOD_DAY:    return QString("(\\d\\d?)");
-    case PERIOD_QUARTER:    return QString("(\\d\\d?)");
+    case PERIOD_MONTH:  return QString("(\\d\\d\?)");
+    case PERIOD_DAY:    return QString("(\\d\\d\?)");
+    case PERIOD_QUARTER:    return QString("(\\d\\d\?)");
     case SLASH: return QString("(/)");
     case BACKSLASH: return QString("(\\\\)");
     case HYPHEN:    return QString("(-)");

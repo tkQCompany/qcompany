@@ -19,8 +19,9 @@ public:
 
     explicit InvoiceNumberFormat_t(QObject *parent = 0);
 
-    void append(const Field field, const SettingsGlobal &s);
+    bool append(const Field field, const SettingsGlobal &s);
     QString cap(const QString &strIn, const int position) const;
+    void clearAll();
 
     QList<Field> fieldList() const;
     QStringList fieldStrList() const;
@@ -31,6 +32,8 @@ public:
     static Field FieldID(const QString &field);
 
     static QString FieldDescription(const Field field);
+
+    int size() const {return list_.size();}
 
     static QString toRegexp(const QString& format);
     QString toString() const;
@@ -47,6 +50,6 @@ private:
     QRegExp regexp_;
 };
 
-//Q_DECLARE_METATYPE(InvoiceNumberFormat_t)
+Q_DECLARE_METATYPE(InvoiceNumberFormat_t::Field)
 
 #endif // INVOICENUMBERFORMAT_T_H
