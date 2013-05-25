@@ -56,6 +56,14 @@ CounterpartyDialog::CounterpartyDialog(QWidget *parent, Database *db, const QMod
         SettingsGlobal s;
         ui_->comboBoxCountry->setCurrentIndex(ui_->comboBoxCountry->findText(s.value(s.COUNTRY).toString()));
     }
+
+    if(db_->modelCounterparty()->isInvNumFormatEmpty(id))
+    {
+        SettingsGlobal s;
+        ui_->lineEditInvNumberFormat->setText(s.value(s.DEFAULT_INV_NUM_FORMAT).toString());
+        qDebug() << "CounterpartyDialog::CounterpartyDialog(): Default invoice number";
+    }
+
     connect(ui_->pushButtonOK, SIGNAL(clicked()), this, SLOT(okClick_()));
     connect(ui_->pushButtonEditTypeList, SIGNAL(clicked()), this, SLOT(editCounterpartyTypeList_()));
     connect(ui_->pushButtonEditEmailList, SIGNAL(clicked()), this, SLOT(editEmailList_()));

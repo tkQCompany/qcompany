@@ -1,3 +1,5 @@
+#include <QSqlQuery>
+
 #include "ModelCounterparty.h"
 #include "CounterpartyData.h"
 #include "CounterpartyTypeData.h"
@@ -18,6 +20,27 @@ QVariant ModelCounterparty::headerData(int section, Qt::Orientation orientation,
         return QVariant();
 
     return CounterpartyData::header((CounterpartyFields::Field)section);
+}
+
+
+bool ModelCounterparty::isInvNumFormatEmpty(const QModelIndex &idCounterparty) const
+{
+    if(idCounterparty.isValid())
+    {
+        database().transaction();
+        QSqlQuery query(this->query());
+        query.exec(QString("SELECT inv_number_format FROM counterparty WHERE id_counterparty = %1").arg(idCounterparty.data().toLongLong()));
+        if(query.isActive() && query.next())
+        {
+            if(!query.value(0).toString().isEmpty())
+            {
+                return false;
+
+            }
+        }
+        database().commit();
+    }
+    return true;
 }
 
 

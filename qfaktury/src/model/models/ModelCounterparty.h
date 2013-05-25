@@ -27,6 +27,8 @@ public:
      */
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+    bool isInvNumFormatEmpty(const QModelIndex &idCounterparty) const;
+
     void setOnlyMyCompanyVisible(const bool yes);
 };
 
