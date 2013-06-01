@@ -487,26 +487,33 @@ void MainWindow::editInvoice_()
     }
 
     QSqlQuery query(db_.modelInvoiceType()->query());
-    const qint64 invType = query.exec(QString("SELECT `id_invoice_type` FROM `invoice_type` WHERE `type` = '%1'")
-                                .arg(db_.modelInvoice()->data(db_.modelInvoice()->index(list.at(0).row(),
+    const int firstInvoice = 0;
+    query.exec(QString("SELECT `id_invoice_type` FROM `invoice_type` WHERE `type` = '%1'")
+                                .arg(db_.modelInvoice()->data(db_.modelInvoice()->index(list.at(firstInvoice).row(),
                                 InvoiceFields::TYPE_ID)).toString()));
+    qint64 invType = -1;
+    if(query.isActive() && query.next())
+    {
+        invType = query.value(0).toLongLong();
+    }
+
     switch(invType)
     {
     case InvoiceTypeData::VAT:
     {
-        InvoiceDialog dialog(this, &db_, InvoiceTypeData::VAT, list.at(0));
+        InvoiceDialog dialog(this, &db_, InvoiceTypeData::VAT, list.at(firstInvoice));
         dialog.exec();
     }
         break;
     case InvoiceTypeData::PRO_FORMA:
     {
-        InvoiceDialog dialog(this, &db_, InvoiceTypeData::PRO_FORMA, list.at(0));
+        InvoiceDialog dialog(this, &db_, InvoiceTypeData::PRO_FORMA, list.at(firstInvoice));
         dialog.exec();
     }
         break;
     case InvoiceTypeData::CORRECTIVE_VAT:
     {
-        CorrectiveInvoiceDialog dialog(this, &db_, InvoiceTypeData::CORRECTIVE_VAT, list.at(0));
+        CorrectiveInvoiceDialog dialog(this, &db_, InvoiceTypeData::CORRECTIVE_VAT, list.at(firstInvoice));
         dialog.exec();  // edit window shouln't return anything
     }
         break;
@@ -518,7 +525,7 @@ void MainWindow::editInvoice_()
         break;
     case InvoiceTypeData::CORRECTIVE_GROSS:
     {
-        CorrectiveInvoiceGrossDialog dialog(this, &db_, list.at(0));
+        CorrectiveInvoiceGrossDialog dialog(this, &db_, list.at(firstInvoice));
         dialog.exec(); // edit window shouln't return anything
     }
         break;

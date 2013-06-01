@@ -4,8 +4,9 @@
 #
 #-------------------------------------------------
 
-TARGET = tst_BillDialogTest
-SOURCES += tst_BillDialogTest.cpp
+TARGET = tst_billdialogtest
+SOURCES += \
+    tst_billdialogtest.cpp
 
 include(../../../qfaktury/qfaktury_common.pri)
 include(../qfakturyTestsCommon.pri)
