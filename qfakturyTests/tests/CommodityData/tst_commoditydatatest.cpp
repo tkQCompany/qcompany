@@ -18,6 +18,8 @@ private Q_SLOTS:
     void cleanupTestCase();
     void testCaseCheckDBFields();
     void testCaseCheckDBFields_data();
+private:
+    Database *db_;
 };
 
 CommodityDataTest::CommodityDataTest()
@@ -28,10 +30,15 @@ void CommodityDataTest::initTestCase()
 {
     TestsCommon::setAppData();
     TestsCommon::removeDBFile();
+
+    SettingsGlobal s;
+    s.setValue(s.keyName(s.FIRST_RUN), QVariant(true));
+    db_ = new Database();
 }
 
 void CommodityDataTest::cleanupTestCase()
 {
+    delete db_;
 }
 
 void CommodityDataTest::testCaseCheckDBFields()
@@ -39,11 +46,10 @@ void CommodityDataTest::testCaseCheckDBFields()
     QFETCH(QString, field_name);
     QFETCH(int, field_num);
 
-    Database db;
-    QSqlQuery query(db.modelCommodity()->query());
+    QSqlQuery query(db_->modelCommodity()->query());
 
     QVERIFY2(query.exec(QString("SELECT %1 FROM 'commodity'").arg(field_name)), "'commodity' table is missing a field");
-    QCOMPARE(db.modelCommodity()->fieldIndex(field_name), field_num);
+    QCOMPARE(db_->modelCommodity()->fieldIndex(field_name), field_num);
 }
 
 void CommodityDataTest::testCaseCheckDBFields_data()

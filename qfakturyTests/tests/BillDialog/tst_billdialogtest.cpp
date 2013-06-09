@@ -38,7 +38,7 @@ void BillDialogTest::testGUI_InitialState()
 {
     Database db;
     BillDialog billDialog(0, &db);
-    QCOMPARE(billDialog.windowTitle(), InvoiceTypeData::name(InvoiceTypeData::BILL));
+    QCOMPARE(billDialog.windowTitle(), trUtf8("Nowy dokument - %1 [*]").arg(InvoiceTypeData::name(InvoiceTypeData::BILL)));
 //    QCOMPARE(billDialog.ui_->comboBoxInvoiceType->currentText(), InvoiceTypeData::name(InvoiceTypeData::BILL));
 //    QCOMPARE(billDialog.ui_->dateEditDateOfIssuance->date(), QDate::currentDate());
 //    QCOMPARE(billDialog.ui_->dateEditDateOfSell->date(), QDate::currentDate());
@@ -56,4 +56,4 @@ void BillDialogTest::testGUI_InitialState()
 
 QTEST_MAIN(BillDialogTest)
 
-#include "tst_BillDialogTest.moc"
+#include "tst_billdialogtest.moc"

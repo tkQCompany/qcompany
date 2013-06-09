@@ -44,6 +44,8 @@ MOC_DIR = moc_files
 OBJECTS_DIR = obj
 UI_DIR = ui_files
 
+LIBS += -L../qdecimal/lib
+
 OTHER_FILES += \
     doc/Doxyfile \
     templates/template.html \

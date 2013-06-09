@@ -119,4 +119,6 @@ static QString name(const Currencies currency_code)
 
 };
 
+Q_DECLARE_METATYPE(CurrencyData::Currencies)
+
 #endif // CURRENCYDATA_H

@@ -4,7 +4,8 @@
 #include <QSettings>
 #include <QString>
 #include <QLocale>
-#include <QDebug>
+
+#include "CurrencyData.h"
 
 
 /**
@@ -82,7 +83,7 @@ public:
         case LAST_UPDATE_EXCHANGE_RATES: return QString("last_update_exchange_rates");
         case LAST_UPDATE_EXCHANGE_RATES_CENTRAL_BANK: return QString("last_update_exchange_rates_central_bank");
         default:
-            qDebug() << "SettingsGlobal::keyName(): improper value of the argument key: " << key;
+            qDebug("SettingsGlobal::keyName(): improper value of the argument key: %d", key);
             return QString();
         }
     }
@@ -130,7 +131,7 @@ public:
         setValue(keyName(VAT_RATES), trUtf8("23|8|5|0|zw."));
         setValue(keyName(CSS), QString("style.css"));
         setValue(keyName(DEFAULT_INV_NUM_FORMAT), trUtf8("{TEKST1}/{R}-{M}-{D}/{NR_R}"));
-        setValue(keyName(DEFAULT_CURRENCY), trUtf8("PLN"));
+        setValue(keyName(DEFAULT_CURRENCY), CurrencyData::PLN);
         setValue(keyName(COUNTRY), trUtf8("Polska"));
         setValue(keyName(TEXT1), trUtf8("F"));
         setValue(keyName(TEXT2), trUtf8(""));

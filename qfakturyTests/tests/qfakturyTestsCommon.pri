@@ -22,4 +22,4 @@ INCLUDEPATH += ../../../qfaktury/src \
                ../../../qdecimal/decnumber \
                ../../../qdecimal/src
 
-LIBS += ../../libqfaktury/libqfaktury.a
+LIBS += ../../libqfaktury/libqfaktury.a -L../../../qdecimal/lib

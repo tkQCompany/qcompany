@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 
-SUBDIRS += ConvertAmount \
+SUBDIRS += \
     BillDialog \
     ChangeAmountDialog \
     CommodityDialog \
@@ -28,4 +28,5 @@ SUBDIRS += ConvertAmount \
     UnitData \
     SettingsDialog \
     ModelInvoice \
-    InvoiceNumberFormat_t
+    InvoiceNumberFormat_t \
+    Money_t

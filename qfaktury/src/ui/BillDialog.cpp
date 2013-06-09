@@ -12,7 +12,7 @@ public:
 
 
 BillDialog::BillDialog(QWidget *parent, Database *db):
-    QDialog(parent), pImpl_(new BillDialogImpl(parent, db))
+    QDialog(parent), pImpl_(new BillDialogImpl(this, db))
 {
     pImpl_->ui->setupUi(this);
     pImpl_->init(InvoiceTypeData::BILL, QModelIndex());

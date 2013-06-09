@@ -61,7 +61,6 @@ CounterpartyDialog::CounterpartyDialog(QWidget *parent, Database *db, const QMod
     {
         SettingsGlobal s;
         ui_->lineEditInvNumberFormat->setText(s.value(s.DEFAULT_INV_NUM_FORMAT).toString());
-        qDebug() << "CounterpartyDialog::CounterpartyDialog(): Default invoice number";
     }
 
     connect(ui_->pushButtonOK, SIGNAL(clicked()), this, SLOT(okClick_()));

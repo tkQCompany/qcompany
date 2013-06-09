@@ -20,7 +20,6 @@ HEADERS += src/ui/BillDialog.h \
     src/ui/MainWindow.h \
     src/ui/PhoneDialog.h \
     src/ui/SettingsDialog.h \
-    src/ConvertAmount.h \
     src/CustomPaymData.h \
     src/model/Database.h \
     src/model/models_data/UnitData.h \
@@ -49,8 +48,8 @@ HEADERS += src/ui/BillDialog.h \
     src/model/models/ModelCounterparty.h \
     src/model/models/ModelCommodityType.h \
     src/model/models/ModelCommodity.h \
-    src/ConvertAmount.h \
     src/SettingsGlobal.h \
+    src/Money_t.h \
     src/ui/InvoiceDialogImpl.h \
     src/model/models_data/InvoiceNumberFormat_t.h
 
@@ -79,7 +78,7 @@ SOURCES += main.cpp \
     src/ui/MainWindow.cpp \
     src/ui/PhoneDialog.cpp \
     src/ui/SettingsDialog.cpp \
-    src/ConvertAmount.cpp \
+    src/Money_t.cpp \
     src/CustomPaymData.cpp \
     src/model/Database.cpp \
     src/model/models/ModelCommodity.cpp \
@@ -98,4 +97,3 @@ SOURCES += main.cpp \
     src/model/models/ModelInvoiceWithCommodities.cpp \
     src/ui/InvoiceDialogImpl.cpp \
     src/model/models_data/InvoiceNumberFormat_t.cpp
-

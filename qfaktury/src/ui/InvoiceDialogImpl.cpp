@@ -12,7 +12,7 @@
 #include "Database.h"
 #include "CounterpartyInfoDialog.h"
 #include "CommodityListDialog.h"
-#include "ConvertAmount.h"
+#include "Money_t.h"
 #include "CustomPaymentDialog.h"
 #include "CounterpartyDialog.h"
 #include "ModelInvoice.h"
@@ -774,8 +774,10 @@ void InvoiceDialogImpl::printInvoice()
             productsHTML += "</tr>";
         }
 
+        Money_t m(ui->labelSumGrossVal->text());
+        m.setCurrency(ui->comboBoxCurrency->itemData(ui->comboBoxCurrency->currentIndex()).value<CurrencyData::Currencies>());
         QString summaryHTML(QString("<span>%1 %2 %3</span>").arg(trUtf8("Do zapłaty:")).arg(ui->labelSumGrossVal->text()).arg(ui->comboBoxCurrency->currentText()));
-        summaryHTML += QString("%1 %2").arg(trUtf8("słownie:")).arg(ConvertAmount::convertPL(ui->labelSumGrossVal->text(), ui->comboBoxCurrency->currentText()));
+        summaryHTML += QString("%1 %2").arg(trUtf8("słownie:")).arg(m.verballyPL());
 
         if(ui->comboBoxPayment->currentIndex() == 0)
         {
