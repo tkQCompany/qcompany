@@ -105,7 +105,7 @@ public:
         setValue(keyName(NUMBER_OF_COPIES), 1);
         setValue(keyName(TAXID_MASK), "999-999-99-99;");
         setValue(keyName(ACCOUNT_MASK), "99-9999-9999-9999-9999-9999-9999;");
-        setValue(keyName(FIRST_RUN), false);
+        setValue(keyName(FIRST_RUN), true);
         setValue(keyName(UNITS), trUtf8("szt.|kg.|g.|m.|km.|godz."));
         setValue(keyName(LOGO), "");
         setValue(keyName(PAYMENT_TYPE), trUtf8("gotówka|przelew|zaliczka"));

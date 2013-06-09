@@ -5,6 +5,7 @@
 #include "Database.h"
 #include "ModelCommodityType.h"
 #include "CommodityTypeData.h"
+#include "SettingsGlobal.h"
 
 class CommodityTypeDataTest : public QObject
 {
@@ -29,6 +30,8 @@ void CommodityTypeDataTest::initTestCase()
 {
     TestsCommon::setAppData();
     TestsCommon::removeDBFile();
+    SettingsGlobal s;
+    s.resetSettings();
 }
 
 void CommodityTypeDataTest::cleanupTestCase()
