@@ -2,7 +2,28 @@
 
 #include "../TestsCommon.h"
 #include "CorrectiveInvoiceGrossDialog.h"
+#include "CorrectiveInvoiceGrossDialog.cpp"
+#include "InvoiceTypeData.h"
 #include "Database.h"
+
+
+namespace Ui
+{
+class InvoiceDialog;
+}
+
+struct CorrectiveInvoiceGrossDialogPublic: public CorrectiveInvoiceGrossDialog
+{
+    CorrectiveInvoiceGrossDialogPublic(QWidget *parent,
+                                  Database *db,
+                                  const QModelIndex &idInvoice = QModelIndex())
+        : CorrectiveInvoiceGrossDialog(parent, db, idInvoice)
+    {
+
+    }
+
+    const Ui::InvoiceDialog *ui() {return pImpl_->ui;}
+};
 
 class CorrectiveInvoiceGrossDialogTest : public QObject
 {

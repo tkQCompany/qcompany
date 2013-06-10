@@ -53,6 +53,7 @@ void DatabaseTest::initTestCase()
 {
     TestsCommon::setAppData();
     TestsCommon::removeDBFile();
+    dbFilename_ = QString("%1-%2.db3").arg(QCoreApplication::applicationName()).arg(APP_VERSION);
 }
 
 void DatabaseTest::cleanupTestCase()

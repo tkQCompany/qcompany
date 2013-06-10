@@ -22,7 +22,7 @@ public:
     explicit BillDialog(QWidget *parent, Database *db);
     ~BillDialog();
 
-private:
+protected:
     class BillDialogImpl;
     BillDialogImpl *pImpl_;
 };

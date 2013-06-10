@@ -21,7 +21,7 @@ public:
 
 
 CorrectiveInvoiceGrossDialog::CorrectiveInvoiceGrossDialog(QWidget *parent, Database *db, const QModelIndex &idInvoice):
-    QDialog(parent), pImpl_(new CorrectiveInvoiceGrossDialogImpl(parent, db))
+    QDialog(parent), pImpl_(new CorrectiveInvoiceGrossDialogImpl(this, db))
 {
     pImpl_->ui->setupUi(this);
     pImpl_->init(InvoiceTypeData::CORRECTIVE_GROSS, idInvoice);

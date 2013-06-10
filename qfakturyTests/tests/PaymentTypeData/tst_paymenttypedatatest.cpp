@@ -74,11 +74,10 @@ void PaymentTypeDataTest::testCaseCheckTypesNames_data()
     QTest::addColumn<QString>("output_name");
 
     QTest::newRow("-1") << -1 << QString();
-    QTest::newRow("0") << 0 << QString();
-    QTest::newRow("1") << 1 << trUtf8("gotówka");
-    QTest::newRow("2") << 2 << trUtf8("zaliczka");
-    QTest::newRow("3") << 3 << trUtf8("przelew");
-    QTest::newRow("4") << 4 << QString();
+    QTest::newRow("0") << (int)PaymentTypeData::CASH << trUtf8("gotówka");
+    QTest::newRow("1") << (int)PaymentTypeData::PREPAYMENT << trUtf8("zaliczka");
+    QTest::newRow("2") << (int)PaymentTypeData::TRANSFER << trUtf8("przelew");
+    QTest::newRow("3") << 3 << QString();
     QTest::newRow("666") << 666 << QString();
 }
 

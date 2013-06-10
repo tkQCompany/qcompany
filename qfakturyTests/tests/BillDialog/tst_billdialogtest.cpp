@@ -3,8 +3,25 @@
 
 #include "../TestsCommon.h"
 #include "BillDialog.h"
+#include "BillDialog.cpp"
 #include "Database.h"
 #include "InvoiceTypeData.h"
+
+namespace Ui
+{
+class InvoiceDialog;
+}
+
+struct BillDialogPublic: public BillDialog
+{
+    BillDialogPublic(QWidget *parent, Database *database)
+        : BillDialog(parent, database)
+    {
+
+    }
+
+    Ui::InvoiceDialog *ui() {return pImpl_->ui;}
+};
 
 class BillDialogTest : public QObject
 {
@@ -37,20 +54,20 @@ void BillDialogTest::cleanupTestCase()
 void BillDialogTest::testGUI_InitialState()
 {
     Database db;
-    BillDialog billDialog(0, &db);
+    BillDialogPublic billDialog(0, &db);
     QCOMPARE(billDialog.windowTitle(), trUtf8("Nowy dokument - %1 [*]").arg(InvoiceTypeData::name(InvoiceTypeData::BILL)));
-//    QCOMPARE(billDialog.ui_->comboBoxInvoiceType->currentText(), InvoiceTypeData::name(InvoiceTypeData::BILL));
-//    QCOMPARE(billDialog.ui_->dateEditDateOfIssuance->date(), QDate::currentDate());
-//    QCOMPARE(billDialog.ui_->dateEditDateOfSell->date(), QDate::currentDate());
-//    QCOMPARE(billDialog.ui_->dateEditDayOfPayment->date(), QDate::currentDate());
-//    QCOMPARE(billDialog.ui_->tableWidgetCommodities->rowCount(), 0);
-//    QCOMPARE(billDialog.ui_->checkBoxDiscount->isChecked(), false);
-//    QCOMPARE(billDialog.ui_->spinBoxDiscount->value(), 0);
+    QCOMPARE(billDialog.ui()->comboBoxInvoiceType->currentText(), InvoiceTypeData::name(InvoiceTypeData::BILL));
+    QCOMPARE(billDialog.ui()->dateEditDateOfIssuance->date(), QDate::currentDate());
+    QCOMPARE(billDialog.ui()->dateEditDateOfSell->date(), QDate::currentDate());
+    QCOMPARE(billDialog.ui()->dateEditDayOfPayment->date(), QDate::currentDate());
+    QCOMPARE(billDialog.ui()->tableWidgetCommodities->rowCount(), 0);
+    QCOMPARE(billDialog.ui()->checkBoxDiscount->isChecked(), false);
+    QCOMPARE(billDialog.ui()->spinBoxDiscount->value(), 0);
 
-//    QLocale locale;
-//    QCOMPARE(billDialog.ui_->labelSumNetVal->text(), locale.toString(0.0, 'f', 2));
-//    QCOMPARE(billDialog.ui_->labelDiscountVal->text(), locale.toString(0.0, 'f', 2));
-//    QCOMPARE(billDialog.ui_->labelSumGrossVal->text(), locale.toString(0.0, 'f', 2));
+    QLocale locale;
+    QCOMPARE(billDialog.ui()->labelSumNetVal->text(), locale.toString(0.0, 'f', 2));
+    QCOMPARE(billDialog.ui()->labelDiscountVal->text(), locale.toString(0.0, 'f', 2));
+    QCOMPARE(billDialog.ui()->labelSumGrossVal->text(), locale.toString(0.0, 'f', 2));
 }
 
 

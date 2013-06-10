@@ -2,8 +2,20 @@
 
 #include "../TestsCommon.h"
 #include "InvoiceDialog.h"
+#include "InvoiceDialog.cpp"
 #include "Database.h"
 #include "SettingsGlobal.h"
+
+struct InvoiceDialogPublic: public InvoiceDialog
+{
+    InvoiceDialogPublic(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType, const QModelIndex &idEdit = QModelIndex())
+        : InvoiceDialog(parent, db, invoiceType, idEdit)
+    {
+
+    }
+
+    Ui::InvoiceDialog *ui() {return pImpl_->ui; }
+};
 
 class InvoiceDialogTest : public QObject
 {
@@ -41,20 +53,20 @@ void InvoiceDialogTest::cleanupTestCase()
 void InvoiceDialogTest::testGUI_InitialState()
 {
     Database db;
-    InvoiceDialog invoiceDialog(0, &db);
-    QCOMPARE(invoiceDialog.windowTitle(), InvoiceTypeData::name(InvoiceTypeData::VAT));
-//    QCOMPARE(invoiceDialog.comboBoxInvoiceType->currentText(), InvoiceTypeData::name(InvoiceTypeData::VAT));
-//    QCOMPARE(invoiceDialog.dateEditDateOfIssuance->date(), QDate::currentDate());
-//    QCOMPARE(invoiceDialog.dateEditDateOfSell->date(), QDate::currentDate());
-//    QCOMPARE(invoiceDialog.dateEditDayOfPayment->date(), QDate::currentDate());
-//    QCOMPARE(invoiceDialog.tableWidgetCommodities->rowCount(), 0);
-//    QCOMPARE(invoiceDialog.checkBoxDiscount->isChecked(), false);
-//    QCOMPARE(invoiceDialog.spinBoxDiscount->value(), 0);
+    InvoiceDialogPublic invoiceDialog(0, &db, InvoiceTypeData::VAT);
+    QCOMPARE(invoiceDialog.windowTitle(), trUtf8("Nowy dokument - %1 [*]").arg(InvoiceTypeData::name(InvoiceTypeData::VAT)));
+    QCOMPARE(invoiceDialog.ui()->comboBoxInvoiceType->currentText(), InvoiceTypeData::name(InvoiceTypeData::VAT));
+    QCOMPARE(invoiceDialog.ui()->dateEditDateOfIssuance->date(), QDate::currentDate());
+    QCOMPARE(invoiceDialog.ui()->dateEditDateOfSell->date(), QDate::currentDate());
+    QCOMPARE(invoiceDialog.ui()->dateEditDayOfPayment->date(), QDate::currentDate());
+    QCOMPARE(invoiceDialog.ui()->tableWidgetCommodities->rowCount(), 0);
+    QCOMPARE(invoiceDialog.ui()->checkBoxDiscount->isChecked(), false);
+    QCOMPARE(invoiceDialog.ui()->spinBoxDiscount->value(), 0);
 
-//    QLocale locale;
-//    QCOMPARE(invoiceDialog.labelSumNetVal->text(), locale.toString(0.0, 'f', 2));
-//    QCOMPARE(invoiceDialog.labelDiscountVal->text(), locale.toString(0.0, 'f', 2));
-//    QCOMPARE(invoiceDialog.labelSumGrossVal->text(), locale.toString(0.0, 'f', 2));
+    QLocale locale;
+    QCOMPARE(invoiceDialog.ui()->labelSumNetVal->text(), locale.toString(0.0, 'f', 2));
+    QCOMPARE(invoiceDialog.ui()->labelDiscountVal->text(), locale.toString(0.0, 'f', 2));
+    QCOMPARE(invoiceDialog.ui()->labelSumGrossVal->text(), locale.toString(0.0, 'f', 2));
 }
 
 

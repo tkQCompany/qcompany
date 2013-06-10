@@ -37,7 +37,7 @@ struct PaymentTypeData
         case PREPAYMENT: return QObject::trUtf8("zaliczka");
         case TRANSFER: return QObject::trUtf8("przelew");
         default:
-            qDebug("Unknown case in PaymentTypeData::name(): %d", paymentType);
+            qDebug("Unknown case in PaymentTypeData::name(): %d\n", paymentType);
             return QString();
         }
     }

@@ -44,7 +44,7 @@ protected:
 private:
     void init_();
 
-private:
+protected:
     class CorrectiveInvoiceGrossDialogImpl;
     CorrectiveInvoiceGrossDialogImpl *pImpl_;
 };

@@ -34,7 +34,7 @@ public:
      */
     virtual ~InvoiceDialog();
 
-private:
+protected:
     InvoiceDialogImpl *pImpl_;
 };
 #endif

@@ -5,6 +5,7 @@
 #include "Database.h"
 #include "ModelCounterparty.h"
 #include "CounterpartyData.h"
+#include "SettingsGlobal.h"
 
 class CounterpartyDataTest : public QObject
 {
@@ -28,6 +29,8 @@ void CounterpartyDataTest::initTestCase()
 {
     TestsCommon::setAppData();
     TestsCommon::removeDBFile();
+    SettingsGlobal s;
+    s.resetSettings();
 }
 
 void CounterpartyDataTest::cleanupTestCase()
@@ -55,7 +58,7 @@ void CounterpartyDataTest::testCaseCheckDBFields_data()
     QTest::newRow("id_counterparty") << QString("id_counterparty") << (int)CounterpartyFields::ID;
     QTest::newRow("name") << QString("name") << (int)CounterpartyFields::NAME;
     QTest::newRow("type_id") << QString("type_id") << (int)CounterpartyFields::TYPE_ID;
-    QTest::newRow("country_id") << QString("country_id") << (int)CounterpartyFields::COUNTRY;
+    QTest::newRow("country") << QString("country") << (int)CounterpartyFields::COUNTRY;
     QTest::newRow("location") << QString("location") << (int)CounterpartyFields::LOCATION;
     QTest::newRow("postal_code") << QString("postal_code") << (int)CounterpartyFields::POSTAL_CODE;
     QTest::newRow("street") << QString("street") << (int)CounterpartyFields::STREET;

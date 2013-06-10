@@ -449,7 +449,7 @@ void Database::initModels_()
     modelPhone_ = new ModelPhone(this->parent());
     modelPhone_->setEditStrategy(QSqlTableModel::OnManualSubmit);
     modelPhone_->setSort(PhoneFields::ID_PHONE, Qt::AscendingOrder);
-    modelPhone_->setRelation(PhoneFields::COUNTERPARTY_ID, QSqlRelation("counterparty", "id_counterparty", "name"));
+    modelPhone_->setRelation(PhoneFields::COUNTERPARTY_ID, QSqlRelation("counterparty", "id_counterparty", "counterparty_id"));
     modelPhone_->select();
 
     modelUnit_ = new ModelUnit(this->parent());
@@ -474,17 +474,17 @@ void Database::initModels_()
     modelCounterparty_ = new ModelCounterparty(this->parent());
     modelCounterparty_->setEditStrategy(QSqlTableModel::OnManualSubmit);
     modelCounterparty_->setSort(CounterpartyFields::ID, Qt::AscendingOrder);
-    modelCounterparty_->setRelation(CounterpartyFields::TYPE_ID, QSqlRelation("counterparty_type", "id_counterparty_type", "type"));
+    modelCounterparty_->setRelation(CounterpartyFields::TYPE_ID, QSqlRelation("counterparty_type", "id_counterparty_type", "type_id"));
     modelCounterparty_->setFilter(QString("type_id != %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
     modelCounterparty_->select();
 
     modelInvoice_ = new ModelInvoice(this->parent());
     modelInvoice_->setEditStrategy(QSqlTableModel::OnManualSubmit);
     modelInvoice_->setSort(InvoiceFields::ID_INVOICE, Qt::AscendingOrder);
-    modelInvoice_->setRelation(InvoiceFields::TYPE_ID, QSqlRelation("invoice_type", "id_invoice_type", "type"));
-    modelInvoice_->setRelation(InvoiceFields::COUNTERPARTY_ID, QSqlRelation("counterparty", "id_counterparty", "name"));
-    modelInvoice_->setRelation(InvoiceFields::PAYMENT_ID, QSqlRelation("payment_type", "id_payment_type", "type"));
-    modelInvoice_->setRelation(InvoiceFields::CURRENCY_ID, QSqlRelation("currency", "id_currency", "code"));
+    modelInvoice_->setRelation(InvoiceFields::TYPE_ID, QSqlRelation("invoice_type", "id_invoice_type", "type_id"));
+    modelInvoice_->setRelation(InvoiceFields::COUNTERPARTY_ID, QSqlRelation("counterparty", "id_counterparty", "counterparty_id"));
+    modelInvoice_->setRelation(InvoiceFields::PAYMENT_ID, QSqlRelation("payment_type", "id_payment_type", "payment_id"));
+    modelInvoice_->setRelation(InvoiceFields::CURRENCY_ID, QSqlRelation("currency", "id_currency", "currency_id"));
     modelInvoice_->select();
 
     modelCurrency_ = new ModelCurrency(this->parent());

@@ -98,7 +98,7 @@ private:
      */
     //void makeBeforeCorrSumm();
 
-private:
+protected:
     class CorrectiveInvoiceDialogImpl;
     CorrectiveInvoiceDialogImpl *pImpl_;
     double origDiscTotal, origNettTotal, origGrossTotal, diffTotal; /**< TODO */

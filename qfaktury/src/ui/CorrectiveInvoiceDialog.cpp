@@ -15,7 +15,7 @@ public:
 
 
 CorrectiveInvoiceDialog::CorrectiveInvoiceDialog(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType, const QModelIndex &idInvoice):
-    QDialog(parent), pImpl_(new CorrectiveInvoiceDialogImpl(parent, db))
+    QDialog(parent), pImpl_(new CorrectiveInvoiceDialogImpl(this, db))
 {
     pImpl_->ui->setupUi(this);
     pImpl_->init(invoiceType, idInvoice);
@@ -41,7 +41,7 @@ void CorrectiveInvoiceDialog::init_()
     pImpl_->ui->labelSumGross->setText(trUtf8("Do zapłaty:"));
 
     connect(pImpl_->ui->comboBoxReasonOfCorrection, SIGNAL(currentIndexChanged(QString)),
-            this, SLOT(textChanged(QString)));
+            pImpl_->ui->labelReasonOfCorrection, SLOT(textChanged(QString)));
 }
 
 

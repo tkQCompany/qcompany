@@ -75,14 +75,13 @@ void InvoiceTypeDataTest::testCaseCheckTypesNames_data()
     QTest::addColumn<QString>("output_name");
 
     QTest::newRow("-1") << -1 << QString();
-    QTest::newRow("0") << 0 << QString();
-    QTest::newRow("1") << 1 << QString("Faktura VAT");
-    QTest::newRow("2") << 2 << QString("Faktura Pro Forma");
-    QTest::newRow("3") << 3 << QString("Korekta");
-    QTest::newRow("4") << 4 << QString("Faktura brutto");
-    QTest::newRow("5") << 5 << QString("Korekta brutto");
-    QTest::newRow("6") << 6 << QString("Rachunek");
-    QTest::newRow("7") << 7 << QString();
+    QTest::newRow("0") << (int)InvoiceTypeData::VAT << QString("Faktura VAT");
+    QTest::newRow("1") << (int)InvoiceTypeData::PRO_FORMA << QString("Faktura Pro Forma");
+    QTest::newRow("2") << (int)InvoiceTypeData::CORRECTIVE_VAT << QString("Korekta");
+    QTest::newRow("3") << (int)InvoiceTypeData::GROSS << QString("Faktura brutto");
+    QTest::newRow("4") << (int)InvoiceTypeData::CORRECTIVE_GROSS << QString("Korekta brutto");
+    QTest::newRow("5") << (int)InvoiceTypeData::BILL << QString("Rachunek");
+    QTest::newRow("6") << 6 << QString();
     QTest::newRow("666") << 666 << QString();
 }
 

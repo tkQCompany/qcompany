@@ -1,15 +1,13 @@
 #ifndef CURRENCYDATA_H
 #define CURRENCYDATA_H
 
-#include <QDebug>
-
 namespace CurrencyFields
 {
 /**
  * @brief
  *
  */
-enum Fields {ID_CURRENCY, CODE, CODE_UNIT, EXCHANGE_RATE_PLN};
+enum Fields {ID_CURRENCY, CODE, CODE_UNIT, EXCHANGE_RATE_PLN, LOCALIZED_NAME};
 }
 
 class CurrencyData
@@ -62,8 +60,7 @@ static QString codeName(const Currencies currency_code)
     case KRW: return QString("KRW");
     case IDR: return QString("IDR");
     default:
-        qDebug() << "Bad currency_code in CurrencyData::codeName(): "
-                 << currency_code;
+        qDebug("Bad currency_code in CurrencyData::codeName(): %d\n", currency_code);
     }
     return QString();
 }
@@ -112,7 +109,7 @@ static QString name(const Currencies currency_code)
     case KRW: return QObject::trUtf8("won (Korea Południowa)");
     case IDR: return QObject::trUtf8("rupia (Indonezja)");
     default:
-        qDebug() << "Bad currency_code in CurrencyData::codeName(): " << currency_code;
+        qDebug("Bad currency_code in CurrencyData::codeName(): %d\n", currency_code);
     }
     return QString();
 }
