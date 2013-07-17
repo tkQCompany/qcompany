@@ -4,6 +4,8 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QString>
 
+#include "SettingsGlobal.h"
+
 namespace TestsCommon
 {
 
@@ -24,6 +26,8 @@ void removeDBFile()
         QDir dir;
         dir.remove(dbFilename);
     }
+    SettingsGlobal s;
+    s.setValue(s.keyName(s.FIRST_RUN), true);
 }
 
 }

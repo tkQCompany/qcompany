@@ -49,7 +49,7 @@ void MainWindow::init_()
 
     if (firstRun_())
     {
-        s.resetSettings();
+        s.setValue(s.keyName(s.FIRST_RUN), false);
         editMyCompanyInfo_();
     }
     else
@@ -584,10 +584,10 @@ void MainWindow::editMyCompanyInfo_()
 
     CounterpartyDialog dialog(this, &db_, db_.modelCounterparty()->index(0, CounterpartyFields::ID), true);
     //dialog.pushButtonEditTypeList->setEnabled(false);
-    //dialog.setWindowTitle(trUtf8("Moja firma"));
+    const QString title("Edycja mojej firmy");
+    dialog.setWindowTitle(title);
     if (dialog.exec() == QDialog::Accepted)
     {
-        const QString title("Edycja mojej firmy");
         if(!db_.modelCounterparty()->submitAll())
         {
             QMessageBox::warning(this, title, db_.modelCounterparty()->lastError().text());

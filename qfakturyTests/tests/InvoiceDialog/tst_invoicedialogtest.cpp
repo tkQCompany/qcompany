@@ -28,8 +28,8 @@ private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     void testGUI_InitialState();
-    void test_generateInvoiceNumber();
     void test_compatibilityWithOldGenerateInvoiceNumber();
+    void test_compatibilityWithOldGenerateInvoiceNumber_data();
 
 private:
     QString generateInvoiceNumberOldVer(InvoiceTypeData::Type invType);
@@ -70,15 +70,15 @@ void InvoiceDialogTest::testGUI_InitialState()
 }
 
 
-void InvoiceDialogTest::test_generateInvoiceNumber()
-{
-    //InvoiceDialog::InvoiceNumChosenPeriod week = InvoiceDialog::WEEK;
-    QFAIL("implement me");
-}
-
 void InvoiceDialogTest::test_compatibilityWithOldGenerateInvoiceNumber()
 {
     QFAIL("implement me");
+}
+
+
+void InvoiceDialogTest::test_compatibilityWithOldGenerateInvoiceNumber_data()
+{
+
 }
 
 
