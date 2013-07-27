@@ -51,7 +51,8 @@ HEADERS += src/ui/BillDialog.h \
     src/SettingsGlobal.h \
     src/Money_t.h \
     src/ui/InvoiceDialogImpl.h \
-    src/model/models_data/InvoiceNumberFormat_t.h
+    src/model/models_data/InvoiceNumberFormat_t.h \
+    src/model/models_data/InvoiceWithCommodities.h
 
 
 

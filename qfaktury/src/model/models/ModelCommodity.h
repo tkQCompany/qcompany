@@ -28,7 +28,7 @@ public:
      * @param role
      * @return QVariant
      */
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
     bool changeAmount(const QString &id, const double change);
 };

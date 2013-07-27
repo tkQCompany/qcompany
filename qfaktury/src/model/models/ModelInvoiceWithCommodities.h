@@ -1,13 +1,13 @@
 #ifndef MODELINVOICEWITHCOMMODITIES_H
 #define MODELINVOICEWITHCOMMODITIES_H
 
-#include <QSqlTableModel>
+#include <QSqlRelationalTableModel>
 
 /**
  * @brief
  *
  */
-class ModelInvoiceWithCommodities : public QSqlTableModel
+class ModelInvoiceWithCommodities : public QSqlRelationalTableModel
 {
     Q_OBJECT
 public:

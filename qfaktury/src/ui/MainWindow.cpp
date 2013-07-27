@@ -848,7 +848,7 @@ void MainWindow::addCommodity_()
         if(db_.modelCommodity()->submitAll())
         {
             tableViewCommodities->selectionModel()->setCurrentIndex(db_.modelCommodity()->index(db_.modelCommodity()->rowCount() - 1,
-                                                                               CommodityFields::ID), QItemSelectionModel::Rows | QItemSelectionModel::Select);
+                                                                               CommodityFields::ID_COMMODITY), QItemSelectionModel::Rows | QItemSelectionModel::Select);
         }
         else
         {
@@ -903,7 +903,7 @@ void MainWindow::editCommodity_()
     }
     else
     {
-        const QModelIndex index = tableViewCommodities->selectionModel()->selectedRows(CommodityFields::ID).at(0);
+        const QModelIndex index = tableViewCommodities->selectionModel()->selectedRows(CommodityFields::ID_COMMODITY).at(0);
         CommodityDialog dialog(this, &db_, index);
         const QString errorTitle(trUtf8("Błąd edycji towaru"));
         if (dialog.exec() == QDialog::Accepted)

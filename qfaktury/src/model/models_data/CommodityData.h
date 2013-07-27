@@ -11,7 +11,7 @@ namespace CommodityFields
  * @brief
  *
  */
-enum Field {ID, NAME, ABBREV, PKWIU, TYPE_ID, UNIT_ID, NET1, NET2, NET3, NET4, VAT, QUANTITY};
+enum Field {ID_COMMODITY, NAME, ABBREV, PKWIU, TYPE_ID, UNIT_ID, NET1, NET2, NET3, NET4, VAT, QUANTITY};
 }
 
 
@@ -22,7 +22,7 @@ public:
     {
         switch(i)
         {
-        case CommodityFields::ID: return QObject::trUtf8("L.p.");
+        case CommodityFields::ID_COMMODITY: return QObject::trUtf8("L.p.");
         case CommodityFields::NAME: return QObject::trUtf8("Nazwa");
         case CommodityFields::ABBREV: return QObject::trUtf8("Skrót nazwy");
         case CommodityFields::PKWIU: return QObject::trUtf8("PKWiU");

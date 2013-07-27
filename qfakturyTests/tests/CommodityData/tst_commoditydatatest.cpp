@@ -57,7 +57,7 @@ void CommodityDataTest::testCaseCheckDBFields_data()
     QTest::addColumn<QString>("field_name");
     QTest::addColumn<int>("field_num");
 
-    QTest::newRow("id")         << QString("id_commodity")  << (int)CommodityFields::ID;
+    QTest::newRow("id_commodity")<< QString("id_commodity")  << (int)CommodityFields::ID_COMMODITY;
     QTest::newRow("name")       << QString("name")          << (int)CommodityFields::NAME;
     QTest::newRow("abbrev")     << QString("abbreviation")  << (int)CommodityFields::ABBREV;
     QTest::newRow("pkwiu")      << QString("pkwiu")         << (int)CommodityFields::PKWIU;

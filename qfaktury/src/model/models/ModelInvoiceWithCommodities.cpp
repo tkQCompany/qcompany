@@ -1,7 +1,7 @@
 #include "ModelInvoiceWithCommodities.h"
 
 ModelInvoiceWithCommodities::ModelInvoiceWithCommodities(QObject *parent) :
-    QSqlTableModel(parent)
+    QSqlRelationalTableModel(parent)
 {
     setTable("table_invoice_commodity");
 }

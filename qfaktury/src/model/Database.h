@@ -43,6 +43,8 @@ public:
      */
     ~Database();
 
+    QSqlDatabase database() const;
+
     const QString dbFileName() const;
 
     /**

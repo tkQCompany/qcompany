@@ -108,7 +108,7 @@ void CommodityListDialog::doAccept() {
     if (!ui->lineEditName->text().isEmpty())
     {
         const QModelIndex current(ui->listViewCommodities->selectionModel()->currentIndex());
-        if( (db->modelCommodity()->amount(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID)).toString())
+        if( (db->modelCommodity()->amount(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toString())
              >= ui->doubleSpinBoxAmount->value())
                 ||
                 (db->modelCommodity()->data(db->modelCommodity()->index(current.row(),
@@ -116,7 +116,7 @@ void CommodityListDialog::doAccept() {
                  CommodityTypeData::name(CommodityTypeData::SERVICES))) //TODO: introduce qDecimals here
         {
             ret.discount = QString("%1").arg(ui->spinBoxDiscount->value());
-            ret.id = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID)).toString();
+            ret.id = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toString();
             ret.name = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NAME)).toString();
             switch(ui->comboBoxChosenNetPrice->currentIndex())
             {
@@ -146,7 +146,7 @@ void CommodityListDialog::doAccept() {
         {
             QMessageBox::information(this, qApp->applicationName(),
                                      trUtf8("Nie ma wystarczającej ilości towaru na stanie. Ilość towaru: %1")
-                                     .arg(db->modelCommodity()->amount(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID)).toString())), QMessageBox::Ok);
+                                     .arg(db->modelCommodity()->amount(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toString())), QMessageBox::Ok);
 
         }
     }

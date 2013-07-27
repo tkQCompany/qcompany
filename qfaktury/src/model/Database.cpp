@@ -83,6 +83,11 @@ Database::~Database()
 }
 
 
+QSqlDatabase Database::database() const
+{
+    return db_;
+}
+
 const QString Database::dbFileName() const
 {
     return db_.databaseName();
@@ -461,7 +466,7 @@ void Database::initModels_()
 
     modelCommodity_ = new ModelCommodity(this->parent());
     modelCommodity_->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    modelCommodity_->setSort(CommodityFields::ID, Qt::AscendingOrder);
+    modelCommodity_->setSort(CommodityFields::ID_COMMODITY, Qt::AscendingOrder);
     modelCommodity_->setRelation(CommodityFields::TYPE_ID, QSqlRelation("commodity_type", "id_commodity_type", "type_id"));
     modelCommodity_->setRelation(CommodityFields::UNIT_ID, QSqlRelation("unit", "id_unit", "unit_id"));
     modelCommodity_->select();
@@ -501,6 +506,8 @@ void Database::initModels_()
     modelInvoiceType_->select();
 
     modelInvoiceWithCommodities_ = new ModelInvoiceWithCommodities(this->parent());
+    modelInvoiceWithCommodities_->setRelation(1, QSqlRelation("invoice", "id_invoice", "invoice_id"));
+    modelInvoiceWithCommodities_->setRelation(2, QSqlRelation("commodity", "id_commodity", "commodity_id"));
 
     if(!db_.isValid())
     {
