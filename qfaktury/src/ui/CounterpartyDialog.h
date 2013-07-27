@@ -86,7 +86,7 @@ private:
      * @return bool
      */
     bool validateForm_(QString &);
-private:
+protected:
     Ui::CounterpartyDialog *ui_;
     Database *db_; /**< TODO */
     const QModelIndex id_; /**< TODO */
