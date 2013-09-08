@@ -3,6 +3,7 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QString>
+#include <QDir>
 
 #include "SettingsGlobal.h"
 
@@ -26,8 +27,6 @@ void removeDBFile()
         QDir dir;
         dir.remove(dbFilename);
     }
-    SettingsGlobal s;
-    s.setValue(s.keyName(s.FIRST_RUN), true);
 }
 
 }

@@ -85,7 +85,7 @@ private:
      * @param
      * @return bool
      */
-    bool validateForm_(QString &);
+    QString validateForm_();
 protected:
     Ui::CounterpartyDialog *ui_;
     Database *db_; /**< TODO */

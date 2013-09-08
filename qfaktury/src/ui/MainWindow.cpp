@@ -49,7 +49,7 @@ void MainWindow::init_()
 
     if (firstRun_())
     {
-        s.setValue(s.keyName(s.FIRST_RUN), false);
+        s.setFirstRun(false);
         editMyCompanyInfo_();
     }
     else

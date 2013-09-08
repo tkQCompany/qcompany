@@ -115,74 +115,72 @@ void CounterpartyDialog::init()
     ui_->lineEditAccountName->setInputMask(s.value(s.ACCOUNT_MASK).toString());
 }
 
-// --------- SLOTS START --
-/** Slot - ok & save
- */
+
 void CounterpartyDialog::okClick_()
 {
-    if (validate_())
+    if(validate_())
     {
-        mapper_.submit();
-        if(db_->modelCounterparty()->lastError().type() == QSqlError::NoError)
+        if(mapper_.submit() && (db_->modelCounterparty()->lastError().type() == QSqlError::NoError))
         {
             accept();
         }
         else
         {
-            qDebug() << "lastError(): " << db_->modelCounterparty()->lastError() <<
+            qDebug() << "CounterpartyDialog::okClick_(), lastError(): " << db_->modelCounterparty()->lastError() <<
                         ", lastQuery(): " << db_->modelCounterparty()->query().lastQuery();
         }
     }
 }
-// --------- SLOTS END --
 
 
-
-//********************** VALIDATION START ************************
 /** Validate form
- *  Don't save when no
- *  "name", "city", "street", "tic"
  */
-bool CounterpartyDialog::validateForm_(QString &missing) {
-    if (ui_->lineEditName->text().isEmpty()) {
-        missing = ui_->labelName->text();
+QString CounterpartyDialog::validateForm_()
+{
+    if (ui_->lineEditName->text().isEmpty())
+    {
         ui_->lineEditName->setFocus();
-        return false;
+        return ui_->labelName->text();
     }
 
-    if (ui_->lineEditLocation->text().isEmpty()) {
-        missing = ui_->labelLocation->text();
+    if (ui_->lineEditLocation->text().isEmpty())
+    {
         ui_->lineEditLocation->setFocus();
-        return false;
+        return ui_->labelLocation->text();
     }
 
-    if (ui_->lineEditPostalCode->text().isEmpty()) {
-        missing = ui_->labelPostalCode->text();
+    if (ui_->lineEditPostalCode->text().isEmpty())
+    {
         ui_->lineEditPostalCode->setFocus();
-        return false;
+        return ui_->labelPostalCode->text();
     }
 
 
-    if (ui_->lineEditAddress->text().isEmpty()) {
-        missing = ui_->labelStreet->text();
+    if (ui_->lineEditAddress->text().isEmpty())
+    {
         ui_->lineEditAddress->setFocus();
-        return false;
+        return ui_->labelStreet->text();
     }
 
-    if (ui_->lineEditTaxID->text().isEmpty()) {
-        missing = ui_->labelTaxID->text();
+    if (ui_->lineEditTaxID->text().isEmpty())
+    {
         ui_->lineEditTaxID->setFocus();
-        return false;
+        return ui_->labelTaxID->text();
+    }
+
+    if(ui_->comboBoxCountry->currentIndex() == -1)
+    {
+        ui_->comboBoxCountry->setFocus();
+        return ui_->labelCountry->text();
     }
 
     if(ui_->comboBoxType->currentIndex() == -1)
     {
-        missing = ui_->labelType->text();
         ui_->comboBoxType->setFocus();
-        return false;
+        return ui_->labelType->text();
     }
 
-    return true;
+    return QString();
 }
 
 /** validate()
@@ -190,7 +188,7 @@ bool CounterpartyDialog::validateForm_(QString &missing) {
 bool CounterpartyDialog::validate_()
 {
     QString missing;
-    if (!validateForm_(missing))
+    if(!(missing = validateForm_()).isEmpty())
     {
         QMessageBox::warning(this, qApp->applicationName(),
                     trUtf8("Kontrahent nie moze zostać zapisany, ponieważ brakuje wymaganych danych w polu: ") + missing);
@@ -199,8 +197,6 @@ bool CounterpartyDialog::validate_()
 
     return true;
 }
-//********************** VALIDATION  END ************************
-
 
 
 // helper method which sets "-" in input forms

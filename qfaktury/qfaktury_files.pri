@@ -97,4 +97,5 @@ SOURCES += main.cpp \
     src/model/models/ModelInvoiceType.cpp \
     src/model/models/ModelInvoiceWithCommodities.cpp \
     src/ui/InvoiceDialogImpl.cpp \
-    src/model/models_data/InvoiceNumberFormat_t.cpp
+    src/model/models_data/InvoiceNumberFormat_t.cpp \
+    src/SettingsGlobal.cpp

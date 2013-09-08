@@ -1,5 +1,4 @@
 #include "ModelCountry.h"
-#include <QDebug>
 
 ModelCountry::ModelCountry(QObject *parent) :
     QStringListModel(parent)

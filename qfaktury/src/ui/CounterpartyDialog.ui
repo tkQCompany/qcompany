@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
+    <width>408</width>
     <height>644</height>
    </rect>
   </property>
@@ -164,10 +164,10 @@
      <item row="6" column="1">
       <widget class="QLineEdit" name="lineEditTaxID">
        <property name="inputMask">
-        <string>999-99-999-99; </string>
+        <string/>
        </property>
        <property name="text">
-        <string>---</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -471,11 +471,11 @@
    <sender>pushButtonCancel</sender>
    <signal>clicked()</signal>
    <receiver>CounterpartyDialog</receiver>
-   <slot>close()</slot>
+   <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>231</x>
-     <y>575</y>
+     <x>402</x>
+     <y>616</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
