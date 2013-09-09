@@ -32,7 +32,7 @@ public:
     
 private Q_SLOTS:
     void initTestCase();
-    void cleanupTestCase();
+    void init();
     void testGUI_InitialState();
 };
 
@@ -43,11 +43,13 @@ BillDialogTest::BillDialogTest()
 void BillDialogTest::initTestCase()
 {
     TestsCommon::setAppData();
-    TestsCommon::removeDBFile();
+    SettingsGlobal s;
+    s.setFirstRun(true);
 }
 
-void BillDialogTest::cleanupTestCase()
+void BillDialogTest::init()
 {
+    TestsCommon::removeDBFile();
 }
 
 
