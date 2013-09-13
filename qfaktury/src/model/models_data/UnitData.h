@@ -8,7 +8,7 @@ namespace UnitFields
  * @brief
  *
  */
-enum Fields {ID_UNIT, NAME};
+enum Fields {ID_UNIT, UNIT_NAME};
 }
 
 

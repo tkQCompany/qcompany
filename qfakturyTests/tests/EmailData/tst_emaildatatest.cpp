@@ -52,9 +52,9 @@ void EmailDataTest::testCaseCheckDBFields_data()
     QTest::addColumn<QString>("field_name");
     QTest::addColumn<int>("field_num");
 
-    QTest::newRow("id_email") << QString("id_email") << (int)EmailFields::ID_EMAIL;
-    QTest::newRow("counterparty_id") << QString("counterparty_id") << (int)EmailFields::COUNTERPARTY_ID;
-    QTest::newRow("email") << QString("email") << (int)EmailFields::EMAIL;
+    QTest::newRow("id_email")           << QString("id_email")          << (int)EmailFields::ID_EMAIL;
+    QTest::newRow("counterparty_id")    << QString("counterparty_id")   << (int)EmailFields::COUNTERPARTY_ID;
+    QTest::newRow("email")              << QString("email")             << (int)EmailFields::EMAIL;
 }
 
 QTEST_APPLESS_MAIN(EmailDataTest)

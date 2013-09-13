@@ -52,11 +52,11 @@ void CurrencyDataTest::testCaseCheckDBFields_data()
     QTest::addColumn<QString>("field_name");
     QTest::addColumn<int>("field_num");
 
-    QTest::newRow("id_currency") << QString("id_currency") << (int)CurrencyFields::ID_CURRENCY;
-    QTest::newRow("code") << QString("code") << (int)CurrencyFields::CODE;
-    QTest::newRow("code_unit") << QString("code_unit") << (int)CurrencyFields::CODE_UNIT;
-    QTest::newRow("exchange_rate_pln") << QString("exchange_rate_pln") << (int)CurrencyFields::EXCHANGE_RATE_PLN;
-    QTest::newRow("localized_name") << QString("localized_name") << (int)CurrencyFields::LOCALIZED_NAME;
+    QTest::newRow("id_currency")        << QString("id_currency")       << (int)CurrencyFields::ID_CURRENCY;
+    QTest::newRow("code")               << QString("code")              << (int)CurrencyFields::CODE;
+    QTest::newRow("code_unit")          << QString("code_unit")         << (int)CurrencyFields::CODE_UNIT;
+    QTest::newRow("exchange_rate_pln")  << QString("exchange_rate_pln") << (int)CurrencyFields::EXCHANGE_RATE_PLN;
+    QTest::newRow("localized_name")     << QString("localized_name")    << (int)CurrencyFields::LOCALIZED_NAME;
 }
 
 QTEST_APPLESS_MAIN(CurrencyDataTest)

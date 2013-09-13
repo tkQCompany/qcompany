@@ -16,7 +16,7 @@ bool ModelUnit::addUnit(const QString &unitName)
 {
     QSqlQuery q(query());
     database().transaction();
-    q.exec(QString("INSERT INTO unit(`name`) VALUES(\"%1\")").arg(unitName));
+    q.exec(QString("INSERT INTO unit(`unit_name`) VALUES(\"%1\")").arg(unitName));
     if(q.isActive())
     {
         database().commit();
@@ -38,7 +38,7 @@ bool ModelUnit::deleteUnit(const QString &unitName)
 {
     QSqlQuery q(query());
     database().transaction();
-    q.exec(QString("SELECT `id_unit` FROM `unit` WHERE `name`='%1'").arg(unitName));
+    q.exec(QString("SELECT `id_unit` FROM `unit` WHERE `unit_name`='%1'").arg(unitName));
     if(q.isActive())
     {
         if(q.next())

@@ -54,8 +54,8 @@ void UnitDataTest::testCaseCheckDBFields_data()
     QTest::addColumn<QString>("field_name");
     QTest::addColumn<int>("field_num");
 
-    QTest::newRow("id_unit") << QString("id_unit") << (int)UnitFields::ID_UNIT;
-    QTest::newRow("name") << QString("name") << (int)UnitFields::NAME;
+    QTest::newRow("id_unit")    << QString("id_unit")   << (int)UnitFields::ID_UNIT;
+    QTest::newRow("unit_name")  << QString("unit_name") << (int)UnitFields::UNIT_NAME;
 }
 
 
@@ -85,6 +85,6 @@ void UnitDataTest::testCaseCheckTypesNames_data()
     QTest::newRow("666") << 666 << QString();
 }
 
-QTEST_APPLESS_MAIN(UnitDataTest)
+QTEST_MAIN(UnitDataTest)
 
 #include "tst_unitdatatest.moc"

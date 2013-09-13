@@ -15,7 +15,7 @@ public:
     
 private Q_SLOTS:
     void initTestCase();
-    void cleanupTestCase();
+    void init();
     void testCaseCheckDBFields();
     void testCaseCheckDBFields_data();
     void testCaseCheckTypesNames();
@@ -29,11 +29,13 @@ PaymentTypeDataTest::PaymentTypeDataTest()
 void PaymentTypeDataTest::initTestCase()
 {
     TestsCommon::setAppData();
-    TestsCommon::removeDBFile();
+    SettingsGlobal s;
+    s.setFirstRun(true);
 }
 
-void PaymentTypeDataTest::cleanupTestCase()
+void PaymentTypeDataTest::init()
 {
+    TestsCommon::removeDBFile();
 }
 
 void PaymentTypeDataTest::testCaseCheckDBFields()
@@ -55,7 +57,7 @@ void PaymentTypeDataTest::testCaseCheckDBFields_data()
     QTest::addColumn<int>("field_num");
 
     QTest::newRow("id_payment_type") << QString("id_payment_type") << (int)PaymentTypeFields::ID_PAYMENT_TYPE;
-    QTest::newRow("type") << QString("type") << (int)PaymentTypeFields::TYPE;
+    QTest::newRow("type")            << QString("type")            << (int)PaymentTypeFields::TYPE;
 }
 
 

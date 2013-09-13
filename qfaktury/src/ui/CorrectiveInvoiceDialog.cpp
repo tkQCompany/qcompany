@@ -41,7 +41,7 @@ void CorrectiveInvoiceDialog::init_()
     pImpl_->ui->labelSumGross->setText(trUtf8("Do zapłaty:"));
 
     connect(pImpl_->ui->comboBoxReasonOfCorrection, SIGNAL(currentIndexChanged(QString)),
-            pImpl_->ui->labelReasonOfCorrection, SLOT(textChanged(QString)));
+            pImpl_->ui->labelReasonOfCorrection, SLOT(setText(QString)));
 }
 
 

@@ -247,7 +247,7 @@ bool Database::createTablesIfNotExist_()
 
     if(ret && !sqlExecute_(QString("CREATE TABLE IF NOT EXISTS `%1` ("
                "id_unit INTEGER PRIMARY KEY AUTOINCREMENT ,"
-               "name VARCHAR(15) NOT NULL UNIQUE)"
+               "unit_name VARCHAR(15) NOT NULL UNIQUE)"
                            ).arg("unit"), __LINE__))
     {
         ret = false;
@@ -307,7 +307,7 @@ bool Database::createTablesIfNotExist_()
 
     if(ret && !sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
                            "`id_invoice_type` INTEGER PRIMARY KEY NOT NULL ,"
-                           "`type` VARCHAR(20) NOT NULL UNIQUE)")
+                           "`invoice_type` VARCHAR(20) NOT NULL UNIQUE)")
                    .arg("invoice_type"), __LINE__))
     {
         ret = false;
@@ -417,7 +417,7 @@ bool Database::sqlInsertIf_(const QString &table, const QString &column, const Q
     query.exec(QString("SELECT `%1` FROM `%2` WHERE `%1` = \"%3\"").arg(column).arg(table).arg(condition));
     if(!query.isActive())
     {
-        QMessageBox::critical(0, trUtf8("Błąd SQL SELECT"), QString("Detected at line %1: %2").arg(line).arg(query.lastError().text()));
+        QMessageBox::critical(0, trUtf8("Database::sqlInsertIf_ - Błąd SQL SELECT"), QString("Detected at line %1: %2").arg(line).arg(query.lastError().text()));
         ret = false;
     }
     else
@@ -426,7 +426,7 @@ bool Database::sqlInsertIf_(const QString &table, const QString &column, const Q
          {
              if(!sqlExecute_(QString("INSERT OR IGNORE INTO `%1`(`%2`) VALUES('%3')").arg(table).arg(column).arg(condition), line))
              {
-                 QMessageBox::critical(0, trUtf8("Błąd SQL INSERT"), QString("Detected at line %1: %2").arg(line).arg(query.lastError().text()));
+                 QMessageBox::critical(0, trUtf8("Database::sqlInsertIf_ - Błąd SQL INSERT"), QString("Detected at line %1: %2").arg(line).arg(query.lastError().text()));
                  ret = false;
              }
          }
@@ -468,7 +468,7 @@ void Database::initModels_()
     modelCommodity_->setEditStrategy(QSqlTableModel::OnManualSubmit);
     modelCommodity_->setSort(CommodityFields::ID_COMMODITY, Qt::AscendingOrder);
     modelCommodity_->setRelation(CommodityFields::TYPE_ID, QSqlRelation("commodity_type", "id_commodity_type", "type"));
-    modelCommodity_->setRelation(CommodityFields::UNIT_ID, QSqlRelation("unit", "id_unit", "name"));
+    modelCommodity_->setRelation(CommodityFields::UNIT_ID, QSqlRelation("unit", "id_unit", "unit_name"));
     modelCommodity_->select();
 
     modelCounterpartyType_ = new ModelCounterpartyType(this->parent());
@@ -486,7 +486,7 @@ void Database::initModels_()
     modelInvoice_ = new ModelInvoice(this->parent());
     modelInvoice_->setEditStrategy(QSqlTableModel::OnManualSubmit);
     modelInvoice_->setSort(InvoiceFields::ID_INVOICE, Qt::AscendingOrder);
-    modelInvoice_->setRelation(InvoiceFields::TYPE_ID, QSqlRelation("invoice_type", "id_invoice_type", "type"));
+    modelInvoice_->setRelation(InvoiceFields::TYPE_ID, QSqlRelation("invoice_type", "id_invoice_type", "invoice_type"));
     modelInvoice_->setRelation(InvoiceFields::COUNTERPARTY_ID, QSqlRelation("counterparty", "id_counterparty", "name"));
     modelInvoice_->setRelation(InvoiceFields::PAYMENT_ID, QSqlRelation("payment_type", "id_payment_type", "type"));
     modelInvoice_->setRelation(InvoiceFields::CURRENCY_ID, QSqlRelation("currency", "id_currency", "code"));
@@ -533,7 +533,7 @@ bool Database::insertDataIfNotInserted_()
 
     for(int i = UnitData::UNIT; i <= UnitData::PACKAGE; ++i)
     {
-        if(!sqlInsertIf_("unit", "name", UnitData::name((UnitData::Name)i), __LINE__))
+        if(!sqlInsertIf_("unit", "unit_name", UnitData::name((UnitData::Name)i), __LINE__))
             return false;
     }
 
@@ -564,7 +564,7 @@ bool Database::insertDataIfNotInserted_()
 
     for(int i = InvoiceTypeData::VAT; i <= InvoiceTypeData::BILL; ++i)
     {
-        if(!sqlInsertIf_("invoice_type", "type", InvoiceTypeData::name((InvoiceTypeData::Type)i), __LINE__))
+        if(!sqlInsertIf_("invoice_type", "invoice_type", InvoiceTypeData::name((InvoiceTypeData::Type)i), __LINE__))
             return false;
     }
 
@@ -726,7 +726,7 @@ QList<CommodityVisualData> Database::commodities(const qint64 id_invoice)
 {
     QList<CommodityVisualData> ret;
     QSqlQuery query(modelInvoiceWithCommodities_->query());
-    const QString queryStr(QString("SELECT commodity.id_commodity, commodity.name, table_invoice_commodity.quantity, unit.name, commodity.pkwiu,table_invoice_commodity.net, commodity.vat, commodity_type.type, table_invoice_commodity.discount "
+    const QString queryStr(QString("SELECT commodity.id_commodity, commodity.name, table_invoice_commodity.quantity, unit.unit_name, commodity.pkwiu,table_invoice_commodity.net, commodity.vat, commodity_type.type, table_invoice_commodity.discount "
                                    "FROM commodity INNER JOIN table_invoice_commodity ON commodity.id_commodity = table_invoice_commodity.commodity_id "
                                    "INNER JOIN unit ON unit.id_unit = commodity.unit_id "
                                    "INNER JOIN commodity_type ON commodity_type.id_commodity_type = commodity.type_id "

@@ -102,7 +102,7 @@ void SettingsDialog::init_()
     ui_->tableViewCurrency->hideColumn(CurrencyFields::ID_CURRENCY);
 
     ui_->listViewUnit->setModel(db_->modelUnit());
-    ui_->listViewUnit->setModelColumn(UnitFields::NAME);
+    ui_->listViewUnit->setModelColumn(UnitFields::UNIT_NAME);
 }
 
 /** Slot - maskHelpClick

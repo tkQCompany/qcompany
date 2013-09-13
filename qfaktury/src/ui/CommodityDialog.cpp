@@ -62,7 +62,7 @@ void CommodityDialog::init()
     ui_->comboBoxType->setModelColumn(CommodityTypeFields::TYPE);
 
     ui_->comboBoxMeasureUnit->setModel(db_->modelUnit());
-    ui_->comboBoxMeasureUnit->setModelColumn(UnitFields::NAME);
+    ui_->comboBoxMeasureUnit->setModelColumn(UnitFields::UNIT_NAME);
 
     ui_->comboBoxVat->setModel(db_->modelVat());
     ui_->comboBoxVat->setInsertPolicy(QComboBox::NoInsert);
