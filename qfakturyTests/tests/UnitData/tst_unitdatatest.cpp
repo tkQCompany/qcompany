@@ -15,7 +15,7 @@ public:
     
 private Q_SLOTS:
     void initTestCase();
-    void cleanupTestCase();
+    void init();
     void testCaseCheckDBFields();
     void testCaseCheckDBFields_data();
     void testCaseCheckTypesNames();
@@ -29,11 +29,13 @@ UnitDataTest::UnitDataTest()
 void UnitDataTest::initTestCase()
 {
     TestsCommon::setAppData();
-    TestsCommon::removeDBFile();
+    SettingsGlobal s;
+    s.setFirstRun(true);
 }
 
-void UnitDataTest::cleanupTestCase()
+void UnitDataTest::init()
 {
+    TestsCommon::removeDBFile();
 }
 
 void UnitDataTest::testCaseCheckDBFields()
