@@ -3,10 +3,10 @@
 
 #include <QModelIndex>
 #include <QDoubleValidator>
+#include <QDataWidgetMapper>
 
 #include "SettingsDialog.h"
 
-class QDataWidgetMapper;
 
 namespace Ui
 {
@@ -35,35 +35,35 @@ public:
      */
     ~CommodityDialog();
 
-private slots:
+protected slots:
     /**
      * @brief
      *
      */
-    void okClick_();
+    void okClick();
     /**
      * @brief
      *
      */
-    void pkwiuGet_();
+    void pkwiuGet();
     /**
      * @brief
      *
      * @param suffix
      */
-    void addSuffix_(const QString &suffix);
+    void addSuffix(const QString &suffix);
 
-    void servicesCantBeCounted_(const QString &name);
+    void servicesCantBeCounted(const QString &name);
 private:
     /**
      * @brief
      *
      */
-    void init();
-private:
-    Ui::CommodityDialog *ui_;
-    Database *db_; /**< TODO */
-    QDataWidgetMapper *mapper_; /**< TODO */
-    QDoubleValidator validator_; /**< TODO */
+    void init_();
+protected:
+    Ui::CommodityDialog *ui;
+    Database *db; /**< TODO */
+    QDataWidgetMapper mapper; /**< TODO */
+    QDoubleValidator validator; /**< TODO */
 };
 #endif

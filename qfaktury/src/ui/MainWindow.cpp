@@ -47,17 +47,8 @@ void MainWindow::init_()
 
     retranslateUi_();
 
-    if (firstRun_())
-    {
-        s.setFirstRun(false);
-        editMyCompanyInfo_();
-    }
-    else
-    {
-        dateEditFilterStart->setDisplayFormat(s.dateFormatExternal());
-        dateEditFilterEnd->setDisplayFormat(s.dateFormatExternal());
-    }
-
+    dateEditFilterStart->setDisplayFormat(s.dateFormatExternal());
+    dateEditFilterEnd->setDisplayFormat(s.dateFormatExternal());
     dateEditFilterStart->setDate(QDate::currentDate());
     dateEditFilterEnd->setDate(QDate::currentDate());
     db_.modelInvoice()->setDataRange(QDate(), QDate());//full range
@@ -82,7 +73,7 @@ void MainWindow::init_()
     // connect slots
     connect(actionHelp_BugReport, SIGNAL (activated ()), this, SLOT(reportBug_()));
     connect(toolButtonApply, SIGNAL (clicked()), this, SLOT(reReadInvHistory_()));
-    connect(actionProgram_CompanyInfo, SIGNAL(activated()), this, SLOT(editMyCompanyInfo_()));
+    connect(actionProgram_CompanyInfo, SIGNAL(activated()), this, SLOT(editMyCompanyInfo()));
     connect(actionProgram_Exit, SIGNAL(activated()), this, SLOT(close()));
     connect(actionCounterparties_Add, SIGNAL(activated()), this, SLOT(addCounterparty_()));
     connect(actionCounterparties_Remove, SIGNAL(activated()), this, SLOT(delCounterparty_()));
@@ -196,17 +187,6 @@ void MainWindow::createInvoice_(const InvoiceTypeData::Type type)
     }
 }
 
-
-/**
- * @brief
- *
- * @return bool
- */
-bool MainWindow::firstRun_() const
-{
-    SettingsGlobal s;
-    return s.value(s.FIRST_RUN, true).toBool();
-}
 
 
 /**
@@ -577,7 +557,7 @@ void MainWindow::delInvoice_()
  * @brief
  *
  */
-void MainWindow::editMyCompanyInfo_()
+void MainWindow::editMyCompanyInfo()
 {
     db_.modelCounterparty()->setOnlyMyCompanyVisible(true);
     db_.modelCounterpartyType()->setMyCompanyVisible(true, true);
@@ -588,13 +568,13 @@ void MainWindow::editMyCompanyInfo_()
     dialog.setWindowTitle(title);
     if (dialog.exec() == QDialog::Accepted)
     {
-        if(!db_.modelCounterparty()->submitAll())
+        if(db_.modelCounterparty()->submitAll())
         {
-            QMessageBox::warning(this, title, db_.modelCounterparty()->lastError().text());
+            QMessageBox::information(this, title, trUtf8("Edycja danych firmy zakończyła się sukcesem."));
         }
         else
         {
-            QMessageBox::information(this, title, trUtf8("Edycja danych firmy zakończyła się sukcesem."));
+            QMessageBox::warning(this, title, db_.modelCounterparty()->lastError().text());
         }
     }
 

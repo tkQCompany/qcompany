@@ -20,41 +20,30 @@ struct CounterpartyDialogPublic : public CounterpartyDialog
     {
     }
 
-    Ui::CounterpartyDialog *ui() {return ui_; }
+    Ui::CounterpartyDialog *ui() {return CounterpartyDialog::ui; }
 };
 
 
 class CounterpartyDialogTest : public QObject
 {
     Q_OBJECT
-    
-public:
-    CounterpartyDialogTest();
 
 private:
     void fail_(const int lineNum, const QSqlError &errSql, const QString &lastQuery);
     
 private Q_SLOTS:
     void initTestCase();
-    void init();
     void testCaseInitialValues();
     void testCaseGUIAddNewCounterparty();
 };
 
-CounterpartyDialogTest::CounterpartyDialogTest()
-{
-}
 
 void CounterpartyDialogTest::initTestCase()
 {
     TestsCommon::setAppData();
+    TestsCommon::removeDBFile();
     SettingsGlobal s;
     s.setFirstRun(true);
-}
-
-void CounterpartyDialogTest::init()
-{
-    TestsCommon::removeDBFile();
 }
 
 
@@ -69,7 +58,6 @@ void CounterpartyDialogTest::testCaseInitialValues()
 
 void CounterpartyDialogTest::testCaseGUIAddNewCounterparty()
 {
-    SettingsGlobal s;
     Database db;
     CounterpartyDialogPublic dialog(0, &db, QModelIndex());
 
@@ -90,7 +78,7 @@ void CounterpartyDialogTest::testCaseGUIAddNewCounterparty()
         fail_(__LINE__, q.lastError(), q.lastQuery());
     }
 
-    QTest::keyClicks(dialog.ui()->lineEditName, "Kontr1");
+    QTest::keyClicks(dialog.ui()->lineEditName, counterpartyName);
     QTest::keyClicks(dialog.ui()->lineEditLocation, counterpartyName + "LOCATION");
     QTest::keyClicks(dialog.ui()->lineEditPostalCode, counterpartyName + "POSTALCODE");
     QTest::keyClicks(dialog.ui()->lineEditAddress, counterpartyName + "ADDRESS");

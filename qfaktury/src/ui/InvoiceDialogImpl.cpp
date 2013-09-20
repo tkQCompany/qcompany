@@ -184,7 +184,7 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
     ui->spinBoxDiscount->setEnabled(false);
 
     ui->comboBoxInvoiceType->setModel(db->modelInvoiceType());
-    ui->comboBoxInvoiceType->setModelColumn(InvoiceTypeFields::TYPE);
+    ui->comboBoxInvoiceType->setModelColumn(InvoiceTypeFields::INVOICE_TYPE);
 
     ui->comboBoxCounterparties->setModel(db->modelCounterparty());
     ui->comboBoxCounterparties->setModelColumn(CounterpartyFields::NAME);

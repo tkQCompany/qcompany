@@ -16,85 +16,84 @@
 #include "ModelVat.h"
 #include "UnitData.h"
 #include "CommodityData.h"
+#include "CommodityDelegate.h"
 
 /** Constructor
  */
 CommodityDialog::CommodityDialog(QWidget *parent, Database *db,
                                  const QModelIndex &id_edit):
-    QDialog(parent), ui_(new Ui::CommodityDialog), db_(db)
+    QDialog(parent), ui(new Ui::CommodityDialog), db(db)
 {
-    ui_->setupUi(this);
-    init();
+    ui->setupUi(this);
+    init_();
 
     if(id_edit.isValid())
     {
         setWindowTitle(trUtf8("Edytuj towar/usługę"));
-        ui_->comboBoxType->setEnabled(false);
+        ui->comboBoxType->setEnabled(false);
 
-        mapper_->setCurrentIndex(id_edit.row());
+        mapper.setCurrentIndex(id_edit.row());
         if(id_edit.row() == 0)
         {
-            addSuffix_(ui_->comboBoxMeasureUnit->currentText());
+            addSuffix(ui->comboBoxMeasureUnit->currentText());
         }
     }
     else
     {
-        db_->modelCommodity()->insertRow(db_->modelCommodity()->rowCount());
-        mapper_->toLast();
-        ui_->comboBoxType->setCurrentIndex(0);
-        ui_->comboBoxMeasureUnit->setCurrentIndex(0);
+        db->modelCommodity()->insertRow(db->modelCommodity()->rowCount());
+        mapper.toLast();
+        ui->comboBoxType->setCurrentIndex(ui->comboBoxType->findText(CommodityTypeData::name(CommodityTypeData::GOODS)));
+        ui->comboBoxMeasureUnit->setCurrentIndex(ui->comboBoxMeasureUnit->findText(UnitData::name(UnitData::UNIT)));
     }
+    connect(ui->pushButtonOK, SIGNAL(clicked()), this, SLOT(okClick()));
+    connect(ui->pushButtonCancel, SIGNAL(clicked()), this, SLOT(close()));
+    connect(ui->toolButtonPKWIU, SIGNAL(clicked()), this, SLOT(pkwiuGet()));
+    connect(ui->comboBoxMeasureUnit, SIGNAL(currentIndexChanged(QString)), this, SLOT(addSuffix(QString)));
+    connect(ui->comboBoxType, SIGNAL(currentIndexChanged(QString)), this, SLOT(servicesCantBeCounted(QString)));
 }
 
 
 CommodityDialog::~CommodityDialog()
 {
-    db_->modelCommodity()->revertAll();
-    delete ui_;
+    db->modelCommodity()->revertAll();
+    delete ui;
 }
 
 
 /** Init
  */
-void CommodityDialog::init()
+void CommodityDialog::init_()
 {
-    ui_->comboBoxType->setModel(db_->modelCommodityType());
-    ui_->comboBoxType->setModelColumn(CommodityTypeFields::TYPE);
+    ui->comboBoxType->setModel(db->modelCommodityType());
+    ui->comboBoxType->setModelColumn(CommodityTypeFields::TYPE);
 
-    ui_->comboBoxMeasureUnit->setModel(db_->modelUnit());
-    ui_->comboBoxMeasureUnit->setModelColumn(UnitFields::UNIT_NAME);
+    ui->comboBoxMeasureUnit->setModel(db->modelUnit());
+    ui->comboBoxMeasureUnit->setModelColumn(UnitFields::UNIT_NAME);
 
-    ui_->comboBoxVat->setModel(db_->modelVat());
-    ui_->comboBoxVat->setInsertPolicy(QComboBox::NoInsert);
+    ui->comboBoxVat->setModel(db->modelVat());
+    ui->comboBoxVat->setInsertPolicy(QComboBox::NoInsert);
 
-    mapper_ = new QDataWidgetMapper(this);
-    mapper_->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
-    mapper_->setItemDelegate(new QSqlRelationalDelegate(this));
-    mapper_->setModel(db_->modelCommodity());
-    mapper_->addMapping(ui_->lineEditName, CommodityFields::NAME);
-    mapper_->addMapping(ui_->lineEditAbbreviation, CommodityFields::ABBREV);
-    mapper_->addMapping(ui_->lineEditPKWIU, CommodityFields::PKWIU);
-    mapper_->addMapping(ui_->comboBoxType, CommodityFields::TYPE_ID);
-    mapper_->addMapping(ui_->comboBoxMeasureUnit, CommodityFields::UNIT_ID);
-    mapper_->addMapping(ui_->lineEditNet1, CommodityFields::NET1);
-    mapper_->addMapping(ui_->lineEditNet2, CommodityFields::NET2);
-    mapper_->addMapping(ui_->lineEditNet3, CommodityFields::NET3);
-    mapper_->addMapping(ui_->lineEditNet4, CommodityFields::NET4);
-    mapper_->addMapping(ui_->comboBoxVat, CommodityFields::VAT, "currentText");
-    mapper_->addMapping(ui_->doubleSpinBoxQuantity, CommodityFields::QUANTITY);
+    mapper.setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+    mapper.setItemDelegate(new CommodityDelegate(this));
+    mapper.setModel(db->modelCommodity());
+    mapper.addMapping(ui->lineEditName, CommodityFields::NAME);
+    mapper.addMapping(ui->lineEditAbbreviation, CommodityFields::ABBREV);
+    mapper.addMapping(ui->lineEditPKWIU, CommodityFields::PKWIU);
+    mapper.addMapping(ui->comboBoxType, CommodityFields::TYPE_ID);
+    mapper.addMapping(ui->comboBoxMeasureUnit, CommodityFields::UNIT_ID);
+    mapper.addMapping(ui->lineEditNet1, CommodityFields::NET1);
+    mapper.addMapping(ui->lineEditNet2, CommodityFields::NET2);
+    mapper.addMapping(ui->lineEditNet3, CommodityFields::NET3);
+    mapper.addMapping(ui->lineEditNet4, CommodityFields::NET4);
+    mapper.addMapping(ui->comboBoxVat, CommodityFields::VAT, "currentText");
+    mapper.addMapping(ui->doubleSpinBoxQuantity, CommodityFields::QUANTITY);
 
-    validator_.setBottom(0.0);
-    validator_.setDecimals(2);
-    ui_->lineEditNet1->setValidator(&validator_);
-    ui_->lineEditNet2->setValidator(&validator_);
-    ui_->lineEditNet3->setValidator(&validator_);
-    ui_->lineEditNet4->setValidator(&validator_);
-
-    connect(ui_->pushButtonOK, SIGNAL(clicked()), this, SLOT(okClick_()));
-    connect(ui_->pushButtonCancel, SIGNAL(clicked()), this, SLOT(close()));
-    connect(ui_->toolButtonPKWIU, SIGNAL(clicked()), this, SLOT(pkwiuGet_()));
-    connect(ui_->comboBoxMeasureUnit, SIGNAL(currentIndexChanged(QString)), this, SLOT(addSuffix_(QString)));
-    connect(ui_->comboBoxType, SIGNAL(currentIndexChanged(QString)), this, SLOT(servicesCantBeCounted_(QString)));
+    validator.setBottom(0.0);
+    validator.setDecimals(2);
+    ui->lineEditNet1->setValidator(&validator);
+    ui->lineEditNet2->setValidator(&validator);
+    ui->lineEditNet3->setValidator(&validator);
+    ui->lineEditNet4->setValidator(&validator);
 }
 
 /******************** SLOTS START ***************************/
@@ -103,22 +102,22 @@ void CommodityDialog::init()
 /** Slot
  *  save data to XML file and returns row for products table
  */
-void CommodityDialog::okClick_()
+void CommodityDialog::okClick()
 {
-    if (ui_->lineEditName->text().isEmpty())
+    if (ui->lineEditName->text().isEmpty())
     {
         QMessageBox::warning(this, qApp->applicationName(), trUtf8("Musisz podać nazwę"));
         return;
     }
 
-    if(mapper_->submit())
+    if(mapper.submit() && (db->modelCommodity()->lastError().type() == QSqlError::NoError))
     {
         accept();
     }
     else
     {
         QMessageBox::warning(this, trUtf8("Błąd w podanych danych"), trUtf8("Niekompletne lub błędne dane:\n%1")
-                             .arg(db_->modelCommodity()->lastError().text()));
+                             .arg(db->modelCommodity()->lastError().text()));
     }
 }
 
@@ -127,30 +126,30 @@ void CommodityDialog::okClick_()
 /** Slot
  *  Find PKWIU code on the net
  */
-void CommodityDialog::pkwiuGet_()
+void CommodityDialog::pkwiuGet()
 {
     QDesktopServices::openUrl(QUrl(tr("http://www.klasyfikacje.pl/")));
 }
 
 
-void CommodityDialog::servicesCantBeCounted_(const QString &name)
+void CommodityDialog::servicesCantBeCounted(const QString &name)
 {
     if(name == CommodityTypeData::name(CommodityTypeData::SERVICES))
     {
-        ui_->labelQuantity->setVisible(false);
-        ui_->doubleSpinBoxQuantity->setVisible(false);
+        ui->labelQuantity->setVisible(false);
+        ui->doubleSpinBoxQuantity->setVisible(false);
     }
     else
     {
-        ui_->labelQuantity->setVisible(true);
-        ui_->doubleSpinBoxQuantity->setVisible(true);
+        ui->labelQuantity->setVisible(true);
+        ui->doubleSpinBoxQuantity->setVisible(true);
     }
 }
 
 
-void CommodityDialog::addSuffix_(const QString &suffix)
+void CommodityDialog::addSuffix(const QString &suffix)
 {
-    ui_->doubleSpinBoxQuantity->setSuffix(QChar(' ') + suffix);
+    ui->doubleSpinBoxQuantity->setSuffix(QChar(' ') + suffix);
 }
 
 /******************** SLOTS END ***************************/

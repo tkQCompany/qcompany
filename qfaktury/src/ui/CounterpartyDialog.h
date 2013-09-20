@@ -65,7 +65,7 @@ private:
      * @brief
      *
      */
-    void init();
+    void init_();
     /**
      * @brief
      *
@@ -87,11 +87,11 @@ private:
      */
     QString validateForm_();
 protected:
-    Ui::CounterpartyDialog *ui_;
-    Database *db_; /**< TODO */
-    const QModelIndex id_; /**< TODO */
-    QDataWidgetMapper mapper_; /**< TODO */
-    QSortFilterProxyModel proxyModelCounterpartyType_;
+    Ui::CounterpartyDialog *ui;
+    Database *db; /**< TODO */
+    const QModelIndex id; /**< TODO */
+    QDataWidgetMapper mapper; /**< TODO */
+    QSortFilterProxyModel proxyModelCounterpartyType;
 
 };
 #endif

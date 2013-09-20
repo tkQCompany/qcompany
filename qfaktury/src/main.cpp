@@ -8,8 +8,8 @@
 #include "MainWindow.h"
 #include "SettingsGlobal.h"
 
-#ifndef MAIN_CPP
-#define MAIN_CPP
+//#ifndef MAIN_CPP
+//#define MAIN_CPP
 
 int main(int argc, char **argv)
 {
@@ -45,7 +45,14 @@ int main(int argc, char **argv)
         splash.finish(&w);
 	}
 
+    SettingsGlobal s;
+    if(s.value(s.FIRST_RUN, true).toBool())//if the app is run first time
+    {
+        s.setFirstRun(false);
+        w.editMyCompanyInfo();
+    }
+
 	return a.exec();
 }
 
-#endif
+//#endif

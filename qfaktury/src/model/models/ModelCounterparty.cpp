@@ -48,11 +48,11 @@ void ModelCounterparty::setOnlyMyCompanyVisible(const bool yes)
 {
     if(yes)
     {
-        setFilter(QString("`type_id` = %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
+        setFilter(QString("`type_id` = %1").arg(CounterpartyTypeData::MY_COMPANY));
     }
     else
     {
-        setFilter(QString("`type_id` != %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
+        setFilter(QString("`type_id` != %1").arg(CounterpartyTypeData::MY_COMPANY));
     }
     select();
 }

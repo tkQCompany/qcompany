@@ -26,93 +26,93 @@
 /** Constructor
  */
 CounterpartyDialog::CounterpartyDialog(QWidget *parent, Database *db, const QModelIndex &id, const bool myCompany) :
-    QDialog(parent), ui_(new Ui::CounterpartyDialog), db_(db), id_(id)
+    QDialog(parent), ui(new Ui::CounterpartyDialog), db(db), id(id)
 {
-    ui_->setupUi(this);
-    init();
+    ui->setupUi(this);
+    init_();
 
     if(id.isValid())
     {
         if(myCompany)
         {
-            proxyModelCounterpartyType_.setFilterRegExp(
-                        QRegExp(QString("%1").arg(CounterpartyTypeData::MY_COMPANY + 1)));
+            proxyModelCounterpartyType.setFilterRegExp(
+                        QRegExp(QString("%1").arg(CounterpartyTypeData::MY_COMPANY)));
         }
         setWindowTitle(trUtf8("Edytuj kontrahenta"));
-        ui_->comboBoxAdditionalPhones->setModel(db_->modelPhone());
-        ui_->comboBoxAdditionalPhones->setModelColumn(PhoneFields::NUMBER);
-        ui_->comboBoxAdditionalEmails->setModel(db_->modelEmail());
-        ui_->comboBoxAdditionalEmails->setModelColumn(EmailFields::EMAIL);
-        mapper_.setCurrentIndex(id.row());
+        ui->comboBoxAdditionalPhones->setModel(db->modelPhone());
+        ui->comboBoxAdditionalPhones->setModelColumn(PhoneFields::NUMBER);
+        ui->comboBoxAdditionalEmails->setModel(db->modelEmail());
+        ui->comboBoxAdditionalEmails->setModelColumn(EmailFields::EMAIL);
+        mapper.setCurrentIndex(id.row());
     }
     else
     {
-        ui_->groupBoxAdditionalContacts->setVisible(false); //because at this moment there is no id_counterparty
+        ui->groupBoxAdditionalContacts->setVisible(false); //because at this moment there is no id_counterparty
 
-        db_->modelCounterparty()->insertRow(db_->modelCounterparty()->rowCount());
-        mapper_.toLast();
-        ui_->comboBoxType->setCurrentIndex(ui_->comboBoxType->findText(CounterpartyTypeData::name(CounterpartyTypeData::COMPANY)));
+        db->modelCounterparty()->insertRow(db->modelCounterparty()->rowCount());
+        mapper.toLast();
+        ui->comboBoxType->setCurrentIndex(ui->comboBoxType->findText(CounterpartyTypeData::name(CounterpartyTypeData::COMPANY)));
 
         SettingsGlobal s;
-        ui_->comboBoxCountry->setCurrentIndex(ui_->comboBoxCountry->findText(s.value(s.COUNTRY).toString()));
+        ui->comboBoxCountry->setCurrentIndex(ui->comboBoxCountry->findText(s.value(s.COUNTRY).toString()));
     }
 
-    if(db_->modelCounterparty()->isInvNumFormatEmpty(id))
+    if(db->modelCounterparty()->isInvNumFormatEmpty(id))
     {
         SettingsGlobal s;
-        ui_->lineEditInvNumberFormat->setText(s.value(s.DEFAULT_INV_NUM_FORMAT).toString());
+        ui->lineEditInvNumberFormat->setText(s.value(s.DEFAULT_INV_NUM_FORMAT).toString());
     }
 
-    connect(ui_->pushButtonOK, SIGNAL(clicked()), this, SLOT(okClick_()));
-    connect(ui_->pushButtonEditTypeList, SIGNAL(clicked()), this, SLOT(editCounterpartyTypeList_()));
-    connect(ui_->pushButtonEditEmailList, SIGNAL(clicked()), this, SLOT(editEmailList_()));
-    connect(ui_->pushButtonEditFormat, SIGNAL(clicked()), this, SLOT(editFormat_()));
-    connect(ui_->pushButtonEditPhoneList, SIGNAL(clicked()), this, SLOT(editPhoneList_()));
-    connect(ui_->pushButtonShowExamples, SIGNAL(clicked()), this, SLOT(showExamples_()));
+    connect(ui->pushButtonOK, SIGNAL(clicked()), this, SLOT(okClick_()));
+    connect(ui->pushButtonEditTypeList, SIGNAL(clicked()), this, SLOT(editCounterpartyTypeList_()));
+    connect(ui->pushButtonEditEmailList, SIGNAL(clicked()), this, SLOT(editEmailList_()));
+    connect(ui->pushButtonEditFormat, SIGNAL(clicked()), this, SLOT(editFormat_()));
+    connect(ui->pushButtonEditPhoneList, SIGNAL(clicked()), this, SLOT(editPhoneList_()));
+    connect(ui->pushButtonShowExamples, SIGNAL(clicked()), this, SLOT(showExamples_()));
 }
 
 
 CounterpartyDialog::~CounterpartyDialog()
 {
-    db_->modelCounterparty()->revertAll();
-    delete ui_;
+    db->modelCounterparty()->revertAll();
+    delete ui;
 }
 
 
 
 /** init()
  */
-void CounterpartyDialog::init()
+void CounterpartyDialog::init_()
 {
-    proxyModelCounterpartyType_.setSourceModel(db_->modelCounterpartyType());
-    proxyModelCounterpartyType_.setFilterKeyColumn(CounterpartyTypeFields::ID);
-    proxyModelCounterpartyType_.setFilterRegExp(QRegExp(QString("[02-9]+")));
+    proxyModelCounterpartyType.setSourceModel(db->modelCounterpartyType());
+    proxyModelCounterpartyType.setFilterKeyColumn(CounterpartyTypeFields::ID);
+    proxyModelCounterpartyType.setFilterRegExp(QRegExp(QString("[02-9]+")));
 
-    ui_->comboBoxType->setModel(&proxyModelCounterpartyType_);
-    ui_->comboBoxType->setEditable(false);
-    ui_->comboBoxType->setModelColumn(CounterpartyTypeFields::TYPE);
+    ui->comboBoxType->setModel(&proxyModelCounterpartyType);
+    ui->comboBoxType->setEditable(false);
+    ui->comboBoxType->setModelColumn(CounterpartyTypeFields::TYPE);
 
-    ui_->comboBoxCountry->setModel(db_->modelCountry());
+    ui->comboBoxCountry->setModel(db->modelCountry());
 
-    mapper_.setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
-    mapper_.setItemDelegate(new CounterpartyTypeDelegate(this));
-    mapper_.setModel(db_->modelCounterparty());
-    mapper_.addMapping(ui_->lineEditName, CounterpartyFields::NAME);
-    mapper_.addMapping(ui_->comboBoxType, CounterpartyFields::TYPE_ID);
-    mapper_.addMapping(ui_->comboBoxCountry, CounterpartyFields::COUNTRY);
-    mapper_.addMapping(ui_->lineEditLocation, CounterpartyFields::LOCATION);
-    mapper_.addMapping(ui_->lineEditPostalCode, CounterpartyFields::POSTAL_CODE);
-    mapper_.addMapping(ui_->lineEditAddress, CounterpartyFields::STREET);
-    mapper_.addMapping(ui_->lineEditTaxID, CounterpartyFields::TAX_IDENT);
-    mapper_.addMapping(ui_->lineEditAccountName, CounterpartyFields::ACCOUNT_NAME);
-    mapper_.addMapping(ui_->lineEditWWW, CounterpartyFields::WWW);
-    mapper_.addMapping(ui_->lineEditPrimaryEmail, CounterpartyFields::PRIMARY_EMAIL);
-    mapper_.addMapping(ui_->lineEditPrimaryPhone, CounterpartyFields::PRIMARY_PHONE);
-    mapper_.addMapping(ui_->lineEditInvNumberFormat, CounterpartyFields::INV_NUM_FORMAT);
+    mapper.setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+    mapper.setItemDelegate(new CounterpartyTypeDelegate(this));
+    mapper.setModel(db->modelCounterparty());
+    mapper.addMapping(ui->lineEditName, CounterpartyFields::NAME);
+    mapper.addMapping(ui->comboBoxType, CounterpartyFields::TYPE_ID);
+    mapper.addMapping(ui->comboBoxCountry, CounterpartyFields::COUNTRY);
+    mapper.addMapping(ui->lineEditLocation, CounterpartyFields::LOCATION);
+    mapper.addMapping(ui->lineEditPostalCode, CounterpartyFields::POSTAL_CODE);
+    mapper.addMapping(ui->lineEditAddress, CounterpartyFields::STREET);
+    mapper.addMapping(ui->lineEditTaxID, CounterpartyFields::TAX_IDENT);
+    mapper.addMapping(ui->lineEditAccountName, CounterpartyFields::ACCOUNT_NAME);
+    mapper.addMapping(ui->lineEditWWW, CounterpartyFields::WWW);
+    mapper.addMapping(ui->lineEditPrimaryEmail, CounterpartyFields::PRIMARY_EMAIL);
+    mapper.addMapping(ui->lineEditPrimaryPhone, CounterpartyFields::PRIMARY_PHONE);
+    mapper.addMapping(ui->lineEditInvNumberFormat, CounterpartyFields::INV_NUM_FORMAT);
 
     SettingsGlobal s;
-    ui_->lineEditTaxID->setInputMask(s.value(s.TAXID_MASK).toString());
-    ui_->lineEditAccountName->setInputMask(s.value(s.ACCOUNT_MASK).toString());
+    ui->lineEditTaxID->setInputMask(s.value(s.TAXID_MASK).toString());
+    ui->lineEditAccountName->setInputMask(s.value(s.ACCOUNT_MASK).toString());
 }
 
 
@@ -120,14 +120,14 @@ void CounterpartyDialog::okClick_()
 {
     if(validate_())
     {
-        if(mapper_.submit() && (db_->modelCounterparty()->lastError().type() == QSqlError::NoError))
+        if(mapper.submit() && (db->modelCounterparty()->lastError().type() == QSqlError::NoError))
         {
             accept();
         }
         else
         {
-            qDebug() << "CounterpartyDialog::okClick_(), lastError(): " << db_->modelCounterparty()->lastError() <<
-                        ", lastQuery(): " << db_->modelCounterparty()->query().lastQuery();
+            qDebug() << "CounterpartyDialog::okClick_(), lastError(): " << db->modelCounterparty()->lastError() <<
+                        ", lastQuery(): " << db->modelCounterparty()->query().lastQuery();
         }
     }
 }
@@ -137,47 +137,47 @@ void CounterpartyDialog::okClick_()
  */
 QString CounterpartyDialog::validateForm_()
 {
-    if (ui_->lineEditName->text().isEmpty())
+    if (ui->lineEditName->text().isEmpty())
     {
-        ui_->lineEditName->setFocus();
-        return ui_->labelName->text();
+        ui->lineEditName->setFocus();
+        return ui->labelName->text();
     }
 
-    if (ui_->lineEditLocation->text().isEmpty())
+    if (ui->lineEditLocation->text().isEmpty())
     {
-        ui_->lineEditLocation->setFocus();
-        return ui_->labelLocation->text();
+        ui->lineEditLocation->setFocus();
+        return ui->labelLocation->text();
     }
 
-    if (ui_->lineEditPostalCode->text().isEmpty())
+    if (ui->lineEditPostalCode->text().isEmpty())
     {
-        ui_->lineEditPostalCode->setFocus();
-        return ui_->labelPostalCode->text();
+        ui->lineEditPostalCode->setFocus();
+        return ui->labelPostalCode->text();
     }
 
 
-    if (ui_->lineEditAddress->text().isEmpty())
+    if (ui->lineEditAddress->text().isEmpty())
     {
-        ui_->lineEditAddress->setFocus();
-        return ui_->labelStreet->text();
+        ui->lineEditAddress->setFocus();
+        return ui->labelStreet->text();
     }
 
-    if (ui_->lineEditTaxID->text().isEmpty())
+    if (ui->lineEditTaxID->text().isEmpty())
     {
-        ui_->lineEditTaxID->setFocus();
-        return ui_->labelTaxID->text();
+        ui->lineEditTaxID->setFocus();
+        return ui->labelTaxID->text();
     }
 
-    if(ui_->comboBoxCountry->currentIndex() == -1)
+    if(ui->comboBoxCountry->currentIndex() == -1)
     {
-        ui_->comboBoxCountry->setFocus();
-        return ui_->labelCountry->text();
+        ui->comboBoxCountry->setFocus();
+        return ui->labelCountry->text();
     }
 
-    if(ui_->comboBoxType->currentIndex() == -1)
+    if(ui->comboBoxType->currentIndex() == -1)
     {
-        ui_->comboBoxType->setFocus();
-        return ui_->labelType->text();
+        ui->comboBoxType->setFocus();
+        return ui->labelType->text();
     }
 
     return QString();
@@ -209,69 +209,69 @@ QString CounterpartyDialog::isEmpty_(const QString &in)
 
 void CounterpartyDialog::editCounterpartyTypeList_()
 {
-    CounterpartyTypeDialog dialog(this, db_);
-    db_->modelCounterpartyType()->setMyCompanyVisible(false);
+    CounterpartyTypeDialog dialog(this, db);
+    db->modelCounterpartyType()->setMyCompanyVisible(false);
     if(dialog.exec() == QDialog::Accepted)
     {
-        if(!db_->modelCounterpartyType()->submitAll())
+        if(!db->modelCounterpartyType()->submitAll())
         {
-            db_->modelCounterpartyType()->revertAll();
+            db->modelCounterpartyType()->revertAll();
             const QString msg(QString("%1\n%2")
                               .arg(trUtf8("Błąd edycji listy typów kontrahentów"))
-                              .arg(db_->modelCounterpartyType()->lastError().text()));
+                              .arg(db->modelCounterpartyType()->lastError().text()));
             QMessageBox::warning(this, trUtf8("Lista typów kontrahentów"), msg);
         }
     }
-    db_->modelCounterpartyType()->setMyCompanyVisible(true);
+    db->modelCounterpartyType()->setMyCompanyVisible(true);
 }
 
 
 void CounterpartyDialog::editEmailList_()
 {
-    EmailDialog dialog(this, db_, id_);
+    EmailDialog dialog(this, db, id);
     if(dialog.exec() == QDialog::Accepted)
     {
-        if(!db_->modelEmail()->submitAll())
+        if(!db->modelEmail()->submitAll())
         {
             const QString msg(QString("%1:\n\n%2")
                               .arg(trUtf8("Błąd edycji listy emaili kontrahenta"))
-                              .arg(db_->modelEmail()->lastError().text()));
+                              .arg(db->modelEmail()->lastError().text()));
             QMessageBox::warning(this, trUtf8("Lista emaili"), msg);
         }
     }
-    db_->modelEmail()->revertAll();
+    db->modelEmail()->revertAll();
 }
 
 
 void CounterpartyDialog::editPhoneList_()
 {
-    PhoneDialog dialog(this, db_, id_);
+    PhoneDialog dialog(this, db, id);
     if(dialog.exec() == QDialog::Accepted)
     {
-        if(!db_->modelPhone()->submitAll())
+        if(!db->modelPhone()->submitAll())
         {
             const QString msg(QString("%1:\n\n%2")
                               .arg(trUtf8("Błąd edycji listy telefonów kontrahenta"))
-                              .arg(db_->modelPhone()->lastError().text()));
+                              .arg(db->modelPhone()->lastError().text()));
             QMessageBox::warning(this, trUtf8("Lista telefonów"), msg);
         }
     }
-    db_->modelPhone()->revertAll();
+    db->modelPhone()->revertAll();
 }
 
 
 void CounterpartyDialog::editFormat_()
 {
-    InvoiceNumberFormatEditDialog dialog(this, db_, ui_->lineEditInvNumberFormat->text());
+    InvoiceNumberFormatEditDialog dialog(this, db, ui->lineEditInvNumberFormat->text());
     if(QDialog::Accepted == dialog.exec())
     {
-        ui_->lineEditInvNumberFormat->setText(dialog.format());
+        ui->lineEditInvNumberFormat->setText(dialog.format());
     }
 }
 
 
 void CounterpartyDialog::showExamples_()
 {
-    InvoiceNumberFormatExamplesDialog dialog(this, db_, ui_->lineEditInvNumberFormat->text(), ui_->lineEditName->text());
+    InvoiceNumberFormatExamplesDialog dialog(this, db, ui->lineEditInvNumberFormat->text(), ui->lineEditName->text());
     dialog.exec();
 }

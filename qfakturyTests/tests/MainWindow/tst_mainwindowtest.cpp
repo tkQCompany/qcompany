@@ -1,71 +1,63 @@
-#include <QtTest/QtTest>
-#include <QSettings>
+#include <QTest>
+#include <QThread>
 
 #include "../TestsCommon.h"
 #include "MainWindow.h"
 #include "CounterpartyDialog.h"
 
+
+struct MainWindowPublic: public MainWindow
+{
+    MainWindowPublic(QWidget *parent = 0)
+        : MainWindow(parent)
+    {
+    }
+};
+
+
+
 class MainWindowTest : public QObject
 {
     Q_OBJECT
-    
-public:
-    MainWindowTest();
-    
+        
 private Q_SLOTS:
     void initTestCase();
-    void cleanupTestCase();
-    void testCase1();
-    void testCase1_data();
-    void testCaseInitDeinit();
+    void init();
+    void testCaseGUI_InitialState();
     void testCaseAddDelCommodity();
     void testCaseAddDelCounterparty();
-
-private:
-    QSettings settings_;
 };
 
-MainWindowTest::MainWindowTest()
-{
-}
+
 
 void MainWindowTest::initTestCase()
 {
     TestsCommon::setAppData();
+    SettingsGlobal s;
+    s.setFirstRun(true);
+}
+
+void MainWindowTest::init()
+{
     TestsCommon::removeDBFile();
 }
 
-void MainWindowTest::cleanupTestCase()
+void MainWindowTest::testCaseGUI_InitialState()
 {
-    settings_.clear();
+    MainWindowPublic mwp;
+    QCOMPARE(mwp.windowTitle(), trUtf8("%1 - %2").arg(qApp->applicationName()).arg(qApp->applicationVersion()));
+    QVERIFY(mwp.dateEditFilterEnd->displayFormat() == mwp.dateEditFilterStart->displayFormat());
 }
 
-void MainWindowTest::testCaseInitDeinit()
-{
-    settings_.clear();
-    MainWindow mw;
 
-}
-
-void MainWindowTest::testCase1()
-{
-    QFETCH(QString, data);
-    QVERIFY2(true, "Failure");
-}
-
-void MainWindowTest::testCase1_data()
-{
-    QTest::addColumn<QString>("data");
-    QTest::newRow("0") << QString();
-}
 
 void MainWindowTest::testCaseAddDelCommodity()
 {
     const size_t testsCount = 1;
-    //MainWindow mw;
+    MainWindowPublic mwp;
     for(size_t i = 0; i < testsCount; ++i)
     {
-        //mw.actionCommodities_Add
+
     }
 }
 

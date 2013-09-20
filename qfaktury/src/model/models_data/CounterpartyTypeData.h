@@ -21,7 +21,7 @@ struct CounterpartyTypeData
      * @brief Default values for the first start of the application. Later these values can change with the exception for MY_COMPANY.
      *
      */
-    enum CounterpartyType {MY_COMPANY, COMPANY, OFFICE};
+    enum CounterpartyType {MY_COMPANY = 1, COMPANY, OFFICE}; // =1 because SQL starts numbering from 1
 
     /**
      * @brief

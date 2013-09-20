@@ -19,7 +19,7 @@ void ModelCounterpartyType::setMyCompanyVisible(const bool yes,
         if(onlyMyCompany)
         {
             setFilter(QString("id_counterparty_type = %1")
-                      .arg(CounterpartyTypeData::MY_COMPANY + 1));
+                      .arg(CounterpartyTypeData::MY_COMPANY));
         }
         else
         {
@@ -29,7 +29,7 @@ void ModelCounterpartyType::setMyCompanyVisible(const bool yes,
     else
     {
         setFilter(QString("id_counterparty_type != %1")
-                  .arg(CounterpartyTypeData::MY_COMPANY + 1));
+                  .arg(CounterpartyTypeData::MY_COMPANY));
     }
     select();
 }

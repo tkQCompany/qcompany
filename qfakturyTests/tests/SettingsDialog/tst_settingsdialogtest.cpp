@@ -12,7 +12,7 @@ public:
     
 private Q_SLOTS:
     void initTestCase();
-    void cleanupTestCase();
+    void init();
     void testGUIChangeLanguage();
 };
 
@@ -24,11 +24,13 @@ SettingsDialogTest::SettingsDialogTest()
 void SettingsDialogTest::initTestCase()
 {
     TestsCommon::setAppData();
-    TestsCommon::removeDBFile();
+    SettingsGlobal s;
+    s.setFirstRun(true);
 }
 
-void SettingsDialogTest::cleanupTestCase()
+void SettingsDialogTest::init()
 {
+    TestsCommon::removeDBFile();
 }
 
 void SettingsDialogTest::testGUIChangeLanguage()

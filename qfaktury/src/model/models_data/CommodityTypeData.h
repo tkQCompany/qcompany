@@ -21,7 +21,7 @@ public:
      * @brief
      *
      */
-    enum CommodityType {GOODS, SERVICES};
+    enum CommodityType {GOODS = 1, SERVICES};
 
     /**
      * @brief

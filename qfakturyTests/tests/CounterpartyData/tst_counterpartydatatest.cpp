@@ -17,7 +17,6 @@ public:
     
 private Q_SLOTS:
     void initTestCase();
-    void init();
     void testCaseCheckDBFields();
     void testCaseCheckDBFields_data();
 };
@@ -29,14 +28,11 @@ CounterpartyDataTest::CounterpartyDataTest()
 void CounterpartyDataTest::initTestCase()
 {
     TestsCommon::setAppData();
+    TestsCommon::removeDBFile();
     SettingsGlobal s;
     s.setFirstRun(true);
 }
 
-void CounterpartyDataTest::init()
-{
-    TestsCommon::removeDBFile();
-}
 
 void CounterpartyDataTest::testCaseCheckDBFields()
 {

@@ -480,7 +480,7 @@ void Database::initModels_()
     modelCounterparty_->setEditStrategy(QSqlTableModel::OnManualSubmit);
     modelCounterparty_->setSort(CounterpartyFields::ID, Qt::AscendingOrder);
     modelCounterparty_->setRelation(CounterpartyFields::TYPE_ID, QSqlRelation("counterparty_type", "id_counterparty_type", "type"));
-    modelCounterparty_->setFilter(QString("type_id != %1").arg(CounterpartyTypeData::MY_COMPANY + 1));
+    modelCounterparty_->setFilter(QString("type_id != %1").arg(CounterpartyTypeData::MY_COMPANY));
     modelCounterparty_->select();
 
     modelInvoice_ = new ModelInvoice(this->parent());
@@ -580,7 +580,7 @@ bool Database::insertDataIfNotInserted_()
         query.exec(QString("INSERT INTO `counterparty`(`name`, `type_id`, `country`, `location`, `postal_code`, "
                            "`street`, `tax_ident`, `account_name`, `www`, `primary_email`, `primary_phone`, 'inv_number_format') "
                    "VALUES(\"%1\", %2, \"%3\", \"%4\", \"%5\", \"%6\", \"%7\", \"%8\", \"%9\", \"%10\", \"%11\", \"%12\")")
-                   .arg(trUtf8("Brak nazwy firmy")).arg(CounterpartyTypeData::MY_COMPANY + 1).arg(QLocale::system().nativeCountryName())
+                   .arg(trUtf8("Brak nazwy firmy")).arg(CounterpartyTypeData::MY_COMPANY).arg(QLocale::system().nativeCountryName())
                    .arg(trUtf8("Brak nazwy miejscowości")).arg(trUtf8("Brak kodu pocztowego")).arg(trUtf8("Brak nazwy ulicy"))
                    .arg(trUtf8("Brak NIP")).arg(trUtf8("Brak numeru konta")).arg("").arg("").arg("").arg(""));
         if(!query.isActive())

@@ -7,7 +7,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>770</width>
+    <width>778</width>
     <height>487</height>
    </rect>
   </property>
@@ -15,7 +15,7 @@
    <string>QFaktury</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../qfaktury.qrc">
+   <iconset resource="../../res/qfaktury.qrc">
     <normaloff>:/res/icons/qfaktury_48.png</normaloff>:/res/icons/qfaktury_48.png</iconset>
   </property>
   <widget class="QWidget" name="widget">
@@ -124,7 +124,7 @@
              </date>
             </property>
             <property name="displayFormat">
-             <string>MM/dd/yyyy</string>
+             <string>dd/MM/yyyy</string>
             </property>
             <property name="calendarPopup">
              <bool>true</bool>
@@ -244,8 +244,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>770</width>
-     <height>25</height>
+     <width>778</width>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuProgram">
@@ -349,7 +349,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionInvoices_Remove">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/usun_fakture.png</normaloff>:/res/icons/usun_fakture.png</iconset>
    </property>
    <property name="text">
@@ -367,7 +367,7 @@
   </action>
   <action name="actionInvoices_InvoiceNew">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/nowa_faktura.png</normaloff>:/res/icons/nowa_faktura.png</iconset>
    </property>
    <property name="text">
@@ -385,7 +385,7 @@
   </action>
   <action name="actionCounterparties_Add">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/dodaj_kontrahentow.png</normaloff>:/res/icons/dodaj_kontrahentow.png</iconset>
    </property>
    <property name="text">
@@ -403,7 +403,7 @@
   </action>
   <action name="actionCounterparties_Remove">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/usun_kontrahentow.png</normaloff>:/res/icons/usun_kontrahentow.png</iconset>
    </property>
    <property name="text">
@@ -421,7 +421,7 @@
   </action>
   <action name="actionCounterparties_Edit">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/edytuj_kontrahentow.png</normaloff>:/res/icons/edytuj_kontrahentow.png</iconset>
    </property>
    <property name="text">
@@ -439,7 +439,7 @@
   </action>
   <action name="actionProgram_Exit">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/koniec.png</normaloff>:/res/icons/koniec.png</iconset>
    </property>
    <property name="text">
@@ -457,7 +457,7 @@
   </action>
   <action name="actionInvoices_Edit">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/edytuj_fakture.png</normaloff>:/res/icons/edytuj_fakture.png</iconset>
    </property>
    <property name="text">
@@ -475,7 +475,7 @@
   </action>
   <action name="actionProgram_CompanyInfo">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/dane_firmy.png</normaloff>:/res/icons/dane_firmy.png</iconset>
    </property>
    <property name="text">
@@ -510,7 +510,7 @@
   </action>
   <action name="actionProgram_Settings">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/ustawienia.png</normaloff>:/res/icons/ustawienia.png</iconset>
    </property>
    <property name="text">
@@ -542,7 +542,7 @@
   </action>
   <action name="actionCommodities_Edit">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/edytuj_towar.png</normaloff>:/res/icons/edytuj_towar.png</iconset>
    </property>
    <property name="text">
@@ -560,7 +560,7 @@
   </action>
   <action name="actionCommodities_Remove">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/usun_towar.png</normaloff>:/res/icons/usun_towar.png</iconset>
    </property>
    <property name="text">
@@ -578,7 +578,7 @@
   </action>
   <action name="actionCommodities_Add">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/dodaj_towar.png</normaloff>:/res/icons/dodaj_towar.png</iconset>
    </property>
    <property name="text">
@@ -666,7 +666,7 @@
   </action>
   <action name="actionInvoices_InvoiceCorrective">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/nowa_korekta.png</normaloff>:/res/icons/nowa_korekta.png</iconset>
    </property>
    <property name="text">
@@ -684,7 +684,7 @@
   </action>
   <action name="actionInvoices_InvoiceProForma">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/nowa_proforma.png</normaloff>:/res/icons/nowa_proforma.png</iconset>
    </property>
    <property name="text">
@@ -707,7 +707,7 @@
   </action>
   <action name="actionInvoices_InvoiceDuplicate">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/nowa_duplikat.png</normaloff>:/res/icons/nowa_duplikat.png</iconset>
    </property>
    <property name="text">
@@ -719,7 +719,7 @@
   </action>
   <action name="actionInvoices_InvoiceGross">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/nowa_brutto.png</normaloff>:/res/icons/nowa_brutto.png</iconset>
    </property>
    <property name="text">
@@ -731,7 +731,7 @@
   </action>
   <action name="actionInvoices_Bill">
    <property name="icon">
-    <iconset resource="../qfaktury.qrc">
+    <iconset resource="../../res/qfaktury.qrc">
      <normaloff>:/res/icons/nowa_rachunek.png</normaloff>:/res/icons/nowa_rachunek.png</iconset>
    </property>
    <property name="text">
@@ -764,7 +764,8 @@
   <tabstop>tableViewCommodities</tabstop>
  </tabstops>
  <resources>
-  <include location="../qfaktury.qrc"/>
+  <include location="../../res/qfaktury.qrc"/>
+  <include location="../../res/qfaktury.qrc"/>
  </resources>
  <connections/>
 </ui>

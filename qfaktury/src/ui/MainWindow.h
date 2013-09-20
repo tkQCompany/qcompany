@@ -22,7 +22,11 @@ class MainWindow: public QMainWindow, public Ui::MainWindow
     Q_OBJECT
 public:
     MainWindow(QWidget *parent = 0);
-private slots:
+
+public slots:
+    void editMyCompanyInfo();
+
+protected slots:
     void tabChanged_(QWidget * widget);
     void aboutQt_();
     void about_();
@@ -34,7 +38,6 @@ private slots:
     void editCounterparty_();
     void editInvoice_();
     void delInvoice_();
-    void editMyCompanyInfo_();
     void editSettings_();
     void newInvoice_();
     void newProFormaInvoice_();
@@ -54,17 +57,14 @@ private slots:
     void retranslateUi_();
     void keyPressEvent(QKeyEvent*);
 
-private:
+protected:
     void createInvoice_(const InvoiceTypeData::Type type);
-    bool firstRun_() const;
     void init_();
     void setActions_(const bool counterpartiesEditEnabled, const bool counterpartiesRemoveEnable, const bool, const bool, const bool historyEditEnabled, const bool historyRemoveEnabled);
+    virtual void loadPlugins();
 
 private:
     Database db_; /**< An object representing the application's database */
     QMap<int, QString> customActions;
-
-protected:
-    virtual void loadPlugins();
 };
 #endif

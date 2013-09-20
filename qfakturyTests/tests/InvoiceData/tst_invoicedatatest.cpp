@@ -14,7 +14,6 @@ public:
     
 private Q_SLOTS:
     void initTestCase();
-    void init();
     void testCaseCaseCheckDBFields();
     void testCaseCaseCheckDBFields_data();
 };
@@ -26,13 +25,9 @@ InvoiceDataTest::InvoiceDataTest()
 void InvoiceDataTest::initTestCase()
 {
     TestsCommon::setAppData();
+    TestsCommon::removeDBFile();
     SettingsGlobal s;
     s.setFirstRun(true);
-}
-
-void InvoiceDataTest::init()
-{
-    TestsCommon::removeDBFile();
 }
 
 void InvoiceDataTest::testCaseCaseCheckDBFields()

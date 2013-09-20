@@ -9,7 +9,7 @@ namespace InvoiceTypeFields
      * @brief
      *
      */
-    enum Fields {ID_INVOICE_TYPE, TYPE};
+    enum Fields {ID_INVOICE_TYPE, INVOICE_TYPE};
 }
 
 /**

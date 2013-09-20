@@ -31,6 +31,8 @@ void InvoiceTypeDataTest::initTestCase()
 {
     TestsCommon::setAppData();
     TestsCommon::removeDBFile();
+    SettingsGlobal s;
+    s.setFirstRun(true);
 }
 
 void InvoiceTypeDataTest::cleanupTestCase()
@@ -56,7 +58,7 @@ void InvoiceTypeDataTest::testCaseCheckDBFields_data()
     QTest::addColumn<int>("field_num");
 
     QTest::newRow("id_invoice_type") << QString("id_invoice_type") << (int)InvoiceTypeFields::ID_INVOICE_TYPE;
-    QTest::newRow("type") << QString("type") << (int)InvoiceTypeFields::TYPE;
+    QTest::newRow("invoice_type") << QString("invoice_type") << (int)InvoiceTypeFields::INVOICE_TYPE;
 }
 
 

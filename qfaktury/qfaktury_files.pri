@@ -52,11 +52,12 @@ HEADERS += src/ui/BillDialog.h \
     src/Money_t.h \
     src/ui/InvoiceDialogImpl.h \
     src/model/models_data/InvoiceNumberFormat_t.h \
-    src/model/models_data/InvoiceWithCommodities.h
+    src/model/models_data/InvoiceWithCommodities.h \
+    src/CommodityDelegate.h
 
 
 
-SOURCES += main.cpp \
+SOURCES += src/main.cpp \
     src/ui/BillDialog.cpp \
     src/ui/ChangeAmountDialog.cpp \
     src/ui/ComboBoxCurrentTextRW.cpp \
@@ -98,4 +99,5 @@ SOURCES += main.cpp \
     src/model/models/ModelInvoiceWithCommodities.cpp \
     src/ui/InvoiceDialogImpl.cpp \
     src/model/models_data/InvoiceNumberFormat_t.cpp \
-    src/SettingsGlobal.cpp
+    src/SettingsGlobal.cpp \
+    src/CommodityDelegate.cpp
