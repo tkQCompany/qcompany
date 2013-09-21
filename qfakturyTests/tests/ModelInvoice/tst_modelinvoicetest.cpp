@@ -2,13 +2,11 @@
 #include <QTest>
 
 #include "ModelInvoice.h"
+#include "Database.h"
 
 class ModelInvoiceTest : public QObject
 {
     Q_OBJECT
-    
-public:
-    ModelInvoiceTest();
     
 private Q_SLOTS:
     void initTestCase();
@@ -17,9 +15,13 @@ private Q_SLOTS:
     void testCaseSamePeriodValues_data();
     void testCaseCheckAllFields();
     void testCaseCheckAllFields_data();
+    void test_compatibilityWithOldGenerateInvoiceNumber();
+    void test_compatibilityWithOldGenerateInvoiceNumber_data();
 
 private:
     void generateCasesSamePeriodValues_(const size_t maxInvoicesPerDay, const size_t maxDays, const QDate &startDate, const int maxDaysWithoutInvoices);
+    QString generateInvoiceNumberOldVer(InvoiceTypeData::Type invType);
+    QString numbersCount(int in, int x);
     static bool isDayChanging_(const QDate &currentDate, const QDate &prevDate);
     static bool isMonthChanging_(const QDate &currentDate, const QDate &prevDate);
     static bool isQuarterChanging_(const QDate &currentDate, const QDate &prevDate);
@@ -30,9 +32,7 @@ private:
     InvoiceNumberFormat_t format_;
 };
 
-ModelInvoiceTest::ModelInvoiceTest()
-{
-}
+
 
 void ModelInvoiceTest::initTestCase()
 {
@@ -301,7 +301,74 @@ bool ModelInvoiceTest::isYearChanging_(const QDate &currentDate, const QDate &pr
 }
 
 
+void ModelInvoiceTest::test_compatibilityWithOldGenerateInvoiceNumber()
+{
+    Database db;
 
+    QFETCH(QString, format);
+    QFETCH(QString, invoiceNum);
+
+    //QCOMPARE(db.modelInvoice()->simulateConsecutiveInvoiceNumbers(), invoiceNum);
+}
+
+
+void ModelInvoiceTest::test_compatibilityWithOldGenerateInvoiceNumber_data()
+{
+    QTest::addColumn<QString>("format");
+    QTest::addColumn<QString>("invoiceNum");
+}
+
+
+QString ModelInvoiceTest::generateInvoiceNumberOldVer(InvoiceTypeData::Type invType)
+{//old code - for checking compatibility with previous versions
+    QString tmp, prefix, suffix;
+    SettingsGlobal s;
+
+    if(invType == InvoiceTypeData::PRO_FORMA)
+    {
+        tmp = s.value("fpro").toString();
+    }
+    else
+    {
+        tmp = s.value("fvat").toString();
+    }
+
+    prefix = s.value("prefix").toString();
+
+    QStringList one1 = tmp.split("/");
+    one1[0] = one1[0].remove(prefix);
+
+    int nr = one1[0].toInt() + 1;
+    QString lastInvoice = prefix + numbersCount(nr, 0);
+
+    if (s.value("day") .toBool())
+        lastInvoice += "/" + QDate::currentDate().toString("dd");
+
+    if (false) //sett().value("month") .toBool()
+        lastInvoice += "/" + QDate::currentDate().toString("MM");
+
+    if (s.value("year") .toBool()) {
+        if (!s.value("shortYear") .toBool())
+            lastInvoice += "/" + QDate::currentDate().toString("yy");
+        else
+            lastInvoice += "/" + QDate::currentDate().toString("yyyy");
+    }
+    suffix = s.value("sufix").toString();
+    lastInvoice += suffix;
+
+    return lastInvoice;
+}
+
+
+QString ModelInvoiceTest::numbersCount(int in, int x) {//old code - for checking compatibility with previous versions
+    SettingsGlobal s;
+    QString tmp2, tmp = s.numberToString(in);
+    tmp2 = "";
+    int incr = x - tmp.length();
+    for (int i = 0; i < incr; ++i)
+        tmp2 += "0";
+    return tmp2 + tmp;
+}
 
 QTEST_MAIN(ModelInvoiceTest)
 

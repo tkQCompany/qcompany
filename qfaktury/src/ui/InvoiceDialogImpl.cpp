@@ -210,6 +210,8 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
 
     ui->tableWidgetCommodities->setColumnCount(CommodityVisualFields::DISCOUNT - CommodityVisualFields::ID + 1);
 
+    retranslateUi();
+
     if(idEdit.isValid())
     {
         mapper.setCurrentIndex(idEdit.row());
@@ -224,7 +226,8 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
 
         SettingsGlobal s;
         const QString invoiceTypeStr(InvoiceTypeData::name(invoiceType));
-        setInitialComboBoxIndexes(invoiceTypeStr, PaymentTypeData::name(PaymentTypeData::CASH), s.value(s.DEFAULT_CURRENCY).toString());
+        setInitialComboBoxIndexes(invoiceTypeStr, PaymentTypeData::name(PaymentTypeData::CASH),
+                                  s.value(s.DEFAULT_CURRENCY).toString());
         parent_->setWindowTitle(trUtf8("Nowy dokument - %1 [*]").arg(invoiceTypeStr));
 
         updateInvoiceNumber();
@@ -236,7 +239,6 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
         }
     }
 
-    retranslateUi();
     isLoaded_ = true;
 }
 
@@ -260,8 +262,7 @@ void InvoiceDialogImpl::updateInvoiceNumber()
 {
     if( (!ui->lineEditInvNumFormat->text().isEmpty()) &&
             ui->dateEditDateOfIssuance->date().isValid() &&
-            (ui->comboBoxInvoiceType->currentIndex() != -1) &&
-            (ui->comboBoxCounterparties->currentIndex() != -1))
+            (ui->comboBoxInvoiceType->currentIndex() != -1))
     {
         SettingsGlobal s;
         const QString invNumFormat(ui->lineEditInvNumFormat->text().isEmpty()

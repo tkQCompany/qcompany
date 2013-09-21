@@ -78,7 +78,6 @@ void SettingsGlobal::resetSettings()
     setValue(keyName(NUMBER_OF_COPIES), 1);
     setValue(keyName(TAXID_MASK), "999-999-99-99; ");
     setValue(keyName(ACCOUNT_MASK), "99-9999-9999-9999-9999-9999-9999; ");
-    //setValue(keyName(FIRST_RUN), false);
     setValue(keyName(UNITS), trUtf8("szt.|kg.|g.|m.|km.|godz."));
     setValue(keyName(LOGO), "");
     setValue(keyName(PAYMENT_TYPE), trUtf8("gotówka|przelew|zaliczka"));
@@ -104,7 +103,7 @@ void SettingsGlobal::resetSettings()
     setValue(keyName(VAT_RATES), trUtf8("23|8|5|0|zw."));
     setValue(keyName(CSS), QString("style.css"));
     setValue(keyName(DEFAULT_INV_NUM_FORMAT), trUtf8("{TEKST1}/{R}-{M}-{D}/{NR_R}"));
-    setValue(keyName(DEFAULT_CURRENCY), CurrencyData::PLN);
+    setValue(keyName(DEFAULT_CURRENCY), CurrencyData::codeName(CurrencyData::PLN));
     setValue(keyName(COUNTRY), trUtf8("Polska"));
     setValue(keyName(TEXT1), trUtf8("F"));
     setValue(keyName(TEXT2), trUtf8(""));
