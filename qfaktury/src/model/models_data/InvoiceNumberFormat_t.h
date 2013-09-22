@@ -14,7 +14,7 @@ class InvoiceNumberFormat_t: public QObject
     Q_OBJECT
 public:
     enum Field {NR, NR_Y, NR_M, NR_D, NR_Q, INVOICE_TYPE, TEXT1, TEXT2, TEXT3,
-                PERIOD_YEAR, PERIOD_MONTH, PERIOD_DAY, PERIOD_QUARTER, SLASH, BACKSLASH, HYPHEN};
+                PERIOD_YEAR, PERIOD_SHORT_YEAR, PERIOD_MONTH, PERIOD_DAY, PERIOD_QUARTER, SLASH, BACKSLASH, HYPHEN};
     enum Separator {SEPARATOR_START = SLASH, SEPARATOR_END = HYPHEN};
 
     explicit InvoiceNumberFormat_t(QObject *parent = 0);

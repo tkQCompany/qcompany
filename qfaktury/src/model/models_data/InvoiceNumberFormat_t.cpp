@@ -83,6 +83,7 @@ QString InvoiceNumberFormat_t::FieldName(const InvoiceNumberFormat_t::Field fiel
     case TEXT2: return QObject::trUtf8("{TEKST2}");
     case TEXT3: return QObject::trUtf8("{TEKST3}");
     case PERIOD_YEAR: return QObject::trUtf8("{R}");
+    case PERIOD_SHORT_YEAR: return QObject::trUtf8("{KR}");
     case PERIOD_MONTH: return QObject::trUtf8("{M}");
     case PERIOD_DAY: return QObject::trUtf8("{D}");
     case PERIOD_QUARTER: return QObject::trUtf8("{K}");
@@ -125,7 +126,8 @@ QString InvoiceNumberFormat_t::FieldDescription(const InvoiceNumberFormat_t::Fie
     case TEXT1: return QObject::trUtf8("Tekst 1");
     case TEXT2: return QObject::trUtf8("Tekst 2");
     case TEXT3: return QObject::trUtf8("Tekst 3");
-    case PERIOD_YEAR: return QObject::trUtf8("Rok");
+    case PERIOD_YEAR: return QObject::trUtf8("Rok (RRRR)");
+    case PERIOD_SHORT_YEAR: return QObject::trUtf8("Rok (RR)");
     case PERIOD_MONTH: return QObject::trUtf8("Miesiąc");
     case PERIOD_DAY: return QObject::trUtf8("Dzień");
     case PERIOD_QUARTER: return QObject::trUtf8("Kwartał");
@@ -153,6 +155,7 @@ QString InvoiceNumberFormat_t::fieldToRegexpStr(const Field field, const Setting
     case TEXT2: return QString("(%1)").arg(s.value(s.TEXT2).toString());
     case TEXT3: return QString("(%1)").arg(s.value(s.TEXT3).toString());
     case PERIOD_YEAR:   return QString("(\\d{4})");
+    case PERIOD_SHORT_YEAR:   return QString("(\\d{2})");
     case PERIOD_MONTH:  return QString("(\\d\\d\?)");
     case PERIOD_DAY:    return QString("(\\d\\d\?)");
     case PERIOD_QUARTER:    return QString("(\\d\\d\?)");

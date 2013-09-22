@@ -98,6 +98,9 @@ QString ModelInvoice::generateInvoiceNumber(const InvoiceNumberFormat_t& invoice
         case InvoiceNumberFormat_t::PERIOD_YEAR:
             ret += issuanceDate.toString("yyyy");
             break;
+        case InvoiceNumberFormat_t::PERIOD_SHORT_YEAR:
+            ret += issuanceDate.toString("yy");
+            break;
         case InvoiceNumberFormat_t::PERIOD_MONTH:
             ret += issuanceDate.toString("MM");
             break;
