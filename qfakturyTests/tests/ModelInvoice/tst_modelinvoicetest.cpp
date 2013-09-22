@@ -1,8 +1,8 @@
 #include <QString>
 #include <QTest>
 
+#include "../TestsCommon.h"
 #include "ModelInvoice.h"
-#include "Database.h"
 
 class ModelInvoiceTest : public QObject
 {
@@ -36,6 +36,10 @@ private:
 
 void ModelInvoiceTest::initTestCase()
 {
+    TestsCommon::setAppData();
+    SettingsGlobal s;
+    s.setFirstRun(true);
+
     model_ = new ModelInvoice(this);
     qsrand(QTime::currentTime().msec());
 }
@@ -307,7 +311,6 @@ bool ModelInvoiceTest::isYearChanging_(const QDate &currentDate, const QDate &pr
 void ModelInvoiceTest::test_compatibilityWithOldGenerateInvoiceNumber()
 {
     SettingsGlobal s;
-    Database db;
 
     QFETCH(QStringList, format);
     QFETCH(QDate, issuanceDate);
@@ -320,7 +323,7 @@ void ModelInvoiceTest::test_compatibilityWithOldGenerateInvoiceNumber()
         fmt.append(InvoiceNumberFormat_t::FieldID(field), s);
     }
 
-    QCOMPARE(db.modelInvoice()->simulateConsecutiveInvoiceNumbers(fmt, issuanceDate,
+    QCOMPARE(model_->simulateConsecutiveInvoiceNumbers(fmt, issuanceDate,
                                                                   isVAT ? InvoiceTypeData::VAT: InvoiceTypeData::PRO_FORMA, 1).at(0), invoiceNum);
 }
 
