@@ -43,7 +43,7 @@ void CurrencyDataTest::testCaseCheckDBFields()
     QSqlQuery query(db.modelCurrency()->query());
 
     QVERIFY2(query.exec(QString("SELECT %1 FROM 'currency'").arg(field_name)),
-             QString("Missing DB field in the table 'currency': %1").arg(field_name).toAscii());
+             QString("Missing DB field in the table 'currency': %1").arg(field_name).toLatin1());
     QCOMPARE(db.modelCurrency()->fieldIndex(field_name), field_num);
 }
 

@@ -1,4 +1,4 @@
-QT += sql xml network
+QT += sql xml network widgets printsupport
 
 # The application version
 VERSION = 0.8.0

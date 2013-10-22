@@ -55,45 +55,52 @@ void MainWindow::init_()
 
     tableViewCounterparties->setModel(db_.modelCounterparty());
     tableViewCounterparties->setItemDelegate(new QSqlRelationalDelegate(tableViewCounterparties));
-    tableViewCounterparties->hideColumn(0);
-    tableViewCounterparties->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    tableViewCounterparties->hideColumn(0);    
 
     tableViewCommodities->setModel(db_.modelCommodity());
     tableViewCommodities->setItemDelegate(new QSqlRelationalDelegate(tableViewCommodities));
     tableViewCommodities->hideColumn(0);
-    tableViewCommodities->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 
     tableViewInvoices->setModel(db_.modelInvoice());
     tableViewInvoices->setItemDelegate(new QSqlRelationalDelegate(tableViewInvoices));
     tableViewInvoices->hideColumn(0);
+
+    #if QT_VERSION < 0x050000
+    tableViewCounterparties->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    tableViewCommodities->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     tableViewInvoices->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    #else
+    tableViewCounterparties->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    tableViewCommodities->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    tableViewInvoices->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    #endif
 
     this->setWindowTitle(QString("%1 - %2").arg(qApp->applicationName()).arg(qApp->applicationVersion()));
 
     // connect slots
-    connect(actionHelp_BugReport, SIGNAL (activated ()), this, SLOT(reportBug_()));
+    connect(actionHelp_BugReport, SIGNAL(triggered()), this, SLOT(reportBug_()));
     connect(toolButtonApply, SIGNAL (clicked()), this, SLOT(reReadInvHistory_()));
-    connect(actionProgram_CompanyInfo, SIGNAL(activated()), this, SLOT(editMyCompanyInfo()));
-    connect(actionProgram_Exit, SIGNAL(activated()), this, SLOT(close()));
-    connect(actionCounterparties_Add, SIGNAL(activated()), this, SLOT(addCounterparty_()));
-    connect(actionCounterparties_Remove, SIGNAL(activated()), this, SLOT(delCounterparty_()));
-    connect(actionCounterparties_Edit, SIGNAL(activated()), this, SLOT(editCounterparty_()));
-    connect(actionInvoices_InvoiceNew, SIGNAL(activated()), this, SLOT(newInvoice_()));
-    connect(actionInvoices_Remove, SIGNAL(activated()), this, SLOT(delInvoice_()));
+    connect(actionProgram_CompanyInfo, SIGNAL(triggered()), this, SLOT(editMyCompanyInfo()));
+    connect(actionProgram_Exit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(actionCounterparties_Add, SIGNAL(triggered()), this, SLOT(addCounterparty_()));
+    connect(actionCounterparties_Remove, SIGNAL(triggered()), this, SLOT(delCounterparty_()));
+    connect(actionCounterparties_Edit, SIGNAL(triggered()), this, SLOT(editCounterparty_()));
+    connect(actionInvoices_InvoiceNew, SIGNAL(triggered()), this, SLOT(newInvoice_()));
+    connect(actionInvoices_Remove, SIGNAL(triggered()), this, SLOT(delInvoice_()));
     connect(actionInvoices_Edit, SIGNAL(triggered()), this, SLOT(editInvoice_()));
-    connect(actionInvoices_InvoiceDuplicate, SIGNAL(activated()), this, SLOT(newDuplicate_()));
-    connect(actionInvoices_InvoiceGross, SIGNAL(activated()), this, SLOT(newGrossInvoice_()));
-    connect(actionInvoices_Bill, SIGNAL(activated()), this, SLOT(newBill_()));
-    connect(actionInvoices_InvoiceCorrective, SIGNAL(activated()), this, SLOT(newCorrection_()));
-    connect(actionInvoices_InvoiceProForma, SIGNAL(activated()), this, SLOT(newProFormaInvoice_()));
-    connect(actionCommodities_Add, SIGNAL(activated()), this, SLOT(addCommodity_()));
-    connect(actionCommodities_Edit, SIGNAL(activated()), this, SLOT(editCommodity_()));
-    connect(actionCommodities_Remove, SIGNAL(activated()), this, SLOT(delCommodity_()));
-    connect(actionHelp_AboutQt, SIGNAL(activated()), this, SLOT(aboutQt_()));
-    connect(actionHelp_About, SIGNAL(activated()), this, SLOT(about_()));
-    connect(actionProgram_Settings, SIGNAL(activated()), this, SLOT(editSettings_()));
-    connect(tabWidgetMain, SIGNAL(currentChanged(QWidget*)), this, SLOT(tabChanged_(QWidget*)));
-    connect(actionHelp_Help, SIGNAL(activated()), this, SLOT(help_()));
+    connect(actionInvoices_InvoiceDuplicate, SIGNAL(triggered()), this, SLOT(newDuplicate_()));
+    connect(actionInvoices_InvoiceGross, SIGNAL(triggered()), this, SLOT(newGrossInvoice_()));
+    connect(actionInvoices_Bill, SIGNAL(triggered()), this, SLOT(newBill_()));
+    connect(actionInvoices_InvoiceCorrective, SIGNAL(triggered()), this, SLOT(newCorrection_()));
+    connect(actionInvoices_InvoiceProForma, SIGNAL(triggered()), this, SLOT(newProFormaInvoice_()));
+    connect(actionCommodities_Add, SIGNAL(triggered()), this, SLOT(addCommodity_()));
+    connect(actionCommodities_Edit, SIGNAL(triggered()), this, SLOT(editCommodity_()));
+    connect(actionCommodities_Remove, SIGNAL(triggered()), this, SLOT(delCommodity_()));
+    connect(actionHelp_AboutQt, SIGNAL(triggered()), this, SLOT(aboutQt_()));
+    connect(actionHelp_About, SIGNAL(triggered()), this, SLOT(about_()));
+    connect(actionProgram_Settings, SIGNAL(triggered()), this, SLOT(editSettings_()));
+    connect(tabWidgetMain, SIGNAL(currentChanged(int)), this, SLOT(tabChanged_(int)));
+    connect(actionHelp_Help, SIGNAL(triggered()), this, SLOT(help_()));
     connect(tableViewInvoices, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editInvoice_()));
     connect(tableViewInvoices, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTableMenuHistory_(QPoint)));
     connect(tableViewCounterparties, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editCounterparty_()));
@@ -105,7 +112,7 @@ void MainWindow::init_()
     connect(tableViewCounterparties, SIGNAL(clicked(QModelIndex)), this, SLOT(mainUpdateStatus_(QModelIndex)));
     connect(tableViewCommodities, SIGNAL(clicked(QModelIndex)), this, SLOT(mainUpdateStatus_(QModelIndex)));
 
-    tabChanged_(tabWidgetMain);
+    tabChanged_(tabWidgetMain->currentIndex());
     loadPlugins();
 }
 
@@ -398,10 +405,10 @@ void MainWindow::mainUpdateStatus_(QModelIndex index)
  *
  * @param widget
  */
-void MainWindow::tabChanged_(QWidget * widget)
+void MainWindow::tabChanged_(int index)
 {
     // disable Edit and Remove actions _ONLY_
-    switch (tabWidgetMain->indexOf(widget))
+    switch (index)
     {
     case 1: //counterparties
         setActions_(true, true, false, false, false, false);

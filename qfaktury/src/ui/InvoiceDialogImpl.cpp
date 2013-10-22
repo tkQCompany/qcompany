@@ -11,6 +11,7 @@
 #include "ui_InvoiceDialog.h"
 #include "Database.h"
 #include "CounterpartyInfoDialog.h"
+#include "CommodityDialog.h"
 #include "CommodityListDialog.h"
 #include "Money_t.h"
 #include "CustomPaymentDialog.h"
@@ -30,7 +31,7 @@
 
 InvoiceDialogImpl::InvoiceDialogImpl(QWidget *parent, Database *database)
     : QObject(parent), parent_((QDialog*)parent), ui(new Ui::InvoiceDialog()),
-      db(database), isLoaded_(false)
+      db(database), commodityDialog(0), commodityListDialog(0), counterpartyDialog(0), isLoaded_(false)
 {
 }
 
@@ -56,15 +57,6 @@ void InvoiceDialogImpl::fillTableCommodity(const QList<CommodityVisualData> &com
             ui->tableWidgetCommodities->setItem(r, c, new QTableWidgetItem(commodities.at(r).field(c)));
         }
     }
-
-    QStringList headers;
-    for(int c = CommodityVisualFields::ID; c <= CommodityVisualFields::DISCOUNT; ++c)
-    {
-        headers.append(CommodityVisualData::header(c));
-    }
-    ui->tableWidgetCommodities->setHorizontalHeaderLabels(headers);
-    ui->tableWidgetCommodities->hideColumn(CommodityVisualFields::ID);
-    ui->tableWidgetCommodities->resizeColumnsToContents();
 }
 
 
@@ -155,6 +147,7 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
     ui->dateEditDayOfPayment->setDate(QDate::currentDate());
 
     connect(ui->pushButtonAddCommodity, SIGNAL(clicked()), this, SLOT(addCommodity()));
+    connect(ui->pushButtonAddNewCommodity, SIGNAL(clicked()), this, SLOT(addNewCommodity()));
     connect(ui->pushButtonMoreInfo, SIGNAL(clicked()), this, SLOT(counterpartyMoreInfo()));
     connect(ui->pushButtonRemoveCommodity, SIGNAL(clicked()), this, SLOT(delCommodity()));
     connect(ui->pushButtonEditCommodity, SIGNAL(clicked()), this, SLOT(editCommodity()));
@@ -209,6 +202,7 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
     mapper.addMapping(ui->spinBoxDiscount, InvoiceFields::DISCOUNT);
 
     ui->tableWidgetCommodities->setColumnCount(CommodityVisualFields::DISCOUNT - CommodityVisualFields::ID + 1);
+    setHeaders();
 
     retranslateUi();
 
@@ -255,6 +249,19 @@ void InvoiceDialogImpl::setInitialComboBoxIndexes(const QString &invoiceType,
     ui->comboBoxInvoiceType->setCurrentIndex(ui->comboBoxInvoiceType->findText(invoiceType));
     ui->comboBoxPayment->setCurrentIndex(ui->comboBoxPayment->findText(paymentType));
     ui->comboBoxCurrency->setCurrentIndex(ui->comboBoxCurrency->findText(defaultCurrency));
+}
+
+
+void InvoiceDialogImpl::setHeaders()
+{
+    QStringList headers;
+    for(int c = CommodityVisualFields::ID; c <= CommodityVisualFields::DISCOUNT; ++c)
+    {
+        headers.append(CommodityVisualData::header(c));
+    }
+    ui->tableWidgetCommodities->setHorizontalHeaderLabels(headers);
+    ui->tableWidgetCommodities->hideColumn(CommodityVisualFields::ID);
+    ui->tableWidgetCommodities->resizeColumnsToContents();
 }
 
 
@@ -357,8 +364,8 @@ bool InvoiceDialogImpl::validateForm()
  */
 void InvoiceDialogImpl::counterpartyAdd()
 {
-    CounterpartyDialog dialog(parent_, db);
-    if (dialog.exec() == QDialog::Accepted)
+    counterpartyDialog = new CounterpartyDialog(parent_, db);
+    if (counterpartyDialog->exec() == QDialog::Accepted)
     {
         if(db->modelCounterparty()->submitAll())
         {
@@ -369,6 +376,8 @@ void InvoiceDialogImpl::counterpartyAdd()
             QMessageBox::warning(parent_, trUtf8("Błąd dodawania kontrahenta"), db->modelCounterparty()->lastError().text());
         }
     }
+    delete counterpartyDialog;
+    counterpartyDialog = 0;
 }
 
 
@@ -526,30 +535,44 @@ void InvoiceDialogImpl::discountChange()
  */
 void InvoiceDialogImpl::addCommodity()
 {
-    CommodityListDialog dialog(parent_, db);
-    if (dialog.exec() == QDialog::Accepted)
+    commodityListDialog = new CommodityListDialog(parent_, db);
+    if (commodityListDialog->exec() == QDialog::Accepted)
     {
         const int rowNum = ui->tableWidgetCommodities->rowCount() == 0 ? 0 : ui->tableWidgetCommodities->rowCount() - 1;
         ui->tableWidgetCommodities->insertRow(rowNum);
-
-        QStringList headers;
         for(int i = CommodityVisualFields::ID; i <= CommodityVisualFields::DISCOUNT; ++i)
         {
-            ui->tableWidgetCommodities->setItem(rowNum, i, new QTableWidgetItem(dialog.ret.field(i)));
-            headers.push_back(CommodityVisualData::header(i));
+            ui->tableWidgetCommodities->setItem(rowNum, i, new QTableWidgetItem(commodityListDialog->ret.field(i)));
         }
-
-        ui->tableWidgetCommodities->hideColumn(CommodityVisualFields::ID);
-        ui->tableWidgetCommodities->setHorizontalHeaderLabels(headers);
-        ui->tableWidgetCommodities->resizeColumnsToContents();
 
         ui->pushButtonSave->setEnabled(true);
         parent_->setWindowModified(true);
         calculateSum();
 
-        db->modelCommodity()->changeAmount(dialog.ret.field(CommodityVisualFields::ID),
-                 -dialog.ret.field(CommodityVisualFields::QUANTITY).toDouble()); //TODO: introduce qDecimals here
+        db->modelCommodity()->changeAmount(commodityListDialog->ret.field(CommodityVisualFields::ID),
+                 -commodityListDialog->ret.field(CommodityVisualFields::QUANTITY).toDouble()); //TODO: introduce qDecimals here
     }
+    delete commodityListDialog;
+    commodityListDialog = 0;
+}
+
+
+/**
+ * @brief
+ *
+ */
+void InvoiceDialogImpl::addNewCommodity()
+{
+    commodityDialog = new CommodityDialog(parent_, db);
+    if (commodityDialog->exec() == QDialog::Accepted)
+    {
+        if(! db->modelCommodity()->submitAll())
+        {
+            QMessageBox::warning(parent_, trUtf8("Błąd dodawania towaru"), db->modelCommodity()->lastError().text());
+        }
+    }
+    delete commodityDialog;
+    commodityDialog = 0;
 }
 
 

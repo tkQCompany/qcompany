@@ -35,31 +35,31 @@ public:
      */
     virtual ~CounterpartyDialog();
 
-private slots:
+protected slots:
     /**
      * @brief
      *
      */
-    void editCounterpartyTypeList_();
+    void editCounterpartyTypeList();
     /**
      * @brief
      *
      */
-    void editEmailList_();
+    void editEmailList();
     /**
      * @brief
      *
      */
-    void editPhoneList_();
+    void editPhoneList();
 
-    void editFormat_();
+    void editFormat();
     /**
      * @brief
      *
      */
-    void okClick_();
+    void okClick();
 
-    void showExamples_();
+    void showExamples();
 private:
     /**
      * @brief

@@ -135,7 +135,7 @@ void InvoiceNumberFormat_tTest::testCaseAppend_data()
 
     for(int i = 0; i < appendTest_.size(); ++i)
     {
-        QTest::newRow(QString("%1").arg(i).toAscii()) << appendTest_.field(i)   << i << appendTest_.expectedValue(i);
+        QTest::newRow(QString("%1").arg(i).toLatin1()) << appendTest_.field(i)   << i << appendTest_.expectedValue(i);
     }
 }
 

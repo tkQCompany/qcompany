@@ -48,7 +48,7 @@ void InvoiceTypeDataTest::testCaseCheckDBFields()
     QSqlQuery query(db.modelInvoiceType()->query());
 
     QVERIFY2(query.exec(QString("SELECT %1 FROM 'invoice_type'").arg(field_name)),
-             QString("Missing DB field in the table 'invoice_type': %1").arg(field_name).toAscii());
+             QString("Missing DB field in the table 'invoice_type': %1").arg(field_name).toLatin1());
     QCOMPARE(db.modelInvoiceType()->fieldIndex(field_name), field_num);
 }
 

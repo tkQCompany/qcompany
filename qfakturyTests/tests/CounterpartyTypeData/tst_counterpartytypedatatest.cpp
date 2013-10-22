@@ -43,7 +43,7 @@ void CounterpartyTypeDataTest::testCaseCheckDBFields()
     QSqlQuery query(db.modelCounterpartyType()->query());
 
     QVERIFY2(query.exec(QString("SELECT %1 FROM 'counterparty_type'").arg(field_name)),
-             QString("Missing DB field in the table 'counterparty_type': %1").arg(field_name).toAscii());
+             QString("Missing DB field in the table 'counterparty_type': %1").arg(field_name).toLatin1());
     QCOMPARE(db.modelCounterpartyType()->fieldIndex(field_name), field_num);
 }
 

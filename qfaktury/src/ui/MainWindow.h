@@ -27,7 +27,7 @@ public slots:
     void editMyCompanyInfo();
 
 protected slots:
-    void tabChanged_(QWidget * widget);
+    void tabChanged_(int index);
     void aboutQt_();
     void about_();
     void addCommodity_();

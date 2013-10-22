@@ -123,7 +123,7 @@ void ModelInvoiceTest::testCaseCheckAllFields_data()
     long nr = 1;
     QDate issuanceDate, prevIssuanceDate;
     QString desiredInvNum, prevInvNum;
-    issuanceDate.setYMD(2011, 1, 1);
+    issuanceDate.setDate(2011, 1, 1);
     const InvoiceTypeData::Type invoiceType = InvoiceTypeData::VAT;
 
     const size_t maxDays = 400; //the whole year + some days
@@ -145,7 +145,7 @@ void ModelInvoiceTest::testCaseCheckAllFields_data()
                     .arg(issuanceDate.month(), fieldWidth, base, padding)
                     .arg(issuanceDate.day(), fieldWidth, base, padding)
                     .arg(1+ (issuanceDate.month() - 1)/3, fieldWidth, base, padding);
-            QTest::newRow((QString("%1").arg(nr)).toAscii())
+            QTest::newRow((QString("%1").arg(nr)).toLatin1())
                     << desiredInvNum
                     << prevInvNum
                     << issuanceDate
@@ -220,7 +220,7 @@ void ModelInvoiceTest::generateCasesSamePeriodValues_(const size_t maxInvoicesPe
     long nr = 1;
     QDate currIssuanceDate, prevIssuanceDate;
     QString currInvNum, prevInvNum;
-    currIssuanceDate.setYMD(startDate.year(), startDate.month(), startDate.day());
+    currIssuanceDate.setDate(startDate.year(), startDate.month(), startDate.day());
     size_t invoicesPerDay = 0;
     const int fieldWidth = 2;
     const int base = 10;
@@ -238,7 +238,7 @@ void ModelInvoiceTest::generateCasesSamePeriodValues_(const size_t maxInvoicesPe
                     .arg(currIssuanceDate.day(), fieldWidth, base, padding)
                     .arg(1 + (currIssuanceDate.month()-1)/3, fieldWidth, base, padding);
 
-            QTest::newRow(QString("%1").arg(nr).toAscii())
+            QTest::newRow(QString("%1").arg(nr).toLatin1())
                     << currInvNum
                     << prevInvNum
                     << currIssuanceDate

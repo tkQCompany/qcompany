@@ -33,7 +33,7 @@ public:
      * @brief
      *
      */
-    ~CommodityDialog();
+    virtual ~CommodityDialog();
 
 protected slots:
     /**

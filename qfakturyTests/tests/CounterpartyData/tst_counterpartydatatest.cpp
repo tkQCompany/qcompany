@@ -45,7 +45,7 @@ void CounterpartyDataTest::testCaseCheckDBFields()
     const QSqlRecord rec(query.record());
 
     QVERIFY2(query.exec(QString("SELECT %1 FROM 'counterparty'").arg(field_real_name)),
-             QString("Missing DB field in the table 'counterparty': %1").arg(field_real_name).toAscii());
+             QString("Missing DB field in the table 'counterparty': %1").arg(field_real_name).toLatin1());
     QCOMPARE(rec.fieldName(field_num), field_name);
 }
 

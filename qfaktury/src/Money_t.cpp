@@ -16,7 +16,7 @@ Money_t::Money_t()
 Money_t::Money_t(const QString &val)
 {
     Money_t();
-    value_.fromString(val.toAscii(), &context_);
+    value_.fromString(val.toLatin1(), &context_);
 }
 
 short Money_t::digit_(const QDecNumber &num, const int index) const

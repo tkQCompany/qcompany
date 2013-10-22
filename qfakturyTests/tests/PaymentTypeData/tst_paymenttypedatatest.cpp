@@ -47,7 +47,7 @@ void PaymentTypeDataTest::testCaseCheckDBFields()
     QSqlQuery query(db.modelPaymentType()->query());
 
     QVERIFY2(query.exec(QString("SELECT %1 FROM 'payment_type'").arg(field_name)),
-             QString("Missing DB field in the table 'payment_type': %1").arg(field_name).toAscii());
+             QString("Missing DB field in the table 'payment_type': %1").arg(field_name).toLatin1());
     QCOMPARE(db.modelPaymentType()->fieldIndex(field_name), field_num);
 }
 

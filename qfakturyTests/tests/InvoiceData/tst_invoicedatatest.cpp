@@ -40,7 +40,7 @@ void InvoiceDataTest::testCaseCaseCheckDBFields()
     QSqlQuery query(db.modelInvoice()->query());
 
     QVERIFY2(query.exec(QString("SELECT %1 FROM 'invoice'").arg(field_real_name)),
-             QString("Missing DB field in the table 'invoice': %1").arg(field_real_name).toAscii());
+             QString("Missing DB field in the table 'invoice': %1").arg(field_real_name).toLatin1());
     QCOMPARE(db.modelInvoice()->fieldIndex(field_name), field_num);
 }
 

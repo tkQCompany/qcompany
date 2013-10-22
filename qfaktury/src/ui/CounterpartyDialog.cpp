@@ -63,12 +63,12 @@ CounterpartyDialog::CounterpartyDialog(QWidget *parent, Database *db, const QMod
         ui->lineEditInvNumberFormat->setText(s.value(s.DEFAULT_INV_NUM_FORMAT).toString());
     }
 
-    connect(ui->pushButtonOK, SIGNAL(clicked()), this, SLOT(okClick_()));
-    connect(ui->pushButtonEditTypeList, SIGNAL(clicked()), this, SLOT(editCounterpartyTypeList_()));
-    connect(ui->pushButtonEditEmailList, SIGNAL(clicked()), this, SLOT(editEmailList_()));
-    connect(ui->pushButtonEditFormat, SIGNAL(clicked()), this, SLOT(editFormat_()));
-    connect(ui->pushButtonEditPhoneList, SIGNAL(clicked()), this, SLOT(editPhoneList_()));
-    connect(ui->pushButtonShowExamples, SIGNAL(clicked()), this, SLOT(showExamples_()));
+    connect(ui->pushButtonOK, SIGNAL(clicked()), this, SLOT(okClick()));
+    connect(ui->pushButtonEditTypeList, SIGNAL(clicked()), this, SLOT(editCounterpartyTypeList()));
+    connect(ui->pushButtonEditEmailList, SIGNAL(clicked()), this, SLOT(editEmailList()));
+    connect(ui->pushButtonEditFormat, SIGNAL(clicked()), this, SLOT(editFormat()));
+    connect(ui->pushButtonEditPhoneList, SIGNAL(clicked()), this, SLOT(editPhoneList()));
+    connect(ui->pushButtonShowExamples, SIGNAL(clicked()), this, SLOT(showExamples()));
 }
 
 
@@ -116,7 +116,7 @@ void CounterpartyDialog::init_()
 }
 
 
-void CounterpartyDialog::okClick_()
+void CounterpartyDialog::okClick()
 {
     if(validate_())
     {
@@ -207,7 +207,7 @@ QString CounterpartyDialog::isEmpty_(const QString &in)
 }
 
 
-void CounterpartyDialog::editCounterpartyTypeList_()
+void CounterpartyDialog::editCounterpartyTypeList()
 {
     CounterpartyTypeDialog dialog(this, db);
     db->modelCounterpartyType()->setMyCompanyVisible(false);
@@ -226,7 +226,7 @@ void CounterpartyDialog::editCounterpartyTypeList_()
 }
 
 
-void CounterpartyDialog::editEmailList_()
+void CounterpartyDialog::editEmailList()
 {
     EmailDialog dialog(this, db, id);
     if(dialog.exec() == QDialog::Accepted)
@@ -243,7 +243,7 @@ void CounterpartyDialog::editEmailList_()
 }
 
 
-void CounterpartyDialog::editPhoneList_()
+void CounterpartyDialog::editPhoneList()
 {
     PhoneDialog dialog(this, db, id);
     if(dialog.exec() == QDialog::Accepted)
@@ -260,7 +260,7 @@ void CounterpartyDialog::editPhoneList_()
 }
 
 
-void CounterpartyDialog::editFormat_()
+void CounterpartyDialog::editFormat()
 {
     InvoiceNumberFormatEditDialog dialog(this, db, ui->lineEditInvNumberFormat->text());
     if(QDialog::Accepted == dialog.exec())
@@ -270,7 +270,7 @@ void CounterpartyDialog::editFormat_()
 }
 
 
-void CounterpartyDialog::showExamples_()
+void CounterpartyDialog::showExamples()
 {
     InvoiceNumberFormatExamplesDialog dialog(this, db, ui->lineEditInvNumberFormat->text(), ui->lineEditName->text());
     dialog.exec();

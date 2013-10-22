@@ -37,7 +37,8 @@ public:
     virtual ~CommodityListDialog();
 public:
     CommodityVisualData ret; /**< TODO */
-private slots:
+
+protected slots:
     /**
      * @brief
      *

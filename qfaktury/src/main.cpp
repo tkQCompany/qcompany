@@ -15,9 +15,11 @@ int main(int argc, char **argv)
 {
 	QApplication a(argc, argv);
 
-    QTextCodec::setCodecForCStrings (QTextCodec::codecForName ("UTF-8"));
-    QTextCodec::setCodecForLocale (QTextCodec::codecForName ("UTF-8"));
-    QTextCodec::setCodecForTr (QTextCodec::codecForName ("UTF-8"));
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName ("UTF-8"));
+#if QT_VERSION < 0x050000
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName ("UTF-8"));
+    QTextCodec::setCodecForTr(QTextCodec::codecForName ("UTF-8"));
+#endif
 
     a.setApplicationName("QFaktury");
     a.setOrganizationName("www.e-linux.pl");

@@ -138,4 +138,7 @@ struct CommodityVisualData
     QString discount; /**< TODO */
 };
 
+Q_DECLARE_METATYPE(CommodityVisualData)
+Q_DECLARE_METATYPE(QList<CommodityVisualData>)
+
 #endif // COMMODITYVISUALDATA_H

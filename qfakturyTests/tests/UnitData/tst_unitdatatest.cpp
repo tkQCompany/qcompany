@@ -47,7 +47,7 @@ void UnitDataTest::testCaseCheckDBFields()
     QSqlQuery query(db.modelUnit()->query());
 
     QVERIFY2(query.exec(QString("SELECT %1 FROM 'unit'").arg(field_name)),
-             QString("Missing DB field in the table 'unit': %1").arg(field_name).toAscii());
+             QString("Missing DB field in the table 'unit': %1").arg(field_name).toLatin1());
     QCOMPARE(db.modelUnit()->fieldIndex(field_name), field_num);
 }
 

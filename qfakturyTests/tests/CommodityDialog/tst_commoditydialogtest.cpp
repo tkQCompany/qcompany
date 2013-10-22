@@ -139,33 +139,36 @@ void CommodityDialogTest::testCase_AddCommodity_data()
     QTest::addColumn<QString>("net3");
     QTest::addColumn<QString>("net4");
     QTest::addColumn<double>("quantity");
+
+    SettingsGlobal s;
+
     QTest::newRow("1") << QString("nameTest1") << QString("abbrTest1") << QString("pkwiuTest1")
                        << CommodityTypeData::name(CommodityTypeData::GOODS) << UnitData::name(UnitData::UNIT) << 0
-                       << QString("1.23") << QString("2.23") << QString("3.23") << QString("4.23")
+                       << s.numberToString(1.23) << s.numberToString(2.23) << s.numberToString(3.23) << s.numberToString(4.23)
                        << 5.231;
     QTest::newRow("2") << QString("nameTest2") << QString("abbrTest2") << QString("pkwiuTest2")
                        << CommodityTypeData::name(CommodityTypeData::GOODS) << UnitData::name(UnitData::KG) << 0
-                       << QString("1.23") << QString("2.23") << QString("3.23") << QString("4.23")
+                       << s.numberToString(1.23) << s.numberToString(2.23) << s.numberToString(3.23) << s.numberToString(4.23)
                        << 5.231;
     QTest::newRow("3") << QString("nameTest3") << QString("abbrTest3") << QString("pkwiuTest3")
                        << CommodityTypeData::name(CommodityTypeData::GOODS) << UnitData::name(UnitData::G) << 0
-                       << QString("1.23") << QString("2.23") << QString("3.23") << QString("4.23")
+                       << s.numberToString(1.23) << s.numberToString(2.23) << s.numberToString(3.23) << s.numberToString(4.23)
                        << 5.231;
     QTest::newRow("4") << QString("nameTest4") << QString("abbrTest4") << QString("pkwiuTest4")
                        << CommodityTypeData::name(CommodityTypeData::GOODS) << UnitData::name(UnitData::M) << 0
-                       << QString("1.23") << QString("2.23") << QString("3.23") << QString("4.23")
+                       << s.numberToString(1.23) << s.numberToString(2.23) << s.numberToString(3.23) << s.numberToString(4.23)
                        << 5.231;
     QTest::newRow("5") << QString("nameTest5") << QString("abbrTest5") << QString("pkwiuTest5")
                        << CommodityTypeData::name(CommodityTypeData::GOODS) << UnitData::name(UnitData::KM) << 0
-                       << QString("1.23") << QString("2.23") << QString("3.23") << QString("4.23")
+                       << s.numberToString(1.23) << s.numberToString(2.23) << s.numberToString(3.23) << s.numberToString(4.23)
                        << 5.231;
     QTest::newRow("6") << QString("nameTest6") << QString("abbrTest6") << QString("pkwiuTest6")
                        << CommodityTypeData::name(CommodityTypeData::GOODS) << UnitData::name(UnitData::HOUR) << 0
-                       << QString("1.23") << QString("2.23") << QString("3.23") << QString("4.23")
+                       << s.numberToString(1.23) << s.numberToString(2.23) << s.numberToString(3.23) << s.numberToString(4.23)
                        << 5.231;
     QTest::newRow("7") << QString("nameTest7") << QString("abbrTest7") << QString("pkwiuTest7")
                        << CommodityTypeData::name(CommodityTypeData::GOODS) << UnitData::name(UnitData::PACKAGE) << 0
-                       << QString("1.23") << QString("2.23") << QString("3.23") << QString("4.23")
+                       << s.numberToString(1.23) << s.numberToString(2.23) << s.numberToString(3.23) << s.numberToString(4.23)
                        << 5.231;
 }
 

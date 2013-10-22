@@ -43,7 +43,7 @@ void EmailDataTest::testCaseCheckDBFields()
     QSqlQuery query(db.modelEmail()->query());
 
     QVERIFY2(query.exec(QString("SELECT %1 FROM 'additional_email'").arg(field_name)),
-             QString("Missing DB field in the table 'additional_email': %1").arg(field_name).toAscii());
+             QString("Missing DB field in the table 'additional_email': %1").arg(field_name).toLatin1());
     QCOMPARE(db.modelEmail()->fieldIndex(field_name), field_num);
 }
 

@@ -54,7 +54,7 @@ void Money_tTest::testCasePLN_data()
     for(int i = 0; i < 100; ++i)
     {
         const QString textNumberFormatDot(QString("0.%1").arg(i, fieldWidth, radix, fillChar));
-        QTest::newRow(textNumberFormatDot.toAscii()) << textNumberFormatDot << currency
+        QTest::newRow(textNumberFormatDot.toLatin1()) << textNumberFormatDot << currency
                                                      << QString("zero złotych %1/100 PLN").arg(i, fieldWidth, radix, fillChar);
     }
     QTest::newRow("1,00") << "1.0" << currency << QString("jeden złoty 00/100 PLN");

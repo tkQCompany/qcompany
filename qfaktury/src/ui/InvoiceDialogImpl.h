@@ -12,6 +12,10 @@
 
 class QTableWidgetItem;
 class CustomPaymData;
+class CommodityDialog;
+class CommodityListDialog;
+class CounterpartyDialog;
+class QPrinter;
 
 namespace Ui
 {
@@ -74,6 +78,8 @@ public:
                                     const QString &paymentType,
                                     const QString &defaultCurrency);
 
+    void setHeaders();
+
     /**
      * @brief
      *
@@ -121,6 +127,12 @@ public slots:
      *
      */
     virtual void addCommodity();
+
+    /**
+     * @brief
+     *
+     */
+    virtual void addNewCommodity();
     /**
      * @brief
      *
@@ -178,6 +190,9 @@ public:
     Database *db; /**< TODO */
     QDataWidgetMapper mapper; /**< TODO */
     CustomPaymData *custPaymData; /**< TODO */
+    CommodityDialog *commodityDialog;
+    CommodityListDialog *commodityListDialog;
+    CounterpartyDialog *counterpartyDialog;
     bool isLoaded_;
     double discountTotal, netTotal, grossTotal; /**< TODO */
     QString docHTML;

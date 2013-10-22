@@ -44,7 +44,7 @@ void PhoneDataTest::testCaseCheckDBFields()
     QSqlQuery query(db.modelPhone()->query());
 
     QVERIFY2(query.exec(QString("SELECT %1 FROM 'additional_phone'").arg(field_real_name)),
-             QString("Missing DB field in the table 'additional_phone': %1").arg(field_real_name).toAscii());
+             QString("Missing DB field in the table 'additional_phone': %1").arg(field_real_name).toLatin1());
     QCOMPARE(db.modelPhone()->fieldIndex(field_name), field_num);
 }
 
