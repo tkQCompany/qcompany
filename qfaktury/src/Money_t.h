@@ -11,10 +11,12 @@ public:
     Money_t();
     Money_t(double val);
     Money_t(const QString &val);
+
     CurrencyData::Currencies getCurrency() const {return currency_; }
     void setCurrency(CurrencyData::Currencies currency) {currency_ = currency; }
 
     QString verballyPL() const;
+    QString toString() const;
 
 private:
     CurrencyData::Currencies currency_;
@@ -25,5 +27,7 @@ private:
     short digit_(const QDecNumber &num, const int index) const;
     QString verballyPL1_999(const QDecNumber &val) const;
 };
+
+Q_DECLARE_METATYPE(Money_t)
 
 #endif // MONEY_T_H

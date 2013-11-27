@@ -2,6 +2,7 @@
 #include <QSqlError>
 #include <QMenu>
 #include <QContextMenuEvent>
+#include <QDebug>
 
 #include "PhoneDialog.h"
 #include "ui_PhoneDialog.h"

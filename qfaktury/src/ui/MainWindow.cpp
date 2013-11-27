@@ -8,6 +8,8 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QUrl>
+#include <QTextStream>
+#include <QDebug>
 
 #include "MainWindow.h"
 #include "CounterpartyDialog.h"
@@ -475,7 +477,7 @@ void MainWindow::editInvoice_()
 
     QSqlQuery query(db_.modelInvoiceType()->query());
     const int firstInvoice = 0;
-    query.exec(QString("SELECT `id_invoice_type` FROM `invoice_type` WHERE `type` = '%1'")
+    query.exec(QString("SELECT `id_invoice_type` FROM `invoice_type` WHERE `invoice_type` = '%1'")
                                 .arg(db_.modelInvoice()->data(db_.modelInvoice()->index(list.at(firstInvoice).row(),
                                 InvoiceFields::TYPE_ID)).toString()));
     qint64 invType = -1;
@@ -524,6 +526,8 @@ void MainWindow::editInvoice_()
         break;
     default:
         qDebug("MainWindow::editInvoice() switch: unexpected value: %lld", invType);
+        qDebug("lastQuery(): %s", qPrintable(query.lastQuery()));
+        qDebug("lastError(): %s", qPrintable(query.lastError().text()));
         break;
     }
 }

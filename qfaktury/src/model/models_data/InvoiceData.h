@@ -9,7 +9,7 @@
 #define INVOICEDATA_H
 
 #include <QDate>
-#include <QDebug>
+#include <QVariant>
 
 #include "QDecNumber.hh"
 #include "QDecContext.hh"
@@ -56,7 +56,7 @@ public:
         case InvoiceFields::ADDIT_TEXT:         return additText_;
         case InvoiceFields::DISCOUNT:           return discount_;
         default:
-            qDebug() << QString("Unknown index in field(): (index=%1) detected in %2, line=%3.").arg(i).arg(__FILE__).arg(__LINE__);
+            qDebug("Unknown index in field(): (index=%d) detected in %s, line=%d.", i, __FILE__, __LINE__);
             return var;
         }
     }
@@ -99,7 +99,8 @@ public:
             discount_ = val.toInt();
             break;
         default:
-            qDebug() << QString("Unknown index in setField(): (index = %1, val=%2) detected in %3, line=%4.").arg(i).arg(val.toString()).arg(__FILE__).arg(__LINE__);
+            qDebug("Unknown index in setField(): (index = %d, val=%s) detected in %s, line=%d.",
+                   i, qPrintable(val.toString()), __FILE__, __LINE__);
         }
     }
 
@@ -120,7 +121,7 @@ public:
         case InvoiceFields::DISCOUNT:           return QObject::trUtf8("Zniżka");
 
         default:
-            qDebug() << QString("Value:%1, file: %2, line: %3 - Unknown header of invoices' table: %3").arg(i).arg(__FILE__).arg(__LINE__).arg(i);
+            qDebug("Value:%d, file: %s, line: %d - Unknown header of invoices' table: %d", i, __FILE__, __LINE__, i);
             return QString();
         }
     }

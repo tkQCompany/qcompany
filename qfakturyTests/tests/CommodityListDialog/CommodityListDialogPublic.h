@@ -9,6 +9,7 @@ class CommodityListDialogPublic : public CommodityListDialog
 public:
     explicit CommodityListDialogPublic(QWidget *parent, Database *db);
     Ui::CommodityListDialog* ui();
+    ~CommodityListDialogPublic() {}
 };
 
 #endif // COMMODITYLISTDIALOGPUBLIC_H

@@ -16,7 +16,8 @@ Money_t::Money_t()
 Money_t::Money_t(const QString &val)
 {
     Money_t();
-    value_.fromString(val.toLatin1(), &context_);
+    QString tmp(val);
+    value_.fromString(qPrintable(tmp.replace(QChar(','), QChar('.'))), &context_);
 }
 
 short Money_t::digit_(const QDecNumber &num, const int index) const
@@ -305,4 +306,10 @@ QString Money_t::verballyPL() const
             .arg(CurrencyData::codeName(currency_));
 
     return ret;
+}
+
+
+QString Money_t::toString() const
+{
+    return value_.toString();
 }

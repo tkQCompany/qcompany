@@ -73,10 +73,10 @@ public:
      *
      * @return QString
      */
-    const QString tPointStr() const
-    {
-        return QString(locale_.groupSeparator());
-    }
+//    const QString tPointStr() const
+//    {
+//        return QString(locale_.groupSeparator());
+//    }
 
 
 

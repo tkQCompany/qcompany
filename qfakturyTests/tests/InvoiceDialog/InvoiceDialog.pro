@@ -12,8 +12,7 @@ SOURCES += tst_invoicedialogtest.cpp \
     CommodityDialogPublic.cpp \
     InvoiceDialogPublic.cpp \
     CounterpartyDialogPublic.cpp \
-    GuiUserAddNewCommodity.cpp \
-    CommodityListDialogPublic.cpp
+    GuiUserAddNewCommodity.cpp
 
 include(../../../qfaktury/qfaktury_common.pri)
 include(../qfakturyTestsCommon.pri)
@@ -26,5 +25,8 @@ HEADERS += \
     InvoiceDialogPublic.h \
     CounterpartyDialogPublic.h \
     GuiUserAddNewCommodity.h \
-    CommodityListDialogPublic.h \
     Counterparty_t.h
+
+DEPENDPATH += ../CommodityListDialog
+# INCLUDEPATH += ../CommodityListDialog
+OBJECTS += ../CommodityListDialog/moc_CommodityListDialogPublic.o

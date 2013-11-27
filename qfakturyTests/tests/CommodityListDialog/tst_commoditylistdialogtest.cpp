@@ -1,6 +1,7 @@
 #include <QtTest/QtTest>
 
 #include "../TestsCommon.h"
+#include "CommodityListDialogPublic.h"
 
 class CommodityListDialogTest : public QObject
 {
@@ -12,8 +13,9 @@ public:
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-    void testCase1();
-    void testCase1_data();
+    void testGUI_InitialState();
+    void testGUI_AddedOneCommodity();
+    void testGUI_AddedOneCommodity_data();
 };
 
 CommodityListDialogTest::CommodityListDialogTest()
@@ -30,13 +32,20 @@ void CommodityListDialogTest::cleanupTestCase()
 {
 }
 
-void CommodityListDialogTest::testCase1()
+void CommodityListDialogTest::testGUI_InitialState()
+{
+
+}
+
+
+void CommodityListDialogTest::testGUI_AddedOneCommodity()
 {
     QFETCH(QString, data);
     QVERIFY2(true, "Failure");
 }
 
-void CommodityListDialogTest::testCase1_data()
+
+void CommodityListDialogTest::testGUI_AddedOneCommodity_data()
 {
     QTest::addColumn<QString>("data");
     QTest::newRow("0") << QString();

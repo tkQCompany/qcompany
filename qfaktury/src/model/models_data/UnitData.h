@@ -25,7 +25,7 @@ struct UnitData
      * @brief Default values when the app is launched for the first time. Later they can be useless.
      *
      */
-    enum Name {UNIT = 1, KG, G, M, KM, HOUR, PACKAGE};
+    enum Name {UNIT, KG, G, M, KM, HOUR, PACKAGE};
 
     /**
      * @brief

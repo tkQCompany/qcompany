@@ -75,15 +75,14 @@ void UnitDataTest::testCaseCheckTypesNames_data()
     QTest::addColumn<int>("input_num");
     QTest::addColumn<QString>("output_name");
 
-    QTest::newRow("0") << 0 << QString();
-    QTest::newRow("1") << (int)UnitData::UNIT << trUtf8("szt.");
-    QTest::newRow("2") << (int)UnitData::KG << trUtf8("kg");
-    QTest::newRow("3") << (int)UnitData::G << trUtf8("g");
-    QTest::newRow("4") << (int)UnitData::M << trUtf8("m");
-    QTest::newRow("5") << (int)UnitData::KM << trUtf8("km");
-    QTest::newRow("6") << (int)UnitData::HOUR << trUtf8("godz.");
-    QTest::newRow("7") << (int)UnitData::PACKAGE << trUtf8("kmpl.");
-    QTest::newRow("8") << 8 << QString();
+    QTest::newRow("0") << (int)UnitData::UNIT << trUtf8("szt.");
+    QTest::newRow("1") << (int)UnitData::KG << trUtf8("kg");
+    QTest::newRow("2") << (int)UnitData::G << trUtf8("g");
+    QTest::newRow("3") << (int)UnitData::M << trUtf8("m");
+    QTest::newRow("4") << (int)UnitData::KM << trUtf8("km");
+    QTest::newRow("5") << (int)UnitData::HOUR << trUtf8("godz.");
+    QTest::newRow("6") << (int)UnitData::PACKAGE << trUtf8("kmpl.");
+    QTest::newRow("7") << 7 << QString();
     QTest::newRow("666") << 666 << QString();
 }
 

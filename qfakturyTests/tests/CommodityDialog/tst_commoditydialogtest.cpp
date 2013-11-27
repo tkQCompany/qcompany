@@ -111,8 +111,8 @@ void CommodityDialogTest::testCase_AddCommodity()
         QCOMPARE(q.value(0).toLongLong(), QString(QTest::currentDataTag()).toLongLong());
         QCOMPARE(q.value(1).toString(), abbr);
         QCOMPARE(q.value(2).toString(), pkwiu);
-        QCOMPARE(CommodityTypeData::name((CommodityTypeData::CommodityType)q.value(3).toInt()), type);
-        QCOMPARE(UnitData::name((UnitData::Name)q.value(4).toInt()), unit);
+        QCOMPARE(CommodityTypeData::name((CommodityTypeData::CommodityType)(q.value(3).toInt() - 1)), type);
+        QCOMPARE(UnitData::name((UnitData::Name)(q.value(4).toInt() - 1)), unit);
         QCOMPARE(q.value(5).toString(), net1);
         QCOMPARE(q.value(6).toString(), net2);
         QCOMPARE(q.value(7).toString(), net3);

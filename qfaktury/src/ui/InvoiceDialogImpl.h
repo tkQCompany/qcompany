@@ -3,6 +3,7 @@
 
 #include <QDataWidgetMapper>
 #include <QDialog>
+#include <QPointer>
 
 #include "InvoiceData.h"
 #include "InvoiceTypeData.h"
@@ -189,10 +190,10 @@ public:
     Ui::InvoiceDialog *ui;
     Database *db; /**< TODO */
     QDataWidgetMapper mapper; /**< TODO */
-    CustomPaymData *custPaymData; /**< TODO */
-    CommodityDialog *commodityDialog;
-    CommodityListDialog *commodityListDialog;
-    CounterpartyDialog *counterpartyDialog;
+    CustomPaymData *custPaymDataPtr; /**< TODO */
+    QPointer<CommodityDialog> commodityDialogPtr;
+    QPointer<CommodityListDialog> commodityListDialogPtr;
+    QPointer<CounterpartyDialog> counterpartyDialogPtr;
     bool isLoaded_;
     double discountTotal, netTotal, grossTotal; /**< TODO */
     QString docHTML;

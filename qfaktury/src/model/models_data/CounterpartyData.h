@@ -5,8 +5,6 @@
  *      Author: moux
  */
 
-#include <QDebug>
-
 #ifndef COUNTERPARTYDATA_H
 #define COUNTERPARTYDATA_H
 
@@ -43,7 +41,7 @@ public:
         case CounterpartyFields::INV_NUM_FORMAT: return QObject::trUtf8("Format numeru faktury");
 
         default:
-            qDebug() << QString("File: %1, line: %2 - Unknown header of counterparties' table: %3").arg(__FILE__).arg(__LINE__).arg(i);
+            qDebug("File: %s, line: %d - Unknown header of counterparties' table: %d", __FILE__, __LINE__, i);
             return QString();
         }
     }

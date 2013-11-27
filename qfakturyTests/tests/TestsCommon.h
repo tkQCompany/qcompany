@@ -4,6 +4,7 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QString>
 #include <QDir>
+#include <QDebug>
 
 #include "SettingsGlobal.h"
 

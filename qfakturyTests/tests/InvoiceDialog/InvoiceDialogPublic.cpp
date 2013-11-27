@@ -1,6 +1,6 @@
 #include "InvoiceDialogPublic.h"
 #include "CommodityDialogPublic.h"
-#include "CommodityListDialogPublic.h"
+#include "../CommodityListDialog/CommodityListDialogPublic.h"
 #include "CounterpartyDialogPublic.h"
 
 InvoiceDialogPublic::InvoiceDialogPublic(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType, const QModelIndex &idEdit)
@@ -12,19 +12,19 @@ InvoiceDialogPublic::InvoiceDialogPublic(QWidget *parent, Database *db, InvoiceT
 
 CommodityDialogPublic* InvoiceDialogPublic::commodityDialog() const
 {
-    return static_cast<CommodityDialogPublic*>(pImpl_->commodityDialog);
+    return static_cast<CommodityDialogPublic*>(pImpl_->commodityDialogPtr.data());
 }
 
 
 CommodityListDialogPublic* InvoiceDialogPublic::commodityListDialog() const
 {
-    return static_cast<CommodityListDialogPublic*>(pImpl_->commodityListDialog);
+    return static_cast<CommodityListDialogPublic*>(pImpl_->commodityListDialogPtr.data());
 }
 
 
 CounterpartyDialogPublic* InvoiceDialogPublic::counterpartyDialog() const
 {
-    return static_cast<CounterpartyDialogPublic*>(pImpl_->counterpartyDialog);
+    return static_cast<CounterpartyDialogPublic*>(pImpl_->counterpartyDialogPtr.data());
 }
 
 Ui::InvoiceDialog* InvoiceDialogPublic::ui()

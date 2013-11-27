@@ -1,6 +1,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QMessageBox>
+#include <QDebug>
 
 #include "CounterpartyDialog.h"
 #include "ui_CounterpartyDialog.h"
@@ -36,7 +37,7 @@ CounterpartyDialog::CounterpartyDialog(QWidget *parent, Database *db, const QMod
         if(myCompany)
         {
             proxyModelCounterpartyType.setFilterRegExp(
-                        QRegExp(QString("%1").arg(CounterpartyTypeData::MY_COMPANY)));
+                        QRegExp(QString("%1").arg(CounterpartyTypeData::MY_COMPANY + 1)));
         }
         setWindowTitle(trUtf8("Edytuj kontrahenta"));
         ui->comboBoxAdditionalPhones->setModel(db->modelPhone());

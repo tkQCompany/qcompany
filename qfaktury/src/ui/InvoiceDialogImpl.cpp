@@ -6,6 +6,7 @@
 #include <QTranslator>
 #include <QFile>
 #include <QMessageBox>
+#include <QDebug>
 
 #include "InvoiceDialogImpl.h"
 #include "ui_InvoiceDialog.h"
@@ -31,7 +32,7 @@
 
 InvoiceDialogImpl::InvoiceDialogImpl(QWidget *parent, Database *database)
     : QObject(parent), parent_((QDialog*)parent), ui(new Ui::InvoiceDialog()),
-      db(database), commodityDialog(0), commodityListDialog(0), counterpartyDialog(0), isLoaded_(false)
+      db(database), isLoaded_(false)
 {
 }
 
@@ -104,7 +105,7 @@ InvoiceData InvoiceDialogImpl::getInvoiceData() const
     ret.setField(InvoiceFields::PAYMENT_DATE, ui->dateEditDayOfPayment->date());
     ret.setField(InvoiceFields::PAYMENT_ID, ui->comboBoxPayment->currentIndex() + 1);
     ret.setField(InvoiceFields::SELLING_DATE, ui->dateEditDateOfSell->date());
-    ret.setField(InvoiceFields::TYPE_ID, ui->comboBoxInvoiceType->currentIndex() + 1);
+    ret.setField(InvoiceFields::TYPE_ID, ui->comboBoxInvoiceType->currentIndex());
 
     return ret;
 }
@@ -364,8 +365,9 @@ bool InvoiceDialogImpl::validateForm()
  */
 void InvoiceDialogImpl::counterpartyAdd()
 {
-    counterpartyDialog = new CounterpartyDialog(parent_, db);
-    if (counterpartyDialog->exec() == QDialog::Accepted)
+    QScopedPointer<CounterpartyDialog> dialog(new CounterpartyDialog(parent_, db));
+    counterpartyDialogPtr = dialog.data();
+    if(dialog->exec() == QDialog::Accepted)
     {
         if(db->modelCounterparty()->submitAll())
         {
@@ -376,8 +378,6 @@ void InvoiceDialogImpl::counterpartyAdd()
             QMessageBox::warning(parent_, trUtf8("Błąd dodawania kontrahenta"), db->modelCounterparty()->lastError().text());
         }
     }
-    delete counterpartyDialog;
-    counterpartyDialog = 0;
 }
 
 
@@ -535,25 +535,24 @@ void InvoiceDialogImpl::discountChange()
  */
 void InvoiceDialogImpl::addCommodity()
 {
-    commodityListDialog = new CommodityListDialog(parent_, db);
-    if (commodityListDialog->exec() == QDialog::Accepted)
+    QScopedPointer<CommodityListDialog> dialog(new CommodityListDialog(parent_, db));
+    commodityListDialogPtr = dialog.data();
+    if(dialog->exec() == QDialog::Accepted)
     {
         const int rowNum = ui->tableWidgetCommodities->rowCount() == 0 ? 0 : ui->tableWidgetCommodities->rowCount() - 1;
         ui->tableWidgetCommodities->insertRow(rowNum);
         for(int i = CommodityVisualFields::ID; i <= CommodityVisualFields::DISCOUNT; ++i)
         {
-            ui->tableWidgetCommodities->setItem(rowNum, i, new QTableWidgetItem(commodityListDialog->ret.field(i)));
+            ui->tableWidgetCommodities->setItem(rowNum, i, new QTableWidgetItem(dialog->ret.field(i)));
         }
 
         ui->pushButtonSave->setEnabled(true);
         parent_->setWindowModified(true);
         calculateSum();
 
-        db->modelCommodity()->changeAmount(commodityListDialog->ret.field(CommodityVisualFields::ID),
-                 -commodityListDialog->ret.field(CommodityVisualFields::QUANTITY).toDouble()); //TODO: introduce qDecimals here
+        db->modelCommodity()->changeAmount(dialog->ret.field(CommodityVisualFields::ID),
+                 -dialog->ret.field(CommodityVisualFields::QUANTITY).toDouble()); //TODO: introduce qDecimals here
     }
-    delete commodityListDialog;
-    commodityListDialog = 0;
 }
 
 
@@ -563,16 +562,16 @@ void InvoiceDialogImpl::addCommodity()
  */
 void InvoiceDialogImpl::addNewCommodity()
 {
-    commodityDialog = new CommodityDialog(parent_, db);
-    if (commodityDialog->exec() == QDialog::Accepted)
+    QScopedPointer<CommodityDialog> dialog(new CommodityDialog(parent_, db));
+    commodityDialogPtr = dialog.data();
+    if(dialog->exec() == QDialog::Accepted)
     {
         if(! db->modelCommodity()->submitAll())
         {
+            qDebug() << "InvoiceDialogImpl::addNewCommodity(): " << db->modelCommodity()->lastError().text();
             QMessageBox::warning(parent_, trUtf8("Błąd dodawania towaru"), db->modelCommodity()->lastError().text());
         }
     }
-    delete commodityDialog;
-    commodityDialog = 0;
 }
 
 
@@ -633,7 +632,7 @@ void InvoiceDialogImpl::payTextChanged(QString text)
         cp.setInvoiceAmount(settings.stringToDouble(ui->labelSumGrossVal->text()));
         if (cp.exec() ==  QDialog::Accepted)
         {
-            custPaymData = cp.custPaymData;
+            custPaymDataPtr = cp.custPaymData;
             ui->dateEditDayOfPayment->setEnabled(false);
         }
         else
@@ -808,15 +807,15 @@ void InvoiceDialogImpl::printInvoice()
             summaryHTML += trUtf8("forma płatności: ") + ui->comboBoxPayment->currentText() + "<b>";
             summaryHTML += trUtf8("Zapłacono gotówką");
         }
-        else if((ui->comboBoxPayment->currentIndex() == ui->comboBoxPayment->count() -1) && (custPaymData != 0))
+        else if((ui->comboBoxPayment->currentIndex() == ui->comboBoxPayment->count() -1) && (custPaymDataPtr != 0))
         {
             summaryHTML += "<span style=\"toPay\">";
-            summaryHTML += QString(trUtf8("Zapłacono: ") + custPaymData->payment1 + ": "
-                                  +  s.numberToString(custPaymData->amount1) + " " + ui->comboBoxCurrency->currentText() + " "
-                                  + custPaymData->date1.toString(s.dateFormatExternal()) + "<br>");
-            summaryHTML += QString(trUtf8("Zaległości: ") + custPaymData->payment2 + ": "
-                                  +  s.numberToString(custPaymData->amount2) + " " + ui->comboBoxCurrency->currentText() + " "
-                                  + custPaymData->date2.toString(s.dateFormatExternal()));
+            summaryHTML += QString(trUtf8("Zapłacono: ") + custPaymDataPtr->payment1 + ": "
+                                  +  s.numberToString(custPaymDataPtr->amount1) + " " + ui->comboBoxCurrency->currentText() + " "
+                                  + custPaymDataPtr->date1.toString(s.dateFormatExternal()) + "<br>");
+            summaryHTML += QString(trUtf8("Zaległości: ") + custPaymDataPtr->payment2 + ": "
+                                  +  s.numberToString(custPaymDataPtr->amount2) + " " + ui->comboBoxCurrency->currentText() + " "
+                                  + custPaymDataPtr->date2.toString(s.dateFormatExternal()));
             summaryHTML += "</span>";
         }
         else

@@ -2,6 +2,7 @@ HEADERS += src/ui/BillDialog.h \
     src/ui/ChangeAmountDialog.h \
     src/ui/ComboBoxCurrentTextRW.h \
     src/ui/CommodityDialog.h \
+    src/ui/CommodityVisualData.h \
     src/ui/CommodityListDialog.h \
     src/ui/CommodityListGrossDialog.h \
     src/ui/CorrectiveInvoiceDialog.h \

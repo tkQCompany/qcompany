@@ -2,6 +2,7 @@
 #include <QMenu>
 #include <QSqlRelationalDelegate>
 #include <QSqlError>
+#include <QDebug>
 
 #include "EmailDialog.h"
 #include "ui_EmailDialog.h"
