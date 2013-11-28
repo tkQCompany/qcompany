@@ -14,7 +14,7 @@ enum Field {ID_COMMODITY, NAME, ABBREV, PKWIU, TYPE_ID, UNIT_ID, NET1, NET2, NET
 }
 
 
-class CommodityData
+struct CommodityData
 {
 public:
     static QString header(const CommodityFields::Field i)

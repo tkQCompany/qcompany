@@ -66,11 +66,11 @@ void CommodityDialogTest::testCase_AddCommodity()
     QFETCH(QString, pkwiu);
     QFETCH(QString, type);
     QFETCH(QString, unit);
-    QFETCH(int, vat);
-    QFETCH(QString, net1);
-    QFETCH(QString, net2);
-    QFETCH(QString, net3);
-    QFETCH(QString, net4);
+    QFETCH(int, vatIndex);
+    QFETCH(double, net1);
+    QFETCH(double, net2);
+    QFETCH(double, net3);
+    QFETCH(double, net4);
     QFETCH(double, quantity);
 
     QSqlQuery q(db.modelCommodity()->query());
@@ -89,16 +89,18 @@ void CommodityDialogTest::testCase_AddCommodity()
         QFAIL("First SQL query failed.");
     }
 
+    SettingsGlobal s;
+
     QTest::keyClicks(cdp.ui()->lineEditName, name);
     QTest::keyClicks(cdp.ui()->lineEditAbbreviation, abbr);
     QTest::keyClicks(cdp.ui()->lineEditPKWIU, pkwiu);
     cdp.ui()->comboBoxType->setCurrentIndex(cdp.ui()->comboBoxType->findText(type));
     cdp.ui()->comboBoxMeasureUnit->setCurrentIndex(cdp.ui()->comboBoxMeasureUnit->findText(unit));
-    cdp.ui()->comboBoxVat->setCurrentIndex(vat);
-    QTest::keyClicks(cdp.ui()->lineEditNet1, net1);
-    QTest::keyClicks(cdp.ui()->lineEditNet2, net2);
-    QTest::keyClicks(cdp.ui()->lineEditNet3, net3);
-    QTest::keyClicks(cdp.ui()->lineEditNet4, net4);
+    cdp.ui()->comboBoxVat->setCurrentIndex(vatIndex);
+    QTest::keyClicks(cdp.ui()->lineEditNet1, s.numberToString(net1, 'f', 2));
+    QTest::keyClicks(cdp.ui()->lineEditNet2, s.numberToString(net2, 'f', 2));
+    QTest::keyClicks(cdp.ui()->lineEditNet3, s.numberToString(net3, 'f', 2));
+    QTest::keyClicks(cdp.ui()->lineEditNet4, s.numberToString(net4, 'f', 2));
     cdp.ui()->doubleSpinBoxQuantity->setValue(quantity);
     QTest::mouseClick(cdp.ui()->pushButtonOK, Qt::LeftButton);
     QVERIFY(db.modelCommodity()->submitAll());
@@ -113,11 +115,11 @@ void CommodityDialogTest::testCase_AddCommodity()
         QCOMPARE(q.value(2).toString(), pkwiu);
         QCOMPARE(CommodityTypeData::name((CommodityTypeData::CommodityType)(q.value(3).toInt() - 1)), type);
         QCOMPARE(UnitData::name((UnitData::Name)(q.value(4).toInt() - 1)), unit);
-        QCOMPARE(q.value(5).toString(), net1);
-        QCOMPARE(q.value(6).toString(), net2);
-        QCOMPARE(q.value(7).toString(), net3);
-        QCOMPARE(q.value(8).toString(), net4);
-        QCOMPARE(q.value(9).toString(), cdp.ui()->comboBoxVat->itemText(vat));
+        QCOMPARE(q.value(5).toString().replace(QChar(','), QChar('.')).toDouble(), net1);
+        QCOMPARE(q.value(6).toString().replace(QChar(','), QChar('.')).toDouble(), net2);
+        QCOMPARE(q.value(7).toString().replace(QChar(','), QChar('.')).toDouble(), net3);
+        QCOMPARE(q.value(8).toString().replace(QChar(','), QChar('.')).toDouble(), net4);
+        QCOMPARE(q.value(9).toString(), cdp.ui()->comboBoxVat->itemText(vatIndex));
         QCOMPARE(q.value(10).toDouble(), quantity);
     }
     else
@@ -133,42 +135,40 @@ void CommodityDialogTest::testCase_AddCommodity_data()
     QTest::addColumn<QString>("pkwiu");
     QTest::addColumn<QString>("type");
     QTest::addColumn<QString>("unit");
-    QTest::addColumn<int>("vat");
-    QTest::addColumn<QString>("net1");
-    QTest::addColumn<QString>("net2");
-    QTest::addColumn<QString>("net3");
-    QTest::addColumn<QString>("net4");
+    QTest::addColumn<int>("vatIndex");
+    QTest::addColumn<double>("net1");
+    QTest::addColumn<double>("net2");
+    QTest::addColumn<double>("net3");
+    QTest::addColumn<double>("net4");
     QTest::addColumn<double>("quantity");
-
-    SettingsGlobal s;
 
     QTest::newRow("1") << QString("nameTest1") << QString("abbrTest1") << QString("pkwiuTest1")
                        << CommodityTypeData::name(CommodityTypeData::GOODS) << UnitData::name(UnitData::UNIT) << 0
-                       << s.numberToString(1.23) << s.numberToString(2.23) << s.numberToString(3.23) << s.numberToString(4.23)
+                       << 1.23 << 2.23 << 3.23 << 4.23
                        << 5.231;
     QTest::newRow("2") << QString("nameTest2") << QString("abbrTest2") << QString("pkwiuTest2")
                        << CommodityTypeData::name(CommodityTypeData::GOODS) << UnitData::name(UnitData::KG) << 0
-                       << s.numberToString(1.23) << s.numberToString(2.23) << s.numberToString(3.23) << s.numberToString(4.23)
+                       << 1.23 << 2.23 << 3.23 << 4.23
                        << 5.231;
     QTest::newRow("3") << QString("nameTest3") << QString("abbrTest3") << QString("pkwiuTest3")
                        << CommodityTypeData::name(CommodityTypeData::GOODS) << UnitData::name(UnitData::G) << 0
-                       << s.numberToString(1.23) << s.numberToString(2.23) << s.numberToString(3.23) << s.numberToString(4.23)
+                       << 1.23 << 2.23 << 3.23 << 4.23
                        << 5.231;
     QTest::newRow("4") << QString("nameTest4") << QString("abbrTest4") << QString("pkwiuTest4")
                        << CommodityTypeData::name(CommodityTypeData::GOODS) << UnitData::name(UnitData::M) << 0
-                       << s.numberToString(1.23) << s.numberToString(2.23) << s.numberToString(3.23) << s.numberToString(4.23)
+                       << 1.23 << 2.23 << 3.23 << 4.23
                        << 5.231;
     QTest::newRow("5") << QString("nameTest5") << QString("abbrTest5") << QString("pkwiuTest5")
                        << CommodityTypeData::name(CommodityTypeData::GOODS) << UnitData::name(UnitData::KM) << 0
-                       << s.numberToString(1.23) << s.numberToString(2.23) << s.numberToString(3.23) << s.numberToString(4.23)
+                       << 1.23 << 2.23 << 3.23 << 4.23
                        << 5.231;
     QTest::newRow("6") << QString("nameTest6") << QString("abbrTest6") << QString("pkwiuTest6")
                        << CommodityTypeData::name(CommodityTypeData::GOODS) << UnitData::name(UnitData::HOUR) << 0
-                       << s.numberToString(1.23) << s.numberToString(2.23) << s.numberToString(3.23) << s.numberToString(4.23)
+                       << 1.23 << 2.23 << 3.23 << 4.23
                        << 5.231;
     QTest::newRow("7") << QString("nameTest7") << QString("abbrTest7") << QString("pkwiuTest7")
                        << CommodityTypeData::name(CommodityTypeData::GOODS) << UnitData::name(UnitData::PACKAGE) << 0
-                       << s.numberToString(1.23) << s.numberToString(2.23) << s.numberToString(3.23) << s.numberToString(4.23)
+                       << 1.23 << 2.23 << 3.23 << 4.23
                        << 5.231;
 }
 

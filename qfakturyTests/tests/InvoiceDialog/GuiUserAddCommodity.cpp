@@ -31,7 +31,6 @@ void GuiUserAddCommodity::process()
                                           cld->ui()->listViewCommodities->model()->index(0, CommodityFields::NAME),
                                           Qt::DisplayRole,
                                           commodity_->field(CommodityFields::NAME).toString()));
-        qDebug() << "GuiUserAddCommodity::process(): name = " << commodity_->field(CommodityFields::NAME).toString();
         if(!indList.isEmpty())
         {
             cld->ui()->listViewCommodities->setCurrentIndex(indList.at(0));

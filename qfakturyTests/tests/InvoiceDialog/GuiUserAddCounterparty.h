@@ -5,7 +5,7 @@
 #include "Counterparty_t.h"
 
 class InvoiceDialogPublic;
-class Counterparty_t;
+struct Counterparty_t;
 
 class GuiUserAddCounterparty : public GuiUser
 {
