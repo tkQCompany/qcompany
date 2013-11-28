@@ -41,7 +41,7 @@ void InvoiceNumberFormatExamplesDialog::init_()
                               :invoiceNumFormat_);
     const QStringList simulatedNums(db_->modelInvoice()->
                                     simulateConsecutiveInvoiceNumbers(
-                                        *InvoiceNumberFormat_t::Parse(invNumFormat).release(),
+                                        *InvoiceNumberFormat_t::Parse(invNumFormat).get(),
                                         firstIssuanceDate,
                                         InvoiceTypeData::VAT,
                                         size));

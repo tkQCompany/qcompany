@@ -252,7 +252,7 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities_data()
         invType = InvoiceTypeData::VAT;
 
         invNum = db.modelInvoice()->generateInvoiceNumber(
-                    *(InvoiceNumberFormat_t::Parse(s.value(s.DEFAULT_INV_NUM_FORMAT).toString()).release()),
+                    *(InvoiceNumberFormat_t::Parse(s.value(s.DEFAULT_INV_NUM_FORMAT).toString()).get()),
                                          invNum,
                                          QDate::currentDate(),
                                          QDate::currentDate(),

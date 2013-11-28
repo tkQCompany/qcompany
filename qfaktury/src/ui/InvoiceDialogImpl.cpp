@@ -279,8 +279,8 @@ void InvoiceDialogImpl::updateInvoiceNumber()
 
         const bool defaultInvNumFormat = (s.value(s.DEFAULT_INV_NUM_FORMAT).toString() == invNumFormat);
         const ModelInvoice::DBData dbData(*db->modelInvoice()->getLastExistingNumberDateFromDB(defaultInvNumFormat,
-                                                                                                ui->comboBoxCounterparties->currentText()).release());
-        const QString invNum(db->modelInvoice()->generateInvoiceNumber(*(InvoiceNumberFormat_t::Parse(invNumFormat).release()),
+                                                                                                ui->comboBoxCounterparties->currentText()).get());
+        const QString invNum(db->modelInvoice()->generateInvoiceNumber(*(InvoiceNumberFormat_t::Parse(invNumFormat).get()),
                                                                          dbData.invNumStr,
                                                                          ui->dateEditDateOfIssuance->date(),
                                                                          dbData.gotIssuanceDate,
