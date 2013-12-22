@@ -11,9 +11,6 @@
 #include <QDate>
 #include <QVariant>
 
-#include "QDecNumber.hh"
-#include "QDecContext.hh"
-
 namespace InvoiceFields
 {
     /**

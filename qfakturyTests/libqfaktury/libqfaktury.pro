@@ -3,9 +3,7 @@ TEMPLATE = lib
 TARGET = qfaktury
 
 DEPENDPATH += ../../qfaktury \
-               ../../qfaktury/src \
-               ../../qdecimal/decnumber \
-               ../../qdecimal/src
+               ../../qfaktury/src
 
 
 INCLUDEPATH +=  ../../qfaktury/src \
@@ -13,12 +11,8 @@ INCLUDEPATH +=  ../../qfaktury/src \
                ../../qfaktury/ui_files \
                ../../qfaktury/src/model \
                ../../qfaktury/src/model/models \
-               ../../qfaktury/src/model/models_data \
-               ../../qdecimal/decnumber \
-               ../../qdecimal/src
+               ../../qfaktury/src/model/models_data
 
 CONFIG += staticlib
 
-OBJECTS += ../../qfaktury/obj/*.o ../../qdecimal/src/obj/*.o ../../qdecimal/decnumber/obj/*.o
-
-LIBS += -L../../qdecimal/lib -ldecnumber -lqdecimal
+OBJECTS += ../../qfaktury/obj/*.o

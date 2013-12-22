@@ -115,10 +115,10 @@ void ModelCurrency::updateDBsCurrenciesRates_()
 
     const QDomNodeList elements(xmlDoc.documentElement()
                                 .elementsByTagName("pozycja"));
-    for(int i = 0; i < elements.length(); ++i)
+    for(int i = 0; i < elements.size(); ++i)
     {
         const QDomNodeList children(elements.item(i).childNodes());
-        for(int j = 0; j < children.length(); ++j)
+        for(int j = 0; j < children.size(); ++j)
         {
             if(children.item(j).nodeName() == "nazwa_waluty")
             {

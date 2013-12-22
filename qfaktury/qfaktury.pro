@@ -10,9 +10,7 @@ INCLUDEPATH += src \
                src/model \
                src/model/models \
                src/model/models_data \
-               src/ui \
-               ../qdecimal/decnumber \
-               ../qdecimal/src
+               src/ui
 
 
 FORMS += src/ui/InvoiceDialog.ui \
@@ -43,8 +41,6 @@ QT += gui
 MOC_DIR = moc_files
 OBJECTS_DIR = obj
 UI_DIR = ui_files
-
-LIBS += -L../qdecimal/lib
 
 OTHER_FILES += \
     doc/Doxyfile \

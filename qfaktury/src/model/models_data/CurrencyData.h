@@ -1,6 +1,9 @@
 #ifndef CURRENCYDATA_H
 #define CURRENCYDATA_H
 
+#include <QString>
+#include <QMetaType>
+
 namespace CurrencyFields
 {
 /**

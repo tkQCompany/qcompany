@@ -273,6 +273,8 @@ void InvoiceDialogTest::startUserThread(GuiUser *guiUser, QThread *thread, QPush
     QTest::mouseClick(buttonStart, Qt::LeftButton);
 }
 
+Q_DECLARE_METATYPE(QList<CommodityData>);
+
 
 QTEST_MAIN(InvoiceDialogTest)
 

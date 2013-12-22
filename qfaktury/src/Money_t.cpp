@@ -1,15 +1,11 @@
 #include <QStringList>
-
+#include <QDebug>
 #include "Money_t.h"
-#include "QDecDouble.hh"
-#include "QDecPacked.hh"
 
 Money_t::Money_t()
 {
     SettingsGlobal s;
     currency_ = s.value(s.keyName(s.DEFAULT_CURRENCY)).value<CurrencyData::Currencies>();
-    value_.fromInt32(0);
-    context_.setDefault();
 }
 
 
@@ -17,30 +13,36 @@ Money_t::Money_t(const QString &val)
 {
     Money_t();
     QString tmp(val);
-    value_.fromString(qPrintable(tmp.replace(QChar(','), QChar('.'))), &context_);
+    const int base = 10;
+    mpf_class valTmp;
+    valTmp.set_str(tmp.replace(QChar(','), QChar('.')).toStdString(), base);
+    value_ = valTmp;
+    value_.canonicalize();
 }
 
-short Money_t::digit_(const QDecNumber &num, const int index) const
+
+short Money_t::digit_(const val_t &num, const size_t index) const
 {
-    return num.toString().at(index) - '0';
+    const std::string str(num.get_str());
+    const short ret = (str.size() > index)? str.at(index) - '0' : 0;
+    return ret;
 }
 
 
-QString Money_t::verballyPL1_999(const QDecNumber &val) const
+QString Money_t::verballyPL1_999(const val_t &val) const
 {
     QString ret;
-    if(val >= QDecNumber(1) && val <= QDecNumber(999))
+    static const QStringList pl100_900(QStringList() << "sto " << "dwieście " << "trzysta " << "czterysta " << "pięćset "
+                                << "sześćset " << "siedemset " << "osiemset " << "dziewięćset ");
+    static const QStringList pl20_90(QStringList() << "dwadzieścia " << "trzydzieści " << "czterdzieści " << "pięćdziesiąt "
+                              << "sześćdziesiąt " << "siedemdziesiąt " << "osiemdziesiąt " << "dziewięćdziesiąt ");
+    static const QStringList pl2_19(QStringList() << "jeden " << "dwa " << "trzy " << "cztery " << "pięć " << "sześć "
+                             << "siedem " << "osiem " << "dziewięć " << "dziesięć " << "jedenaście " << "dwanaście "
+                             << "trzynaście " << "czternaście " << "piętnaście " << "szesnaście " << "siedemnaście "
+                             << "osiemnaście " << "dziewiętnaście ");
+    if(val >= val_t(1) && val <= val_t(999))
     {
-        const QStringList pl100_900(QStringList() << "sto " << "dwieście " << "trzysta " << "czterysta " << "pięćset "
-                                    << "sześćset " << "siedemset " << "osiemset " << "dziewięćset ");
-        const QStringList pl20_90(QStringList() << "dwadzieścia " << "trzydzieści " << "czterdzieści " << "pięćdziesiąt "
-                                  << "sześćdziesiąt " << "siedemdziesiąt " << "osiemdziesiąt " << "dziewięćdziesiąt ");
-        const QStringList pl2_19(QStringList() << "jeden " << "dwa " << "trzy " << "cztery " << "pięć " << "sześć "
-                                 << "siedem " << "osiem " << "dziewięć " << "dziesięć " << "jedenaście " << "dwanaście "
-                                 << "trzynaście " << "czternaście " << "piętnaście " << "szesnaście " << "siedemnaście "
-                                 << "osiemnaście " << "dziewiętnaście ");
-
-        if(val >= QDecNumber(100))
+        if(val >= val_t(100))
         {
             const short dozens = digit_(val, 1);
             const short ones = digit_(val, 2);
@@ -57,7 +59,7 @@ QString Money_t::verballyPL1_999(const QDecNumber &val) const
                 ret += pl2_19.at(10 * dozens + ones - 1);
             }
         }
-        else if(val >= QDecNumber(10))
+        else if(val >= val_t(10))
         {
             const short dozens = digit_(val, 0);
             const short ones = digit_(val, 1);
@@ -92,199 +94,102 @@ QString Money_t::verballyPL1_999(const QDecNumber &val) const
 QString Money_t::verballyPL() const
 {
     QString ret;
-    if(value_ >= QDecNumber("1e21"))
+    if(value_ >= val_t("1000000000000000000000"))
     {
         return ret;
     }
 
-    QDecNumber valTmp(value_), divisor("1e18"), divisionInt;
-
-    if(valTmp >= divisor)
+    const size_t unitsSize = 6;
+    struct
     {
-        divisionInt = valTmp.divideInteger(divisor);
-        if(divisionInt != QDecNumber(1))
+        QString name1;
+        QString name2;
+        QString name3;
+    } units[unitsSize];
+
+    units[0].name1 = QString("tryliony ");
+    units[0].name2 = QString("trylionów ");
+    units[0].name3 = QString("jeden trylion ");
+
+    units[1].name1 = QString("biliardy ");
+    units[1].name2 = QString("biliardów ");
+    units[1].name3 = QString("jeden biliard ");
+
+    units[2].name1 = QString("biliony ");
+    units[2].name2 = QString("bilionów ");
+    units[2].name3 = QString("jeden bilion ");
+
+    units[3].name1 = QString("miliardy ");
+    units[3].name2 = QString("miliardów ");
+    units[3].name3 = QString("jeden miliard ");
+
+    units[4].name1 = QString("miliony ");
+    units[4].name2 = QString("milionów ");
+    units[4].name3 = QString("jeden milion ");
+
+    units[5].name1 = QString("tysiące ");
+    units[5].name2 = QString("tysięcy ");
+    units[5].name3 = QString("tysiąc ");
+
+    mpz_class divisorInt("1000000000000000000"), divisionInt, valTmp(value_);
+    const mpq_class valDec(100 * (value_ - mpq_class(valTmp))); //decimal part
+
+    for(size_t i = 0; i < unitsSize; ++i, divisorInt /= 1000)
+    {
+        if(valTmp >= divisorInt)
         {
-            const QDecNumber leftPart(divisionInt);
-            ret += verballyPL1_999(leftPart);
-            const short digit = digit_(leftPart, 2);
-            if(digit >= 2 && digit <= 4)
+            divisionInt = trunc(mpf_class((valTmp / divisorInt)));
+            if(divisionInt != 1)
             {
-                ret += QString("tryliony ");
+                const val_t leftPart(divisionInt);
+                ret += verballyPL1_999(leftPart);
+                const short digit = digit_(leftPart, leftPart.get_str().size() - 1);
+                if(digit >= 2 && digit <= 4)
+                {
+                    ret += units[i].name1;
+                }
+                else
+                {
+                    ret += units[i].name2;
+                }
             }
             else
             {
-                ret += QString("trylionów ");
+                ret += units[i].name3;
             }
-        }
-        else
-        {
-            ret += QString("jeden trylion ");
-        }
 
-        valTmp %= divisor;
+            valTmp = mpz_class(valTmp) % divisorInt;
+        }
     }
 
-    divisor /= QDecNumber(1000);
-
-    if(valTmp >= divisor)
+    if(valTmp >= divisorInt) //if valTmp >= 1 && < 1000
     {
-        divisionInt = valTmp.divideInteger(divisor);
-        if(divisionInt != QDecNumber(1))
+        divisionInt = trunc(mpf_class((valTmp / divisorInt)));
+        if(divisionInt != 1)
         {
-            const QDecNumber leftPart(divisionInt);
-            ret += verballyPL1_999(leftPart);
-            const short digit = digit_(leftPart, 2);
-            if(digit >= 2 && digit <= 4)
-            {
-                ret += QString("biliardy ");
-            }
-            else
-            {
-                ret += QString("biliardów ");
-            }
-        }
-        else
-        {
-            ret += QString("jeden biliard ");
-        }
-        valTmp %= divisor;
-    }
-
-    divisor /= QDecNumber(1000);
-
-    if(valTmp >= divisor)
-    {
-        divisionInt = valTmp.divideInteger(divisor);
-        if(divisionInt != QDecNumber(1))
-        {
-            const QDecNumber leftPart(divisionInt);
-            ret += verballyPL1_999(leftPart);
-            const short digit = digit_(leftPart, 2);
-            if(digit >= 2 && digit <= 4)
-            {
-                ret += QString("biliony ");
-            }
-            else
-            {
-                ret += QString("bilionów ");
-            }
-        }
-        else
-        {
-            ret += QString("jeden bilion ");
-        }
-        valTmp %= divisor;
-    }
-
-    divisor /= QDecNumber(1000);
-
-    if(valTmp >= divisor)
-    {
-        divisionInt = valTmp.divideInteger(divisor);
-        if(divisionInt != QDecNumber(1))
-        {
-            const QDecNumber leftPart(divisionInt);
-            ret += verballyPL1_999(leftPart);
-            const short digit = digit_(leftPart, 2);
-            if(digit >= 2 && digit <= 4)
-            {
-                ret += QString("miliardy ");
-            }
-            else
-            {
-                ret += QString("miliardów ");
-            }
-        }
-        else
-        {
-            ret += QString("jeden miliard ");
-        }
-        valTmp %= divisor;
-    }
-
-    divisor /= QDecNumber(1000);
-
-    if(valTmp >= divisor)
-    {
-        divisionInt = valTmp.divideInteger(divisor);
-        if(divisionInt != QDecNumber(1))
-        {
-            const QDecNumber leftPart(divisionInt);
-            ret += verballyPL1_999(leftPart);
-            const short digit = digit_(leftPart, 2);
-            if(digit >= 2 && digit <= 4)
-            {
-                ret += QString("miliony ");
-            }
-            else
-            {
-                ret += QString("milionów ");
-            }
-        }
-        else
-        {
-            ret += QString("jeden milion ");
-        }
-        valTmp %= divisor;
-    }
-
-    divisor /= QDecNumber(1000);
-
-    if(valTmp >= divisor)
-    {
-        divisionInt = valTmp.divideInteger(divisor);
-        if(divisionInt != QDecNumber(1))
-        {
-            const QDecNumber leftPart(divisionInt);
-            ret += verballyPL1_999(leftPart);
-            const short digit = digit_(leftPart, leftPart.toString().size() - 1);
-            if(digit >= 2 && digit <= 4)
-            {
-                ret += QString("tysiące ");
-            }
-            else
-            {
-                ret += QString("tysięcy ");
-            }
-        }
-        else
-        {
-            ret += QString("tysiąc ");
-        }
-        valTmp %= divisor;
-    }
-
-    divisor /= QDecNumber(1000);
-
-    if(valTmp >= divisor)
-    {
-        divisionInt = valTmp.divideInteger(divisor);
-        if(divisionInt != QDecNumber(1))
-        {
-            const QDecNumber leftPart(divisionInt);
+            const val_t leftPart(divisionInt);
             ret += verballyPL1_999(leftPart);
         }
         else
         {
             ret += QString("jeden ");
         }
-        valTmp %= divisor;
+        valTmp = mpz_class(valTmp) % divisorInt;
     }
 
-    const int radix = 10;
-    const int fieldWidth = 2;
-    const QChar fillChar(QChar('0'));
-    QDecDouble dbl;
-    dbl.fromQDecNumber(valTmp * QDecNumber(100));
+
+
     if(ret.isEmpty())
     {
         ret += "zero ";
     }
 
-    switch(digit_(value_, value_.divideInteger(QDecNumber(1)).toString().size() - 1))
+    mpz_class lastDigit(value_);
+    lastDigit %= 10;
+    switch(lastDigit.get_ui())
     {
         case 1:
-        if((value_ % QDecNumber(1)) == QDecNumber(0))
+        if(mpz_class(value_) == 1)
         {
             ret += "złoty ";
         }
@@ -302,7 +207,12 @@ QString Money_t::verballyPL() const
         ret += "złotych ";
     }
 
-    ret += QString("%1/100 %2").arg((int)dbl.toDouble(), fieldWidth, radix, fillChar)
+    const int fieldWidth = 2;
+    const char format = 'f';
+    const int precision = 0;
+    const QChar fillChar(QChar('0'));
+
+    ret += QString("%1/100 %2").arg(valDec.get_d(), fieldWidth, format, precision, fillChar)
             .arg(CurrencyData::codeName(currency_));
 
     return ret;
@@ -311,5 +221,5 @@ QString Money_t::verballyPL() const
 
 QString Money_t::toString() const
 {
-    return value_.toString();
+    return QString("%1").arg(value_.get_d());
 }

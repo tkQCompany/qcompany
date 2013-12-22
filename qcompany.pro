@@ -1,7 +1,6 @@
 TEMPLATE = subdirs
 
-SUBDIRS += qdecimal \
-    qfaktury \
+SUBDIRS += qfaktury \
     qfakturyTests
 
 CONFIG += ordered
