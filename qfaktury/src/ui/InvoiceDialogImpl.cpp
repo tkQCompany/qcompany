@@ -172,6 +172,7 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
     connect(ui->spinBoxDiscount, SIGNAL(valueChanged(int)), this, SLOT(discountChange()));
     connect(ui->checkBoxDiscount, SIGNAL(stateChanged(int)), this, SLOT(discountConstChange()));
 
+    ui->pushButtonMoreInfo->setEnabled(false);
     ui->pushButtonRemoveCommodity->setEnabled(false);
     ui->pushButtonEditCommodity->setEnabled(false);
     ui->dateEditDayOfPayment->setEnabled(false);
@@ -377,6 +378,11 @@ void InvoiceDialogImpl::counterpartyAdd()
         {
             QMessageBox::warning(parent_, trUtf8("Błąd dodawania kontrahenta"), db->modelCounterparty()->lastError().text());
         }
+    }
+
+    if(db->modelCounterparty()->rowCount() > 0)
+    {
+        ui->pushButtonMoreInfo->setEnabled(true);
     }
 }
 

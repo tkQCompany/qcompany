@@ -58,6 +58,7 @@ void InvoiceDialogTest::testGUI_InitialState()
     QCOMPARE(invoiceDialog.ui()->dateEditDateOfIssuance->date(), QDate::currentDate());
     QCOMPARE(invoiceDialog.ui()->comboBoxInvoiceType->currentText(), InvoiceTypeData::name(InvoiceTypeData::VAT));
     QVERIFY( ! invoiceDialog.ui()->lineEditInvNumber->text().isEmpty());
+    QVERIFY( ! invoiceDialog.ui()->pushButtonMoreInfo->isEnabled());
 
     QCOMPARE(invoiceDialog.ui()->tableWidgetCommodities->rowCount(), 0);
     const int maxCols = invoiceDialog.ui()->tableWidgetCommodities->columnCount();
