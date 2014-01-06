@@ -6,6 +6,7 @@
 
 class InvoiceDialogPublic;
 struct Counterparty_t;
+class QComboBox;
 
 class GuiUserAddCounterparty : public GuiUser
 {
@@ -16,9 +17,16 @@ public:
 public slots:
     void process();
 
+signals:
+    void setComboBoxIndex(int);
+
 private:
-    InvoiceDialogPublic *idp_;
-    Counterparty_t *counterparty_;
+    void postText_(QObject *obj, const QString &str);
+    void postComboBoxIndex_(QComboBox *obj, const int index);
+
+private:
+    const InvoiceDialogPublic *idp_;
+    const Counterparty_t counterparty_;    
 };
 
 #endif // GUIUSERADDCOUNTERPARTY_H

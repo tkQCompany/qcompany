@@ -2,7 +2,7 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 
-#include "../TestsCommon.h"
+#include "../TestsCommon/TestsCommon.h"
 #include "Database.h"
 #include "ModelCounterparty.h"
 #include "CounterpartyData.h"

@@ -32,7 +32,7 @@
 
 InvoiceDialogImpl::InvoiceDialogImpl(QWidget *parent, Database *database)
     : QObject(parent), parent_((QDialog*)parent), ui(new Ui::InvoiceDialog()),
-      db(database), isLoaded_(false)
+      db(database), custPaymDataPtr(0), isLoaded_(false)
 {
 }
 

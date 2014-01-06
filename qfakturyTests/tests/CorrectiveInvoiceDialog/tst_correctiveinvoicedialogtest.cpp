@@ -1,6 +1,6 @@
 #include <QtTest/QtTest>
 
-#include "../TestsCommon.h"
+#include "../TestsCommon/TestsCommon.h"
 #include "CorrectiveInvoiceDialog.h"
 #include "CorrectiveInvoiceDialog.cpp"
 #include "Database.h"

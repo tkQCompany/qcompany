@@ -2,23 +2,27 @@
 #include <QThread>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QTime>
 
-#include "../TestsCommon.h"
 #include "Database.h"
 #include "SettingsGlobal.h"
 #include "CommodityData.h"
 #include "CommodityTypeData.h"
 #include "PaymentTypeData.h"
-#include "InvoiceDialogPublic.h"
 #include "UnitData.h"
-#include "GuiUserAddCommodity.h"
-#include "GuiUserAddNewCommodity.h"
-#include "GuiUserAddCounterparty.h"
+#include "../TestsCommon/TestsCommon.h"
+#include "../TestsCommon/InvoiceDialogPublic.h"
+#include "../TestsCommon/InvoiceDialogPublic.cpp"
+#include "../TestsCommon/GuiUserAddCommodity.h"
+#include "../TestsCommon/GuiUserAddNewCommodity.h"
+#include "../TestsCommon/GuiUserAddCounterparty.h"
+#include "../TestsCommon/Counterparty_t.h"
 #include "ModelCommodity.h"
+#include "ModelCounterparty.h"
 #include "ModelCountry.h"
 #include "ModelInvoice.h"
+#include "ModelInvoiceWithCommodities.h"
 #include "CounterpartyTypeData.h"
-#include "Counterparty_t.h"
 
 
 class InvoiceDialogTest : public QObject
@@ -42,7 +46,8 @@ void InvoiceDialogTest::initTestCase()
     TestsCommon::removeDBFile();
     SettingsGlobal s;
     s.setFirstRun(true);
-    qsrand(0);
+    qsrand(QTime::currentTime().msec());
+    //qRegisterMetaType<QItemSelection>("QItemSelection");
 }
 
 
@@ -99,17 +104,20 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities()
 
     Database db;
     InvoiceDialogPublic invD(0, &db, invoiceType);
-    QThread threadNewCommodity, threadCommodity, threadCounterparty;
-    qRegisterMetaType<QItemSelection>("QItemSelection");
     foreach(const CommodityData cd, lcd)
     {
-        GuiUserAddNewCommodity userAddNewCommod(&invD, &cd);
-        startUserThread(&userAddNewCommod, &threadNewCommodity, invD.ui()->pushButtonAddNewCommodity);
-        while(threadNewCommodity.isRunning())
         {
-            QTest::qSleep(100);
+            GuiUserAddNewCommodity userAddNewCommod(&invD, cd);
+            QThread threadNewCommodity;
+            threadNewCommodity.setObjectName("threadNewCommodity");
+            startUserThread(&userAddNewCommod, &threadNewCommodity, invD.ui()->pushButtonAddNewCommodity);
+            while(!threadNewCommodity.isFinished())
+            {
+                QTest::qSleep(200);
+            }
+
+            QVERIFY(db.modelCommodity()->submitAll());
         }
-        QVERIFY(db.modelCommodity()->submitAll());
 
         QSqlQuery query(db.modelCommodity()->query());
         query.exec(QString("SELECT name, abbreviation, pkwiu, type_id, unit_id, net1, net2, net3, net4, vat, quantity FROM commodity WHERE id_commodity = (SELECT MAX(id_commodity) FROM commodity)"));
@@ -131,46 +139,59 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities()
         QCOMPARE(query.value(9).toString(), cd.field(CommodityFields::VAT).toString());
         QCOMPARE(query.value(10).toString(), cd.field(CommodityFields::QUANTITY).toString());
 
-        GuiUserAddCommodity userAddCommod(&invD, &cd);
-        startUserThread(&userAddCommod, &threadCommodity, invD.ui()->pushButtonAddCommodity);
-        while(threadCommodity.isRunning())
         {
-            QTest::qSleep(100);
+            GuiUserAddCommodity userAddCommod(&invD, cd);
+            QThread threadCommodity;
+            threadCommodity.setObjectName("threadCommodity");
+            startUserThread(&userAddCommod, &threadCommodity, invD.ui()->pushButtonAddCommodity);
+            while(!threadCommodity.isFinished())
+            {
+                QTest::qSleep(100);
+            }
         }
     }
 
     QCOMPARE(invD.ui()->tableWidgetCommodities->rowCount(), lcd.size());
 
-    GuiUserAddCounterparty userAddNewCounterp(&invD, &counterparty);
-    startUserThread(&userAddNewCounterp, &threadCounterparty, invD.ui()->pushButtonAddCounterparty);
-    while(threadCounterparty.isRunning())
     {
-        QTest::qSleep(100);
+        GuiUserAddCounterparty userAddNewCounterp(&invD, &counterparty);
+        QThread threadCounterparty;
+        threadCounterparty.setObjectName("threadCounterparty");
+        startUserThread(&userAddNewCounterp, &threadCounterparty, invD.ui()->pushButtonAddCounterparty);
+        while(!threadCounterparty.isFinished())
+        {
+            QTest::qSleep(100);
+        }
+        QVERIFY(db.modelCounterparty()->submitAll());
     }
 
-    QVERIFY(invD.ui()->comboBoxCounterparties->findText(counterparty.name) != -1);
+    const int indNewCounterparty = invD.ui()->comboBoxCounterparties->findText(counterparty.name);
+    QVERIFY(indNewCounterparty != -1);
+    invD.ui()->comboBoxCounterparties->setCurrentIndex(indNewCounterparty);
 
     QTest::mouseClick(invD.ui()->pushButtonSave, Qt::LeftButton);
     QTest::mouseClick(invD.ui()->pushButtonClose, Qt::LeftButton);
 
-//    QSqlQuery query(db.modelInvoice()->query());
-//    query.exec(QString("SELECT inv_number FROM invoice WHERE counterparty_id = (SELECT id_counterparty FROM counterparty WHERE name = %1)").arg(counterparty.name));
-//    if(!query.isActive())
-//    {
-//        qDebug() << "InvoiceDialogTest::testGUI_AddDeleteCommodities(): first SQL query failed. Reason" << query.lastError().text() << "\nQuery: " << query.lastQuery();
-//    }
-//    QVERIFY(query.isActive());
-//    QVERIFY(query.next());
-//    QVERIFY(query.value(0).toString() == invoiceNumber);
+    QVERIFY(db.modelInvoice()->submitAll());
 
-//    query.exec(QString("SELECT invoice_type FROM invoice JOIN invoice_type ON invoice.type_id = invoice_type.id_invoice_type WHERE invoice.counterparty_id = (SELECT id_counterparty FROM counterparty WHERE name = %1)").arg(counterparty.name));
-//    if(!query.isActive())
-//    {
-//        qDebug() << "InvoiceDialogTest::testGUI_AddDeleteCommodities(): second SQL query failed. Reason" << query.lastError().text() << "\nQuery: " << query.lastQuery();
-//    }
-//    QVERIFY(query.isActive());
-//    QVERIFY(query.next());
-//    QVERIFY(query.value(0).toString() == InvoiceTypeData::name(invoiceType));
+    QSqlQuery query(db.modelInvoice()->query());
+    query.exec(QString("SELECT inv_number FROM invoice WHERE counterparty_id = (SELECT id_counterparty FROM counterparty WHERE name = '%1')").arg(counterparty.name));
+    if(!query.isActive())
+    {
+        qDebug() << "InvoiceDialogTest::testGUI_AddDeleteCommodities(): first SQL query failed. Reason" << query.lastError().text() << "\nQuery: " << query.lastQuery();
+    }
+    QVERIFY(query.isActive());
+    QVERIFY(query.next());
+    QVERIFY(query.value(0).toString() == invoiceNumber);
+
+    query.exec(QString("SELECT invoice_type FROM invoice JOIN invoice_type ON invoice.type_id = invoice_type.id_invoice_type WHERE invoice.counterparty_id = (SELECT id_counterparty FROM counterparty WHERE name = '%1')").arg(counterparty.name));
+    if(!query.isActive())
+    {
+        qDebug() << "InvoiceDialogTest::testGUI_AddDeleteCommodities(): second SQL query failed. Reason" << query.lastError().text() << "\nQuery: " << query.lastQuery();
+    }
+    QVERIFY(query.isActive());
+    QVERIFY(query.next());
+    QVERIFY(query.value(0).toString() == InvoiceTypeData::name(invoiceType));
 }
 
 
@@ -191,11 +212,11 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities_data()
     QVariant v;
     const QStringList vatRates(s.value(s.keyName(s.VAT_RATES)).toString().split("|"));
 
-    const int maxRows = qrand() % 5 + 1; //1-200
+    const int maxRows = qrand() % 4 + 1; //1-200
     const int base = 10;
     for(int row = 0; row < maxRows; ++row)
     {
-        const int maxCommod = qrand() % 10 + 1; //1-200 commodities per invoice
+        const int maxCommod = qrand() % 20 + 1; //1-200 commodities per invoice
         lcd.clear();
         for(int commod = 0; commod < maxCommod; ++commod)
         {
@@ -266,7 +287,6 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities_data()
 
 void InvoiceDialogTest::startUserThread(GuiUser *guiUser, QThread *thread, QPushButton *buttonStart) const
 {
-
     guiUser->moveToThread(thread);
     connect(thread, SIGNAL(started()), guiUser, SLOT(process()));
     connect(guiUser, SIGNAL(finished()), thread, SLOT(quit()));
@@ -274,7 +294,7 @@ void InvoiceDialogTest::startUserThread(GuiUser *guiUser, QThread *thread, QPush
     QTest::mouseClick(buttonStart, Qt::LeftButton);
 }
 
-Q_DECLARE_METATYPE(QList<CommodityData>);
+Q_DECLARE_METATYPE(QList<CommodityData>)
 
 
 QTEST_MAIN(InvoiceDialogTest)

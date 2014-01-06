@@ -6,27 +6,27 @@
 
 TARGET = tst_invoicedialogtest
 SOURCES += tst_invoicedialogtest.cpp \
-    GuiUser.cpp \
-    GuiUserAddCommodity.cpp \
-    GuiUserAddCounterparty.cpp \
-    CommodityDialogPublic.cpp \
-    InvoiceDialogPublic.cpp \
-    CounterpartyDialogPublic.cpp \
-    GuiUserAddNewCommodity.cpp
+    ../TestsCommon/InvoiceDialogPublic.cpp \
+    ../TestsCommon/GuiUserAddNewCommodity.cpp \
+    ../TestsCommon/GuiUserAddCounterparty.cpp \
+    ../TestsCommon/GuiUserAddCommodity.cpp \
+    ../TestsCommon/GuiUser.cpp \
+    ../TestsCommon/CounterpartyDialogPublic.cpp \
+    ../TestsCommon/CommodityDialogPublic.cpp
 
 include(../../../qfaktury/qfaktury_common.pri)
 include(../qfakturyTestsCommon.pri)
 
-HEADERS += \
-    GuiUser.h \
-    GuiUserAddCommodity.h \
-    GuiUserAddCounterparty.h \
-    CommodityDialogPublic.h \
-    InvoiceDialogPublic.h \
-    CounterpartyDialogPublic.h \
-    GuiUserAddNewCommodity.h \
-    Counterparty_t.h
-
 DEPENDPATH += ../CommodityListDialog
-# INCLUDEPATH += ../CommodityListDialog
 OBJECTS += ../CommodityListDialog/moc_CommodityListDialogPublic.o
+
+HEADERS += \
+    ../TestsCommon/TestsCommon.h \
+    ../TestsCommon/InvoiceDialogPublic.h \
+    ../TestsCommon/GuiUserAddNewCommodity.h \
+    ../TestsCommon/GuiUserAddCounterparty.h \
+    ../TestsCommon/GuiUserAddCommodity.h \
+    ../TestsCommon/GuiUser.h \
+    ../TestsCommon/Counterparty_t.h \
+    ../TestsCommon/CounterpartyDialogPublic.h \
+    ../TestsCommon/CommodityDialogPublic.h

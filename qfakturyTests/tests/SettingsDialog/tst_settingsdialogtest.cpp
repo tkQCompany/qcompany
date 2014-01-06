@@ -1,6 +1,6 @@
 #include <QtTest>
 
-#include "../TestsCommon.h"
+#include "../TestsCommon/TestsCommon.h"
 #include "SettingsDialog.h"
 
 class SettingsDialogTest : public QObject

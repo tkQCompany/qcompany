@@ -1,7 +1,6 @@
 TEMPLATE = subdirs
 
-SUBDIRS += \
-    BillDialog \
+SUBDIRS += BillDialog \
     ChangeAmountDialog \
     CommodityDialog \
     CommodityListDialog \

@@ -7,7 +7,7 @@
 #include "InvoiceDialogPublic.h"
 
 
-GuiUserAddCommodity::GuiUserAddCommodity(InvoiceDialogPublic *idp, const CommodityData *commodity, QObject *parent) :
+GuiUserAddCommodity::GuiUserAddCommodity(InvoiceDialogPublic *idp, const CommodityData &commodity, QObject *parent) :
     GuiUser(parent), idp_(idp), commodity_(commodity)
 {
 }
@@ -30,11 +30,11 @@ void GuiUserAddCommodity::process()
         const QModelIndexList indList(cld->ui()->listViewCommodities->model()->match(
                                           cld->ui()->listViewCommodities->model()->index(0, CommodityFields::NAME),
                                           Qt::DisplayRole,
-                                          commodity_->field(CommodityFields::NAME).toString()));
+                                          commodity_.field(CommodityFields::NAME).toString()));
         if(!indList.isEmpty())
         {
-            cld->ui()->listViewCommodities->setCurrentIndex(indList.at(0));
-            cld->ui()->doubleSpinBoxAmount->setValue(commodity_->field(CommodityFields::QUANTITY).toDouble());
+            postListViewIndex_(cld->ui()->listViewCommodities, indList.at(0));
+            postDoubleVal_(cld->ui()->doubleSpinBoxAmount, commodity_.field(CommodityFields::QUANTITY).toDouble());
         }
         else
         {
@@ -50,12 +50,29 @@ void GuiUserAddCommodity::process()
 
     if(ok)
     {
-        QMetaObject::invokeMethod(cld, "doAccept");
+        QMetaObject::invokeMethod(cld, "doAccept", Qt::QueuedConnection);
     }
     else
     {
-        QMetaObject::invokeMethod(cld, "close");
+        QMetaObject::invokeMethod(cld, "close", Qt::QueuedConnection);
     }
 
     emit finished();
+}
+
+
+void GuiUserAddCommodity::postListViewIndex_(QListView *obj, const QModelIndex &index)
+{
+    connect(this, SIGNAL(setCurrentIndex(const QModelIndex&)), obj,
+            SLOT(setCurrentIndex(const QModelIndex&)), Qt::BlockingQueuedConnection);
+    emit setCurrentIndex(index);
+    disconnect(this, SIGNAL(setCurrentIndex(const QModelIndex&)), obj,
+            SLOT(setCurrentIndex(const QModelIndex&)));
+}
+
+void GuiUserAddCommodity::postDoubleVal_(QDoubleSpinBox *obj, const double val)
+{
+    connect(this, SIGNAL(setDoubleValue(double)), obj, SLOT(setValue(double)), Qt::BlockingQueuedConnection);
+    emit setDoubleValue(val);
+    disconnect(this, SIGNAL(setDoubleValue(double)), obj, SLOT(setValue(double)));
 }

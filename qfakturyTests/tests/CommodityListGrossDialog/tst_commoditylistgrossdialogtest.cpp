@@ -1,6 +1,6 @@
 #include <QtTest/QtTest>
 
-#include "../TestsCommon.h"
+#include "../TestsCommon/TestsCommon.h"
 
 class CommodityListGrossDialogTest : public QObject
 {

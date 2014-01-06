@@ -8,6 +8,7 @@ class GuiUser : public QObject
     Q_OBJECT
 public:
     explicit GuiUser(QObject *parent = 0);
+    virtual ~GuiUser() {}
     
 signals:
     void finished();

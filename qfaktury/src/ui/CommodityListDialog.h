@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QDataWidgetMapper>
+#include <QDoubleValidator>
 
 #include "CommodityVisualData.h"
 
@@ -73,6 +74,7 @@ protected:
     Ui::CommodityListDialog *ui;
     Database *db; /**< TODO */
     QDataWidgetMapper widgetMapper; /**< TODO */
+    QDoubleValidator validator;
     double netVal; /**< TODO */
 };
 #endif

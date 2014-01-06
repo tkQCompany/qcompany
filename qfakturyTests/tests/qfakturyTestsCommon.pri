@@ -5,8 +5,6 @@ TEMPLATE = app
 CONFIG   += console
 CONFIG   -= app_bundle
 
-HEADERS += ../TestsCommon.h
-
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 
@@ -18,8 +16,6 @@ INCLUDEPATH += ../../../qfaktury/src \
                ../../../qfaktury/ui_files \
                ../../../qfaktury/src/model \
                ../../../qfaktury/src/model/models \
-               ../../../qfaktury/src/model/models_data \
-               ../../../qdecimal/decnumber \
-               ../../../qdecimal/src
+               ../../../qfaktury/src/model/models_data
 
 LIBS += ../../libqfaktury/libqfaktury.a -lgmpxx -lgmp

@@ -1,4 +1,5 @@
 #include <QMessageBox>
+#include <QDebug>
 
 #include "CommodityListDialog.h"
 #include "ui_CommodityListDialog.h"
@@ -28,11 +29,10 @@ void CommodityListDialog::init()
     comboBoxCommoditiesChanged(CommodityTypeData::GOODS);
     widgetMapper.addMapping(ui->comboBoxCommodities, CommodityFields::TYPE_ID);
     widgetMapper.addMapping(ui->lineEditName, CommodityFields::NAME);
-    widgetMapper.addMapping(ui->doubleSpinBoxPriceNet1, CommodityFields::NET1);
-    widgetMapper.addMapping(ui->doubleSpinBoxPriceNet2, CommodityFields::NET2);
-    widgetMapper.addMapping(ui->doubleSpinBoxPriceNet3, CommodityFields::NET3);
-    widgetMapper.addMapping(ui->doubleSpinBoxPriceNet4, CommodityFields::NET4);
-    //widgetMapper.addMapping(ui->doubleSpinBoxAmount, CommodityFields::QUANTITY);
+    widgetMapper.addMapping(ui->lineEditPriceNet1, CommodityFields::NET1);
+    widgetMapper.addMapping(ui->lineEditPriceNet2, CommodityFields::NET2);
+    widgetMapper.addMapping(ui->lineEditPriceNet3, CommodityFields::NET3);
+    widgetMapper.addMapping(ui->lineEditPriceNet4, CommodityFields::NET4);
     widgetMapper.toFirst();
     ui->doubleSpinBoxAmount->setValue(0.0);
 
@@ -57,6 +57,13 @@ void CommodityListDialog::init()
     connect(ui->comboBoxChosenNetPrice, SIGNAL(currentIndexChanged(int)), this, SLOT( comboBoxChosenNetPriceChanged(int) ) );
     connect(ui->spinBoxDiscount, SIGNAL( valueChanged(int) ), this, SLOT( updateNetVal() ) );
     connect(ui->doubleSpinBoxAmount, SIGNAL( valueChanged(const QString&) ), this, SLOT( updateNetVal() ) );
+
+    validator.setBottom(0.0);
+    validator.setDecimals(2);
+    ui->lineEditPriceNet1->setValidator(&validator);
+    ui->lineEditPriceNet2->setValidator(&validator);
+    ui->lineEditPriceNet3->setValidator(&validator);
+    ui->lineEditPriceNet4->setValidator(&validator);
 }
 
 
@@ -79,16 +86,16 @@ void CommodityListDialog::comboBoxChosenNetPriceChanged(const int i)
         switch(i)
         {
         case 0:
-            netVal = ui->doubleSpinBoxPriceNet1->value();
+            netVal = ui->lineEditPriceNet1->text().toDouble();
             break;
         case 1:
-            netVal = ui->doubleSpinBoxPriceNet2->value();
+            netVal = ui->lineEditPriceNet2->text().toDouble();
             break;
         case 2:
-            netVal = ui->doubleSpinBoxPriceNet3->value();
+            netVal = ui->lineEditPriceNet3->text().toDouble();
             break;
         case 3:
-            netVal = ui->doubleSpinBoxPriceNet4->value();
+            netVal = ui->lineEditPriceNet4->text().toDouble();
             break;
         }
         updateNetVal();

@@ -1,7 +1,7 @@
 #include <QTest>
 #include <QThread>
 
-#include "../TestsCommon.h"
+#include "../TestsCommon/TestsCommon.h"
 #include "MainWindow.h"
 #include "CounterpartyDialog.h"
 

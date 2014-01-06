@@ -1,7 +1,7 @@
 #include <QtTest/QtTest>
 #include <QSqlRecord>
 
-#include "../TestsCommon.h"
+#include "../TestsCommon/TestsCommon.h"
 #include "Database.h"
 #include "CommodityVisualData.h"
 #include "ModelCommodity.h"
