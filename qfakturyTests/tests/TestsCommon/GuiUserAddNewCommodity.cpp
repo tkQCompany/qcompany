@@ -18,7 +18,7 @@ void GuiUserAddNewCommodity::process()
     CommodityDialogPublic *cd = 0;
     do
     {
-        QTest::qSleep(200);
+        QTest::qWait(200);
         cd = idp_->commodityDialog();
     } while(cd == 0);
 
@@ -37,7 +37,7 @@ void GuiUserAddNewCommodity::process()
 
     postDoubleVal_(cd->ui()->doubleSpinBoxQuantity, commodity_.field(CommodityFields::QUANTITY).toDouble());
 
-    QMetaObject::invokeMethod(cd, "okClick", Qt::QueuedConnection);
+    postMouseClick(cd->ui()->pushButtonOK);
     emit finished();
 }
 

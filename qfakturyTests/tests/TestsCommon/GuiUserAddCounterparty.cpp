@@ -19,7 +19,7 @@ void GuiUserAddCounterparty::process()
     do
     {
         cd = idp_->counterpartyDialog();
-        QTest::qSleep(200);
+        QTest::qWait(200);
     } while(cd == 0);
 
     postText_(cd->ui()->lineEditName, counterparty_.name);
@@ -36,7 +36,7 @@ void GuiUserAddCounterparty::process()
     postText_(cd->ui()->lineEditPrimaryEmail, counterparty_.email);
     postText_(cd->ui()->lineEditPrimaryPhone, counterparty_.phone);
 
-    QMetaObject::invokeMethod(cd, "okClick", Qt::QueuedConnection);
+    postMouseClick(cd->ui()->pushButtonOK);
     emit finished();
 }
 

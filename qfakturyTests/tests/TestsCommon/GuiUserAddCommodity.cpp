@@ -18,7 +18,7 @@ void GuiUserAddCommodity::process()
     CommodityListDialogPublic *cld = 0;
     do
     {
-        QTest::qSleep(200);
+        QTest::qWait(200);
         cld = idp_->commodityListDialog();
     } while(cld == 0);
 
@@ -50,11 +50,11 @@ void GuiUserAddCommodity::process()
 
     if(ok)
     {
-        QMetaObject::invokeMethod(cld, "doAccept", Qt::QueuedConnection);
+        postMouseClick(cld->ui()->pushButtonOK);
     }
     else
     {
-        QMetaObject::invokeMethod(cld, "close", Qt::QueuedConnection);
+        postMouseClick(cld->ui()->pushButtonCancel);
     }
 
     emit finished();

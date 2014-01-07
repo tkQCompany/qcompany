@@ -113,7 +113,7 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities()
             startUserThread(&userAddNewCommod, &threadNewCommodity, invD.ui()->pushButtonAddNewCommodity);
             while(!threadNewCommodity.isFinished())
             {
-                QTest::qSleep(200);
+                QTest::qWait(200);
             }
 
             QVERIFY(db.modelCommodity()->submitAll());
@@ -146,7 +146,7 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities()
             startUserThread(&userAddCommod, &threadCommodity, invD.ui()->pushButtonAddCommodity);
             while(!threadCommodity.isFinished())
             {
-                QTest::qSleep(100);
+                QTest::qWait(100);
             }
         }
     }
@@ -160,7 +160,7 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities()
         startUserThread(&userAddNewCounterp, &threadCounterparty, invD.ui()->pushButtonAddCounterparty);
         while(!threadCounterparty.isFinished())
         {
-            QTest::qSleep(100);
+            QTest::qWait(100);
         }
         QVERIFY(db.modelCounterparty()->submitAll());
     }
