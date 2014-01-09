@@ -1,6 +1,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QMessageBox>
+#include <QUrl>
 #include <QDebug>
 
 #include "CounterpartyDialog.h"
@@ -121,6 +122,12 @@ void CounterpartyDialog::okClick()
 {
     if(validate_())
     {
+        const QUrl url = QUrl::fromUserInput(ui->lineEditWWW->text()); //correcting possibly malformed WWW address
+        if(url.isValid())
+        {
+            ui->lineEditWWW->setText(url.toString());
+        }
+
         if(mapper.submit() && (db->modelCounterparty()->lastError().type() == QSqlError::NoError))
         {
             accept();

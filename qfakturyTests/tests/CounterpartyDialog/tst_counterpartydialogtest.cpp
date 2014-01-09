@@ -75,6 +75,7 @@ void CounterpartyDialogTest::testCaseGUIAddNewCounterparty()
     QFETCH(QString, accountNum);
     QFETCH(QString, accountNum_formal);
     QFETCH(QString, www);
+    QFETCH(QString, www_formal);
     QFETCH(QString, primaryEmail);
     QFETCH(QString, primaryPhone);
 
@@ -113,8 +114,8 @@ void CounterpartyDialogTest::testCaseGUIAddNewCounterparty()
     if(q.isActive())
     {
         QCOMPARE(q.next(), true);
-        const long long correct_id = 2LL; //ID==1 is for our own company
-        QCOMPARE(q.value(0).toLongLong(), correct_id);
+        static long long correct_id = 2LL; //ID==1 is for our own company
+        QCOMPARE(q.value(0).toLongLong(), correct_id++);
         QCOMPARE(q.value(1).toString(), name);
         QCOMPARE(q.value(2).toInt(), (int)typeId + 1);//SQL starts from 1 and MY COMPANY is skipped
         QCOMPARE(q.value(3).toString(), country);
@@ -123,7 +124,7 @@ void CounterpartyDialogTest::testCaseGUIAddNewCounterparty()
         QCOMPARE(q.value(6).toString(), street);
         QCOMPARE(q.value(7).toString(), taxID_formal);
         QCOMPARE(q.value(8).toString(), accountNum_formal);
-        QCOMPARE(q.value(9).toString(), www);
+        QCOMPARE(q.value(9).toString(), www_formal);
         QCOMPARE(q.value(10).toString(), primaryEmail);
         QCOMPARE(q.value(11).toString(), primaryPhone);
     }
@@ -148,12 +149,27 @@ void CounterpartyDialogTest::testCaseGUIAddNewCounterparty_data()
     QTest::addColumn<QString>("accountNum");
     QTest::addColumn<QString>("accountNum_formal");
     QTest::addColumn<QString>("www");
+    QTest::addColumn<QString>("www_formal");
     QTest::addColumn<QString>("primaryEmail");
     QTest::addColumn<QString>("primaryPhone");
 
     SettingsGlobal s;
 
-    QTest::newRow("") << QString("name")
+    QTest::newRow("basic") << QString("name1")
+                      << CounterpartyTypeData::COMPANY
+                      << s.value(s.COUNTRY).toString()
+                      << QString("location")
+                      << QString("postal_code")
+                      << QString("street 123/1234")
+                      << QString("0123456789")
+                      << QString("012-345-67-89")
+                      << QString("99999999999999999999999999")
+                      << QString("99-9999-9999-9999-9999-9999-9999")
+                      << QString("http://www.test.com")
+                      << QString("http://www.test.com")
+                      << QString("email@test.com")
+                      << QString("0123456789");
+    QTest::newRow("malformed WWW ") << QString("name2")
                       << CounterpartyTypeData::COMPANY
                       << s.value(s.COUNTRY).toString()
                       << QString("location")
@@ -164,6 +180,7 @@ void CounterpartyDialogTest::testCaseGUIAddNewCounterparty_data()
                       << QString("99999999999999999999999999")
                       << QString("99-9999-9999-9999-9999-9999-9999")
                       << QString("www.test.com")
+                      << QString("http://www.test.com")
                       << QString("email@test.com")
                       << QString("0123456789");
 }
