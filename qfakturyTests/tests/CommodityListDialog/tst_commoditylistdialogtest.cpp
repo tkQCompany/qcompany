@@ -1,7 +1,7 @@
 #include <QtTest/QtTest>
 
 #include "../TestsCommon/TestsCommon.h"
-#include "CommodityListDialogPublic.h"
+#include "../TestsCommon/CommodityListDialogPublic.h"
 #include "CommodityListDialog.cpp"
 #include "CommodityTypeData.h"
 #include "Database.h"

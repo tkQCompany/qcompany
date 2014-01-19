@@ -3,20 +3,24 @@
 
 #include "InvoiceDialog.h"
 #include "ui_InvoiceDialog.h"
+#include "../TestsCommon/DialogWithCommodityDialog.h"
+#include "../TestsCommon/DialogWithCommodityListDialog.h"
+#include "../TestsCommon/DialogWithCounterpartyDialog.h"
 
 
 class CommodityDialogPublic;
 class CommodityListDialogPublic;
 class CounterpartyDialogPublic;
 
-class InvoiceDialogPublic: public InvoiceDialog
+class InvoiceDialogPublic: public InvoiceDialog, public DialogWithCommodityDialog,
+        public DialogWithCommodityListDialog, public DialogWithCounterpartyDialog
 {
     Q_OBJECT
 public:
     InvoiceDialogPublic(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType, const QModelIndex &idEdit = QModelIndex());
-    CommodityDialogPublic* commodityDialog() const;
-    CommodityListDialogPublic* commodityListDialog() const;
-    CounterpartyDialogPublic* counterpartyDialog() const;
+    CommodityDialogPublic* commodityDialogPublic() const;
+    CommodityListDialogPublic* commodityListDialogPublic() const;
+    CounterpartyDialogPublic* counterpartyDialogPublic() const;
     Ui::InvoiceDialog *ui();
 };
 

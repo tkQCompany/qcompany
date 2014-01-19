@@ -4,8 +4,8 @@
 #include "GuiUser.h"
 #include "CommodityData.h"
 
-class InvoiceDialogPublic;
 struct CommodityData;
+class DialogWithCommodityDialog;
 class QComboBox;
 class QDoubleSpinBox;
 
@@ -13,7 +13,7 @@ class GuiUserAddNewCommodity : public GuiUser
 {
     Q_OBJECT
 public:
-    explicit GuiUserAddNewCommodity(InvoiceDialogPublic *idp, const CommodityData &commodity, QObject *parent = 0);
+    explicit GuiUserAddNewCommodity(DialogWithCommodityDialog *d, const CommodityData &commodity, QObject *parent = 0);
     ~GuiUserAddNewCommodity() {}
     
 public slots:
@@ -29,7 +29,7 @@ private:
     void postDoubleVal_(QDoubleSpinBox *obj, const double val);
 
 private:
-    const InvoiceDialogPublic *idp_;
+    DialogWithCommodityDialog *dialog_;
     const CommodityData commodity_;
 };
 

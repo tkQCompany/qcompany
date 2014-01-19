@@ -12,13 +12,13 @@ SOURCES += tst_invoicedialogtest.cpp \
     ../TestsCommon/GuiUserAddCommodity.cpp \
     ../TestsCommon/GuiUser.cpp \
     ../TestsCommon/CounterpartyDialogPublic.cpp \
-    ../TestsCommon/CommodityDialogPublic.cpp
+    ../TestsCommon/CommodityDialogPublic.cpp \
+    ../TestsCommon/CommodityListDialogPublic.cpp
 
 include(../../../qfaktury/qfaktury_common.pri)
 include(../qfakturyTestsCommon.pri)
 
 DEPENDPATH += ../CommodityListDialog
-OBJECTS += ../CommodityListDialog/moc_CommodityListDialogPublic.o
 
 HEADERS += \
     ../TestsCommon/TestsCommon.h \
@@ -29,4 +29,5 @@ HEADERS += \
     ../TestsCommon/GuiUser.h \
     ../TestsCommon/Counterparty_t.h \
     ../TestsCommon/CounterpartyDialogPublic.h \
-    ../TestsCommon/CommodityDialogPublic.h
+    ../TestsCommon/CommodityDialogPublic.h \
+    ../TestsCommon/CommodityListDialogPublic.h

@@ -6,16 +6,16 @@
 #include "GuiUser.h"
 #include "CommodityData.h"
 
-class InvoiceDialogPublic;
 struct CommodityData;
-class QListView;
+class DialogWithCommodityListDialog;
 class QDoubleSpinBox;
+class QListView;
 
 class GuiUserAddCommodity : public GuiUser
 {
     Q_OBJECT
 public:
-    explicit GuiUserAddCommodity(InvoiceDialogPublic *idp, const CommodityData &commodity, QObject *parent = 0);
+    explicit GuiUserAddCommodity(DialogWithCommodityListDialog *d, const CommodityData &commodity, QObject *parent = 0);
     ~GuiUserAddCommodity() {}
     
 public slots:
@@ -30,7 +30,7 @@ private:
     void postDoubleVal_(QDoubleSpinBox *obj, const double val);
 
 private:
-    const InvoiceDialogPublic *idp_;
+    DialogWithCommodityListDialog *dialog_;
     const CommodityData commodity_;
 };
 

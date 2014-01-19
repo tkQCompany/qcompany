@@ -47,7 +47,6 @@ void InvoiceDialogTest::initTestCase()
     SettingsGlobal s;
     s.setFirstRun(true);
     qsrand(QTime::currentTime().msec());
-    //qRegisterMetaType<QItemSelection>("QItemSelection");
 }
 
 
@@ -165,6 +164,8 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities()
         QVERIFY(db.modelCounterparty()->submitAll());
     }
 
+    QVERIFY(invD.ui()->pushButtonMoreInfo->isEnabled());
+
     const int indNewCounterparty = invD.ui()->comboBoxCounterparties->findText(counterparty.name);
     QVERIFY(indNewCounterparty != -1);
     invD.ui()->comboBoxCounterparties->setCurrentIndex(indNewCounterparty);
@@ -212,11 +213,11 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities_data()
     QVariant v;
     const QStringList vatRates(s.value(s.keyName(s.VAT_RATES)).toString().split("|"));
 
-    const int maxRows = qrand() % 4 + 1; //1-200
+    const int maxRows = qrand() % 200 + 1; //1-200
     const int base = 10;
     for(int row = 0; row < maxRows; ++row)
     {
-        const int maxCommod = qrand() % 20 + 1; //1-200 commodities per invoice
+        const int maxCommod = qrand() % 200 + 1; //1-200 commodities per invoice
         lcd.clear();
         for(int commod = 0; commod < maxCommod; ++commod)
         {

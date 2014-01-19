@@ -5,39 +5,39 @@
 #include "GuiUserAddNewCommodity.h"
 #include "CommodityDialogPublic.h"
 #include "CommodityDialog.cpp"
-#include "InvoiceDialogPublic.h"
+#include "../TestsCommon/DialogWithCommodityDialog.h"
 
-GuiUserAddNewCommodity::GuiUserAddNewCommodity(InvoiceDialogPublic *idp, const CommodityData &commodity, QObject *parent) :
-    GuiUser(parent), idp_(idp), commodity_(commodity)
+GuiUserAddNewCommodity::GuiUserAddNewCommodity(DialogWithCommodityDialog *d, const CommodityData &commodity, QObject *parent) :
+    GuiUser(parent), dialog_(d), commodity_(commodity)
 {
 }
 
 
 void GuiUserAddNewCommodity::process()
 {
-    CommodityDialogPublic *cd = 0;
+    CommodityDialogPublic *cdp = 0;
     do
     {
         QTest::qWait(200);
-        cd = idp_->commodityDialog();
-    } while(cd == 0);
+        cdp = dialog_->commodityDialogPublic();
+    } while(cdp == 0);
 
-    postText_(cd->ui()->lineEditName, commodity_.field(CommodityFields::NAME).toString());
-    postText_(cd->ui()->lineEditAbbreviation, commodity_.field(CommodityFields::ABBREV).toString());
-    postText_(cd->ui()->lineEditPKWIU, commodity_.field(CommodityFields::PKWIU).toString());
+    postText_(cdp->ui()->lineEditName, commodity_.field(CommodityFields::NAME).toString());
+    postText_(cdp->ui()->lineEditAbbreviation, commodity_.field(CommodityFields::ABBREV).toString());
+    postText_(cdp->ui()->lineEditPKWIU, commodity_.field(CommodityFields::PKWIU).toString());
 
-    postComboBoxIndex_(cd->ui()->comboBoxType, commodity_.field(CommodityFields::TYPE_ID).toInt());
-    postComboBoxIndex_(cd->ui()->comboBoxMeasureUnit, commodity_.field(CommodityFields::UNIT_ID).toInt());
-    postComboBoxIndex_(cd->ui()->comboBoxVat, cd->ui()->comboBoxVat->findText(commodity_.field(CommodityFields::VAT).toString()));
+    postComboBoxIndex_(cdp->ui()->comboBoxType, commodity_.field(CommodityFields::TYPE_ID).toInt());
+    postComboBoxIndex_(cdp->ui()->comboBoxMeasureUnit, commodity_.field(CommodityFields::UNIT_ID).toInt());
+    postComboBoxIndex_(cdp->ui()->comboBoxVat, cdp->ui()->comboBoxVat->findText(commodity_.field(CommodityFields::VAT).toString()));
 
-    postText_(cd->ui()->lineEditNet1, commodity_.field(CommodityFields::NET1).toString());
-    postText_(cd->ui()->lineEditNet2, commodity_.field(CommodityFields::NET2).toString());
-    postText_(cd->ui()->lineEditNet3, commodity_.field(CommodityFields::NET3).toString());
-    postText_(cd->ui()->lineEditNet4, commodity_.field(CommodityFields::NET4).toString());
+    postText_(cdp->ui()->lineEditNet1, commodity_.field(CommodityFields::NET1).toString());
+    postText_(cdp->ui()->lineEditNet2, commodity_.field(CommodityFields::NET2).toString());
+    postText_(cdp->ui()->lineEditNet3, commodity_.field(CommodityFields::NET3).toString());
+    postText_(cdp->ui()->lineEditNet4, commodity_.field(CommodityFields::NET4).toString());
 
-    postDoubleVal_(cd->ui()->doubleSpinBoxQuantity, commodity_.field(CommodityFields::QUANTITY).toDouble());
+    postDoubleVal_(cdp->ui()->doubleSpinBoxQuantity, commodity_.field(CommodityFields::QUANTITY).toDouble());
 
-    postMouseClick(cd->ui()->pushButtonOK);
+    postMouseClick(cdp->ui()->pushButtonOK);
     emit finished();
 }
 

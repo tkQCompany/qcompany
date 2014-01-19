@@ -4,15 +4,15 @@
 #include "GuiUser.h"
 #include "Counterparty_t.h"
 
-class InvoiceDialogPublic;
 struct Counterparty_t;
+class DialogWithCounterpartyDialog;
 class QComboBox;
 
 class GuiUserAddCounterparty : public GuiUser
 {
     Q_OBJECT
 public:
-    explicit GuiUserAddCounterparty(InvoiceDialogPublic *idp, Counterparty_t *counterparty, QObject *parent = 0);
+    explicit GuiUserAddCounterparty(DialogWithCounterpartyDialog *d, Counterparty_t *counterparty, QObject *parent = 0);
     
 public slots:
     void process();
@@ -25,7 +25,7 @@ private:
     void postComboBoxIndex_(QComboBox *obj, const int index);
 
 private:
-    const InvoiceDialogPublic *idp_;
+    DialogWithCounterpartyDialog *dialog_;
     const Counterparty_t counterparty_;    
 };
 

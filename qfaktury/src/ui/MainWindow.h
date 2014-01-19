@@ -1,11 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QPointer>
+
 #include "ui_MainWindow.h"
 #include "Database.h"
 #include "InvoiceTypeData.h"
 #include "CommodityData.h"
 #include "CounterpartyData.h"
+#include "CommodityDialog.h"
+#include "CounterpartyDialog.h"
 
 
 namespace CMF = CommodityFields;
@@ -17,7 +21,7 @@ namespace IVF = InvoiceFields;
  * @brief
  *
  */
-class MainWindow: public QMainWindow, public Ui::MainWindow
+class MainWindow: public QMainWindow
 {
     Q_OBJECT
 public:
@@ -59,9 +63,15 @@ protected slots:
 
 protected:
     void createInvoice_(const InvoiceTypeData::Type type);
+    Database* database();
     void init_();
     void setActions_(const bool counterpartiesEditEnabled, const bool counterpartiesRemoveEnable, const bool, const bool, const bool historyEditEnabled, const bool historyRemoveEnabled);
     virtual void loadPlugins();
+
+protected:
+    Ui::MainWindow *ui;
+    QPointer<CommodityDialog> commodityDialogPtr;
+    QPointer<CounterpartyDialog> counterpartyDialogPtr;
 
 private:
     Database db_; /**< An object representing the application's database */

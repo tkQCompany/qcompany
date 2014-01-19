@@ -2,39 +2,39 @@
 #include <QDebug>
 
 #include "GuiUserAddCommodity.h"
-#include "../CommodityListDialog/CommodityListDialogPublic.cpp"
+#include "../TestsCommon//CommodityListDialogPublic.h"
+#include "../TestsCommon/DialogWithCommodityListDialog.h"
 #include "CommodityListDialog.cpp"
-#include "InvoiceDialogPublic.h"
 
 
-GuiUserAddCommodity::GuiUserAddCommodity(InvoiceDialogPublic *idp, const CommodityData &commodity, QObject *parent) :
-    GuiUser(parent), idp_(idp), commodity_(commodity)
+GuiUserAddCommodity::GuiUserAddCommodity(DialogWithCommodityListDialog *d, const CommodityData &commodity, QObject *parent) :
+    GuiUser(parent), dialog_(d), commodity_(commodity)
 {
 }
 
 
 void GuiUserAddCommodity::process()
 {
-    CommodityListDialogPublic *cld = 0;
+    bool ok = true;
+
+    CommodityListDialogPublic *cldp = 0;
     do
     {
         QTest::qWait(200);
-        cld = idp_->commodityListDialog();
-    } while(cld == 0);
+        cldp = dialog_->commodityListDialogPublic();
+    } while(cldp == 0);
 
-    bool ok = true;
-
-    const int rowCount = cld->ui()->listViewCommodities->model()->rowCount();
+    const int rowCount = cldp->ui()->listViewCommodities->model()->rowCount();
     if(rowCount > 0)
     {
-        const QModelIndexList indList(cld->ui()->listViewCommodities->model()->match(
-                                          cld->ui()->listViewCommodities->model()->index(0, CommodityFields::NAME),
+        const QModelIndexList indList(cldp->ui()->listViewCommodities->model()->match(
+                                          cldp->ui()->listViewCommodities->model()->index(0, CommodityFields::NAME),
                                           Qt::DisplayRole,
                                           commodity_.field(CommodityFields::NAME).toString()));
         if(!indList.isEmpty())
         {
-            postListViewIndex_(cld->ui()->listViewCommodities, indList.at(0));
-            postDoubleVal_(cld->ui()->doubleSpinBoxAmount, commodity_.field(CommodityFields::QUANTITY).toDouble());
+            postListViewIndex_(cldp->ui()->listViewCommodities, indList.at(0));
+            postDoubleVal_(cldp->ui()->doubleSpinBoxAmount, commodity_.field(CommodityFields::QUANTITY).toDouble());
         }
         else
         {
@@ -50,11 +50,11 @@ void GuiUserAddCommodity::process()
 
     if(ok)
     {
-        postMouseClick(cld->ui()->pushButtonOK);
+        postMouseClick(cldp->ui()->pushButtonOK);
     }
     else
     {
-        postMouseClick(cld->ui()->pushButtonCancel);
+        postMouseClick(cldp->ui()->pushButtonCancel);
     }
 
     emit finished();
