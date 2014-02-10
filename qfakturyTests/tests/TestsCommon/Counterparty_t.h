@@ -17,6 +17,7 @@ struct Counterparty_t
     QString www;
     QString email;
     QString phone;
+    QString invNumFormat;
 };
 
 Q_DECLARE_METATYPE(Counterparty_t)

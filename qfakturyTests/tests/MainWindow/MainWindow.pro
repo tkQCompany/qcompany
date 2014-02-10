@@ -13,7 +13,9 @@ SOURCES += tst_mainwindowtest.cpp \
     ../TestsCommon/CounterpartyDialogPublic.cpp \
     ../TestsCommon/CommodityDialogPublic.cpp \
     ../TestsCommon/CommodityListDialogPublic.cpp \
-    ../TestsCommon/MainWindowPublic.cpp
+    ../TestsCommon/MainWindowPublic.cpp \
+    ../TestsCommon/GuiUserEditInvoice.cpp \
+    ../TestsCommon/InvoiceDialogPublic.cpp
 
 include(../../../qfaktury/qfaktury_common.pri)
 include(../qfakturyTestsCommon.pri)
@@ -31,4 +33,7 @@ HEADERS += ../TestsCommon/TestsCommon.h \
     ../TestsCommon/DialogWithCommodityListDialog.h \
     ../TestsCommon/DialogWithCommodityDialog.h \
     ../TestsCommon/DialogWithCounterpartyDialog.h \
-    ../TestsCommon/DialogWithPublicDialog.h
+    ../TestsCommon/DialogWithPublicDialog.h \
+    ../TestsCommon/GuiUserEditInvoice.h \
+    ../TestsCommon/DialogWithInvoiceDialog.h \
+    ../TestsCommon/InvoiceDialogPublic.h

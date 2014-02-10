@@ -13,7 +13,6 @@
 
 #include "MainWindow.h"
 #include "CounterpartyDialog.h"
-#include "InvoiceDialog.h"
 #include "InvoiceGrossDialog.h"
 #include "CorrectiveInvoiceDialog.h"
 #include "CorrectiveInvoiceGrossDialog.h"
@@ -32,10 +31,24 @@
  *
  * @param parent Pointer to Qt's parent widget
  */
-MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow())
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui_(new Ui::MainWindow())
 {
-    ui->setupUi(this);
+    ui_->setupUi(this);
     init_();
+}
+
+MainWindow::~MainWindow()
+{
+    if(commodityDialogPtr_)
+        delete commodityDialogPtr_;
+
+    if(counterpartyDialogPtr_)
+        delete counterpartyDialogPtr_;
+
+    if(invoiceDialogPtr_)
+        delete invoiceDialogPtr_;
+
+    delete ui_;
 }
 
 
@@ -49,72 +62,72 @@ void MainWindow::init_()
 
     retranslateUi_();
 
-    ui->dateEditFilterStart->setDisplayFormat(s.dateFormatExternal());
-    ui->dateEditFilterEnd->setDisplayFormat(s.dateFormatExternal());
-    ui->dateEditFilterStart->setDate(QDate::currentDate());
-    ui->dateEditFilterEnd->setDate(QDate::currentDate());
+    ui_->dateEditFilterStart->setDisplayFormat(s.dateFormatExternal());
+    ui_->dateEditFilterEnd->setDisplayFormat(s.dateFormatExternal());
+    ui_->dateEditFilterStart->setDate(QDate::currentDate());
+    ui_->dateEditFilterEnd->setDate(QDate::currentDate());
     db_.modelInvoice()->setDataRange(QDate(), QDate());//full range
 
-    ui->tableViewCounterparties->setModel(db_.modelCounterparty());
-    ui->tableViewCounterparties->setItemDelegate(new QSqlRelationalDelegate(ui->tableViewCounterparties));
-    ui->tableViewCounterparties->hideColumn(0);
+    ui_->tableViewCounterparties->setModel(db_.modelCounterparty());
+    ui_->tableViewCounterparties->setItemDelegate(new QSqlRelationalDelegate(ui_->tableViewCounterparties));
+    ui_->tableViewCounterparties->hideColumn(0);
 
-    ui->tableViewCommodities->setModel(db_.modelCommodity());
-    ui->tableViewCommodities->setItemDelegate(new QSqlRelationalDelegate(ui->tableViewCommodities));
-    ui->tableViewCommodities->hideColumn(0);
+    ui_->tableViewCommodities->setModel(db_.modelCommodity());
+    ui_->tableViewCommodities->setItemDelegate(new QSqlRelationalDelegate(ui_->tableViewCommodities));
+    ui_->tableViewCommodities->hideColumn(0);
 
-    ui->tableViewInvoices->setModel(db_.modelInvoice());
-    ui->tableViewInvoices->setItemDelegate(new QSqlRelationalDelegate(ui->tableViewInvoices));
-    ui->tableViewInvoices->hideColumn(0);
+    ui_->tableViewInvoices->setModel(db_.modelInvoice());
+    ui_->tableViewInvoices->setItemDelegate(new QSqlRelationalDelegate(ui_->tableViewInvoices));
+    ui_->tableViewInvoices->hideColumn(0);
 
     #if QT_VERSION < 0x050000
     ui->tableViewCounterparties->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->tableViewCommodities->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->tableViewInvoices->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     #else
-    ui->tableViewCounterparties->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    ui->tableViewCommodities->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    ui->tableViewInvoices->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui_->tableViewCounterparties->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui_->tableViewCommodities->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui_->tableViewInvoices->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     #endif
 
     this->setWindowTitle(QString("%1 - %2").arg(qApp->applicationName()).arg(qApp->applicationVersion()));
 
     // connect slots
-    connect(ui->actionHelp_BugReport, SIGNAL(triggered()), this, SLOT(reportBug_()));
-    connect(ui->toolButtonApply, SIGNAL (clicked()), this, SLOT(reReadInvHistory_()));
-    connect(ui->actionProgram_CompanyInfo, SIGNAL(triggered()), this, SLOT(editMyCompanyInfo()));
-    connect(ui->actionProgram_Exit, SIGNAL(triggered()), this, SLOT(close()));
-    connect(ui->actionCounterparties_Add, SIGNAL(triggered()), this, SLOT(addCounterparty_()));
-    connect(ui->actionCounterparties_Remove, SIGNAL(triggered()), this, SLOT(delCounterparty_()));
-    connect(ui->actionCounterparties_Edit, SIGNAL(triggered()), this, SLOT(editCounterparty_()));
-    connect(ui->actionInvoices_InvoiceNew, SIGNAL(triggered()), this, SLOT(newInvoice_()));
-    connect(ui->actionInvoices_Remove, SIGNAL(triggered()), this, SLOT(delInvoice_()));
-    connect(ui->actionInvoices_Edit, SIGNAL(triggered()), this, SLOT(editInvoice_()));
-    connect(ui->actionInvoices_InvoiceDuplicate, SIGNAL(triggered()), this, SLOT(newDuplicate_()));
-    connect(ui->actionInvoices_InvoiceGross, SIGNAL(triggered()), this, SLOT(newGrossInvoice_()));
-    connect(ui->actionInvoices_Bill, SIGNAL(triggered()), this, SLOT(newBill_()));
-    connect(ui->actionInvoices_InvoiceCorrective, SIGNAL(triggered()), this, SLOT(newCorrection_()));
-    connect(ui->actionInvoices_InvoiceProForma, SIGNAL(triggered()), this, SLOT(newProFormaInvoice_()));
-    connect(ui->actionCommodities_Add, SIGNAL(triggered()), this, SLOT(addCommodity_()));
-    connect(ui->actionCommodities_Edit, SIGNAL(triggered()), this, SLOT(editCommodity_()));
-    connect(ui->actionCommodities_Remove, SIGNAL(triggered()), this, SLOT(delCommodity_()));
-    connect(ui->actionHelp_AboutQt, SIGNAL(triggered()), this, SLOT(aboutQt_()));
-    connect(ui->actionHelp_About, SIGNAL(triggered()), this, SLOT(about_()));
-    connect(ui->actionProgram_Settings, SIGNAL(triggered()), this, SLOT(editSettings_()));
-    connect(ui->tabWidgetMain, SIGNAL(currentChanged(int)), this, SLOT(tabChanged_(int)));
-    connect(ui->actionHelp_Help, SIGNAL(triggered()), this, SLOT(help_()));
-    connect(ui->tableViewInvoices, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editInvoice_()));
-    connect(ui->tableViewInvoices, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTableMenuHistory_(QPoint)));
-    connect(ui->tableViewCounterparties, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editCounterparty_()));
-    connect(ui->tableViewCounterparties, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTableMenuCounterparties_(QPoint)));
-    connect(ui->tableViewCommodities, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editCommodity_()));
-    connect(ui->tableViewCommodities, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTableMenuGoods_(QPoint)));
+    connect(ui_->actionHelp_BugReport, SIGNAL(triggered()), this, SLOT(reportBug_()));
+    connect(ui_->toolButtonApply, SIGNAL (clicked()), this, SLOT(reReadInvHistory_()));
+    connect(ui_->actionProgram_CompanyInfo, SIGNAL(triggered()), this, SLOT(editMyCompanyInfo()));
+    connect(ui_->actionProgram_Exit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(ui_->actionCounterparties_Add, SIGNAL(triggered()), this, SLOT(addCounterparty_()));
+    connect(ui_->actionCounterparties_Remove, SIGNAL(triggered()), this, SLOT(delCounterparty_()));
+    connect(ui_->actionCounterparties_Edit, SIGNAL(triggered()), this, SLOT(editCounterparty_()));
+    connect(ui_->actionInvoices_InvoiceNew, SIGNAL(triggered()), this, SLOT(newInvoice_()));
+    connect(ui_->actionInvoices_Remove, SIGNAL(triggered()), this, SLOT(delInvoice_()));
+    connect(ui_->actionInvoices_Edit, SIGNAL(triggered()), this, SLOT(editInvoice_()));
+    connect(ui_->actionInvoices_InvoiceDuplicate, SIGNAL(triggered()), this, SLOT(newDuplicate_()));
+    connect(ui_->actionInvoices_InvoiceGross, SIGNAL(triggered()), this, SLOT(newGrossInvoice_()));
+    connect(ui_->actionInvoices_Bill, SIGNAL(triggered()), this, SLOT(newBill_()));
+    connect(ui_->actionInvoices_InvoiceCorrective, SIGNAL(triggered()), this, SLOT(newCorrection_()));
+    connect(ui_->actionInvoices_InvoiceProForma, SIGNAL(triggered()), this, SLOT(newProFormaInvoice_()));
+    connect(ui_->actionCommodities_Add, SIGNAL(triggered()), this, SLOT(addCommodity_()));
+    connect(ui_->actionCommodities_Edit, SIGNAL(triggered()), this, SLOT(editCommodity_()));
+    connect(ui_->actionCommodities_Remove, SIGNAL(triggered()), this, SLOT(delCommodity_()));
+    connect(ui_->actionHelp_AboutQt, SIGNAL(triggered()), this, SLOT(aboutQt_()));
+    connect(ui_->actionHelp_About, SIGNAL(triggered()), this, SLOT(about_()));
+    connect(ui_->actionProgram_Settings, SIGNAL(triggered()), this, SLOT(editSettings_()));
+    connect(ui_->tabWidgetMain, SIGNAL(currentChanged(int)), this, SLOT(tabChanged_(int)));
+    connect(ui_->actionHelp_Help, SIGNAL(triggered()), this, SLOT(help_()));
+    connect(ui_->tableViewInvoices, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editInvoice_()));
+    connect(ui_->tableViewInvoices, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTableMenuHistory_(QPoint)));
+    connect(ui_->tableViewCounterparties, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editCounterparty_()));
+    connect(ui_->tableViewCounterparties, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTableMenuCounterparties_(QPoint)));
+    connect(ui_->tableViewCommodities, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editCommodity_()));
+    connect(ui_->tableViewCommodities, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTableMenuGoods_(QPoint)));
 
-    connect(ui->tableViewInvoices, SIGNAL(clicked(QModelIndex)), this, SLOT(mainUpdateStatus_(QModelIndex)));
-    connect(ui->tableViewCounterparties, SIGNAL(clicked(QModelIndex)), this, SLOT(mainUpdateStatus_(QModelIndex)));
-    connect(ui->tableViewCommodities, SIGNAL(clicked(QModelIndex)), this, SLOT(mainUpdateStatus_(QModelIndex)));
+    connect(ui_->tableViewInvoices, SIGNAL(clicked(QModelIndex)), this, SLOT(mainUpdateStatus_(QModelIndex)));
+    connect(ui_->tableViewCounterparties, SIGNAL(clicked(QModelIndex)), this, SLOT(mainUpdateStatus_(QModelIndex)));
+    connect(ui_->tableViewCommodities, SIGNAL(clicked(QModelIndex)), this, SLOT(mainUpdateStatus_(QModelIndex)));
 
-    tabChanged_(ui->tabWidgetMain->currentIndex());
+    tabChanged_(ui_->tabWidgetMain->currentIndex());
     loadPlugins();
 }
 
@@ -150,12 +163,12 @@ void MainWindow::loadPlugins()
             QAction *action = new QAction(t.readLine().remove ("# "), this);
             action->setData(QVariant(i));
             connect(action, SIGNAL(triggered()), this, SLOT (pluginSlot_()));
-            ui->menuPlugins->addAction(action);
-            customActions[i] = path + allFiles[i];
+            ui_->menuPlugins->addAction(action);
+            customActions_[i] = path + allFiles[i];
         }
     }
-    ui->menuPlugins->addSeparator();
-    ui->menuPlugins->addAction(trUtf8("Informacje"), this, SLOT (pluginInfoSlot_()));
+    ui_->menuPlugins->addSeparator();
+    ui_->menuPlugins->addAction(trUtf8("Informacje"), this, SLOT (pluginInfoSlot_()));
 }
 
 
@@ -167,31 +180,30 @@ void MainWindow::loadPlugins()
  */
 void MainWindow::createInvoice_(const InvoiceTypeData::Type type)
 {
-    QScopedPointer<QDialog> invoice;
     switch(type)
     {
     case InvoiceTypeData::VAT:
     case InvoiceTypeData::PRO_FORMA:
-        invoice.reset(new InvoiceDialog(this, &db_, type));
+        invoiceDialogPtr_ = new InvoiceDialog(this, &db_, type);
         break;
     case InvoiceTypeData::BILL:
-        invoice.reset(new BillDialog(this, &db_));
+        invoiceDialogPtr_ = new BillDialog(this, &db_);
         break;
     case InvoiceTypeData::GROSS:
-        invoice.reset(new InvoiceGrossDialog(this, &db_));
+        invoiceDialogPtr_ = new InvoiceGrossDialog(this, &db_);
         break;
     default:
         return;
     }
 
-    if(!invoice.isNull())
+    if(invoiceDialogPtr_)
     {
-        if(QDialog::Accepted == invoice->exec())
+        if(QDialog::Accepted == invoiceDialogPtr_->exec())
         {
-            ui->tableViewInvoices->selectionModel()->setCurrentIndex(db_.modelInvoice()->index(db_.modelInvoice()->rowCount() - 1,
+            ui_->tableViewInvoices->selectionModel()->setCurrentIndex(db_.modelInvoice()->index(db_.modelInvoice()->rowCount() - 1,
                                                                            InvoiceFields::ID_INVOICE), QItemSelectionModel::Rows | QItemSelectionModel::Select);
-            ui->dateEditFilterStart->setDate(QDate::currentDate()); //otherwise our new invoice couldn't be shown
-            ui->dateEditFilterEnd->setDate(QDate::currentDate());
+            ui_->dateEditFilterStart->setDate(QDate::currentDate()); //otherwise our new invoice couldn't be shown
+            ui_->dateEditFilterEnd->setDate(QDate::currentDate());
         }
     }
 }
@@ -217,12 +229,12 @@ void MainWindow::setActions_(const bool counterpartiesEditEnabled, const bool co
                             const bool commoditiesEditEnabled, const bool commoditiesRemoveEnabled,
                             const bool historyEditEnabled, const bool historyRemoveEnabled)
 {
-    ui->actionCounterparties_Edit->setEnabled(counterpartiesEditEnabled);
-    ui->actionCounterparties_Remove->setEnabled(counterpartiesRemoveEnable);
-    ui->actionCommodities_Edit->setEnabled(commoditiesEditEnabled);
-    ui->actionCommodities_Remove->setEnabled(commoditiesRemoveEnabled);
-    ui->actionInvoices_Edit->setEnabled(historyEditEnabled);
-    ui->actionInvoices_Remove->setEnabled(historyRemoveEnabled);
+    ui_->actionCounterparties_Edit->setEnabled(counterpartiesEditEnabled);
+    ui_->actionCounterparties_Remove->setEnabled(counterpartiesRemoveEnable);
+    ui_->actionCommodities_Edit->setEnabled(commoditiesEditEnabled);
+    ui_->actionCommodities_Remove->setEnabled(commoditiesRemoveEnabled);
+    ui_->actionInvoices_Edit->setEnabled(historyEditEnabled);
+    ui_->actionInvoices_Remove->setEnabled(historyRemoveEnabled);
 }
 
 
@@ -238,7 +250,7 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 {
     if (event->key() == Qt::Key_Return)
     {
-        switch (ui->tabWidgetMain->currentIndex())
+        switch (ui_->tabWidgetMain->currentIndex())
         {
         case 0:
             editInvoice_();
@@ -253,24 +265,24 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
     }
     if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_PageUp)
     {
-        if (ui->tabWidgetMain->currentIndex() != ui->tabWidgetMain->count() - 1)
+        if (ui_->tabWidgetMain->currentIndex() != ui_->tabWidgetMain->count() - 1)
         {
-            ui->tabWidgetMain->setCurrentIndex(ui->tabWidgetMain->currentIndex() + 1);
+            ui_->tabWidgetMain->setCurrentIndex(ui_->tabWidgetMain->currentIndex() + 1);
         }
         else
         {
-            ui->tabWidgetMain->setCurrentIndex(0);
+            ui_->tabWidgetMain->setCurrentIndex(0);
         }
     }
     if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_PageDown)
     {
-        if (ui->tabWidgetMain->currentIndex() != 0)
+        if (ui_->tabWidgetMain->currentIndex() != 0)
         {
-            ui->tabWidgetMain->setCurrentIndex(ui->tabWidgetMain->currentIndex() - 1);
+            ui_->tabWidgetMain->setCurrentIndex(ui_->tabWidgetMain->currentIndex() - 1);
         }
         else
         {
-            ui->tabWidgetMain->setCurrentIndex(ui->tabWidgetMain->count() - 1);
+            ui_->tabWidgetMain->setCurrentIndex(ui_->tabWidgetMain->count() - 1);
         }
     }
 }
@@ -291,7 +303,7 @@ void MainWindow::pluginInfoSlot_()
 
 void MainWindow::reReadInvHistory_()
 {
-    db_.modelInvoice()->setDataRange(ui->dateEditFilterStart->date(), ui->dateEditFilterEnd->date());
+    db_.modelInvoice()->setDataRange(ui_->dateEditFilterStart->date(), ui_->dateEditFilterEnd->date());
 }
 
 
@@ -301,7 +313,7 @@ void MainWindow::retranslateUi_()
     SettingsGlobal s;
     appTranslator.load(QString(":/res/translations/qfaktury_") + s.value(s.LANG).toString());
     qApp->installTranslator(&appTranslator);
-    ui->retranslateUi(this);
+    ui_->retranslateUi(this);
 }
 
 
@@ -316,7 +328,7 @@ void MainWindow::pluginSlot_()
     const int scriptId = a->data().toInt();
 
     QStringList args;
-    args += customActions[scriptId];
+    args += customActions_[scriptId];
     args += QString("%1").arg(winId());
 
     QProcess cmd(this);
@@ -337,11 +349,11 @@ void MainWindow::pluginSlot_()
  */
 void MainWindow::showTableMenuGoods_(const QPoint &p) const
 {
-    QMenu menutableViewGoods(ui->tableViewCommodities);
-    menutableViewGoods.addAction(ui->actionCommodities_Add);
-    menutableViewGoods.addAction(ui->actionCommodities_Remove);
-    menutableViewGoods.addAction(ui->actionCommodities_Edit);
-    menutableViewGoods.exec(ui->tableViewCommodities->mapToGlobal(p));
+    QMenu menutableViewGoods(ui_->tableViewCommodities);
+    menutableViewGoods.addAction(ui_->actionCommodities_Add);
+    menutableViewGoods.addAction(ui_->actionCommodities_Remove);
+    menutableViewGoods.addAction(ui_->actionCommodities_Edit);
+    menutableViewGoods.exec(ui_->tableViewCommodities->mapToGlobal(p));
 }
 
 
@@ -353,11 +365,11 @@ void MainWindow::showTableMenuGoods_(const QPoint &p) const
  */
 void MainWindow::showTableMenuCounterparties_(const QPoint &p) const
 {
-    QMenu menuTableCounterparties(ui->tableViewCounterparties);
-    menuTableCounterparties.addAction(ui->actionCounterparties_Add);
-    menuTableCounterparties.addAction(ui->actionCounterparties_Remove);
-    menuTableCounterparties.addAction(ui->actionCounterparties_Edit);
-    menuTableCounterparties.exec(ui->tableViewCounterparties->mapToGlobal(p));
+    QMenu menuTableCounterparties(ui_->tableViewCounterparties);
+    menuTableCounterparties.addAction(ui_->actionCounterparties_Add);
+    menuTableCounterparties.addAction(ui_->actionCounterparties_Remove);
+    menuTableCounterparties.addAction(ui_->actionCounterparties_Edit);
+    menuTableCounterparties.exec(ui_->tableViewCounterparties->mapToGlobal(p));
 }
 
 
@@ -369,18 +381,18 @@ void MainWindow::showTableMenuCounterparties_(const QPoint &p) const
  */
 void MainWindow::showTableMenuHistory_(const QPoint &p) const
 {
-    QMenu menuTableInvoices(ui->tableViewInvoices);
-    menuTableInvoices.addAction(ui->actionInvoices_InvoiceNew);
-    menuTableInvoices.addAction(ui->actionInvoices_InvoiceGross);
-    menuTableInvoices.addAction(ui->actionInvoices_Bill);
+    QMenu menuTableInvoices(ui_->tableViewInvoices);
+    menuTableInvoices.addAction(ui_->actionInvoices_InvoiceNew);
+    menuTableInvoices.addAction(ui_->actionInvoices_InvoiceGross);
+    menuTableInvoices.addAction(ui_->actionInvoices_Bill);
     menuTableInvoices.addSeparator();
-    menuTableInvoices.addAction(ui->actionInvoices_InvoiceProForma);
-    menuTableInvoices.addAction(ui->actionInvoices_InvoiceCorrective);
-    menuTableInvoices.addAction(ui->actionInvoices_InvoiceDuplicate);
+    menuTableInvoices.addAction(ui_->actionInvoices_InvoiceProForma);
+    menuTableInvoices.addAction(ui_->actionInvoices_InvoiceCorrective);
+    menuTableInvoices.addAction(ui_->actionInvoices_InvoiceDuplicate);
     menuTableInvoices.addSeparator();
-    menuTableInvoices.addAction(ui->actionInvoices_Edit);
-    menuTableInvoices.addAction(ui->actionInvoices_Remove);
-    menuTableInvoices.exec(ui->tableViewInvoices->mapToGlobal(p));
+    menuTableInvoices.addAction(ui_->actionInvoices_Edit);
+    menuTableInvoices.addAction(ui_->actionInvoices_Remove);
+    menuTableInvoices.exec(ui_->tableViewInvoices->mapToGlobal(p));
 }
 
 
@@ -473,7 +485,7 @@ void MainWindow::about_()
  */
 void MainWindow::editInvoice_()
 {
-    const QModelIndexList list(ui->tableViewInvoices->selectionModel()->selectedIndexes());
+    const QModelIndexList list(ui_->tableViewInvoices->selectionModel()->selectedIndexes());
     if(list.size() <= 0)
     {
         QMessageBox::information(this, qApp->applicationName(), trUtf8("Żadna faktura nie jest wybrana.") + QChar(' ') + trUtf8("Nie można edytować."));
@@ -495,38 +507,38 @@ void MainWindow::editInvoice_()
     {
     case InvoiceTypeData::VAT:
     {
-        InvoiceDialog dialog(this, &db_, InvoiceTypeData::VAT, list.at(firstInvoice));
-        dialog.exec();
+        invoiceDialogPtr_ = new InvoiceDialog(this, &db_, InvoiceTypeData::VAT, list.at(firstInvoice));
+        invoiceDialogPtr_->exec();
     }
         break;
     case InvoiceTypeData::PRO_FORMA:
     {
-        InvoiceDialog dialog(this, &db_, InvoiceTypeData::PRO_FORMA, list.at(firstInvoice));
-        dialog.exec();
+        invoiceDialogPtr_ = new InvoiceDialog(this, &db_, InvoiceTypeData::PRO_FORMA, list.at(firstInvoice));
+        invoiceDialogPtr_->exec();
     }
         break;
     case InvoiceTypeData::CORRECTIVE_VAT:
     {
-        CorrectiveInvoiceDialog dialog(this, &db_, InvoiceTypeData::CORRECTIVE_VAT, list.at(firstInvoice));
-        dialog.exec();  // edit window shouln't return anything
+        invoiceDialogPtr_ = new CorrectiveInvoiceDialog(this, &db_, InvoiceTypeData::CORRECTIVE_VAT, list.at(firstInvoice));
+        invoiceDialogPtr_->exec();  // edit window shouln't return anything
     }
         break;
     case InvoiceTypeData::GROSS:
     {
-        InvoiceGrossDialog dialog(this, &db_, QModelIndex());
-        dialog.exec();
+        invoiceDialogPtr_ = new InvoiceGrossDialog(this, &db_, QModelIndex());
+        invoiceDialogPtr_->exec();
     }
         break;
     case InvoiceTypeData::CORRECTIVE_GROSS:
     {
-        CorrectiveInvoiceGrossDialog dialog(this, &db_, list.at(firstInvoice));
-        dialog.exec(); // edit window shouln't return anything
+        invoiceDialogPtr_ = new CorrectiveInvoiceGrossDialog(this, &db_, list.at(firstInvoice));
+        invoiceDialogPtr_->exec(); // edit window shouln't return anything
     }
         break;
     case InvoiceTypeData::BILL:
     {
-        BillDialog dialog(this, &db_);
-        dialog.exec(); // edit window shouln't return anything
+        invoiceDialogPtr_ = new BillDialog(this, &db_);
+        invoiceDialogPtr_->exec(); // edit window shouln't return anything
     }
         break;
     default:
@@ -544,7 +556,7 @@ void MainWindow::editInvoice_()
  */
 void MainWindow::delInvoice_()
 {
-    if(ui->tableViewInvoices->selectionModel()->selectedRows().length() != 1)
+    if(ui_->tableViewInvoices->selectionModel()->selectedRows().length() != 1)
     {
         QMessageBox::information(this, qApp->applicationName(), trUtf8("Żadna faktura nie jest wybrana.") + QChar(' ') + trUtf8("Nie można usuwać."));
     }
@@ -554,7 +566,7 @@ void MainWindow::delInvoice_()
                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
         {
             const QString title("Usuwanie faktury");
-            if(db_.modelInvoice()->removeRow(ui->tableViewInvoices->currentIndex().row()))
+            if(db_.modelInvoice()->removeRow(ui_->tableViewInvoices->currentIndex().row()))
             {
                 QMessageBox::information(this, title, trUtf8("Wybrana faktura została usunięta"));
                 db_.modelInvoice()->submitAll();
@@ -620,12 +632,13 @@ void MainWindow::editSettings_()
  */
 void MainWindow::addCounterparty_()
 {
-    CounterpartyDialog dialog(this, &db_);
-    if (dialog.exec() == QDialog::Accepted)
+    QScopedPointer<CounterpartyDialog> dialog(new CounterpartyDialog(this, &db_));
+    counterpartyDialogPtr_ = dialog.data();
+    if (dialog->exec() == QDialog::Accepted)
     {
         if(db_.modelCounterparty()->submitAll())
         {
-            ui->tableViewCounterparties->selectionModel()->setCurrentIndex(db_.modelCounterparty()->index(db_.modelCounterparty()->rowCount() - 1,
+            ui_->tableViewCounterparties->selectionModel()->setCurrentIndex(db_.modelCounterparty()->index(db_.modelCounterparty()->rowCount() - 1,
                                                                                CounterpartyFields::ID), QItemSelectionModel::Rows | QItemSelectionModel::Select);
         }
         else
@@ -644,18 +657,18 @@ void MainWindow::addCounterparty_()
  */
 void MainWindow::delCounterparty_()
 {
-    if(ui->tableViewCounterparties->selectionModel()->selectedRows().length() != 1)
+    if(ui_->tableViewCounterparties->selectionModel()->selectedRows().length() != 1)
     {
         QMessageBox::information(this, trUtf8("Niewybrany wiersz"), trUtf8("Wybierz tylko jednego kontrahenta do skasowania"));
     }
     else
     {
         if (QMessageBox::warning(this, qApp->applicationName(), trUtf8("Czy na pewno chcesz usunąć kontrahenta: %1?")
-                                 .arg(db_.modelCounterparty()->index(ui->tableViewCounterparties->currentIndex().row(), CounterpartyFields::NAME).data().toString()),
+                                 .arg(db_.modelCounterparty()->index(ui_->tableViewCounterparties->currentIndex().row(), CounterpartyFields::NAME).data().toString()),
                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
         {
             const QString title("Usuwanie kontrahenta");
-            if(db_.modelCounterparty()->removeRow(ui->tableViewCounterparties->currentIndex().row()))
+            if(db_.modelCounterparty()->removeRow(ui_->tableViewCounterparties->currentIndex().row()))
             {
                 QMessageBox::information(this, title, trUtf8("Wybrany kontrahent został usunięty"));
                 db_.modelCounterparty()->submitAll();
@@ -677,13 +690,13 @@ void MainWindow::delCounterparty_()
  */
 void MainWindow::editCounterparty_()
 {
-    if(ui->tableViewCounterparties->selectionModel()->selectedRows().length() != 1)
+    if(ui_->tableViewCounterparties->selectionModel()->selectedRows().length() != 1)
     {
         QMessageBox::information(this, trUtf8("Niewybrany wiersz"), trUtf8("Wybierz tylko jednego kontrahenta do edycji"));
     }
     else
     {
-        const QModelIndexList list(ui->tableViewCounterparties->selectionModel()->selectedRows(CounterpartyFields::ID));
+        const QModelIndexList list(ui_->tableViewCounterparties->selectionModel()->selectedRows(CounterpartyFields::ID));
         if(list.size() > 0)
         {
             CounterpartyDialog dialog(this, &db_, list.at(0));
@@ -754,7 +767,7 @@ void MainWindow::newProFormaInvoice_()
  */
 void MainWindow::newCorrection_()
 {//TODO: remove redundancy here and in edit* methods (hint: areTableItemsSelected())
-    const QModelIndexList list(ui->tableViewInvoices->selectionModel()->selectedIndexes());
+    const QModelIndexList list(ui_->tableViewInvoices->selectionModel()->selectedIndexes());
     if(list.size() <= 0)
     {
         QMessageBox::information(this, qApp->applicationName(), trUtf8("Żadna faktura nie jest wybrana.") + QChar(' ') + trUtf8("Nie można edytować."));
@@ -796,7 +809,7 @@ void MainWindow::newCorrection_()
  */
 void MainWindow::newDuplicate_()
 {//TODO: remove redundancy here and in edit* methods (hint: areTableItemsSelected())
-    const QModelIndexList list(ui->tableViewInvoices->selectionModel()->selectedIndexes());
+    const QModelIndexList list(ui_->tableViewInvoices->selectionModel()->selectedIndexes());
     if(list.size() <= 0)
     {
         QMessageBox::information(this, qApp->applicationName(), trUtf8("Żadna faktura nie jest wybrana.") + QChar(' ') + trUtf8("Nie można edytować."));
@@ -838,12 +851,12 @@ void MainWindow::newDuplicate_()
 void MainWindow::addCommodity_()
 {
     QScopedPointer<CommodityDialog> dialog(new CommodityDialog(this, &db_));
-    commodityDialogPtr = dialog.data();
+    commodityDialogPtr_ = dialog.data();
     if (dialog->exec() == QDialog::Accepted)
     {
         if(db_.modelCommodity()->submitAll())
         {
-            ui->tableViewCommodities->selectionModel()->setCurrentIndex(db_.modelCommodity()->index(db_.modelCommodity()->rowCount() - 1,
+            ui_->tableViewCommodities->selectionModel()->setCurrentIndex(db_.modelCommodity()->index(db_.modelCommodity()->rowCount() - 1,
                                                                                CommodityFields::ID_COMMODITY), QItemSelectionModel::Rows | QItemSelectionModel::Select);
         }
         else
@@ -860,18 +873,18 @@ void MainWindow::addCommodity_()
  */
 void MainWindow::delCommodity_()
 {
-    if(ui->tableViewCommodities->selectionModel()->selectedRows().length() != 1)
+    if(ui_->tableViewCommodities->selectionModel()->selectedRows().length() != 1)
     {
         QMessageBox::information(this, trUtf8("Niewybrany wiersz"), trUtf8("Wybierz tylko jeden towar do skasowania"));
     }
     else
     {
         if (QMessageBox::warning(this, qApp->applicationName(), trUtf8("Czy na pewno chcesz usunąć towar: %1?")
-                                 .arg(db_.modelCommodity()->index(ui->tableViewCommodities->currentIndex().row(),
+                                 .arg(db_.modelCommodity()->index(ui_->tableViewCommodities->currentIndex().row(),
                                  CommodityFields::NAME).data().toString()), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
         {
             const QString title("Usuwanie towaru");
-            if(db_.modelCommodity()->removeRows(ui->tableViewCommodities->currentIndex().row(), 1))
+            if(db_.modelCommodity()->removeRows(ui_->tableViewCommodities->currentIndex().row(), 1))
             {
                 qDebug() << "Sql error: " << db_.modelCommodity()->lastError().text();
                 db_.modelCommodity()->submitAll();
@@ -893,13 +906,13 @@ void MainWindow::delCommodity_()
  */
 void MainWindow::editCommodity_()
 {
-    if(ui->tableViewCommodities->selectionModel()->selectedRows().length() != 1)
+    if(ui_->tableViewCommodities->selectionModel()->selectedRows().length() != 1)
     {
         QMessageBox::information(this, trUtf8("Niewybrany wiersz"), trUtf8("Wybierz tylko jeden towar do edycji"));
     }
     else
     {
-        const QModelIndex index = ui->tableViewCommodities->selectionModel()->selectedRows(CommodityFields::ID_COMMODITY).at(0);
+        const QModelIndex index = ui_->tableViewCommodities->selectionModel()->selectedRows(CommodityFields::ID_COMMODITY).at(0);
         CommodityDialog dialog(this, &db_, index);
         const QString errorTitle(trUtf8("Błąd edycji towaru"));
         if (dialog.exec() == QDialog::Accepted)

@@ -21,7 +21,9 @@ public:
     CommodityDialogPublic* commodityDialogPublic() const;
     CommodityListDialogPublic* commodityListDialogPublic() const;
     CounterpartyDialogPublic* counterpartyDialogPublic() const;
-    Ui::InvoiceDialog *ui();
+    InvoiceDialogPublic* invoiceDialogPublic() const;
+    Ui::InvoiceDialog *ui() const;
+    InvoiceDialogImpl *implementation() const;
 };
 
 #endif // INVOICEDIALOGPUBLIC_H

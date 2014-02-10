@@ -98,12 +98,12 @@ InvoiceData InvoiceDialogImpl::getInvoiceData() const
     ret.setField(InvoiceFields::COUNTERPARTY_ID, db->modelCounterparty()->
                  data(db->modelCounterparty()->index(ui->comboBoxCounterparties->currentIndex(),
                             CounterpartyFields::ID)).toLongLong());
-    ret.setField(InvoiceFields::CURRENCY_ID, ui->comboBoxCurrency->currentIndex() + 1);
+    ret.setField(InvoiceFields::CURRENCY_ID, ui->comboBoxCurrency->currentIndex());
     ret.setField(InvoiceFields::DISCOUNT, ui->spinBoxDiscount->value());
     ret.setField(InvoiceFields::INV_NUMBER, ui->lineEditInvNumber->text());
     ret.setField(InvoiceFields::ISSUANCE_DATE, ui->dateEditDateOfIssuance->date());
     ret.setField(InvoiceFields::PAYMENT_DATE, ui->dateEditDayOfPayment->date());
-    ret.setField(InvoiceFields::PAYMENT_ID, ui->comboBoxPayment->currentIndex() + 1);
+    ret.setField(InvoiceFields::PAYMENT_ID, ui->comboBoxPayment->currentIndex());
     ret.setField(InvoiceFields::SELLING_DATE, ui->dateEditDateOfSell->date());
     ret.setField(InvoiceFields::TYPE_ID, ui->comboBoxInvoiceType->currentIndex());
 
@@ -198,8 +198,8 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
     mapper.addMapping(ui->comboBoxCounterparties, InvoiceFields::COUNTERPARTY_ID, "currentIndex");
     mapper.addMapping(ui->dateEditDateOfIssuance, InvoiceFields::ISSUANCE_DATE);
     mapper.addMapping(ui->dateEditDayOfPayment, InvoiceFields::PAYMENT_DATE);
-    mapper.addMapping(ui->comboBoxPayment, InvoiceFields::PAYMENT_ID);
-    mapper.addMapping(ui->comboBoxCurrency, InvoiceFields::CURRENCY_ID);
+    mapper.addMapping(ui->comboBoxPayment, InvoiceFields::PAYMENT_ID, "currentIndex");
+    mapper.addMapping(ui->comboBoxCurrency, InvoiceFields::CURRENCY_ID, "currentIndex");
     mapper.addMapping(ui->lineEditAdditionalText, InvoiceFields::ADDIT_TEXT);
     mapper.addMapping(ui->spinBoxDiscount, InvoiceFields::DISCOUNT);
 
@@ -625,7 +625,7 @@ void InvoiceDialogImpl::payTextChanged(QString text)
         ui->dateEditDayOfPayment->setEnabled(false);
     }
 
-    if(ui->comboBoxPayment->currentIndex() == ui->comboBoxPayment->count() - 1)
+    if(ui->comboBoxPayment->currentIndex() == (ui->comboBoxPayment->count() - 1))
     {
         SettingsGlobal settings;
         if (settings.stringToDouble(ui->labelSumGrossVal->text()) == 0)

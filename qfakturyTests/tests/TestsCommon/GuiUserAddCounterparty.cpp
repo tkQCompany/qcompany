@@ -6,8 +6,8 @@
 #include "../TestsCommon/DialogWithCounterpartyDialog.h"
 
 
-GuiUserAddCounterparty::GuiUserAddCounterparty(DialogWithCounterpartyDialog *d, Counterparty_t *counterparty, QObject *parent) :
-    GuiUser(parent), dialog_(d), counterparty_(*counterparty)
+GuiUserAddCounterparty::GuiUserAddCounterparty(DialogWithCounterpartyDialog *d, const Counterparty_t &counterparty, QObject *parent) :
+    GuiUser(parent), dialog_(d), counterparty_(counterparty)
 {
 }
 
@@ -17,8 +17,8 @@ void GuiUserAddCounterparty::process()
     CounterpartyDialogPublic *cdp = 0;
     do
     {
-        cdp = dialog_->counterpartyDialogPublic();
         QTest::qWait(200);
+        cdp = dialog_->counterpartyDialogPublic();
     } while(cdp == 0);
 
     postText_(cdp->ui()->lineEditName, counterparty_.name);

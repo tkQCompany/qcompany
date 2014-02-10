@@ -153,7 +153,7 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities()
     QCOMPARE(invD.ui()->tableWidgetCommodities->rowCount(), lcd.size());
 
     {
-        GuiUserAddCounterparty userAddNewCounterp(&invD, &counterparty);
+        GuiUserAddCounterparty userAddNewCounterp(&invD, counterparty);
         QThread threadCounterparty;
         threadCounterparty.setObjectName("threadCounterparty");
         startUserThread(&userAddNewCounterp, &threadCounterparty, invD.ui()->pushButtonAddCounterparty);
@@ -183,7 +183,7 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities()
     }
     QVERIFY(query.isActive());
     QVERIFY(query.next());
-    QVERIFY(query.value(0).toString() == invoiceNumber);
+    QCOMPARE(query.value(0).toString(), invoiceNumber);
 
     query.exec(QString("SELECT invoice_type FROM invoice JOIN invoice_type ON invoice.type_id = invoice_type.id_invoice_type WHERE invoice.counterparty_id = (SELECT id_counterparty FROM counterparty WHERE name = '%1')").arg(counterparty.name));
     if(!query.isActive())
@@ -192,7 +192,7 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities()
     }
     QVERIFY(query.isActive());
     QVERIFY(query.next());
-    QVERIFY(query.value(0).toString() == InvoiceTypeData::name(invoiceType));
+    QCOMPARE(query.value(0).toString(), InvoiceTypeData::name(invoiceType));
 }
 
 
@@ -213,18 +213,18 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities_data()
     QVariant v;
     const QStringList vatRates(s.value(s.keyName(s.VAT_RATES)).toString().split("|"));
 
-    const int maxRows = qrand() % 200 + 1; //1-200
+    const int maxInvoices = qrand() % 4 + 1; //1-200
     const int base = 10;
-    for(int row = 0; row < maxRows; ++row)
+    for(int invoice = 0; invoice < maxInvoices; ++invoice)
     {
-        const int maxCommod = qrand() % 200 + 1; //1-200 commodities per invoice
+        const int maxCommod = qrand() % 2 + 1; //1-200 commodities per invoice
         lcd.clear();
         for(int commod = 0; commod < maxCommod; ++commod)
         {
             CommodityData cd;
 
-            cd.setField(CommodityFields::ABBREV, QString("abbrev_%1").arg(row));
-            cd.setField(CommodityFields::NAME, QString("name_%1_%2").arg(row).arg(commod));
+            cd.setField(CommodityFields::ABBREV, QString("abbrev_%1").arg(invoice));
+            cd.setField(CommodityFields::NAME, QString("name_%1_%2").arg(invoice).arg(commod));
 
             v.setValue(Money_t(QString("%1%2%3").arg(commod).arg('.').arg(11)));
             cd.setField(CommodityFields::NET1, v);
@@ -238,7 +238,7 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities_data()
             v.setValue(Money_t(QString("%1%2%3").arg(commod).arg('.').arg(14)));
             cd.setField(CommodityFields::NET4, v);
 
-            cd.setField(CommodityFields::PKWIU, QString("pkwiu_%1_%2").arg(row).arg(commod));
+            cd.setField(CommodityFields::PKWIU, QString("pkwiu_%1_%2").arg(invoice).arg(commod));
             cd.setField(CommodityFields::QUANTITY, QString("%1").arg(qrand() % 1000 + 1));
             cd.setField(CommodityFields::VAT, vatRates[qrand() % vatRates.size()]);
             const CommodityTypeData::CommodityType type = CommodityTypeData::GOODS;
@@ -256,21 +256,21 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities_data()
                 .arg(qrand() % 10000, 4, base, QChar('0'))
                 .arg(qrand() % 10000, 4, base, QChar('0'))
                 .arg(qrand() % 10000, 4, base, QChar('0'));
-        counterparty.city = QString("city_%1").arg(row);
+        counterparty.city = QString("city_%1").arg(invoice);
         const QStringList countries(db.modelCountry()->stringList());
         counterparty.country = QString("%1").arg(countries.at(qrand() % (countries.size())));
-        counterparty.email = QString("%1@test.pl").arg(row);
-        counterparty.name = QString("name_%1").arg(row);
+        counterparty.email = QString("%1@test.pl").arg(invoice);
+        counterparty.name = QString("name_%1").arg(invoice);
         counterparty.phone = QString("%1").arg(qrand(), 10, base, QChar('1'));
-        counterparty.postalCode = QString("postalCode_%1").arg(row);
-        counterparty.street = QString("street_%1").arg(row);
+        counterparty.postalCode = QString("postalCode_%1").arg(invoice);
+        counterparty.street = QString("street_%1").arg(invoice);
         counterparty.taxID = QString("%1-%2-%3-%4")
                 .arg(qrand()%1000, 3, base, QChar('0'))
                 .arg(qrand()%1000, 3, base, QChar('0'))
                 .arg(qrand()%100, 2, base, QChar('0'))
                 .arg(qrand()%100, 2, base, QChar('0'));
         counterparty.type = CounterpartyTypeData::name( (qrand() % 2)? CounterpartyTypeData::COMPANY : CounterpartyTypeData::OFFICE);
-        counterparty.www = QString("http://www.row%1.com").arg(row);
+        counterparty.www = QString("http://www.row%1.com").arg(invoice);
 
         invType = InvoiceTypeData::VAT;
 
@@ -281,7 +281,7 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities_data()
                                          QDate::currentDate(),
                                          invType);
 
-        QTest::newRow(qPrintable(QString("%1").arg(row))) << lcd << counterparty << invNum << invType;
+        QTest::newRow(qPrintable(QString("%1").arg(invoice))) << lcd << counterparty << invNum << invType;
     }
 }
 
@@ -294,8 +294,6 @@ void InvoiceDialogTest::startUserThread(GuiUser *guiUser, QThread *thread, QPush
     thread->start();
     QTest::mouseClick(buttonStart, Qt::LeftButton);
 }
-
-Q_DECLARE_METATYPE(QList<CommodityData>)
 
 
 QTEST_MAIN(InvoiceDialogTest)

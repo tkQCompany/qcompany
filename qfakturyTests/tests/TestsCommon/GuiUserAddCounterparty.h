@@ -12,7 +12,7 @@ class GuiUserAddCounterparty : public GuiUser
 {
     Q_OBJECT
 public:
-    explicit GuiUserAddCounterparty(DialogWithCounterpartyDialog *d, Counterparty_t *counterparty, QObject *parent = 0);
+    explicit GuiUserAddCounterparty(DialogWithCounterpartyDialog *d, const Counterparty_t &counterparty, QObject *parent = 0);
     
 public slots:
     void process();

@@ -5,6 +5,7 @@
 
 #include "ui_MainWindow.h"
 #include "Database.h"
+#include "InvoiceDialog.h"
 #include "InvoiceTypeData.h"
 #include "CommodityData.h"
 #include "CounterpartyData.h"
@@ -26,11 +27,12 @@ class MainWindow: public QMainWindow
     Q_OBJECT
 public:
     MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
 public slots:
     void editMyCompanyInfo();
 
-protected slots:
+private slots:
     void tabChanged_(int index);
     void aboutQt_();
     void about_();
@@ -62,19 +64,27 @@ protected slots:
     void keyPressEvent(QKeyEvent*);
 
 protected:
-    void createInvoice_(const InvoiceTypeData::Type type);
     Database* database();
-    void init_();
-    void setActions_(const bool counterpartiesEditEnabled, const bool counterpartiesRemoveEnable, const bool, const bool, const bool historyEditEnabled, const bool historyRemoveEnabled);
     virtual void loadPlugins();
 
 protected:
-    Ui::MainWindow *ui;
-    QPointer<CommodityDialog> commodityDialogPtr;
-    QPointer<CounterpartyDialog> counterpartyDialogPtr;
+    Ui::MainWindow *ui() const { return ui_; }
+    QPointer<CommodityDialog> commodityDialogPtr() const { return commodityDialogPtr_; }
+    QPointer<CounterpartyDialog> counterpartyDialogPtr() const { return counterpartyDialogPtr_; }
+    QPointer<QDialog> invoiceDialogPtr() const { return invoiceDialogPtr_; }
 
 private:
+    void createInvoice_(const InvoiceTypeData::Type type);
+    void init_();
+    void setActions_(const bool counterpartiesEditEnabled, const bool counterpartiesRemoveEnable, const bool, const bool, const bool historyEditEnabled, const bool historyRemoveEnabled);
+
+private:
+    Ui::MainWindow *ui_;
+    QPointer<CommodityDialog> commodityDialogPtr_;
+    QPointer<CounterpartyDialog> counterpartyDialogPtr_;
+    QPointer<QDialog> invoiceDialogPtr_;
+
     Database db_; /**< An object representing the application's database */
-    QMap<int, QString> customActions;
+    QMap<int, QString> customActions_;
 };
 #endif

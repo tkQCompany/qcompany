@@ -28,7 +28,17 @@ CounterpartyDialogPublic* InvoiceDialogPublic::counterpartyDialogPublic() const
     return static_cast<CounterpartyDialogPublic*>(pImpl_->counterpartyDialogPtr.data());
 }
 
-Ui::InvoiceDialog* InvoiceDialogPublic::ui()
+InvoiceDialogPublic* InvoiceDialogPublic::invoiceDialogPublic() const
+{
+    return 0;
+}
+
+Ui::InvoiceDialog* InvoiceDialogPublic::ui() const
 {
     return pImpl_->ui;
+}
+
+InvoiceDialogImpl *InvoiceDialogPublic::implementation() const
+{
+    return pImpl_;
 }
