@@ -98,14 +98,14 @@ InvoiceData InvoiceDialogImpl::getInvoiceData() const
     ret.setField(InvoiceFields::COUNTERPARTY_ID, db->modelCounterparty()->
                  data(db->modelCounterparty()->index(ui->comboBoxCounterparties->currentIndex(),
                             CounterpartyFields::ID)).toLongLong());
-    ret.setField(InvoiceFields::CURRENCY_ID, ui->comboBoxCurrency->currentIndex());
+    ret.setField(InvoiceFields::CURRENCY_ID, db->modelCurrency()->data(db->modelCurrency()->index(ui->comboBoxCurrency->currentIndex(), CurrencyFields::ID_CURRENCY)).toInt());
     ret.setField(InvoiceFields::DISCOUNT, ui->spinBoxDiscount->value());
     ret.setField(InvoiceFields::INV_NUMBER, ui->lineEditInvNumber->text());
     ret.setField(InvoiceFields::ISSUANCE_DATE, ui->dateEditDateOfIssuance->date());
     ret.setField(InvoiceFields::PAYMENT_DATE, ui->dateEditDayOfPayment->date());
-    ret.setField(InvoiceFields::PAYMENT_ID, ui->comboBoxPayment->currentIndex());
+    ret.setField(InvoiceFields::PAYMENT_ID, db->modelPaymentType()->data(db->modelPaymentType()->index(ui->comboBoxPayment->currentIndex(), PaymentTypeFields::ID_PAYMENT_TYPE)).toInt());
     ret.setField(InvoiceFields::SELLING_DATE, ui->dateEditDateOfSell->date());
-    ret.setField(InvoiceFields::TYPE_ID, ui->comboBoxInvoiceType->currentIndex());
+    ret.setField(InvoiceFields::TYPE_ID, db->modelInvoiceType()->data(db->modelInvoiceType()->index(ui->comboBoxInvoiceType->currentIndex(), InvoiceTypeFields::ID_INVOICE_TYPE)).toInt());
 
     return ret;
 }
@@ -574,7 +574,6 @@ void InvoiceDialogImpl::addNewCommodity()
     {
         if(! db->modelCommodity()->submitAll())
         {
-            qDebug() << "InvoiceDialogImpl::addNewCommodity(): " << db->modelCommodity()->lastError().text();
             QMessageBox::warning(parent_, trUtf8("Błąd dodawania towaru"), db->modelCommodity()->lastError().text());
         }
     }

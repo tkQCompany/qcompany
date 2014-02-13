@@ -492,34 +492,27 @@ void MainWindow::editInvoice_()
         return;
     }
 
-    QSqlQuery query(db_.modelInvoiceType()->query());
     const int firstInvoice = 0;
-    query.exec(QString("SELECT `id_invoice_type` FROM `invoice_type` WHERE `invoice_type` = '%1'")
-                                .arg(db_.modelInvoice()->data(db_.modelInvoice()->index(list.at(firstInvoice).row(),
-                                InvoiceFields::TYPE_ID)).toString()));
-    qint64 invType = -1;
-    if(query.isActive() && query.next())
-    {
-        invType = query.value(0).toLongLong();
-    }
+    const QModelIndex indexSel(list.at(firstInvoice));
+    const int invType = db_.modelInvoice()->data(db_.modelInvoice()->index(indexSel.row(), InvoiceFields::TYPE_ID)).toInt();
 
     switch(invType)
     {
     case InvoiceTypeData::VAT:
     {
-        invoiceDialogPtr_ = new InvoiceDialog(this, &db_, InvoiceTypeData::VAT, list.at(firstInvoice));
+        invoiceDialogPtr_ = new InvoiceDialog(this, &db_, InvoiceTypeData::VAT, indexSel);
         invoiceDialogPtr_->exec();
     }
         break;
     case InvoiceTypeData::PRO_FORMA:
     {
-        invoiceDialogPtr_ = new InvoiceDialog(this, &db_, InvoiceTypeData::PRO_FORMA, list.at(firstInvoice));
+        invoiceDialogPtr_ = new InvoiceDialog(this, &db_, InvoiceTypeData::PRO_FORMA, indexSel);
         invoiceDialogPtr_->exec();
     }
         break;
     case InvoiceTypeData::CORRECTIVE_VAT:
     {
-        invoiceDialogPtr_ = new CorrectiveInvoiceDialog(this, &db_, InvoiceTypeData::CORRECTIVE_VAT, list.at(firstInvoice));
+        invoiceDialogPtr_ = new CorrectiveInvoiceDialog(this, &db_, InvoiceTypeData::CORRECTIVE_VAT, indexSel);
         invoiceDialogPtr_->exec();  // edit window shouln't return anything
     }
         break;
@@ -531,7 +524,7 @@ void MainWindow::editInvoice_()
         break;
     case InvoiceTypeData::CORRECTIVE_GROSS:
     {
-        invoiceDialogPtr_ = new CorrectiveInvoiceGrossDialog(this, &db_, list.at(firstInvoice));
+        invoiceDialogPtr_ = new CorrectiveInvoiceGrossDialog(this, &db_, indexSel);
         invoiceDialogPtr_->exec(); // edit window shouln't return anything
     }
         break;
@@ -542,9 +535,7 @@ void MainWindow::editInvoice_()
     }
         break;
     default:
-        qDebug("MainWindow::editInvoice() switch: unexpected value: %lld", invType);
-        qDebug("lastQuery(): %s", qPrintable(query.lastQuery()));
-        qDebug("lastError(): %s", qPrintable(query.lastError().text()));
+        qDebug("MainWindow::editInvoice() switch: unexpected value: %d", invType);
         break;
     }
 }

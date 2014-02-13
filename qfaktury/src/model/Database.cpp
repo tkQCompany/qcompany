@@ -307,7 +307,7 @@ bool Database::createTablesIfNotExist_()
 
 
     if(ret && !sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
-                           "`id_invoice_type` INTEGER PRIMARY KEY NOT NULL ,"
+                           "`id_invoice_type` INTEGER PRIMARY KEY AUTOINCREMENT,"
                            "`invoice_type` VARCHAR(20) NOT NULL UNIQUE)")
                    .arg("invoice_type"), __LINE__))
     {
@@ -316,7 +316,7 @@ bool Database::createTablesIfNotExist_()
 
 
     if(ret && !sqlExecute_(QString("CREATE  TABLE IF NOT EXISTS `%1` ("
-                           "`id_payment_type` INTEGER PRIMARY KEY NOT NULL ,"
+                           "`id_payment_type` INTEGER PRIMARY KEY AUTOINCREMENT,"
                            "`type` VARCHAR(45) NOT NULL UNIQUE)")
                    .arg("payment_type"), __LINE__))
     {
@@ -504,6 +504,7 @@ void Database::initModels_()
     modelPaymentType_->select();
 
     modelInvoiceType_ = new ModelInvoiceType(this->parent());
+    modelInvoiceType_->setSort(InvoiceTypeFields::ID_INVOICE_TYPE, Qt::AscendingOrder);
     modelInvoiceType_->select();
 
     modelInvoiceWithCommodities_ = new ModelInvoiceWithCommodities(this->parent());

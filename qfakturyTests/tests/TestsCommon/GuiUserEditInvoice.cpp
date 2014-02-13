@@ -21,7 +21,6 @@ void GuiUserEditInvoice::process()
     } while(idp == 0);
 
     invData_ = idp->implementation()->getInvoiceData();
-    invData_.setField(InvoiceFields::TYPE_ID, invData_.field(InvoiceFields::TYPE_ID).toUInt() + 1);
     commodities_ = idp->implementation()->getCommoditiesVisualData();
 
     postMouseClick(idp->ui()->pushButtonClose);
