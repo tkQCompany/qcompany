@@ -213,6 +213,7 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
         mapper.setCurrentIndex(idEdit.row());
         fillTableCommodity(db->commodities(idEdit.data().toLongLong()));
         ui->pushButtonSave->setEnabled(false); //TODO: sprawdzić czy ustawienia z Settings mają grać tu rolę
+        ui->pushButtonMoreInfo->setEnabled(true);
         parent_->setWindowTitle(trUtf8("Edycja dokumentu - %1[*]").arg(InvoiceTypeData::name(invoiceType)));
     }
     else

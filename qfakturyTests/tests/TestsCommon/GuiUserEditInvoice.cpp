@@ -23,6 +23,11 @@ void GuiUserEditInvoice::process()
     invData_ = idp->implementation()->getInvoiceData();
     commodities_ = idp->implementation()->getCommoditiesVisualData();
 
+    if(!idp->ui()->pushButtonMoreInfo->isEnabled())
+    {
+        QWARN("GuiUserEditInvoice::process(): !idp->ui()->pushButtonMoreInfo->isEnabled()");
+    }
+
     postMouseClick(idp->ui()->pushButtonClose);
 
     emit finished();
