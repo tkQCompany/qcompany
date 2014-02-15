@@ -90,6 +90,10 @@ void MainWindow::init_()
     ui_->tableViewInvoices->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     #endif
 
+    ui_->tableViewCommodities->horizontalHeader()->setStretchLastSection(true);
+    ui_->tableViewCounterparties->horizontalHeader()->setStretchLastSection(true);
+    ui_->tableViewInvoices->horizontalHeader()->setStretchLastSection(true);
+
     this->setWindowTitle(QString("%1 - %2").arg(qApp->applicationName()).arg(qApp->applicationVersion()));
 
     // connect slots

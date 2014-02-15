@@ -58,6 +58,29 @@ void MainWindowTest::testCaseGUI_InitialState()
     MainWindowPublic mwp;
     QCOMPARE(mwp.windowTitle(), trUtf8("%1 - %2").arg(qApp->applicationName()).arg(qApp->applicationVersion()));
     QVERIFY(mwp.ui()->dateEditFilterEnd->displayFormat() == mwp.ui()->dateEditFilterStart->displayFormat());
+
+    const int maxCMSections = mwp.ui()->tableViewCommodities->horizontalHeader()->count();
+    const int maxCPSections = mwp.ui()->tableViewCounterparties->horizontalHeader()->count();
+    const int maxISections = mwp.ui()->tableViewInvoices->horizontalHeader()->count();
+
+    for(int i = 0; i < maxCMSections; ++i)
+    {
+        QCOMPARE(mwp.ui()->tableViewCommodities->horizontalHeader()->sectionResizeMode(i), QHeaderView::ResizeToContents);
+    }
+
+    for(int i = 0; i < maxCPSections; ++i)
+    {
+        QCOMPARE(mwp.ui()->tableViewCounterparties->horizontalHeader()->sectionResizeMode(i), QHeaderView::ResizeToContents);
+    }
+
+    for(int i = 0; i < maxISections; ++i)
+    {
+        QCOMPARE(mwp.ui()->tableViewInvoices->horizontalHeader()->sectionResizeMode(i), QHeaderView::ResizeToContents);
+    }
+
+    QVERIFY(mwp.ui()->tableViewCommodities->horizontalHeader()->stretchLastSection());
+    QVERIFY(mwp.ui()->tableViewCounterparties->horizontalHeader()->stretchLastSection());
+    QVERIFY(mwp.ui()->tableViewInvoices->horizontalHeader()->stretchLastSection());
 }
 
 
