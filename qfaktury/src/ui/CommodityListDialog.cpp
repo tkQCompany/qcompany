@@ -8,6 +8,7 @@
 #include "ModelCommodityType.h"
 #include "CommodityData.h"
 #include "CommodityTypeData.h"
+#include "SettingsGlobal.h"
 
 
 CommodityListDialog::CommodityListDialog(QWidget *parent, Database *db):

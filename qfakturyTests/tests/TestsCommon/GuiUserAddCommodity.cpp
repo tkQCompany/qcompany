@@ -7,8 +7,8 @@
 #include "CommodityListDialog.cpp"
 
 
-GuiUserAddCommodity::GuiUserAddCommodity(DialogWithCommodityListDialog *d, const CommodityData &commodity, QObject *parent) :
-    GuiUser(parent), dialog_(d), commodity_(commodity)
+GuiUserAddCommodity::GuiUserAddCommodity(DialogWithCommodityListDialog *d, const CommodityData &commodity, const int whichNetVal, QObject *parent) :
+    GuiUser(parent), dialog_(d), commodity_(commodity), netValIndex_(whichNetVal)
 {
 }
 
@@ -34,6 +34,7 @@ void GuiUserAddCommodity::process()
         if(!indList.isEmpty())
         {
             postListViewIndex_(cldp->ui()->listViewCommodities, indList.at(0));
+            postComboBoxIndex_(cldp->ui()->comboBoxChosenNetPrice, netValIndex_);
             postDoubleVal_(cldp->ui()->doubleSpinBoxAmount, commodity_.field(CommodityFields::QUANTITY).toDouble());
         }
         else
@@ -58,6 +59,14 @@ void GuiUserAddCommodity::process()
     }
 
     emit finished();
+}
+
+
+void GuiUserAddCommodity::postComboBoxIndex_(QComboBox *obj, const int index)
+{
+    connect(this, SIGNAL(setComboBoxIndex(int)), obj, SLOT(setCurrentIndex(int)), Qt::BlockingQueuedConnection);
+    emit setComboBoxIndex(index);
+    disconnect(this, SIGNAL(setComboBoxIndex(int)), obj, SLOT(setCurrentIndex(int)));
 }
 
 

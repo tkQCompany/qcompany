@@ -103,7 +103,7 @@ void SettingsGlobal::resetSettings()
     setValue(keyName(VAT_RATES), trUtf8("23|8|5|0|zw."));
     setValue(keyName(CSS), QString("style.css"));
     setValue(keyName(DEFAULT_INV_NUM_FORMAT), trUtf8("{TEKST1}/{R}-{M}-{D}/{NR_R}"));
-    setValue(keyName(DEFAULT_CURRENCY), CurrencyData::codeName(CurrencyData::PLN));
+    setValue(keyName(DEFAULT_CURRENCY), CurrencyData::PLN);
     setValue(keyName(COUNTRY), trUtf8("Polska"));
     setValue(keyName(TEXT1), trUtf8("F"));
     setValue(keyName(TEXT2), trUtf8(""));

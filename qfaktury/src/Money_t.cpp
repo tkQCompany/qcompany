@@ -1,23 +1,69 @@
 #include <QStringList>
 #include <QDebug>
+
 #include "Money_t.h"
+#include "SettingsGlobal.h"
+
 
 Money_t::Money_t()
 {
     SettingsGlobal s;
-    currency_ = s.value(s.keyName(s.DEFAULT_CURRENCY)).value<CurrencyData::Currencies>();
+    init_(s.numberToString(0.0, 'g', 2), true);
+}
+
+Money_t::Money_t(const double val)
+{
+    SettingsGlobal s;
+    init_(s.numberToString(val, 'g', 2), true);
 }
 
 
 Money_t::Money_t(const QString &val)
 {
-    Money_t();
-    QString tmp(val);
-    const int base = 10;
-    mpf_class valTmp;
-    valTmp.set_str(tmp.replace(QChar(','), QChar('.')).toStdString(), base);
-    value_ = valTmp;
-    value_.canonicalize();
+    init_(val, true);
+}
+
+
+void Money_t::setValue(const double val)
+{
+    SettingsGlobal s;
+    init_(s.numberToString(val, 'g', 2), false);
+}
+
+
+void Money_t::setValue(const QString &val)
+{
+    init_(val, false);
+}
+
+
+Money_t& Money_t::operator+=(const Money_t &rhs)
+{
+    if(currency_ == rhs.currency_)
+        value_ += rhs.value_;
+    return *this;
+}
+
+Money_t Money_t::operator+ (const Money_t &rhs)
+{
+    Money_t ret(*this);
+    ret += rhs; //Money_t::operator+=()
+    return ret;
+}
+
+
+Money_t& Money_t::operator*=(const double rhs)
+{
+    value_ *= rhs;
+    return *this;
+}
+
+
+Money_t  Money_t::operator* (const double rhs)
+{
+    Money_t ret(*this);
+    ret *= rhs; //Money_t::operator*=()
+    return ret;
 }
 
 
@@ -26,6 +72,25 @@ short Money_t::digit_(const val_t &num, const size_t index) const
     const std::string str(num.get_str());
     const short ret = (str.size() > index)? str.at(index) - '0' : 0;
     return ret;
+}
+
+void Money_t::init_(const QString &val, const bool setDefaultCurrency)
+{
+    const int base = 10;
+    if(setDefaultCurrency)
+        setDefaultCurrency_();
+
+    mpf_class valTmp;
+    valTmp.set_str(val.toStdString(), base);
+
+    value_ = valTmp;
+    value_.canonicalize();
+}
+
+void Money_t::setDefaultCurrency_()
+{
+    SettingsGlobal s;
+    currency_ = (CurrencyData::Currencies)s.value(s.keyName(s.DEFAULT_CURRENCY)).toInt();
 }
 
 
@@ -221,5 +286,6 @@ QString Money_t::verballyPL() const
 
 QString Money_t::toString() const
 {
-    return QString("%1").arg(value_.get_d());
+    SettingsGlobal s;
+    return s.numberToString(value_.get_d(), 'f', 2);
 }

@@ -209,6 +209,7 @@ void MainWindow::createInvoice_(const InvoiceTypeData::Type type)
             ui_->dateEditFilterStart->setDate(QDate::currentDate()); //otherwise our new invoice couldn't be shown
             ui_->dateEditFilterEnd->setDate(QDate::currentDate());
         }
+        db_.modelInvoice()->revertAll();
     }
 }
 

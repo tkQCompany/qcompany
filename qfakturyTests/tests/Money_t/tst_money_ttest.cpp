@@ -3,32 +3,65 @@
 
 #include "CurrencyData.h"
 #include "Money_t.h"
+#include "SettingsGlobal.h"
+#include "../TestsCommon/TestsCommon.h"
 
 class Money_tTest : public QObject
 {
     Q_OBJECT
     
-public:
-    Money_tTest();
-    
 private Q_SLOTS:
     void initTestCase();
-    void cleanupTestCase();
+    void testCaseDefaultValues();
+    void testCaseEqualityOperators();
+    void testCaseEqualityOperators_data();
     void testCasePLN();
     void testCasePLN_data();
 };
 
-Money_tTest::Money_tTest()
-{
-}
 
 void Money_tTest::initTestCase()
 {
+    TestsCommon::setAppData();
+    SettingsGlobal s;
+    s.setFirstRun(true);
 }
 
-void Money_tTest::cleanupTestCase()
+
+void Money_tTest::testCaseDefaultValues()
 {
+    Money_t m;
+    SettingsGlobal s;
+    QCOMPARE(m.toString(), QString("%0%1%2").arg(0).arg(s.decimalPointStr()).arg("00"));
+    QCOMPARE((int)m.currency(), (int)s.value(s.keyName(s.DEFAULT_CURRENCY)).value<int>());
 }
+
+
+void Money_tTest::testCaseEqualityOperators()
+{
+    QFETCH(Money_t, first_arg);
+    QFETCH(Money_t, second_arg);
+    QFETCH(bool, result);
+
+    QCOMPARE(first_arg == second_arg, result);
+    QCOMPARE(first_arg != second_arg, !result);
+}
+
+
+void Money_tTest::testCaseEqualityOperators_data()
+{
+    QTest::addColumn<Money_t>("first_arg");
+    QTest::addColumn<Money_t>("second_arg");
+    QTest::addColumn<bool>("result");
+
+    Money_t m_0_0_PLN; m_0_0_PLN.setCurrency(CurrencyData::PLN);
+    Money_t m_0_0_AUD; m_0_0_AUD.setCurrency(CurrencyData::AUD);
+    QTest::newRow("1") << m_0_0_PLN << m_0_0_PLN << true;
+    QTest::newRow("2") << m_0_0_PLN << m_0_0_AUD << false;
+
+
+}
+
 
 void Money_tTest::testCasePLN()
 {

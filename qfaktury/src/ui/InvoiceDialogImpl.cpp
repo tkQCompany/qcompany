@@ -160,7 +160,7 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
     connect(ui->tableWidgetCommodities, SIGNAL(itemActivated(QTableWidgetItem *)), this, SLOT(tableActivated(QTableWidgetItem *)));
     connect(ui->tableWidgetCommodities, SIGNAL(itemClicked(QTableWidgetItem *)), this, SLOT(tableActivated(QTableWidgetItem *)));
     connect(ui->lineEditAdditionalText, SIGNAL(textChanged(QString)), this, SLOT(textChanged(QString)));
-    connect(ui->lineEditInvNumFormat, SIGNAL(textChanged(QString)), this, SLOT(updateInvoiceNumber()));
+    //connect(ui->lineEditInvNumFormat, SIGNAL(textChanged(QString)), this, SLOT(updateInvoiceNumber()));
     connect(ui->comboBoxPayment, SIGNAL(currentIndexChanged (QString)), this, SLOT(payTextChanged(QString)));
     connect(ui->comboBoxCurrency, SIGNAL(currentIndexChanged (QString)), this, SLOT(textChanged(QString)));
     connect(ui->comboBoxCounterparties, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateInvoiceNumberFormat()));
@@ -224,7 +224,7 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
         SettingsGlobal s;
         const QString invoiceTypeStr(InvoiceTypeData::name(invoiceType));
         setInitialComboBoxIndexes(invoiceTypeStr, PaymentTypeData::name(PaymentTypeData::CASH),
-                                  s.value(s.DEFAULT_CURRENCY).toString());
+                                  CurrencyData::codeName((CurrencyData::Currencies)s.value(s.DEFAULT_CURRENCY).value<int>()));
         parent_->setWindowTitle(trUtf8("Nowy dokument - %1 [*]").arg(invoiceTypeStr));
 
         updateInvoiceNumber();
@@ -264,12 +264,14 @@ void InvoiceDialogImpl::setHeaders()
     }
     ui->tableWidgetCommodities->setHorizontalHeaderLabels(headers);
     ui->tableWidgetCommodities->hideColumn(CommodityVisualFields::ID);
+    ui->tableWidgetCommodities->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->tableWidgetCommodities->resizeColumnsToContents();
 }
 
 
 void InvoiceDialogImpl::updateInvoiceNumber()
 {
+    const QString counterpartyName(ui->comboBoxCounterparties->currentText());
     if( (!ui->lineEditInvNumFormat->text().isEmpty()) &&
             ui->dateEditDateOfIssuance->date().isValid() &&
             (ui->comboBoxInvoiceType->currentIndex() != -1))
@@ -281,7 +283,7 @@ void InvoiceDialogImpl::updateInvoiceNumber()
 
         const bool defaultInvNumFormat = (s.value(s.DEFAULT_INV_NUM_FORMAT).toString() == invNumFormat);
         const ModelInvoice::DBData dbData(*db->modelInvoice()->getLastExistingNumberDateFromDB(defaultInvNumFormat,
-                                                                                                ui->comboBoxCounterparties->currentText()).get());
+                                                                                                counterpartyName).get());
         const QString invNum(db->modelInvoice()->generateInvoiceNumber(*(InvoiceNumberFormat_t::Parse(invNumFormat).get()),
                                                                          dbData.invNumStr,
                                                                          ui->dateEditDateOfIssuance->date(),

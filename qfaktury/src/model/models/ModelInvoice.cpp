@@ -171,21 +171,31 @@ std::auto_ptr<ModelInvoice::DBData> ModelInvoice::getLastExistingNumberDateFromD
                                                                                     const QString &counterpartyName) const
 {
     std::auto_ptr<ModelInvoice::DBData> ret(new ModelInvoice::DBData());
+    if( (!defaultInvNumFormat) && (counterpartyName.isEmpty() || counterpartyName.isNull()))
+    {
+        qDebug("ModelInvoice::getLastExistingNumberDateFromDB_(): Counterparty's name is not supplied.");
+        return ret;
+    }
 
     QSqlQuery q(this->query());
 
     this->database().transaction();
     if(defaultInvNumFormat)
     {
-        const QString sql("SELECT MAX(invoice.inv_number), MAX(issuance_date) FROM invoice JOIN counterparty ON invoice.counterparty_id=counterparty.id_counterparty");
-        q.exec(sql);
+        const QString sql("SELECT MAX(inv_number), MAX(issuance_date) FROM invoice JOIN counterparty ON invoice.counterparty_id=counterparty.id_counterparty");
+        if(!q.exec(sql))
+        {
+            qDebug("ModelInvoice::getLastExistingNumberDateFromDB(): First SQL query wasn't successful");
+        }
     }
     else
     {
         const QString sql("SELECT inv_number, issuance_date FROM 'invoice' WHERE id_invoice = (SELECT MAX(id_invoice) FROM 'invoice' WHERE counterparty_id = (SELECT id_counterparty FROM 'counterparty' WHERE name = \"%1\"))");
-        q.exec(sql.arg(counterpartyName));
+        if(!q.exec(sql.arg(counterpartyName)))
+        {
+            qDebug("ModelInvoice::getLastExistingNumberDateFromDB(): Second SQL query wasn't successful");
+        }
     }
-    this->database().commit();
 
     if(q.isActive())
     {
@@ -200,6 +210,7 @@ std::auto_ptr<ModelInvoice::DBData> ModelInvoice::getLastExistingNumberDateFromD
         qDebug() << QString("ModelInvoice::getLastExistingNumberDateFromDB_(): SQL error detected in line %1: %2")
                     .arg(__LINE__).arg(q.lastError().text());
     }
+    this->database().commit();
 
     return ret;
 }

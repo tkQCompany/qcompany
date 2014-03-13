@@ -1,7 +1,8 @@
 #ifndef COMMODITYDATA_H
 #define COMMODITYDATA_H
 
-#include "SettingsGlobal.h"
+#include <QVariant>
+
 #include "Money_t.h"
 
 namespace CommodityFields
@@ -43,6 +44,7 @@ public:
 
     QVariant field(const CommodityFields::Field i) const
     {
+        QVariant net;
         switch(i)
         {
         case CommodityFields::ID_COMMODITY: return id_;
@@ -51,10 +53,10 @@ public:
         case CommodityFields::PKWIU: return pkwiu_;
         case CommodityFields::TYPE_ID: return type_id_;
         case CommodityFields::UNIT_ID: return unit_id_;
-        case CommodityFields::NET1: return net1_.toString();
-        case CommodityFields::NET2: return net2_.toString();
-        case CommodityFields::NET3: return net3_.toString();
-        case CommodityFields::NET4: return net4_.toString();
+        case CommodityFields::NET1: {net.setValue(net1_); return net;}
+        case CommodityFields::NET2: {net.setValue(net2_); return net;}
+        case CommodityFields::NET3: {net.setValue(net3_); return net;}
+        case CommodityFields::NET4: {net.setValue(net4_); return net;}
         case CommodityFields::VAT: return vat_;
         case CommodityFields::QUANTITY: return quantity_;
         default:
@@ -125,5 +127,6 @@ private:
 };
 
 Q_DECLARE_METATYPE(CommodityData)
+Q_DECLARE_METATYPE(QList<CommodityData>)
 
 #endif
