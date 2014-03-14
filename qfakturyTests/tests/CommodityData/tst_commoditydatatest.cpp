@@ -170,7 +170,7 @@ void CommodityDataTest::testCaseCheckFields()
     const Money_t net42(net42Str);
     val.setValue(net42);
     cd.setField(CommodityFields::NET4, val);
-    QCOMPARE(cd.field(CommodityFields::NET4).value<Money_t>().toString(), net42Str);
+    QCOMPARE(cd.field(CommodityFields::NET4).value<Money_t>(), net42);
 }
 
 
