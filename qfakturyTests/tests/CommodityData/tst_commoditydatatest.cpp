@@ -3,7 +3,7 @@
 #include <QSqlRecord>
 #include <QSqlField>
 
-#include "../TestsCommon/TestsCommon.h"
+#include "../../TestsCommon/TestsCommon.h"
 #include "Database.h"
 #include "ModelCommodity.h"
 #include "CommodityData.h"

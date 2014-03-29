@@ -4,7 +4,7 @@
 #include <QSqlDriver>
 #include <QString>
 
-#include "../TestsCommon/TestsCommon.h"
+#include "../../TestsCommon/TestsCommon.h"
 #include "CounterpartyDialog.h"
 #include "Database.h"
 #include "SettingsGlobal.h"

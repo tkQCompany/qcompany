@@ -2,9 +2,11 @@
 #include <QDebug>
 
 #include "GuiUserAddCommodity.h"
+#include "ui_CommodityListDialog.h"
 #include "../TestsCommon//CommodityListDialogPublic.h"
 #include "../TestsCommon/DialogWithCommodityListDialog.h"
-#include "CommodityListDialog.cpp"
+#include "CommodityListDialog.h"
+//#include "CommodityListDialog.cpp"
 
 
 GuiUserAddCommodity::GuiUserAddCommodity(DialogWithCommodityListDialog *d, const CommodityData &commodity, const int whichNetVal, QObject *parent) :

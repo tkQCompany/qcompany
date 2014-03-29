@@ -1,10 +1,10 @@
 #include <QString>
-#include <QtTest>
+#include <QTest>
 
 #include "CurrencyData.h"
 #include "Money_t.h"
 #include "SettingsGlobal.h"
-#include "../TestsCommon/TestsCommon.h"
+#include "../../TestsCommon/TestsCommon.h"
 
 class Money_tTest : public QObject
 {

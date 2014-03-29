@@ -18,4 +18,4 @@ INCLUDEPATH += ../../../qfaktury/src \
                ../../../qfaktury/src/model/models \
                ../../../qfaktury/src/model/models_data
 
-LIBS += ../../libqfaktury/libqfaktury.a -lgmpxx -lgmp
+LIBS += ../../TestsCommon/libTestsCommon.a ../../libqfaktury/libqfaktury.a -lgmpxx -lgmp

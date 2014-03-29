@@ -1,6 +1,6 @@
-#include <QtTest/QtTest>
+#include <QTest>
 
-#include "../TestsCommon/TestsCommon.h"
+#include "../../TestsCommon/TestsCommon.h"
 #include "CorrectiveInvoiceGrossDialog.h"
 #include "CorrectiveInvoiceGrossDialog.cpp"
 #include "InvoiceTypeData.h"

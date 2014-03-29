@@ -3,7 +3,7 @@
 #include <QSqlError>
 #include <QSqlDriver>
 
-#include "../TestsCommon/TestsCommon.h"
+#include "../../TestsCommon/TestsCommon.h"
 #include "CommodityDialog.h"
 #include "CommodityDialog.cpp"
 #include "Database.h"

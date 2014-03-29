@@ -5,10 +5,7 @@
 #-------------------------------------------------
 
 TARGET = tst_commoditylistdialogtest
-SOURCES += tst_commoditylistdialogtest.cpp \
-    ../TestsCommon/CommodityListDialogPublic.cpp
-
-HEADERS += ../TestsCommon/CommodityListDialogPublic.h
+SOURCES += tst_commoditylistdialogtest.cpp
 
 include(../../../qfaktury/qfaktury_common.pri)
 include(../qfakturyTestsCommon.pri)

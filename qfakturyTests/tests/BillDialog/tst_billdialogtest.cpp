@@ -1,7 +1,7 @@
 #include <QtTest/QtTest>
 #include <QtGui>
 
-#include "../TestsCommon/TestsCommon.h"
+#include "../../TestsCommon/TestsCommon.h"
 #include "BillDialog.h"
 #include "BillDialog.cpp"
 #include "Database.h"

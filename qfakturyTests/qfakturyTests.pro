@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
 
-SUBDIRS += libqfaktury tests
+SUBDIRS += libqfaktury TestsCommon tests
 
 CONFIG += ordered

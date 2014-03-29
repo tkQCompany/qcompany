@@ -4,13 +4,13 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
-#include "../TestsCommon/TestsCommon.h"
-#include "../TestsCommon/GuiUserAddCommodity.h"
-#include "../TestsCommon/GuiUserAddNewCommodity.h"
-#include "../TestsCommon/GuiUserAddCounterparty.h"
-#include "../TestsCommon/GuiUserEditInvoice.h"
-#include "../TestsCommon/Counterparty_t.h"
-#include "../TestsCommon/MainWindowPublic.h"
+#include "../../TestsCommon/TestsCommon.h"
+#include "../../TestsCommon/GuiUserAddCommodity.h"
+#include "../../TestsCommon/GuiUserAddNewCommodity.h"
+#include "../../TestsCommon/GuiUserAddCounterparty.h"
+#include "../../TestsCommon/GuiUserEditInvoice.h"
+#include "../../TestsCommon/Counterparty_t.h"
+#include "../../TestsCommon/MainWindowPublic.h"
 #include "CounterpartyDialog.h"
 #include "ModelCommodity.h"
 #include "ModelCounterparty.h"

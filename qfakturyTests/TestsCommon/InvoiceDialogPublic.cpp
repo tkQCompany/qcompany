@@ -2,6 +2,7 @@
 #include "CommodityDialogPublic.h"
 #include "../TestsCommon/CommodityListDialogPublic.h"
 #include "CounterpartyDialogPublic.h"
+#include "InvoiceDialog.cpp"
 
 InvoiceDialogPublic::InvoiceDialogPublic(QWidget *parent, Database *db, InvoiceTypeData::Type invoiceType, const QModelIndex &idEdit)
     : InvoiceDialog(parent, db, invoiceType, idEdit), DialogWithCommodityDialog(), DialogWithCommodityListDialog(),

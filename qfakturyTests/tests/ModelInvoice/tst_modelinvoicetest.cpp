@@ -1,7 +1,7 @@
 #include <QString>
 #include <QTest>
 
-#include "../TestsCommon/TestsCommon.h"
+#include "../../TestsCommon/TestsCommon.h"
 #include "ModelInvoice.h"
 
 class ModelInvoiceTest : public QObject

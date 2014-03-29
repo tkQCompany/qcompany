@@ -5,29 +5,7 @@
 #-------------------------------------------------
 
 TARGET = tst_invoicedialogtest
-SOURCES += tst_invoicedialogtest.cpp \
-    ../TestsCommon/InvoiceDialogPublic.cpp \
-    ../TestsCommon/GuiUserAddNewCommodity.cpp \
-    ../TestsCommon/GuiUserAddCounterparty.cpp \
-    ../TestsCommon/GuiUserAddCommodity.cpp \
-    ../TestsCommon/GuiUser.cpp \
-    ../TestsCommon/CounterpartyDialogPublic.cpp \
-    ../TestsCommon/CommodityDialogPublic.cpp \
-    ../TestsCommon/CommodityListDialogPublic.cpp
+SOURCES += tst_invoicedialogtest.cpp
 
 include(../../../qfaktury/qfaktury_common.pri)
 include(../qfakturyTestsCommon.pri)
-
-DEPENDPATH += ../CommodityListDialog
-
-HEADERS += \
-    ../TestsCommon/TestsCommon.h \
-    ../TestsCommon/InvoiceDialogPublic.h \
-    ../TestsCommon/GuiUserAddNewCommodity.h \
-    ../TestsCommon/GuiUserAddCounterparty.h \
-    ../TestsCommon/GuiUserAddCommodity.h \
-    ../TestsCommon/GuiUser.h \
-    ../TestsCommon/Counterparty_t.h \
-    ../TestsCommon/CounterpartyDialogPublic.h \
-    ../TestsCommon/CommodityDialogPublic.h \
-    ../TestsCommon/CommodityListDialogPublic.h
