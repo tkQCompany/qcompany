@@ -7,14 +7,16 @@
 
 Money_t::Money_t()
 {
-    SettingsGlobal s;
-    init_(s.numberToString(0.0, 'g', 2), true);
+    QLocale lc;
+    lc.setNumberOptions(QLocale::OmitGroupSeparator);
+    init_(lc.toString(0.0, 'f', 2), true);
 }
 
-Money_t::Money_t(const double val)
+Money_t::Money_t(const int val)
 {
-    SettingsGlobal s;
-    init_(s.numberToString(val, 'g', 2), true);
+    QLocale lc;
+    lc.setNumberOptions(QLocale::OmitGroupSeparator);
+    init_(lc.toString(val), true);
 }
 
 
@@ -24,16 +26,31 @@ Money_t::Money_t(const QString &val)
 }
 
 
-void Money_t::setValue(const double val)
+void Money_t::setValue(const int val)
 {
-    SettingsGlobal s;
-    init_(s.numberToString(val, 'g', 2), false);
+    QLocale lc;
+    lc.setNumberOptions(QLocale::OmitGroupSeparator);
+    init_(lc.toString(val), false);
 }
 
 
 void Money_t::setValue(const QString &val)
 {
     init_(val, false);
+}
+
+
+void Money_t::init_(const QString &val, const bool setDefaultCurrency)
+{
+    qRegisterMetaTypeStreamOperators<Money_t>("Money_t");
+    const int base = 10;
+    if(setDefaultCurrency)
+        setDefaultCurrency_();
+
+    mpf_class valTmp;
+    valTmp.set_str(val.toStdString(), base);
+    value_ = valTmp;
+    value_.canonicalize();
 }
 
 
@@ -44,7 +61,8 @@ Money_t& Money_t::operator+=(const Money_t &rhs)
     return *this;
 }
 
-Money_t Money_t::operator+ (const Money_t &rhs)
+
+const Money_t Money_t::operator+ (const Money_t &rhs) const
 {
     Money_t ret(*this);
     ret += rhs; //Money_t::operator+=()
@@ -52,18 +70,73 @@ Money_t Money_t::operator+ (const Money_t &rhs)
 }
 
 
-Money_t& Money_t::operator*=(const double rhs)
+Money_t& Money_t::operator*=(const val_t &rhs)
 {
     value_ *= rhs;
     return *this;
 }
 
 
-Money_t  Money_t::operator* (const double rhs)
+const Money_t  Money_t::operator* (const val_t &rhs) const
 {
     Money_t ret(*this);
     ret *= rhs; //Money_t::operator*=()
     return ret;
+}
+
+
+Money_t& Money_t::operator-=(const Money_t &rhs)
+{
+    if(currency_ == rhs.currency_)
+        value_ -= rhs.value_;
+    return *this;
+}
+
+
+const Money_t  Money_t::operator- (const Money_t &rhs) const
+{
+    Money_t ret(*this);
+    ret -= rhs; //Money_t::operator-=()
+    return ret;
+}
+
+
+Money_t& Money_t::operator/=(const val_t &rhs)
+{
+    value_ /= rhs;
+    return *this;
+}
+
+
+const Money_t  Money_t::operator/ (const val_t &rhs) const
+{
+    Money_t ret(*this);
+    ret /= rhs; //Money_t::operator/=()
+    return ret;
+}
+
+
+bool Money_t::operator<(const Money_t &rhs) const
+{
+    return value_ < rhs.value_;
+}
+
+
+bool Money_t::operator>(const Money_t &rhs) const
+{
+    return value_ > rhs.value_;
+}
+
+
+bool Money_t::operator<=(const Money_t &rhs) const
+{
+    return value_ <= rhs.value_;
+}
+
+
+bool Money_t::operator>=(const Money_t &rhs) const
+{
+    return value_ >= rhs.value_;
 }
 
 
@@ -74,18 +147,7 @@ short Money_t::digit_(const val_t &num, const size_t index) const
     return ret;
 }
 
-void Money_t::init_(const QString &val, const bool setDefaultCurrency)
-{
-    const int base = 10;
-    if(setDefaultCurrency)
-        setDefaultCurrency_();
 
-    mpf_class valTmp;
-    valTmp.set_str(val.toStdString(), base);
-
-    value_ = valTmp;
-    value_.canonicalize();
-}
 
 void Money_t::setDefaultCurrency_()
 {
@@ -284,8 +346,10 @@ QString Money_t::verballyPL() const
 }
 
 
-QString Money_t::toString() const
+QString Money_t::toString(const int digits) const
 {
-    SettingsGlobal s;
-    return s.numberToString(value_.get_d(), 'f', 2);
+    QLocale lc;
+    lc.setNumberOptions(QLocale::OmitGroupSeparator);
+    return lc.toString(value_.get_d(), 'f', digits);
+    //return value_.get_str().c_str();
 }

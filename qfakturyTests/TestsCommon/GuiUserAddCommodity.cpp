@@ -37,7 +37,7 @@ void GuiUserAddCommodity::process()
         {
             postListViewIndex_(cldp->ui()->listViewCommodities, indList.at(0));
             postComboBoxIndex_(cldp->ui()->comboBoxChosenNetPrice, netValIndex_);
-            postDoubleVal_(cldp->ui()->doubleSpinBoxAmount, commodity_.field(CommodityFields::QUANTITY).toDouble());
+            postDoubleVal_(cldp->ui()->doubleSpinBoxAmount, commodity_.field(CommodityFields::QUANTITY).value<Money_t::val_t>().get_d());
         }
         else
         {

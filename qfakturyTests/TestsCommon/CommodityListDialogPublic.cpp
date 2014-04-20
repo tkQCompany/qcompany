@@ -11,3 +11,8 @@ Ui::CommodityListDialog* CommodityListDialogPublic::ui()
 {
     return CommodityListDialog::ui;
 }
+
+QDataWidgetMapper* CommodityListDialogPublic::getDataWidgetMapper() const
+{
+    return widgetMapper;
+}

@@ -622,11 +622,11 @@ bool Database::invoiceWithCommoditiesInsertTransact(const InvoiceData &invoice, 
                                       .arg(invoice.field(InvoiceFields::PAYMENT_ID).toString())
                                       .arg(invoice.field(InvoiceFields::CURRENCY_ID).toString())
                                       .arg(invoice.field(InvoiceFields::ADDIT_TEXT).toString())
-                                      .arg(invoice.field(InvoiceFields::DISCOUNT).toString()));
+                                      .arg(invoice.field(InvoiceFields::DISCOUNT).value<Money_t::val_t>().get_d()));
 
             if(queryInv.exec(queryInvStr))
             {
-                const qint64 id_invoice = queryInv.lastInsertId().toLongLong();
+                const qlonglong id_invoice = queryInv.lastInsertId().toLongLong();
 
                 QSqlQuery queryInvCommod(modelInvoiceWithCommodities_->query());
                 const QString queryInvCommodStr("INSERT INTO table_invoice_commodity(invoice_id, commodity_id, net, quantity, discount) VALUES (:invoice_id, :commodity_id, :net, :quantity, :discount)");
@@ -634,10 +634,10 @@ bool Database::invoiceWithCommoditiesInsertTransact(const InvoiceData &invoice, 
                 for(int i = 0; i < commodities.size(); ++i)
                 {
                     queryInvCommod.bindValue(":invoice_id", id_invoice);
-                    queryInvCommod.bindValue(":commodity_id", commodities.at(i).id.toLongLong());
-                    queryInvCommod.bindValue(":net", commodities.at(i).net.toDouble());
-                    queryInvCommod.bindValue(":quantity", commodities.at(i).quantity.toInt());
-                    queryInvCommod.bindValue(":discount", commodities.at(i).discount.toInt());
+                    queryInvCommod.bindValue(":commodity_id", commodities.at(i).id);
+                    queryInvCommod.bindValue(":net", commodities.at(i).net.toString());
+                    queryInvCommod.bindValue(":quantity", commodities.at(i).quantity.get_str().c_str());
+                    queryInvCommod.bindValue(":discount", commodities.at(i).discount.get_str().c_str());
                     if(!queryInvCommod.exec())
                     {
                         qDebug() << "queryInvCommodStr: " << queryInvCommod.lastQuery();

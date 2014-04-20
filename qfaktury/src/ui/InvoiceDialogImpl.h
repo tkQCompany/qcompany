@@ -195,7 +195,6 @@ public:
     QPointer<CommodityListDialog> commodityListDialogPtr;
     QPointer<CounterpartyDialog> counterpartyDialogPtr;
     bool isLoaded_;
-    double discountTotal, netTotal, grossTotal; /**< TODO */
     QString docHTML;
 };
 

@@ -18,25 +18,33 @@ class Money_t
     friend bool operator!=(const Money_t &lhs, const Money_t &rhs);
     friend QDataStream& operator<<(QDataStream &ostr, const Money_t &money);
     friend QDataStream& operator>>(QDataStream &istr, Money_t &money);
-    typedef mpq_class val_t;
 public:
+    typedef mpq_class val_t;
     explicit Money_t();
-    explicit Money_t(const double val);
+    explicit Money_t(const int val);
     explicit Money_t(const QString &val);
 
-    void setValue(const double val);
+    void setValue(const int val);
     void setValue(const QString &val);
 
     Money_t& operator+=(const Money_t &rhs);
-    Money_t  operator+ (const Money_t &rhs);
-    Money_t& operator*=(const double rhs);
-    Money_t  operator* (const double rhs);
+    const Money_t  operator+ (const Money_t &rhs) const;
+    Money_t& operator*=(const val_t &rhs);
+    const Money_t  operator* (const val_t &rhs) const;
+    Money_t& operator-=(const Money_t &rhs);
+    const Money_t  operator- (const Money_t &rhs) const;
+    Money_t& operator/=(const val_t &rhs);
+    const Money_t  operator/ (const val_t &rhs) const;
+    bool operator<(const Money_t &rhs) const;
+    bool operator>(const Money_t &rhs) const;
+    bool operator<=(const Money_t &rhs) const;
+    bool operator>=(const Money_t &rhs) const;
 
     CurrencyData::Currencies currency() const {return currency_; }
     void setCurrency(CurrencyData::Currencies currency) {currency_ = currency; }
 
     QString verballyPL() const;
-    QString toString() const;
+    QString toString(const int digits = 6) const;
 
 private:
     CurrencyData::Currencies currency_;
@@ -78,5 +86,6 @@ inline QDataStream& operator>>(QDataStream &istr, Money_t &money)
 }
 
 Q_DECLARE_METATYPE(Money_t)
+Q_DECLARE_METATYPE(Money_t::val_t)
 
 #endif // MONEY_T_H

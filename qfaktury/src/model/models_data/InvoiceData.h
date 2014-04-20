@@ -11,6 +11,8 @@
 #include <QDate>
 #include <QVariant>
 
+#include "Money_t.h"
+
 namespace InvoiceFields
 {
     /**
@@ -38,7 +40,7 @@ public:
      */
     QVariant field(const InvoiceFields::Fields i) const
     {
-        QVariant var;
+        QVariant val;
         switch(i)
         {
         case InvoiceFields::ID_INVOICE:         return id_;
@@ -51,10 +53,10 @@ public:
         case InvoiceFields::PAYMENT_ID:         return paymentID_;
         case InvoiceFields::CURRENCY_ID:        return currencyID_;
         case InvoiceFields::ADDIT_TEXT:         return additText_;
-        case InvoiceFields::DISCOUNT:           return discount_;
+        case InvoiceFields::DISCOUNT:           {val.setValue<Money_t::val_t>(discount_); return val;}
         default:
             qDebug("Unknown index in field(): (index=%d) detected in %s, line=%d.", i, __FILE__, __LINE__);
-            return var;
+            return val;
         }
     }
 
@@ -93,7 +95,7 @@ public:
             additText_ = val.toString();
             break;
         case InvoiceFields::DISCOUNT:
-            discount_ = val.toInt();
+            discount_ = val.value<Money_t::val_t>();
             break;
         default:
             qDebug("Unknown index in setField(): (index = %d, val=%s) detected in %s, line=%d.",
@@ -135,6 +137,6 @@ private:
     qint64 paymentID_; /**< TODO */
     qint64 currencyID_; /**< TODO */
     QString additText_; /**< TODO */
-    short int discount_; /**< TODO */
+    Money_t::val_t discount_; /**< TODO */
 };
 #endif

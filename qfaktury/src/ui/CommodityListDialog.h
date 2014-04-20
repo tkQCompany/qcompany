@@ -2,10 +2,10 @@
 #define COMMODITYLISTDIALOG_H
 
 #include <QDialog>
-#include <QDataWidgetMapper>
 #include <QDoubleValidator>
 
 #include "CommodityVisualData.h"
+#include "Money_t.h"
 
 namespace Ui
 {
@@ -14,6 +14,7 @@ namespace Ui
 
 
 class Database;
+class QDataWidgetMapper;
 
 
 /**
@@ -73,8 +74,8 @@ protected:
 protected:
     Ui::CommodityListDialog *ui;
     Database *db; /**< TODO */
-    QDataWidgetMapper widgetMapper; /**< TODO */
+    QDataWidgetMapper *widgetMapper; /**< TODO */
     QDoubleValidator validator;
-    double netVal; /**< TODO */
+    Money_t netVal; /**< TODO */
 };
 #endif

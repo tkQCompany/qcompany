@@ -68,17 +68,6 @@ public:
         return QString(locale_.decimalPoint());
     }
 
-    /**
-     * @brief
-     *
-     * @return QString
-     */
-//    const QString tPointStr() const
-//    {
-//        return QString(locale_.groupSeparator());
-//    }
-
-
 
     using QSettings::value;
 

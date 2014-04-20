@@ -10,15 +10,19 @@ ModelCommodity::ModelCommodity(QObject *parent) :
 }
 
 
-double ModelCommodity::amount(const QString &id)
+Money_t::val_t ModelCommodity::amount(const qlonglong &id)
 {
     QSqlQuery q(query());
-    q.exec(QString("SELECT `quantity` FROM `commodity` WHERE `id_commodity`=%1").arg(id));
+    q.exec(QString("SELECT quantity FROM commodity WHERE id_commodity=%1").arg(id));
     if(q.next())
     {
-        return q.value(0).toDouble(); //TODO: introduce qDecimal here
+        return Money_t::val_t(q.value(0).toDouble());
     }
-    return 0.0;
+    else
+    {
+        qDebug("ModelCommodity::amount(): couldn't successfully execute the SELECT SQL query");
+    }
+    return 0;
 }
 
 
@@ -33,14 +37,15 @@ QVariant ModelCommodity::headerData(int section, Qt::Orientation orientation, in
 }
 
 
-bool ModelCommodity::changeAmount(const QString &id, const double change)
+bool ModelCommodity::changeAmount(const qlonglong &id, const Money_t::val_t &change)
 {
-    double amountVal = amount(id);
+    Money_t::val_t amountVal = amount(id) + change;
+    const Money_t::val_t newQuantity((amountVal >=0)? amountVal : Money_t::val_t(0));
     QSqlQuery q(query());
     if(q.exec(QString("UPDATE `commodity` SET `quantity` = %1 WHERE `id_commodity`=%2")
-              .arg( ((amountVal + change) >=0)? (amountVal + change) : 0 ).arg(id)))
+              .arg(newQuantity.get_str().c_str()).arg(id)))
     {
-        return true; //TODO: introduce qDecimal here
+        return true;
     }
     return false;
 }

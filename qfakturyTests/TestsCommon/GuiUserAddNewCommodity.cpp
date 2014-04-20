@@ -28,14 +28,15 @@ void GuiUserAddNewCommodity::process()
 
     postComboBoxIndex_(cdp->ui()->comboBoxType, commodity_.field(CommodityFields::TYPE_ID).toInt());
     postComboBoxIndex_(cdp->ui()->comboBoxMeasureUnit, commodity_.field(CommodityFields::UNIT_ID).toInt());
-    postComboBoxIndex_(cdp->ui()->comboBoxVat, cdp->ui()->comboBoxVat->findText(commodity_.field(CommodityFields::VAT).toString()));
+    postComboBoxIndex_(cdp->ui()->comboBoxVat, cdp->ui()->comboBoxVat->findText(commodity_.field(CommodityFields::VAT).value<Money_t::val_t>().get_str().c_str()));
 
-    postText_(cdp->ui()->lineEditNet1, commodity_.field(CommodityFields::NET1).toString());
-    postText_(cdp->ui()->lineEditNet2, commodity_.field(CommodityFields::NET2).toString());
-    postText_(cdp->ui()->lineEditNet3, commodity_.field(CommodityFields::NET3).toString());
-    postText_(cdp->ui()->lineEditNet4, commodity_.field(CommodityFields::NET4).toString());
+    const int precision = 2;
+    postText_(cdp->ui()->lineEditNet1, commodity_.field(CommodityFields::NET1).value<Money_t>().toString(precision));
+    postText_(cdp->ui()->lineEditNet2, commodity_.field(CommodityFields::NET2).value<Money_t>().toString(precision));
+    postText_(cdp->ui()->lineEditNet3, commodity_.field(CommodityFields::NET3).value<Money_t>().toString(precision));
+    postText_(cdp->ui()->lineEditNet4, commodity_.field(CommodityFields::NET4).value<Money_t>().toString(precision));
 
-    postDoubleVal_(cdp->ui()->doubleSpinBoxQuantity, commodity_.field(CommodityFields::QUANTITY).toDouble());
+    postDoubleVal_(cdp->ui()->doubleSpinBoxQuantity, commodity_.field(CommodityFields::QUANTITY).value<Money_t::val_t>().get_d());
 
     postMouseClick(cdp->ui()->pushButtonOK);
     emit finished();

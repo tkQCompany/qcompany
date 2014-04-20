@@ -58,8 +58,6 @@ void InvoiceDialogTest::initTestCase()
     SettingsGlobal s;
     s.setFirstRun(true);
     qsrand(QTime::currentTime().msec());
-    qRegisterMetaTypeStreamOperators<Money_t>("Money_t");
-    qRegisterMetaType<QList<CommodityData> >("QList<CommodityData>");
     TestsCommon::removeDBFile();
     db_ = new Database();
 }
@@ -124,6 +122,7 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities()
     QFETCH(Money_t, totalDiscountVal);
     QFETCH(Money_t, totalGrossVal);
 
+    const int precision = 2;
     InvoiceDialogPublic invD(0, db_, invoiceType);
     for(int i = 0; i < lcd.size(); ++i)
     {
@@ -132,10 +131,11 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities()
         checkLastInsertedCommodity(lcd.at(i));
 
         addCommodityInThread(&invD, lcd.at(i), netValIndices.at(i));
+        QVERIFY(db_->modelCommodity()->submitAll());
 
-        QCOMPARE(invD.ui()->labelSumNetVal->text(), totalNetVal.toString());
-        QCOMPARE(invD.ui()->labelDiscountVal->text(), totalDiscountVal.toString());
-        QCOMPARE(invD.ui()->labelSumGrossVal->text(), totalGrossVal.toString());
+        QCOMPARE(invD.ui()->labelSumNetVal->text(), totalNetVal.toString(precision));
+        QCOMPARE(invD.ui()->labelDiscountVal->text(), totalDiscountVal.toString(precision));
+        QCOMPARE(invD.ui()->labelSumGrossVal->text(), totalGrossVal.toString(precision));
     }
 
     QCOMPARE(invD.ui()->tableWidgetCommodities->rowCount(), lcd.size());
@@ -155,24 +155,37 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities()
 
     QVERIFY(db_->modelInvoice()->submitAll());
 
-    QSqlQuery query(db_->modelInvoice()->query());
-    query.exec(QString("SELECT inv_number FROM invoice WHERE counterparty_id = (SELECT id_counterparty FROM counterparty WHERE name = '%1')").arg(counterparty.name));
-    if(!query.isActive())
+    for(int i = 0; i < lcd.size(); ++i)
     {
-        qDebug() << "InvoiceDialogTest::testGUI_AddDeleteCommodities(): first SQL query failed. Reason" << query.lastError().text() << "\nQuery: " << query.lastQuery();
+        QSqlQuery queryCommod(db_->modelCommodity()->query());
+        queryCommod.exec(QString("SELECT quantity FROM commodity WHERE name = '%1'").arg(lcd.at(i).field(CommodityFields::NAME).toString()));
+        if(!queryCommod.isActive())
+        {
+            qDebug() << "InvoiceDialogTest::testGUI_AddDeleteCommodities_data(): first SQL query failed. Reason" << queryCommod.lastError().text() << "\nQuery: " << queryCommod.lastQuery();
+        }
+        QVERIFY(queryCommod.isActive());
+        QVERIFY(queryCommod.next());
+        QCOMPARE(queryCommod.value(0).value<Money_t::val_t>().get_d(), 0.0);
     }
-    QVERIFY(query.isActive());
-    QVERIFY(query.next());
-    QCOMPARE(query.value(0).toString(), invoiceNumber);
 
-    query.exec(QString("SELECT invoice_type FROM invoice JOIN invoice_type ON invoice.type_id = invoice_type.id_invoice_type WHERE invoice.counterparty_id = (SELECT id_counterparty FROM counterparty WHERE name = '%1')").arg(counterparty.name));
-    if(!query.isActive())
+    QSqlQuery queryInvoice(db_->modelInvoice()->query());
+    queryInvoice.exec(QString("SELECT inv_number FROM invoice WHERE counterparty_id = (SELECT id_counterparty FROM counterparty WHERE name = '%1')").arg(counterparty.name));
+    if(!queryInvoice.isActive())
     {
-        qDebug() << "InvoiceDialogTest::testGUI_AddDeleteCommodities(): second SQL query failed. Reason" << query.lastError().text() << "\nQuery: " << query.lastQuery();
+        qDebug() << "InvoiceDialogTest::testGUI_AddDeleteCommodities(): second SQL query failed. Reason" << queryInvoice.lastError().text() << "\nQuery: " << queryInvoice.lastQuery();
     }
-    QVERIFY(query.isActive());
-    QVERIFY(query.next());
-    QCOMPARE(query.value(0).toString(), InvoiceTypeData::name(invoiceType));
+    QVERIFY(queryInvoice.isActive());
+    QVERIFY(queryInvoice.next());
+    QCOMPARE(queryInvoice.value(0).toString(), invoiceNumber);
+
+    queryInvoice.exec(QString("SELECT invoice_type FROM invoice JOIN invoice_type ON invoice.type_id = invoice_type.id_invoice_type WHERE invoice.counterparty_id = (SELECT id_counterparty FROM counterparty WHERE name = '%1')").arg(counterparty.name));
+    if(!queryInvoice.isActive())
+    {
+        qDebug() << "InvoiceDialogTest::testGUI_AddDeleteCommodities(): third SQL query failed. Reason" << queryInvoice.lastError().text() << "\nQuery: " << queryInvoice.lastQuery();
+    }
+    QVERIFY(queryInvoice.isActive());
+    QVERIFY(queryInvoice.next());
+    QCOMPARE(queryInvoice.value(0).toString(), InvoiceTypeData::name(invoiceType));
 }
 
 
@@ -195,10 +208,10 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities_data()
 
     SettingsGlobal s;
 
-    const int maxInvoices = qrand() % 4 + 2; //2-200
+    const int maxInvoices = qrand() % 4 + 2;
     for(int invoice = 0; invoice < maxInvoices; ++invoice)
     {
-        const int maxCommod = qrand() % 2 + 2; //2-200 commodities per invoice
+        const int maxCommod = qrand() % 2 + 2;
         lcd.clear();
         for(int commod = 0; commod < maxCommod; ++commod)
         {
@@ -272,38 +285,40 @@ void InvoiceDialogTest::checkLastInsertedCommodity(const CommodityData &cd)
         const QString errMsg(QString("InvoiceDialogTest::testGUI_AddDeleteCommodities(): first SQL query failed. Reason: %1\nQuery: %2").arg(query.lastError().text()).arg(query.lastQuery()));
         QFAIL(qPrintable(errMsg));
     }
+    const int precision = 2;
     QVERIFY(query.next());
     QCOMPARE(query.value(0).toString(), cd.field(CommodityFields::NAME).toString());
     QCOMPARE(query.value(1).toString(), cd.field(CommodityFields::ABBREV).toString());
     QCOMPARE(query.value(2).toString(), cd.field(CommodityFields::PKWIU).toString());
     QCOMPARE(query.value(3).toInt() - 1, cd.field(CommodityFields::TYPE_ID).toInt()); //-1 because SQL starts from 1
     QCOMPARE(query.value(4).toInt() - 1, cd.field(CommodityFields::UNIT_ID).toInt()); //-1 because SQL starts from 1
-    QCOMPARE(query.value(5).toString(), cd.field(CommodityFields::NET1).toString());
-    QCOMPARE(query.value(6).toString(), cd.field(CommodityFields::NET2).toString());
-    QCOMPARE(query.value(7).toString(), cd.field(CommodityFields::NET3).toString());
-    QCOMPARE(query.value(8).toString(), cd.field(CommodityFields::NET4).toString());
-    QCOMPARE(query.value(9).toString(), cd.field(CommodityFields::VAT).toString());
-    QCOMPARE(query.value(10).toString(), cd.field(CommodityFields::QUANTITY).toString());
+    QCOMPARE(query.value(5).toString(), cd.field(CommodityFields::NET1).value<Money_t>().toString(precision));
+    QCOMPARE(query.value(6).toString(), cd.field(CommodityFields::NET2).value<Money_t>().toString(precision));
+    QCOMPARE(query.value(7).toString(), cd.field(CommodityFields::NET3).value<Money_t>().toString(precision));
+    QCOMPARE(query.value(8).toString(), cd.field(CommodityFields::NET4).value<Money_t>().toString(precision));
+    QCOMPARE(query.value(9).toString(), QString("%1").arg(cd.field(CommodityFields::VAT).value<Money_t::val_t>().get_d()));
+    QCOMPARE(query.value(10).toString(), QString("%1").arg(cd.field(CommodityFields::QUANTITY).value<Money_t::val_t>().get_d()));
 }
 
 
 Money_t InvoiceDialogTest::computeNetVal(const CommodityData &cd, const int netValIndex) const
 {
     Money_t ret;
+    const Money_t::val_t quantity(cd.field(CommodityFields::QUANTITY).value<Money_t::val_t>());
 
     switch(netValIndex)
     {
     case CommodityFields::NET1:
-        ret = cd.field(CommodityFields::NET1).value<Money_t>() * cd.field(CommodityFields::QUANTITY).toDouble();
+        ret = cd.field(CommodityFields::NET1).value<Money_t>() * quantity;
         break;
     case CommodityFields::NET2:
-        ret = cd.field(CommodityFields::NET2).value<Money_t>() * cd.field(CommodityFields::QUANTITY).toDouble();
+        ret = cd.field(CommodityFields::NET2).value<Money_t>() * quantity;
         break;
     case CommodityFields::NET3:
-        ret = cd.field(CommodityFields::NET3).value<Money_t>() * cd.field(CommodityFields::QUANTITY).toDouble();
+        ret = cd.field(CommodityFields::NET3).value<Money_t>() * quantity;
         break;
     case CommodityFields::NET4:
-        ret = cd.field(CommodityFields::NET4).value<Money_t>() * cd.field(CommodityFields::QUANTITY).toDouble();
+        ret = cd.field(CommodityFields::NET4).value<Money_t>() * quantity;
         break;
     }
 
@@ -344,8 +359,12 @@ CommodityData InvoiceDialogTest::createNewCommodity(const int invoiceIndex, cons
     cd.setField(CommodityFields::NET4, v);
 
     cd.setField(CommodityFields::PKWIU, QString("pkwiu_%1_%2").arg(invoiceIndex).arg(commodityIndex));
-    cd.setField(CommodityFields::QUANTITY, QString("%1").arg(qrand() % 1000 + 1));
-    cd.setField(CommodityFields::VAT, vatRates[qrand() % vatRates.size()]);
+
+    v.setValue(Money_t::val_t(qrand() % 1000 + 1.234));
+    cd.setField(CommodityFields::QUANTITY, v);
+
+    v.setValue(Money_t::val_t(vatRates[qrand() % vatRates.size()].toDouble()));
+    cd.setField(CommodityFields::VAT, v);
     const CommodityTypeData::CommodityType type = CommodityTypeData::GOODS;
     cd.setField(CommodityFields::TYPE_ID, type);
     const UnitData::Name unit = UnitData::Name(qrand() % (UnitData::PACKAGE - UnitData::UNIT + 1));

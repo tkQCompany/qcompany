@@ -1,6 +1,8 @@
 #ifndef COMMODITYTYPEDATA_H
 #define COMMODITYTYPEDATA_H
 
+#include <QString>
+
 namespace CommodityTypeFields
 {
 /**

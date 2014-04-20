@@ -3,6 +3,8 @@
 
 #include <QSqlRelationalTableModel>
 
+#include <Money_t.h>
+
 /**
  * @brief
  *
@@ -18,7 +20,7 @@ public:
      */
     explicit ModelCommodity(QObject *parent);
 
-    double amount(const QString &id);
+    Money_t::val_t amount(const qlonglong &id);
 
     /**
      * @brief
@@ -30,7 +32,7 @@ public:
      */
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-    bool changeAmount(const QString &id, const double change);
+    bool changeAmount(const qlonglong &id, const Money_t::val_t &change);
 };
 
 #endif // MODELCOMMODITY_H

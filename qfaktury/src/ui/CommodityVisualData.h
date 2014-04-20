@@ -3,6 +3,8 @@
 
 #include <QVariant>
 
+#include "Money_t.h"
+
 namespace CommodityVisualFields
 {
     /**
@@ -24,23 +26,24 @@ struct CommodityVisualData
      * @param fieldnum
      * @return QString
      */
-    QString field(const int fieldnum) const
+    QVariant field(const int fieldnum) const
     {
+        QVariant val;
         switch(fieldnum)
         {
         case CommodityVisualFields::ID: return id;
         case CommodityVisualFields::NAME: return name;
-        case CommodityVisualFields::QUANTITY: return quantity;
+        case CommodityVisualFields::QUANTITY: {val.setValue<Money_t::val_t>(quantity); return val;}
         case CommodityVisualFields::UNIT: return unit;
         case CommodityVisualFields::PKWIU: return pkwiu;
-        case CommodityVisualFields::NET: return net;
-        case CommodityVisualFields::VAT: return vat;
+        case CommodityVisualFields::NET: {val.setValue<Money_t>(net); return val;}
+        case CommodityVisualFields::VAT: {val.setValue<Money_t::val_t>(vat); return val;}
         case CommodityVisualFields::TYPE: return type;
-        case CommodityVisualFields::DISCOUNT: return discount;
+        case CommodityVisualFields::DISCOUNT: {val.setValue<Money_t::val_t>(discount); return val;}
         default:
             qDebug("CommodityVisualData::field(): Unrecognized field number");
         }
-        return QString();
+        return val;
     }
 
     /**
@@ -54,13 +57,13 @@ struct CommodityVisualData
         switch(fieldnum)
         {
         case CommodityVisualFields::ID:
-            id = v.toString();
+            id = v.toLongLong();
             break;
         case CommodityVisualFields::NAME:
             name = v.toString();
             break;
         case CommodityVisualFields::QUANTITY:
-            quantity = v.toString();
+            quantity = v.value<Money_t::val_t>();
             break;
         case CommodityVisualFields::UNIT:
             unit = v.toString();
@@ -69,16 +72,16 @@ struct CommodityVisualData
             pkwiu = v.toString();
             break;
         case CommodityVisualFields::NET:
-            net = v.toString();
+            net = v.value<Money_t>();
             break;
         case CommodityVisualFields::VAT:
-            vat = v.toString();
+            vat = v.value<Money_t::val_t>();
             break;
         case CommodityVisualFields::TYPE:
             type = v.toString();
             break;
         case CommodityVisualFields::DISCOUNT:
-            discount = v.toString();
+            discount = v.value<Money_t::val_t>();
             break;
         default:
             qDebug("CommodityVisualData::setField(): Unrecognized field number");
@@ -127,15 +130,15 @@ struct CommodityVisualData
         return !(*this == cvd);
     }
 
-    QString id; /**< TODO */
+    qlonglong id; /**< TODO */
     QString name; /**< TODO */
-    QString quantity; /**< TODO */
-    QString unit; /**< TODO */
+    Money_t::val_t quantity; /**< TODO */
+    QString unit; /**< TODO */ //TODO: change type to appropriate
     QString pkwiu; /**< TODO */
-    QString net; /**< TODO */
-    QString vat; /**< TODO */
-    QString type; /**< TODO */
-    QString discount; /**< TODO */
+    Money_t net; /**< TODO */
+    Money_t::val_t vat; /**< TODO */
+    QString type; /**< TODO */ //TODO: change type to appropriate
+    Money_t::val_t discount; /**< TODO */
 };
 
 Q_DECLARE_METATYPE(CommodityVisualData)

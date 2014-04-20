@@ -1,5 +1,5 @@
 #include <QMessageBox>
-#include <QDebug>
+#include <QDataWidgetMapper>
 
 #include "CommodityListDialog.h"
 #include "ui_CommodityListDialog.h"
@@ -12,7 +12,7 @@
 
 
 CommodityListDialog::CommodityListDialog(QWidget *parent, Database *db):
-    QDialog(parent), ui(new Ui::CommodityListDialog), db(db), netVal(0.0)
+    QDialog(parent), ui(new Ui::CommodityListDialog), db(db), widgetMapper(new QDataWidgetMapper)
 {
     ui->setupUi(this);
     init();
@@ -26,35 +26,28 @@ void CommodityListDialog::init()
     ui->comboBoxCommodities->setModel(db->modelCommodityType());
     ui->comboBoxCommodities->setModelColumn(CommodityTypeFields::TYPE);
 
-    widgetMapper.setModel(db->modelCommodity());
+    widgetMapper->setModel(db->modelCommodity());
     comboBoxCommoditiesChanged(CommodityTypeData::GOODS);
-    widgetMapper.addMapping(ui->comboBoxCommodities, CommodityFields::TYPE_ID);
-    widgetMapper.addMapping(ui->lineEditName, CommodityFields::NAME);
-    widgetMapper.addMapping(ui->lineEditPriceNet1, CommodityFields::NET1);
-    widgetMapper.addMapping(ui->lineEditPriceNet2, CommodityFields::NET2);
-    widgetMapper.addMapping(ui->lineEditPriceNet3, CommodityFields::NET3);
-    widgetMapper.addMapping(ui->lineEditPriceNet4, CommodityFields::NET4);
-    widgetMapper.toFirst();
+    widgetMapper->addMapping(ui->comboBoxCommodities, CommodityFields::TYPE_ID);
+    widgetMapper->addMapping(ui->lineEditName, CommodityFields::NAME);
+    widgetMapper->addMapping(ui->lineEditPriceNet1, CommodityFields::NET1);
+    widgetMapper->addMapping(ui->lineEditPriceNet2, CommodityFields::NET2);
+    widgetMapper->addMapping(ui->lineEditPriceNet3, CommodityFields::NET3);
+    widgetMapper->addMapping(ui->lineEditPriceNet4, CommodityFields::NET4);
+    widgetMapper->toFirst();
     ui->doubleSpinBoxAmount->setValue(0.0);
 
     ui->listViewCommodities->selectionModel()->setCurrentIndex(db->modelCommodity()->index(0, 0), QItemSelectionModel::Rows);
     comboBoxChosenNetPriceChanged(ui->comboBoxChosenNetPrice->currentIndex());
 
-    SettingsGlobal s;
-    if(s.value(s.EDIT_NAME).toBool())
-    {
-        ui->lineEditName->setEnabled(true);
-    }
-    else
-    {
-        ui->lineEditName->setEnabled(false);
-	}
+    SettingsGlobal s;    
+    ui->lineEditName->setEnabled(s.value(s.EDIT_NAME).toBool());
 
 	// connects
     connect(ui->pushButtonOK, SIGNAL( clicked() ), this, SLOT( doAccept()));
     connect(ui->pushButtonCancel, SIGNAL( clicked() ), this, SLOT( close()));
     connect(ui->comboBoxCommodities, SIGNAL( activated(int) ), this, SLOT( comboBoxCommoditiesChanged(int)));
-    connect(ui->listViewCommodities, SIGNAL(clicked(QModelIndex)), &widgetMapper, SLOT(setCurrentModelIndex(QModelIndex)));
+    connect(ui->listViewCommodities, SIGNAL(clicked(QModelIndex)), widgetMapper, SLOT(setCurrentModelIndex(QModelIndex)));
     connect(ui->comboBoxChosenNetPrice, SIGNAL(currentIndexChanged(int)), this, SLOT( comboBoxChosenNetPriceChanged(int) ) );
     connect(ui->spinBoxDiscount, SIGNAL( valueChanged(int) ), this, SLOT( updateNetVal() ) );
     connect(ui->doubleSpinBoxAmount, SIGNAL( valueChanged(const QString&) ), this, SLOT( updateNetVal() ) );
@@ -70,6 +63,7 @@ void CommodityListDialog::init()
 
 CommodityListDialog::~CommodityListDialog()
 {
+    delete widgetMapper;
     db->modelCommodity()->setFilter("");
     delete ui;
 }
@@ -87,17 +81,19 @@ void CommodityListDialog::comboBoxChosenNetPriceChanged(const int i)
         switch(i)
         {
         case 0:
-            netVal = ui->lineEditPriceNet1->text().toDouble();
+            netVal.setValue(ui->lineEditPriceNet1->text().remove(' '));
             break;
         case 1:
-            netVal = ui->lineEditPriceNet2->text().toDouble();
+            netVal.setValue(ui->lineEditPriceNet2->text().remove(' '));
             break;
         case 2:
-            netVal = ui->lineEditPriceNet3->text().toDouble();
+            netVal.setValue(ui->lineEditPriceNet3->text().remove(' '));
             break;
         case 3:
-            netVal = ui->lineEditPriceNet4->text().toDouble();
+            netVal.setValue(ui->lineEditPriceNet4->text().remove(' '));
             break;
+        default:
+            qDebug("Unexpected value in a switch() in CommodityListDialog::comboBoxChosenNetPriceChanged()");
         }
         updateNetVal();
     }
@@ -116,37 +112,36 @@ void CommodityListDialog::doAccept() {
     if (!ui->lineEditName->text().isEmpty())
     {
         const QModelIndex current(ui->listViewCommodities->selectionModel()->currentIndex());
-        if( (db->modelCommodity()->amount(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toString())
-             >= ui->doubleSpinBoxAmount->value())
-                ||
-                (db->modelCommodity()->data(db->modelCommodity()->index(current.row(),
-                                      CommodityFields::TYPE_ID)).toString() ==
-                 CommodityTypeData::name(CommodityTypeData::SERVICES))) //TODO: introduce qDecimals here
+        const Money_t::val_t amountOnStock(db->modelCommodity()->amount(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toLongLong()));
+        const QString currentCommodityTypeStr(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::TYPE_ID)).toString());
+        const Money_t::val_t demandedAmount(ui->doubleSpinBoxAmount->value());
+
+        if( (amountOnStock >= demandedAmount)  || (currentCommodityTypeStr == CommodityTypeData::name(CommodityTypeData::SERVICES)))
         {
-            ret.discount = QString("%1").arg(ui->spinBoxDiscount->value());
-            ret.id = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toString();
+            ret.discount = ui->spinBoxDiscount->value();
+            ret.id = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toLongLong();
             ret.name = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NAME)).toString();
             switch(ui->comboBoxChosenNetPrice->currentIndex())
             {
             case 0:
-                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET1)).toString();
+                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET1)).value<Money_t>();
                 break;
             case 1:
-                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET2)).toString();
+                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET2)).value<Money_t>();
                 break;
             case 2:
-                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET3)).toString();
+                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET3)).value<Money_t>();
                 break;
             case 3:
-                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET4)).toString();
+                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET4)).value<Money_t>();
                 break;
             }
 
             ret.pkwiu = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::PKWIU)).toString();
-            ret.quantity = QString("%1").arg(ui->doubleSpinBoxAmount->value());
+            ret.quantity = Money_t::val_t(ui->doubleSpinBoxAmount->value());
             ret.type = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::TYPE_ID)).toString();
             ret.unit = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::UNIT_ID)).toString();
-            ret.vat = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::VAT)).toString();
+            ret.vat = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::VAT)).value<Money_t::val_t>();
 
             accept();
         }
@@ -154,7 +149,7 @@ void CommodityListDialog::doAccept() {
         {
             QMessageBox::information(this, qApp->applicationName(),
                                      trUtf8("Nie ma wystarczającej ilości towaru na stanie. Ilość towaru: %1")
-                                     .arg(db->modelCommodity()->amount(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toString())), QMessageBox::Ok);
+                                     .arg(db->modelCommodity()->amount(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toLongLong()).get_str().c_str()), QMessageBox::Ok);
 
         }
     }
@@ -166,16 +161,13 @@ void CommodityListDialog::doAccept() {
 
 
 
-/** Slot
- *  Calulate Netto
- */
 void CommodityListDialog::updateNetVal()
 {
-    const double totalNetPrice = netVal * ui->doubleSpinBoxAmount->value();
-    const double discountedNetPrice = totalNetPrice - totalNetPrice * ui->spinBoxDiscount->value() * 0.01;
-
-    SettingsGlobal s;
-    ui->labelNetVal->setText(s.numberToString(discountedNetPrice, 'f', 2));
+    const Money_t totalNetPrice = netVal * Money_t::val_t(ui->doubleSpinBoxAmount->value());
+    const Money_t::val_t onePercent(Money_t::val_t(1)/Money_t::val_t(100));
+    const Money_t discountedNetPrice = totalNetPrice - (totalNetPrice * onePercent * Money_t::val_t(ui->spinBoxDiscount->value()));
+    const int precision = 2;
+    ui->labelNetVal->setText(discountedNetPrice.toString(precision));
 }
 
 
@@ -184,22 +176,3 @@ void CommodityListDialog::comboBoxCommoditiesChanged(int val)
 {
     db->modelCommodity()->setFilter(QString("`type_id` = %1").arg(val + 1));
 }
-
-
-// ***************************** SLOTS END *****************************************
-
-
-
-///** Remove unnecessary zeros 1,000 = 1
-// */
-//QString CommodityListDialog::trimZeros(const QString &in)
-//{
-//	// code to remove unncessery zeros
-//    const QStringList quan(in.split(sett().getDecimalPointStr()));
-//    QString quantity(in);
-//    if (quan[1].compare("000") == 0)
-//    {
-//		quantity = quan[0];
-//	}
-//	return quantity;
-//}

@@ -1,12 +1,11 @@
 #include <QTest>
 #include <QSqlQuery>
+#include <QSqlError>
 #include <QThread>
 
 #include "CommodityData.h"
 #include "CommodityTypeData.h"
 #include "CommodityListDialog.h"
-//#include "CommodityListDialog.cpp"
-#include "ui_CommodityListDialog.h"
 #include "Database.h"
 #include "UnitData.h"
 #include "Money_t.h"
@@ -26,8 +25,8 @@ private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     void testGUI_InitialState();
-    void testGUI_AddedOneCommodity();
-    void testGUI_AddedOneCommodity_data();
+    void testGUI_AddManyCommodities();
+    void testGUI_AddManyCommodities_data();
 private:
     void addCommodityInThread(InvoiceDialogPublic *idp, const CommodityData &cd, const int netValIndex);
     void startUserThread(GuiUser *guiUser, QThread *thread, QPushButton *buttonStart) const;
@@ -42,6 +41,7 @@ void CommodityListDialogTest::initTestCase()
     SettingsGlobal s;
     s.setFirstRun(true);
     qsrand(QTime::currentTime().msec());
+    TestsCommon::removeDBFile();
     db_ = new Database();
 }
 
@@ -71,7 +71,7 @@ void CommodityListDialogTest::testGUI_InitialState()
 }
 
 
-void CommodityListDialogTest::testGUI_AddedOneCommodity()
+void CommodityListDialogTest::testGUI_AddManyCommodities()
 {
     QFETCH(CommodityTypeData::CommodityType, commodityType);
     QFETCH(QString, commodityName);
@@ -79,33 +79,58 @@ void CommodityListDialogTest::testGUI_AddedOneCommodity()
     QFETCH(Money_t, net2);
     QFETCH(Money_t, net3);
     QFETCH(Money_t, net4);
-    QFETCH(double, quantity);
-    QFETCH(double, discount);
+    QFETCH(Money_t::val_t, quantity);
+    QFETCH(Money_t::val_t, discount);
     QFETCH(int, netValIndex);
     QFETCH(Money_t, resultNetVal);
 
     QSqlQuery query(db_->modelCommodity()->query());
+    const int precision = 2;
     query.prepare("INSERT INTO commodity(name, abbreviation, pkwiu, type_id, unit_id, net1, net2, net3, net4, vat, quantity) VALUES(:name, :abbreviation, :pkwiu, :type_id, :unit_id, :net1, :net2, :net3, :net4, :vat, :quantity)");
     query.bindValue(":name", commodityName);
     query.bindValue(":abbreviation", "abbrev");
     query.bindValue(":pkwiu", "pkwiu");
-    query.bindValue(":type_id", commodityType);
-    query.bindValue(":unit_id", UnitData::PACKAGE);
-    query.bindValue(":net1", net1.toString());
-    query.bindValue(":net2", net2.toString());
-    query.bindValue(":net3", net3.toString());
-    query.bindValue(":net4", net4.toString());
+    query.bindValue(":type_id", commodityType + 1);
+    query.bindValue(":unit_id", UnitData::PACKAGE + 1);
+    query.bindValue(":net1", net1.toString(precision));
+    query.bindValue(":net2", net2.toString(precision));
+    query.bindValue(":net3", net3.toString(precision));
+    query.bindValue(":net4", net4.toString(precision));
     query.bindValue(":vat",  QString("%1").arg(qrand() % 100));
-    query.bindValue(":quantity", quantity);
-    query.exec();
 
-    QCOMPARE(discount, 0.0);
-    QCOMPARE(netValIndex, 3);
+    const Money_t::val_t stockQuantity(2 * quantity);
+    query.bindValue(":quantity", stockQuantity.get_str().c_str()); //on stock
+    const bool retQuery = query.exec();
+    if(!retQuery)
+    {
+        qWarning("%s", qPrintable(query.lastError().text()));
+    }
+    QVERIFY(retQuery);
+    db_->modelCommodity()->submitAll();
 
+    CommodityListDialogPublic listDialog(0, db_);
+
+    static int rowNumber = 0;
+    listDialog.getDataWidgetMapper()->setCurrentIndex(rowNumber);
+    QCOMPARE(listDialog.ui()->listViewCommodities->model()->rowCount(), ++rowNumber);
+
+    QCOMPARE(listDialog.ui()->comboBoxCommodities->currentIndex(), (int)commodityType);
+    QCOMPARE(listDialog.ui()->lineEditName->text(), commodityName);
+    QCOMPARE(listDialog.ui()->lineEditPriceNet1->text(), net1.toString(precision));
+    QCOMPARE(listDialog.ui()->lineEditPriceNet2->text(), net2.toString(precision));
+    QCOMPARE(listDialog.ui()->lineEditPriceNet3->text(), net3.toString(precision));
+    QCOMPARE(listDialog.ui()->lineEditPriceNet4->text(), net4.toString(precision));
+    QCOMPARE(listDialog.ui()->comboBoxChosenNetPrice->currentIndex(), 0); //0 is default
+
+    listDialog.ui()->comboBoxChosenNetPrice->setCurrentIndex(netValIndex);
+    listDialog.ui()->doubleSpinBoxAmount->setValue(quantity.get_d());
+    listDialog.ui()->spinBoxDiscount->setValue((int)discount.get_d());
+
+    QCOMPARE(listDialog.ui()->labelNetVal->text(), resultNetVal.toString(precision));
 }
 
 
-void CommodityListDialogTest::testGUI_AddedOneCommodity_data()
+void CommodityListDialogTest::testGUI_AddManyCommodities_data()
 {
     QTest::addColumn<CommodityTypeData::CommodityType>("commodityType");
     QTest::addColumn<QString>("commodityName");
@@ -113,21 +138,42 @@ void CommodityListDialogTest::testGUI_AddedOneCommodity_data()
     QTest::addColumn<Money_t>("net2");
     QTest::addColumn<Money_t>("net3");
     QTest::addColumn<Money_t>("net4");
-    QTest::addColumn<double>("quantity");
-    QTest::addColumn<double>("discount");
+    QTest::addColumn<Money_t::val_t>("quantity");
+    QTest::addColumn<Money_t::val_t>("discount");
     QTest::addColumn<int>("netValIndex");
     QTest::addColumn<Money_t>("resultNetVal");
 
-    QTest::newRow("0") << CommodityTypeData::GOODS
-                       << QString("name0")
-                       << Money_t(QString("%1,%2").arg(qrand() % 10000).arg(qrand() % 1000))
-                       << Money_t(QString("%1,%2").arg(qrand() % 10000).arg(qrand() % 1000))
-                       << Money_t(QString("%1,%2").arg(qrand() % 10000).arg(qrand() % 1000))
-                       << Money_t(QString("%1,%2").arg(qrand() % 10000).arg(qrand() % 1000))
-                       << (double)(qrand() % 100000)
-                       << (double)(qrand() % 100)
-                       << qrand() % 4
-                       << Money_t(0.1);
+    const int maxNetVals = 4;
+    Money_t netVal, nets[maxNetVals];
+
+    for(int i = 0; i < maxNetVals; ++i)
+    {
+        const QString netStr(QString("%1,%2").arg(qrand() % 10000 + 1).arg(qrand() % 100));
+        nets[i] = Money_t(netStr);
+    }
+
+    const int maxTests = 100;
+    for(int i = 0; i < maxTests; ++i)
+    {
+        const int netValIndex = qrand() % maxNetVals;
+        const Money_t::val_t discountPercent = qrand() % 100;
+        netVal = nets[netValIndex];
+        const Money_t::val_t quantity = (qrand() % 100000) + 10;
+        const Money_t totalNetVal(netVal * quantity);
+        const Money_t::val_t onePercent(Money_t::val_t(1)/Money_t::val_t(100));
+        const Money_t discountedTotalNetVal(totalNetVal - (totalNetVal * discountPercent * onePercent));
+
+        QTest::newRow(qPrintable(QString("%1").arg(i))) << CommodityTypeData::GOODS
+                           << QString("name_%1").arg(i)
+                           << nets[0]
+                           << nets[1]
+                           << nets[2]
+                           << nets[3]
+                           << quantity
+                           << discountPercent
+                           << netValIndex
+                           << discountedTotalNetVal;
+    }
 }
 
 

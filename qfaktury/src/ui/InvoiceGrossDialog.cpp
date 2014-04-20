@@ -35,9 +35,9 @@ InvoiceGrossDialog::~InvoiceGrossDialog()
  */
 void InvoiceGrossDialog::calculateOneDiscount(const int i)
 {
-	double quantity = 0, vat = 0, gross = 0;
+    double quantity = 0, vat = 0, gross = 0;
 	double netto = 0,  price = 0;
-	double discountValue = 0, discount;
+    double discountValue = 0, discount;
 
     SettingsGlobal s;
 

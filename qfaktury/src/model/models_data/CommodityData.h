@@ -44,7 +44,7 @@ public:
 
     QVariant field(const CommodityFields::Field i) const
     {
-        QVariant net;
+        QVariant val;
         switch(i)
         {
         case CommodityFields::ID_COMMODITY: return id_;
@@ -53,15 +53,15 @@ public:
         case CommodityFields::PKWIU: return pkwiu_;
         case CommodityFields::TYPE_ID: return type_id_;
         case CommodityFields::UNIT_ID: return unit_id_;
-        case CommodityFields::NET1: {net.setValue(net1_); return net;}
-        case CommodityFields::NET2: {net.setValue(net2_); return net;}
-        case CommodityFields::NET3: {net.setValue(net3_); return net;}
-        case CommodityFields::NET4: {net.setValue(net4_); return net;}
-        case CommodityFields::VAT: return vat_;
-        case CommodityFields::QUANTITY: return quantity_;
+        case CommodityFields::NET1: {val.setValue(net1_); return val;}
+        case CommodityFields::NET2: {val.setValue(net2_); return val;}
+        case CommodityFields::NET3: {val.setValue(net3_); return val;}
+        case CommodityFields::NET4: {val.setValue(net4_); return val;}
+        case CommodityFields::VAT:  {val.setValue(vat_); return val;}
+        case CommodityFields::QUANTITY: {val.setValue(quantity_); return val;}
         default:
             qDebug("CommodityData::field(): Unknown commodity field: %d", (int)i);
-            return QVariant();
+            return val;
         }
     }
 
@@ -100,10 +100,10 @@ public:
             net4_ = val.value<Money_t>();
             break;
         case CommodityFields::VAT:
-            vat_ = val.toFloat();
+            vat_ = val.value<Money_t::val_t>();
             break;
         case CommodityFields::QUANTITY:
-            quantity_ = val.toDouble();
+            quantity_ = val.value<Money_t::val_t>();
             break;
         default:
             qDebug("Unknown index in CommodityData::setField(): (index = %d, val=%s) detected in %s, line=%d.",
@@ -122,8 +122,8 @@ private:
     Money_t net2_;
     Money_t net3_;
     Money_t net4_;
-    float vat_;
-    double quantity_;
+    Money_t::val_t vat_;
+    Money_t::val_t quantity_;
 };
 
 Q_DECLARE_METATYPE(CommodityData)
