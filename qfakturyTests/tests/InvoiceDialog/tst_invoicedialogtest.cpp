@@ -3,6 +3,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QTime>
+#include <QMap>
 
 #include "Database.h"
 #include "SettingsGlobal.h"
@@ -88,7 +89,7 @@ void InvoiceDialogTest::testGUI_InitialState()
 
     for(int header = 0; header < maxCols; ++header)
     {
-        QCOMPARE(invoiceDialog.ui()->tableWidgetCommodities->horizontalHeaderItem(header)->text(), CommodityVisualData::header(header));
+        QCOMPARE(invoiceDialog.ui()->tableWidgetCommodities->horizontalHeaderItem(header)->text(), CommodityVisualData::header((CommodityVisualFields::Field)header));
     }
 
     QCOMPARE(invoiceDialog.ui()->checkBoxDiscount->isChecked(), false);
@@ -118,12 +119,14 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities()
     QFETCH(QString, invoiceNumber);
     QFETCH(InvoiceTypeData::Type, invoiceType);
     QFETCH(QList<int>, netValIndices);
+    QFETCH(Money_t::val_t, discount);
     QFETCH(Money_t, totalNetVal);
     QFETCH(Money_t, totalDiscountVal);
     QFETCH(Money_t, totalGrossVal);
 
     const int precision = 2;
     InvoiceDialogPublic invD(0, db_, invoiceType);
+    invD.show();
     for(int i = 0; i < lcd.size(); ++i)
     {
         addNewCommodityInThread(&invD, lcd.at(i));
@@ -131,7 +134,45 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities()
         checkLastInsertedCommodity(lcd.at(i));
 
         addCommodityInThread(&invD, lcd.at(i), netValIndices.at(i));
-        QVERIFY(db_->modelCommodity()->submitAll());
+
+        QTableWidgetItem *item = 0;
+        invD.ui()->tableWidgetCommodities->selectRow(i);
+        item = invD.ui()->tableWidgetCommodities->item(i, CommodityVisualFields::ID);
+        QVERIFY(item != NULL);
+        QCOMPARE(item->text().toLongLong(), lcd.at(i).field(CommodityFields::ID_COMMODITY).toLongLong());
+
+        item = invD.ui()->tableWidgetCommodities->item(i, CommodityVisualFields::NAME);
+        QVERIFY(item != NULL);
+        QCOMPARE(item->text(), lcd.at(i).field(CommodityFields::NAME).toString());
+
+        item = invD.ui()->tableWidgetCommodities->item(i, CommodityVisualFields::QUANTITY);
+        QVERIFY(item != NULL);
+        QCOMPARE(item->text().toDouble(), lcd.at(i).field(CommodityFields::QUANTITY).value<Money_t::val_t>().get_d());
+
+        item = invD.ui()->tableWidgetCommodities->item(i, CommodityVisualFields::UNIT);
+        QVERIFY(item != NULL);
+        QCOMPARE(item->text(), UnitData::name((UnitData::Name)lcd.at(i).field(CommodityFields::UNIT_ID).toInt()));
+
+        item = invD.ui()->tableWidgetCommodities->item(i, CommodityVisualFields::PKWIU);
+        QVERIFY(item != NULL);
+        QCOMPARE(item->text(), lcd.at(i).field(CommodityFields::PKWIU).toString());
+
+        item = invD.ui()->tableWidgetCommodities->item(i, CommodityVisualFields::NET);
+        QVERIFY(item != NULL);
+        QCOMPARE(item->text(), lcd.at(i).field((CommodityFields::Field)(CommodityFields::NET1 + netValIndices.at(i))).value<Money_t>().toString(precision));
+
+        item = invD.ui()->tableWidgetCommodities->item(i, CommodityVisualFields::TYPE);
+        QVERIFY(item != NULL);
+        QCOMPARE(item->text(), CommodityTypeData::name((CommodityTypeData::CommodityType)lcd.at(i).field(CommodityFields::TYPE_ID).toInt()));
+
+        item = invD.ui()->tableWidgetCommodities->item(i, CommodityVisualFields::VAT);
+        QVERIFY(item != NULL);
+        QCOMPARE(item->text().toDouble(), lcd.at(i).field(CommodityFields::VAT).value<Money_t::val_t>().get_d());
+
+        item = invD.ui()->tableWidgetCommodities->item(i, CommodityVisualFields::DISCOUNT);
+        QVERIFY(item != NULL);
+        QCOMPARE(item->text(), QString("0"));
+
 
         QCOMPARE(invD.ui()->labelSumNetVal->text(), totalNetVal.toString(precision));
         QCOMPARE(invD.ui()->labelDiscountVal->text(), totalDiscountVal.toString(precision));
@@ -196,6 +237,7 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities_data()
     QTest::addColumn<QString>("invoiceNumber");
     QTest::addColumn<InvoiceTypeData::Type>("invoiceType");
     QTest::addColumn<QList<int> >("netValIndices");
+    QTest::addColumn<Money_t::val_t>("discount");
     QTest::addColumn<Money_t>("totalNetVal");
     QTest::addColumn<Money_t>("totalDiscountVal");
     QTest::addColumn<Money_t>("totalGrossVal");
@@ -205,15 +247,16 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities_data()
     InvoiceTypeData::Type invType;
     QList<int> netValIndices;
     Money_t totalNetVal, totalDiscountVal, totalGrossVal;
+    Money_t::val_t discount;
 
     SettingsGlobal s;
 
     const int maxInvoices = qrand() % 4 + 2;
     for(int invoice = 0; invoice < maxInvoices; ++invoice)
     {
-        const int maxCommod = qrand() % 2 + 2;
+        const int maxCommodPerInvoice = qrand() % 2 + 2;
         lcd.clear();
-        for(int commod = 0; commod < maxCommod; ++commod)
+        for(int commod = 0; commod < maxCommodPerInvoice; ++commod)
         {
             const CommodityData cd = createNewCommodity(invoice, commod);
             lcd.append(cd);
@@ -232,7 +275,7 @@ void InvoiceDialogTest::testGUI_AddDeleteCommodities_data()
                                          QDate::currentDate(),
                                          invType);
 
-        QTest::newRow(qPrintable(QString("%1").arg(invoice))) << lcd << createNewCounterparty(invoice) << invNum << invType << netValIndices << totalNetVal << totalDiscountVal << totalGrossVal;
+        QTest::newRow(qPrintable(QString("%1").arg(invoice))) << lcd << createNewCounterparty(invoice) << invNum << invType << netValIndices << discount << totalNetVal << totalDiscountVal << totalGrossVal;
     }
 }
 
@@ -245,7 +288,7 @@ void InvoiceDialogTest::addCommodityInThread(InvoiceDialogPublic *idp, const Com
     startUserThread(&userAddCommod, &threadCommodity, idp->ui()->pushButtonAddCommodity);
     while(!threadCommodity.isFinished())
     {
-        QTest::qWait(100);
+        QTest::qWait(200);
     }
 }
 
@@ -258,7 +301,7 @@ void InvoiceDialogTest::addCounterpartyInThread(InvoiceDialogPublic *idp, const 
     startUserThread(&userAddNewCounterp, &threadCounterparty, idp->ui()->pushButtonAddCounterparty);
     while(!threadCounterparty.isFinished())
     {
-        QTest::qWait(100);
+        QTest::qWait(200);
     }
 }
 
@@ -342,8 +385,10 @@ CommodityData InvoiceDialogTest::createNewCommodity(const int invoiceIndex, cons
     SettingsGlobal s;
     QVariant v;
     const QStringList vatRates(s.value(s.keyName(s.VAT_RATES)).toString().split("|"));
+    static qlonglong commodityIDNum = 1;//SQL starts from 1
 
     cd.setField(CommodityFields::ABBREV, QString("abbrev_%1").arg(invoiceIndex));
+    cd.setField(CommodityFields::ID_COMMODITY, commodityIDNum++);
     cd.setField(CommodityFields::NAME, QString("name_%1_%2").arg(invoiceIndex).arg(commodityIndex));
 
     v.setValue(Money_t(QString("%1%2%3").arg(commodityIndex).arg(s.decimalPointStr()).arg(11)));
@@ -365,8 +410,10 @@ CommodityData InvoiceDialogTest::createNewCommodity(const int invoiceIndex, cons
 
     v.setValue(Money_t::val_t(vatRates[qrand() % vatRates.size()].toDouble()));
     cd.setField(CommodityFields::VAT, v);
+
     const CommodityTypeData::CommodityType type = CommodityTypeData::GOODS;
     cd.setField(CommodityFields::TYPE_ID, type);
+
     const UnitData::Name unit = UnitData::Name(qrand() % (UnitData::PACKAGE - UnitData::UNIT + 1));
     cd.setField(CommodityFields::UNIT_ID, unit);
 
@@ -407,7 +454,6 @@ Counterparty_t InvoiceDialogTest::createNewCounterparty(const int invoiceIndex) 
 
     return counterparty;
 }
-
 
 QTEST_MAIN(InvoiceDialogTest)
 

@@ -58,7 +58,10 @@ public:
      *
      * @param commodities
      */
-    void fillTableCommodity(const QList<CommodityVisualData> &commodities);
+    void tableCommodityFill(const QList<CommodityVisualData> &commodities);
+
+    void tableCommoditySetItems(const CommodityVisualData &cvd, const int rowNum);
+
     /**
      * @brief
      *

@@ -351,5 +351,4 @@ QString Money_t::toString(const int digits) const
     QLocale lc;
     lc.setNumberOptions(QLocale::OmitGroupSeparator);
     return lc.toString(value_.get_d(), 'f', digits);
-    //return value_.get_str().c_str();
 }

@@ -48,18 +48,29 @@ InvoiceDialogImpl::~InvoiceDialogImpl()
  *
  * @param commodities
  */
-void InvoiceDialogImpl::fillTableCommodity(const QList<CommodityVisualData> &commodities)
+void InvoiceDialogImpl::tableCommodityFill(const QList<CommodityVisualData> &commodities)
 {
     ui->tableWidgetCommodities->setRowCount(commodities.size());
-    for(int r = 0; r < commodities.size(); ++r)
+    for(int row = 0; row < commodities.size(); ++row)
     {
-        for(int c = CommodityVisualFields::ID; c <= CommodityVisualFields::DISCOUNT; ++c)
-        {
-            ui->tableWidgetCommodities->setItem(r, c, new QTableWidgetItem(commodities.at(r).field(c).toString()));
-        }
+        tableCommoditySetItems(commodities.at(row), row);
     }
 }
 
+
+void InvoiceDialogImpl::tableCommoditySetItems(const CommodityVisualData &cvd, const int rowNum)
+{
+    const int precision = 2;
+    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::ID, new QTableWidgetItem(QString("%1").arg(cvd.field(CommodityVisualFields::ID).toLongLong())));
+    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::NAME, new QTableWidgetItem(cvd.field(CommodityVisualFields::NAME).toString()));
+    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::QUANTITY, new QTableWidgetItem(QString("%1").arg(cvd.field(CommodityVisualFields::QUANTITY).value<Money_t::val_t>().get_d())));
+    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::UNIT, new QTableWidgetItem(cvd.field(CommodityVisualFields::UNIT).toString()));
+    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::PKWIU, new QTableWidgetItem(cvd.field(CommodityVisualFields::PKWIU).toString()));
+    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::NET, new QTableWidgetItem(cvd.field(CommodityVisualFields::NET).value<Money_t>().toString(precision)));
+    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::VAT, new QTableWidgetItem(QString("%1").arg(cvd.field(CommodityVisualFields::VAT).value<Money_t::val_t>().get_d())));
+    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::TYPE, new QTableWidgetItem(cvd.field(CommodityVisualFields::TYPE).toString()));
+    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::DISCOUNT, new QTableWidgetItem(QString("%1").arg(cvd.field(CommodityVisualFields::DISCOUNT).value<Money_t::val_t>().get_d())));
+}
 
 
 /**
@@ -76,7 +87,7 @@ QList<CommodityVisualData> InvoiceDialogImpl::getCommoditiesVisualData() const
         CommodityVisualData d;
         for(int c = CommodityVisualFields::ID; c <= CommodityVisualFields::DISCOUNT; ++c)
         {
-            d.setField(c, ui->tableWidgetCommodities->item(r, c)->data(Qt::DisplayRole));
+            d.setField((CommodityVisualFields::Field)c, ui->tableWidgetCommodities->item(r, c)->data(Qt::DisplayRole));
         }
         ret.append(d);
     }
@@ -212,7 +223,7 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
     if(idEdit.isValid())
     {
         mapper.setCurrentIndex(idEdit.row());
-        fillTableCommodity(db->commodities(idEdit.data().toLongLong()));
+        tableCommodityFill(db->commodities(idEdit.data().toLongLong()));
         ui->pushButtonSave->setEnabled(false); //TODO: sprawdzić czy ustawienia z Settings mają grać tu rolę
         ui->pushButtonMoreInfo->setEnabled(true);
         parent_->setWindowTitle(trUtf8("Edycja dokumentu - %1[*]").arg(InvoiceTypeData::name(invoiceType)));
@@ -261,7 +272,7 @@ void InvoiceDialogImpl::setHeaders()
     QStringList headers;
     for(int c = CommodityVisualFields::ID; c <= CommodityVisualFields::DISCOUNT; ++c)
     {
-        headers.append(CommodityVisualData::header(c));
+        headers.append(CommodityVisualData::header((CommodityVisualFields::Field)c));
     }
     ui->tableWidgetCommodities->setHorizontalHeaderLabels(headers);
     ui->tableWidgetCommodities->hideColumn(CommodityVisualFields::ID);
@@ -549,12 +560,9 @@ void InvoiceDialogImpl::addCommodity()
     commodityListDialogPtr = dialog.data();
     if(dialog->exec() == QDialog::Accepted)
     {
-        const int rowNum = ui->tableWidgetCommodities->rowCount() == 0 ? 0 : ui->tableWidgetCommodities->rowCount() - 1;
-        ui->tableWidgetCommodities->insertRow(rowNum);
-        for(int i = CommodityVisualFields::ID; i <= CommodityVisualFields::DISCOUNT; ++i)
-        {
-            ui->tableWidgetCommodities->setItem(rowNum, i, new QTableWidgetItem(dialog->ret.field(i).toString()));
-        }
+        const int rowNum = ui->tableWidgetCommodities->rowCount();
+        ui->tableWidgetCommodities->setRowCount(rowNum + 1);
+        tableCommoditySetItems(dialog->ret, rowNum);
 
         ui->pushButtonSave->setEnabled(true);
         parent_->setWindowModified(true);
@@ -765,7 +773,7 @@ void InvoiceDialogImpl::printInvoice()
             productsHTML += "<tr>";
             if(s.contains(s.keyName(s.ORDER_NUMBER)))
             {
-                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::ID).toString());
+                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::ID).toLongLong());
             }
 
             if(s.contains(s.keyName(s.NAME)))
@@ -780,7 +788,7 @@ void InvoiceDialogImpl::printInvoice()
 
             if(s.contains(s.keyName(s.QUANTITY)))
             {
-                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::QUANTITY).toString());
+                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::QUANTITY).value<Money_t::val_t>().get_d());
             }
 
             if(s.contains(s.keyName(s.INTERNAT_UNIT)))
@@ -790,17 +798,18 @@ void InvoiceDialogImpl::printInvoice()
 
             if(s.contains(s.keyName(s.NET_VAL)))
             {
-                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::NET).toString());
+                const int precision = 2;
+                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::NET).value<Money_t>().toString(precision));
             }
 
             if(s.contains(s.keyName(s.DISCOUNT)))
             {
-                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::DISCOUNT).toString());
+                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::DISCOUNT).value<Money_t::val_t>().get_d());
             }
 
             if(s.contains(s.keyName(s.VAT_VAL)))
             {
-                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::VAT).toString());
+                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::VAT).value<Money_t::val_t>().get_d());
             }
 
             productsHTML += "</tr>";

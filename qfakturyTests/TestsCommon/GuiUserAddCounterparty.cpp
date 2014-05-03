@@ -14,12 +14,14 @@ GuiUserAddCounterparty::GuiUserAddCounterparty(DialogWithCounterpartyDialog *d, 
 
 void GuiUserAddCounterparty::process()
 {
-    CounterpartyDialogPublic *cdp = 0;
+    QPointer<CounterpartyDialogPublic> cdp;
     do
     {
         QTest::qWait(200);
         cdp = dialog_->counterpartyDialogPublic();
     } while(cdp == 0);
+
+    cdp->show();
 
     postText_(cdp->ui()->lineEditName, counterparty_.name);
 
@@ -36,6 +38,12 @@ void GuiUserAddCounterparty::process()
     postText_(cdp->ui()->lineEditPrimaryPhone, counterparty_.phone);
 
     postMouseClick(cdp->ui()->pushButtonOK);
+
+    do
+    {
+        QTest::qWait(200);
+    } while(cdp);
+
     emit finished();
 }
 

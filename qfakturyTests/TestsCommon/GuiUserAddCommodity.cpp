@@ -19,12 +19,14 @@ void GuiUserAddCommodity::process()
 {
     bool ok = true;
 
-    CommodityListDialogPublic *cldp = 0;
+    QPointer<CommodityListDialogPublic> cldp;
     do
     {
         QTest::qWait(200);
         cldp = dialog_->commodityListDialogPublic();
     } while(cldp == 0);
+
+    cldp->show();
 
     const int rowCount = cldp->ui()->listViewCommodities->model()->rowCount();
     if(rowCount > 0)
@@ -53,12 +55,18 @@ void GuiUserAddCommodity::process()
 
     if(ok)
     {
+        QTest::qWait(200);
         postMouseClick(cldp->ui()->pushButtonOK);
     }
     else
     {
         postMouseClick(cldp->ui()->pushButtonCancel);
     }
+
+    do
+    {
+        QTest::qWait(200);
+    } while(cldp);
 
     emit finished();
 }

@@ -12,5 +12,4 @@ void GuiUser::postMouseClick(QPushButton *obj)
 {
     QObject::connect(this, SIGNAL(mouseClick()), obj, SLOT(click()), Qt::BlockingQueuedConnection);
     emit mouseClick();
-    QObject::disconnect(this, SIGNAL(mouseClick()), obj, SLOT(click()));
 }

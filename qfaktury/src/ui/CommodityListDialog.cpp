@@ -121,27 +121,30 @@ void CommodityListDialog::doAccept() {
             ret.discount = ui->spinBoxDiscount->value();
             ret.id = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toLongLong();
             ret.name = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NAME)).toString();
+
+            CommodityFields::Field netIndex;
             switch(ui->comboBoxChosenNetPrice->currentIndex())
             {
             case 0:
-                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET1)).value<Money_t>();
+                netIndex = CommodityFields::NET1;
                 break;
             case 1:
-                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET2)).value<Money_t>();
+                netIndex = CommodityFields::NET2;
                 break;
             case 2:
-                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET3)).value<Money_t>();
+                netIndex = CommodityFields::NET3;
                 break;
             case 3:
-                ret.net = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NET4)).value<Money_t>();
+                netIndex = CommodityFields::NET4;
                 break;
             }
+            ret.net = Money_t(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), netIndex)).toString());
 
             ret.pkwiu = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::PKWIU)).toString();
             ret.quantity = Money_t::val_t(ui->doubleSpinBoxAmount->value());
             ret.type = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::TYPE_ID)).toString();
             ret.unit = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::UNIT_ID)).toString();
-            ret.vat = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::VAT)).value<Money_t::val_t>();
+            ret.vat = Money_t::val_t(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::VAT)).toDouble());
 
             accept();
         }

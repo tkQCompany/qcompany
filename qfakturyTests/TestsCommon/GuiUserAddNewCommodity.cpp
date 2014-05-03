@@ -15,12 +15,14 @@ GuiUserAddNewCommodity::GuiUserAddNewCommodity(DialogWithCommodityDialog *d, con
 
 void GuiUserAddNewCommodity::process()
 {
-    CommodityDialogPublic *cdp = 0;
+    QPointer<CommodityDialogPublic> cdp;
     do
     {
         QTest::qWait(200);
         cdp = dialog_->commodityDialogPublic();
     } while(cdp == 0);
+
+    cdp->show();
 
     postText_(cdp->ui()->lineEditName, commodity_.field(CommodityFields::NAME).toString());
     postText_(cdp->ui()->lineEditAbbreviation, commodity_.field(CommodityFields::ABBREV).toString());
@@ -39,6 +41,12 @@ void GuiUserAddNewCommodity::process()
     postDoubleVal_(cdp->ui()->doubleSpinBoxQuantity, commodity_.field(CommodityFields::QUANTITY).value<Money_t::val_t>().get_d());
 
     postMouseClick(cdp->ui()->pushButtonOK);
+
+    do
+    {
+        QTest::qWait(200);
+    } while(cdp);
+
     emit finished();
 }
 

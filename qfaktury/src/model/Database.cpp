@@ -742,7 +742,7 @@ QList<CommodityVisualData> Database::commodities(const qint64 id_invoice)
         {
             for(int i = CommodityVisualFields::ID; i <= CommodityVisualFields::DISCOUNT; ++i)
             {
-                d.setField(i, query.value(i));
+                d.setField((CommodityVisualFields::Field)i, query.value(i));
             }
             ret.append(d);
         }

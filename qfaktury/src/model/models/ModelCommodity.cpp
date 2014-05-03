@@ -39,6 +39,7 @@ QVariant ModelCommodity::headerData(int section, Qt::Orientation orientation, in
 
 bool ModelCommodity::changeAmount(const qlonglong &id, const Money_t::val_t &change)
 {
+    database().transaction();
     Money_t::val_t amountVal = amount(id) + change;
     const Money_t::val_t newQuantity((amountVal >=0)? amountVal : Money_t::val_t(0));
     QSqlQuery q(query());
@@ -47,5 +48,6 @@ bool ModelCommodity::changeAmount(const qlonglong &id, const Money_t::val_t &cha
     {
         return true;
     }
+    database().commit();
     return false;
 }

@@ -11,7 +11,7 @@ namespace CommodityVisualFields
      * @brief
      *
      */
-    enum Fields {ID, NAME, QUANTITY, UNIT, PKWIU, NET, VAT, TYPE, DISCOUNT};
+    enum Field {ID, NAME, QUANTITY, UNIT, PKWIU, NET, VAT, TYPE, DISCOUNT};
 }
 
 /**
@@ -26,7 +26,7 @@ struct CommodityVisualData
      * @param fieldnum
      * @return QString
      */
-    QVariant field(const int fieldnum) const
+    QVariant field(const CommodityVisualFields::Field fieldnum) const
     {
         QVariant val;
         switch(fieldnum)
@@ -46,13 +46,14 @@ struct CommodityVisualData
         return val;
     }
 
+
     /**
      * @brief
      *
      * @param fieldnum
      * @param v
      */
-    void setField(const int fieldnum, const QVariant &v)
+    void setField(const CommodityVisualFields::Field fieldnum, const QVariant &v)
     {
         switch(fieldnum)
         {
@@ -94,7 +95,7 @@ struct CommodityVisualData
      * @param fieldnum
      * @return QString
      */
-    static QString header(const int fieldnum)
+    static QString header(const CommodityVisualFields::Field fieldnum)
     {
         switch(fieldnum)
         {
@@ -117,7 +118,7 @@ struct CommodityVisualData
     {
         for(int i = CommodityVisualFields::ID; i <= CommodityVisualFields::DISCOUNT; ++i)
         {
-            if(this->field(i) != cvd.field(i))
+            if(this->field((CommodityVisualFields::Field)i) != cvd.field((CommodityVisualFields::Field)i))
             {
                 return false;
             }
