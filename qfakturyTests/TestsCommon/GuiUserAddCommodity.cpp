@@ -6,11 +6,11 @@
 #include "../TestsCommon//CommodityListDialogPublic.h"
 #include "../TestsCommon/DialogWithCommodityListDialog.h"
 #include "CommodityListDialog.h"
-//#include "CommodityListDialog.cpp"
+#include "SettingsGlobal.h"
 
 
-GuiUserAddCommodity::GuiUserAddCommodity(DialogWithCommodityListDialog *d, const CommodityData &commodity, const int whichNetVal, QObject *parent) :
-    GuiUser(parent), dialog_(d), commodity_(commodity), netValIndex_(whichNetVal)
+GuiUserAddCommodity::GuiUserAddCommodity(DialogWithCommodityListDialog *d, const CommodityData &commodity, const int whichNetVal, const DecVal &discount, QObject *parent) :
+    GuiUser(parent), dialog_(d), commodity_(commodity), netValIndex_(whichNetVal), discount_(discount)
 {
 }
 
@@ -26,6 +26,11 @@ void GuiUserAddCommodity::process()
         cldp = dialog_->commodityListDialogPublic();
     } while(cldp == 0);
 
+    connect(this, SIGNAL(setSpinBoxValue(int)), cldp->ui()->spinBoxDiscount, SLOT(setValue(int)), Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(setDoubleValue(double)), cldp->ui()->doubleSpinBoxAmount, SLOT(setValue(double)), Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(setCurrentIndex(const QModelIndex&)), cldp->ui()->listViewCommodities, SLOT(setCurrentIndex(const QModelIndex&)), Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(setComboBoxIndex(int)), cldp->ui()->comboBoxChosenNetPrice, SLOT(setCurrentIndex(int)), Qt::BlockingQueuedConnection);
+
     cldp->show();
 
     const int rowCount = cldp->ui()->listViewCommodities->model()->rowCount();
@@ -34,12 +39,13 @@ void GuiUserAddCommodity::process()
         const QModelIndexList indList(cldp->ui()->listViewCommodities->model()->match(
                                           cldp->ui()->listViewCommodities->model()->index(0, CommodityFields::NAME),
                                           Qt::DisplayRole,
-                                          commodity_.field(CommodityFields::NAME).toString()));
+                                          commodity_.field(CommodityFields::NAME)));
         if(!indList.isEmpty())
         {
-            postListViewIndex_(cldp->ui()->listViewCommodities, indList.at(0));
-            postComboBoxIndex_(cldp->ui()->comboBoxChosenNetPrice, netValIndex_);
-            postDoubleVal_(cldp->ui()->doubleSpinBoxAmount, commodity_.field(CommodityFields::QUANTITY).value<Money_t::val_t>().get_d());
+            postListViewIndex_(indList.at(0));
+            postComboBoxIndex_(netValIndex_);
+            postDoubleVal_(commodity_.field(CommodityFields::QUANTITY).value<DecVal>().toDouble());
+            postSpinBoxVal_(discount_);
         }
         else
         {
@@ -72,26 +78,24 @@ void GuiUserAddCommodity::process()
 }
 
 
-void GuiUserAddCommodity::postComboBoxIndex_(QComboBox *obj, const int index)
+void GuiUserAddCommodity::postComboBoxIndex_(const int index)
 {
-    connect(this, SIGNAL(setComboBoxIndex(int)), obj, SLOT(setCurrentIndex(int)), Qt::BlockingQueuedConnection);
     emit setComboBoxIndex(index);
-    disconnect(this, SIGNAL(setComboBoxIndex(int)), obj, SLOT(setCurrentIndex(int)));
 }
 
 
-void GuiUserAddCommodity::postListViewIndex_(QListView *obj, const QModelIndex &index)
+void GuiUserAddCommodity::postListViewIndex_(const QModelIndex &index)
 {
-    connect(this, SIGNAL(setCurrentIndex(const QModelIndex&)), obj,
-            SLOT(setCurrentIndex(const QModelIndex&)), Qt::BlockingQueuedConnection);
     emit setCurrentIndex(index);
-    disconnect(this, SIGNAL(setCurrentIndex(const QModelIndex&)), obj,
-            SLOT(setCurrentIndex(const QModelIndex&)));
 }
 
-void GuiUserAddCommodity::postDoubleVal_(QDoubleSpinBox *obj, const double val)
+void GuiUserAddCommodity::postDoubleVal_(const double val)
 {
-    connect(this, SIGNAL(setDoubleValue(double)), obj, SLOT(setValue(double)), Qt::BlockingQueuedConnection);
     emit setDoubleValue(val);
-    disconnect(this, SIGNAL(setDoubleValue(double)), obj, SLOT(setValue(double)));
+}
+
+
+void GuiUserAddCommodity::postSpinBoxVal_(const DecVal &val)
+{
+    emit setSpinBoxValue((int)val.toDouble());
 }

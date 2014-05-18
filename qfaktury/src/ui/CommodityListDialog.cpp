@@ -51,6 +51,7 @@ void CommodityListDialog::init()
     connect(ui->comboBoxChosenNetPrice, SIGNAL(currentIndexChanged(int)), this, SLOT( comboBoxChosenNetPriceChanged(int) ) );
     connect(ui->spinBoxDiscount, SIGNAL( valueChanged(int) ), this, SLOT( updateNetVal() ) );
     connect(ui->doubleSpinBoxAmount, SIGNAL( valueChanged(const QString&) ), this, SLOT( updateNetVal() ) );
+    connect(ui->listViewCommodities, SIGNAL(clicked(QModelIndex)), this, SLOT(updateNetVal()));
 
     validator.setBottom(0.0);
     validator.setDecimals(2);
@@ -112,14 +113,15 @@ void CommodityListDialog::doAccept() {
     if (!ui->lineEditName->text().isEmpty())
     {
         const QModelIndex current(ui->listViewCommodities->selectionModel()->currentIndex());
-        const Money_t::val_t amountOnStock(db->modelCommodity()->amount(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toLongLong()));
+        const qlonglong id_commodity = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toLongLong();
+        const DecVal amountOnStock(db->modelCommodity()->amount(id_commodity));
         const QString currentCommodityTypeStr(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::TYPE_ID)).toString());
-        const Money_t::val_t demandedAmount(ui->doubleSpinBoxAmount->value());
+        const DecVal demandedAmount(ui->doubleSpinBoxAmount->value());
 
         if( (amountOnStock >= demandedAmount)  || (currentCommodityTypeStr == CommodityTypeData::name(CommodityTypeData::SERVICES)))
         {
-            ret.discount = ui->spinBoxDiscount->value();
-            ret.id = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toLongLong();
+            ret.discount = DecVal(ui->spinBoxDiscount->value());
+            ret.id = id_commodity;
             ret.name = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NAME)).toString();
 
             CommodityFields::Field netIndex;
@@ -141,10 +143,10 @@ void CommodityListDialog::doAccept() {
             ret.net = Money_t(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), netIndex)).toString());
 
             ret.pkwiu = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::PKWIU)).toString();
-            ret.quantity = Money_t::val_t(ui->doubleSpinBoxAmount->value());
-            ret.type = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::TYPE_ID)).toString();
+            ret.quantity = demandedAmount;
+            ret.type = currentCommodityTypeStr;
             ret.unit = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::UNIT_ID)).toString();
-            ret.vat = Money_t::val_t(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::VAT)).toDouble());
+            ret.vat = DecVal(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::VAT)).toDouble());
 
             accept();
         }
@@ -152,8 +154,7 @@ void CommodityListDialog::doAccept() {
         {
             QMessageBox::information(this, qApp->applicationName(),
                                      trUtf8("Nie ma wystarczającej ilości towaru na stanie. Ilość towaru: %1")
-                                     .arg(db->modelCommodity()->amount(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toLongLong()).get_str().c_str()), QMessageBox::Ok);
-
+                                     .arg(db->modelCommodity()->amount(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::ID_COMMODITY)).toLongLong()).toString()), QMessageBox::Ok);
         }
     }
     else
@@ -166,9 +167,9 @@ void CommodityListDialog::doAccept() {
 
 void CommodityListDialog::updateNetVal()
 {
-    const Money_t totalNetPrice = netVal * Money_t::val_t(ui->doubleSpinBoxAmount->value());
-    const Money_t::val_t onePercent(Money_t::val_t(1)/Money_t::val_t(100));
-    const Money_t discountedNetPrice = totalNetPrice - (totalNetPrice * onePercent * Money_t::val_t(ui->spinBoxDiscount->value()));
+    const Money_t totalNetPrice = netVal * DecVal(ui->doubleSpinBoxAmount->value());
+    const DecVal onePercent(DecVal(1)/DecVal(100));
+    const Money_t discountedNetPrice = totalNetPrice - (totalNetPrice * onePercent * DecVal(ui->spinBoxDiscount->value()));
     const int precision = 2;
     ui->labelNetVal->setText(discountedNetPrice.toString(precision));
 }

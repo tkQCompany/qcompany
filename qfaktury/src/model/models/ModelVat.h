@@ -17,6 +17,7 @@ public:
      * @param parent
      */
     explicit ModelVat(QObject *parent);
+    QStringList listVAT() const;
 private:
     QStringList listVat_; /**< TODO */
 };

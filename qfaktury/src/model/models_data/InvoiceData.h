@@ -53,7 +53,7 @@ public:
         case InvoiceFields::PAYMENT_ID:         return paymentID_;
         case InvoiceFields::CURRENCY_ID:        return currencyID_;
         case InvoiceFields::ADDIT_TEXT:         return additText_;
-        case InvoiceFields::DISCOUNT:           {val.setValue<Money_t::val_t>(discount_); return val;}
+        case InvoiceFields::DISCOUNT:           {val.setValue<DecVal>(discount_); return val;}
         default:
             qDebug("Unknown index in field(): (index=%d) detected in %s, line=%d.", i, __FILE__, __LINE__);
             return val;
@@ -95,7 +95,7 @@ public:
             additText_ = val.toString();
             break;
         case InvoiceFields::DISCOUNT:
-            discount_ = val.value<Money_t::val_t>();
+            discount_ = val.value<DecVal>();
             break;
         default:
             qDebug("Unknown index in setField(): (index = %d, val=%s) detected in %s, line=%d.",
@@ -137,6 +137,6 @@ private:
     qint64 paymentID_; /**< TODO */
     qint64 currencyID_; /**< TODO */
     QString additText_; /**< TODO */
-    Money_t::val_t discount_; /**< TODO */
+    DecVal discount_; /**< TODO */
 };
 #endif

@@ -7,3 +7,9 @@ ModelVat::ModelVat(QObject *parent) : QStringListModel(parent)
     listVat_.append(s.value(s.VAT_RATES).toString().split(QChar('|')));
     setStringList(listVat_);
 }
+
+
+QStringList ModelVat::listVAT() const
+{
+    return listVat_;
+}

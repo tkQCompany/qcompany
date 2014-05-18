@@ -1,5 +1,4 @@
 #include <QStringList>
-#include <QDebug>
 
 #include "Money_t.h"
 #include "SettingsGlobal.h"
@@ -43,14 +42,10 @@ void Money_t::setValue(const QString &val)
 void Money_t::init_(const QString &val, const bool setDefaultCurrency)
 {
     qRegisterMetaTypeStreamOperators<Money_t>("Money_t");
-    const int base = 10;
     if(setDefaultCurrency)
         setDefaultCurrency_();
 
-    mpf_class valTmp;
-    valTmp.set_str(val.toStdString(), base);
-    value_ = valTmp;
-    value_.canonicalize();
+    value_ = DecVal(val);
 }
 
 
@@ -70,14 +65,14 @@ const Money_t Money_t::operator+ (const Money_t &rhs) const
 }
 
 
-Money_t& Money_t::operator*=(const val_t &rhs)
+Money_t& Money_t::operator*=(const DecVal &rhs)
 {
     value_ *= rhs;
     return *this;
 }
 
 
-const Money_t  Money_t::operator* (const val_t &rhs) const
+const Money_t  Money_t::operator* (const DecVal &rhs) const
 {
     Money_t ret(*this);
     ret *= rhs; //Money_t::operator*=()
@@ -101,14 +96,14 @@ const Money_t  Money_t::operator- (const Money_t &rhs) const
 }
 
 
-Money_t& Money_t::operator/=(const val_t &rhs)
+Money_t& Money_t::operator/=(const DecVal &rhs)
 {
     value_ /= rhs;
     return *this;
 }
 
 
-const Money_t  Money_t::operator/ (const val_t &rhs) const
+const Money_t  Money_t::operator/ (const DecVal &rhs) const
 {
     Money_t ret(*this);
     ret /= rhs; //Money_t::operator/=()
@@ -140,10 +135,10 @@ bool Money_t::operator>=(const Money_t &rhs) const
 }
 
 
-short Money_t::digit_(const val_t &num, const size_t index) const
+short Money_t::digit_(const DecVal &num, const int index) const
 {
-    const std::string str(num.get_str());
-    const short ret = (str.size() > index)? str.at(index) - '0' : 0;
+    const QString str(DecVal::removeTrailingZeros(num.toString()));
+    const short ret = (str.size() > index)? str.at(index).toLatin1() - '0' : 0;
     return ret;
 }
 
@@ -156,7 +151,7 @@ void Money_t::setDefaultCurrency_()
 }
 
 
-QString Money_t::verballyPL1_999(const val_t &val) const
+QString Money_t::verballyPL1_999(const DecVal &val) const
 {
     QString ret;
     static const QStringList pl100_900(QStringList() << "sto " << "dwieście " << "trzysta " << "czterysta " << "pięćset "
@@ -167,9 +162,9 @@ QString Money_t::verballyPL1_999(const val_t &val) const
                              << "siedem " << "osiem " << "dziewięć " << "dziesięć " << "jedenaście " << "dwanaście "
                              << "trzynaście " << "czternaście " << "piętnaście " << "szesnaście " << "siedemnaście "
                              << "osiemnaście " << "dziewiętnaście ");
-    if(val >= val_t(1) && val <= val_t(999))
+    if(val >= DecVal(1) && val <= DecVal(999))
     {
-        if(val >= val_t(100))
+        if(val >= DecVal(100))
         {
             const short dozens = digit_(val, 1);
             const short ones = digit_(val, 2);
@@ -186,7 +181,7 @@ QString Money_t::verballyPL1_999(const val_t &val) const
                 ret += pl2_19.at(10 * dozens + ones - 1);
             }
         }
-        else if(val >= val_t(10))
+        else if(val >= DecVal(10))
         {
             const short dozens = digit_(val, 0);
             const short ones = digit_(val, 1);
@@ -221,7 +216,7 @@ QString Money_t::verballyPL1_999(const val_t &val) const
 QString Money_t::verballyPL() const
 {
     QString ret;
-    if(value_ >= val_t("1000000000000000000000"))
+    if(value_ >= DecVal("1000000000000000000000"))
     {
         return ret;
     }
@@ -258,19 +253,19 @@ QString Money_t::verballyPL() const
     units[5].name2 = QString("tysięcy ");
     units[5].name3 = QString("tysiąc ");
 
-    mpz_class divisorInt("1000000000000000000"), divisionInt, valTmp(value_);
-    const mpq_class valDec(100 * (value_ - mpq_class(valTmp))); //decimal part
+    DecVal divisorInt("1000000000000000000"), divisionInt, valTmp(value_);
 
-    for(size_t i = 0; i < unitsSize; ++i, divisorInt /= 1000)
+    for(size_t i = 0; i < unitsSize; ++i, divisorInt /= DecVal(1000))
     {
         if(valTmp >= divisorInt)
         {
-            divisionInt = trunc(mpf_class((valTmp / divisorInt)));
-            if(divisionInt != 1)
+            divisionInt = (valTmp / divisorInt).integerPart();
+            if(divisionInt != DecVal(1))
             {
-                const val_t leftPart(divisionInt);
+                const QString leftPartStr(DecVal::removeTrailingZeros(divisionInt.toString()));
+                const DecVal leftPart(leftPartStr);
                 ret += verballyPL1_999(leftPart);
-                const short digit = digit_(leftPart, leftPart.get_str().size() - 1);
+                const short digit = digit_(leftPart, leftPartStr.size() - 1);
                 if(digit >= 2 && digit <= 4)
                 {
                     ret += units[i].name1;
@@ -285,23 +280,23 @@ QString Money_t::verballyPL() const
                 ret += units[i].name3;
             }
 
-            valTmp = mpz_class(valTmp) % divisorInt;
+            valTmp = valTmp % divisorInt;
         }
     }
 
     if(valTmp >= divisorInt) //if valTmp >= 1 && < 1000
     {
-        divisionInt = trunc(mpf_class((valTmp / divisorInt)));
-        if(divisionInt != 1)
+        divisionInt = (valTmp / divisorInt).integerPart();
+        if(divisionInt != DecVal(1))
         {
-            const val_t leftPart(divisionInt);
+            const DecVal leftPart(qPrintable(divisionInt.toString()));
             ret += verballyPL1_999(leftPart);
         }
         else
         {
             ret += QString("jeden ");
         }
-        valTmp = mpz_class(valTmp) % divisorInt;
+        valTmp = valTmp % divisorInt;
     }
 
 
@@ -311,12 +306,11 @@ QString Money_t::verballyPL() const
         ret += "zero ";
     }
 
-    mpz_class lastDigit(value_);
-    lastDigit %= 10;
-    switch(lastDigit.get_ui())
+    const DecVal lastDigit(value_ % DecVal(10));
+    switch((int)lastDigit.toDouble())
     {
         case 1:
-        if(mpz_class(value_) == 1)
+        if(int(value_.toDouble()) == 1)
         {
             ret += "złoty ";
         }
@@ -339,7 +333,8 @@ QString Money_t::verballyPL() const
     const int precision = 0;
     const QChar fillChar(QChar('0'));
 
-    ret += QString("%1/100 %2").arg(valDec.get_d(), fieldWidth, format, precision, fillChar)
+    const DecVal valDecimal100(DecVal(100) * value_.decimalPart()); //100 * decimal part
+    ret += QString("%1/100 %2").arg(valDecimal100.toDouble(), fieldWidth, format, precision, fillChar)
             .arg(CurrencyData::codeName(currency_));
 
     return ret;
@@ -348,7 +343,5 @@ QString Money_t::verballyPL() const
 
 QString Money_t::toString(const int digits) const
 {
-    QLocale lc;
-    lc.setNumberOptions(QLocale::OmitGroupSeparator);
-    return lc.toString(value_.get_d(), 'f', digits);
+    return value_.toString(digits);
 }

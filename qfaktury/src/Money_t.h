@@ -1,7 +1,7 @@
 #ifndef MONEY_T_H
 #define MONEY_T_H
 
-#include <gmpxx.h>
+#include <DecVal.h>
 
 #include "CurrencyData.h"
 
@@ -19,7 +19,6 @@ class Money_t
     friend QDataStream& operator<<(QDataStream &ostr, const Money_t &money);
     friend QDataStream& operator>>(QDataStream &istr, Money_t &money);
 public:
-    typedef mpq_class val_t;
     explicit Money_t();
     explicit Money_t(const int val);
     explicit Money_t(const QString &val);
@@ -29,12 +28,12 @@ public:
 
     Money_t& operator+=(const Money_t &rhs);
     const Money_t  operator+ (const Money_t &rhs) const;
-    Money_t& operator*=(const val_t &rhs);
-    const Money_t  operator* (const val_t &rhs) const;
+    Money_t& operator*=(const DecVal &rhs);
+    const Money_t  operator* (const DecVal &rhs) const;
     Money_t& operator-=(const Money_t &rhs);
     const Money_t  operator- (const Money_t &rhs) const;
-    Money_t& operator/=(const val_t &rhs);
-    const Money_t  operator/ (const val_t &rhs) const;
+    Money_t& operator/=(const DecVal &rhs);
+    const Money_t  operator/ (const DecVal &rhs) const;
     bool operator<(const Money_t &rhs) const;
     bool operator>(const Money_t &rhs) const;
     bool operator<=(const Money_t &rhs) const;
@@ -48,13 +47,13 @@ public:
 
 private:
     CurrencyData::Currencies currency_;
-    val_t value_;
+    DecVal value_;
 
 private:
-    short digit_(const val_t &num, const size_t index) const;
+    short digit_(const DecVal &num, const int index) const;
     void init_(const QString &val, const bool setDefaultCurrency);
     void setDefaultCurrency_();
-    QString verballyPL1_999(const val_t &val) const;
+    QString verballyPL1_999(const DecVal &val) const;
 };
 
 
@@ -86,6 +85,5 @@ inline QDataStream& operator>>(QDataStream &istr, Money_t &money)
 }
 
 Q_DECLARE_METATYPE(Money_t)
-Q_DECLARE_METATYPE(Money_t::val_t)
 
 #endif // MONEY_T_H

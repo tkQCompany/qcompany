@@ -3,7 +3,7 @@
 
 #include <QSqlRelationalTableModel>
 
-#include <Money_t.h>
+#include "DecVal.h"
 
 /**
  * @brief
@@ -20,7 +20,7 @@ public:
      */
     explicit ModelCommodity(QObject *parent);
 
-    Money_t::val_t amount(const qlonglong &id);
+    DecVal amount(const qlonglong &id);
 
     /**
      * @brief
@@ -32,7 +32,7 @@ public:
      */
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-    bool changeAmount(const qlonglong &id, const Money_t::val_t &change);
+    bool changeAmount(const qlonglong &id, const DecVal &change);
 };
 
 #endif // MODELCOMMODITY_H

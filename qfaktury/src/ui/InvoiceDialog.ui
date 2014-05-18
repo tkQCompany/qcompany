@@ -438,7 +438,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="spinBoxDiscount"/>
+        <widget class="QSpinBox" name="spinBoxDiscount">
+         <property name="suffix">
+          <string>%</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

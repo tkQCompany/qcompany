@@ -1,12 +1,12 @@
 #include <QSqlRelationalDelegate>
 #include <QSqlError>
 #include <QTextDocument>
+#include <QTextStream>
 #include <QPrinter>
 #include <QPrintPreviewDialog>
 #include <QTranslator>
 #include <QFile>
 #include <QMessageBox>
-#include <QDebug>
 
 #include "InvoiceDialogImpl.h"
 #include "ui_InvoiceDialog.h"
@@ -25,6 +25,7 @@
 #include "ModelPaymentType.h"
 #include "ModelCurrency.h"
 #include "ModelCommodity.h"
+#include "ModelVat.h"
 #include "PaymentTypeData.h"
 #include "CurrencyData.h"
 #include "CustomPaymData.h"
@@ -61,15 +62,19 @@ void InvoiceDialogImpl::tableCommodityFill(const QList<CommodityVisualData> &com
 void InvoiceDialogImpl::tableCommoditySetItems(const CommodityVisualData &cvd, const int rowNum)
 {
     const int precision = 2;
+    const int precisionQuantity = 3;
     ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::ID, new QTableWidgetItem(QString("%1").arg(cvd.field(CommodityVisualFields::ID).toLongLong())));
     ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::NAME, new QTableWidgetItem(cvd.field(CommodityVisualFields::NAME).toString()));
-    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::QUANTITY, new QTableWidgetItem(QString("%1").arg(cvd.field(CommodityVisualFields::QUANTITY).value<Money_t::val_t>().get_d())));
+    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::QUANTITY, new QTableWidgetItem(cvd.field(CommodityVisualFields::QUANTITY).value<DecVal>().toString(precisionQuantity)));
     ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::UNIT, new QTableWidgetItem(cvd.field(CommodityVisualFields::UNIT).toString()));
     ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::PKWIU, new QTableWidgetItem(cvd.field(CommodityVisualFields::PKWIU).toString()));
     ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::NET, new QTableWidgetItem(cvd.field(CommodityVisualFields::NET).value<Money_t>().toString(precision)));
-    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::VAT, new QTableWidgetItem(QString("%1").arg(cvd.field(CommodityVisualFields::VAT).value<Money_t::val_t>().get_d())));
+
+    const DecVal vatVal = cvd.field(CommodityVisualFields::VAT).value<DecVal>();
+    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::VAT, new QTableWidgetItem(DecVal::removeTrailingZeros(vatVal.toString(precision))));
+
     ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::TYPE, new QTableWidgetItem(cvd.field(CommodityVisualFields::TYPE).toString()));
-    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::DISCOUNT, new QTableWidgetItem(QString("%1").arg(cvd.field(CommodityVisualFields::DISCOUNT).value<Money_t::val_t>().get_d())));
+    ui->tableWidgetCommodities->setItem(rowNum, CommodityVisualFields::DISCOUNT, new QTableWidgetItem(cvd.field(CommodityVisualFields::DISCOUNT).value<DecVal>().toString(precision)));
 }
 
 
@@ -128,29 +133,36 @@ InvoiceData InvoiceDialogImpl::getInvoiceData() const
  */
 void InvoiceDialogImpl::calculateSum()
 {
-    SettingsGlobal s;
-    Money_t::val_t discountTotal, netTotal, grossTotal;
-    netTotal = discountTotal = grossTotal = 0;
+    Money_t discountTotal, netTotal, grossTotal;
 
-    const Money_t::val_t onePercent(Money_t::val_t(1)/Money_t::val_t(100));
+    const DecVal onePercent(DecVal(1)/DecVal(100));
     for (int i = 0; i < ui->tableWidgetCommodities->rowCount(); ++i)
     {
-        const Money_t::val_t quantity = s.stringToDouble(ui->tableWidgetCommodities->item(i, CommodityVisualFields::QUANTITY)->text());
-        const Money_t::val_t netVal = s.stringToDouble(ui->tableWidgetCommodities->item(i, CommodityVisualFields::NET)->text());
-        const Money_t::val_t vatRate = onePercent * s.stringToDouble(ui->tableWidgetCommodities->item(i, CommodityVisualFields::VAT)->text());
-        const Money_t::val_t discountRate = onePercent * s.stringToDouble(ui->tableWidgetCommodities->item(i, CommodityVisualFields::DISCOUNT)->text());
+        const DecVal quantity(ui->tableWidgetCommodities->item(i, CommodityVisualFields::QUANTITY)->text());
+        const Money_t netValue(ui->tableWidgetCommodities->item(i, CommodityVisualFields::NET)->text());
+        bool ok = false;
+        const QString vatRateStr(ui->tableWidgetCommodities->item(i, CommodityVisualFields::VAT)->text());
+        const double vatConvRet = vatRateStr.toDouble(&ok); //handling non-numeric forms of vat values (e.g. "zw." in polish version)
+        const DecVal vatRate = onePercent * (ok? DecVal(vatConvRet) : DecVal(0.0));
+        const DecVal discountRate = onePercent * DecVal(ui->tableWidgetCommodities->item(i, CommodityVisualFields::DISCOUNT)->text());
 
-        const Money_t::val_t grossVal = netVal + netVal * vatRate;
-        const Money_t::val_t discountValue = discountRate * grossVal;
+        const Money_t grossValue = netValue + netValue * vatRate;
+        const Money_t discountValue = grossValue * discountRate;
 
-        netTotal += netVal * quantity;
+        netTotal += netValue * quantity;
         discountTotal += discountValue * quantity;
-        grossTotal += (grossVal - discountValue) * quantity;
+        grossTotal += (grossValue - discountValue) * quantity;
     }
 
-    ui->labelSumNetVal->setText(s.numberToString(netTotal.get_d(), 'f', 2));
-    ui->labelDiscountVal->setText(s.numberToString(discountTotal.get_d(), 'f', 2));
-    ui->labelSumGrossVal->setText(s.numberToString(grossTotal.get_d(), 'f', 2));
+    const DecVal discountPerInvoiceRate(DecVal(ui->spinBoxDiscount->value()) * onePercent);
+    const Money_t discountPerInvoiceVal = grossTotal * discountPerInvoiceRate;
+    discountTotal += discountPerInvoiceVal;
+    grossTotal -= discountPerInvoiceVal;
+
+    const int precision = 2;
+    ui->labelSumNetVal->setText(netTotal.toString(precision));
+    ui->labelDiscountVal->setText(discountTotal.toString(precision));
+    ui->labelSumGrossVal->setText(grossTotal.toString(precision));
 }
 
 
@@ -188,7 +200,6 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
     ui->pushButtonRemoveCommodity->setEnabled(false);
     ui->pushButtonEditCommodity->setEnabled(false);
     ui->dateEditDayOfPayment->setEnabled(false);
-    ui->spinBoxDiscount->setEnabled(false);
 
     ui->comboBoxInvoiceType->setModel(db->modelInvoiceType());
     ui->comboBoxInvoiceType->setModelColumn(InvoiceTypeFields::INVOICE_TYPE);
@@ -443,9 +454,9 @@ void InvoiceDialogImpl::delCommodity()
     const qlonglong idCommodity(ui->tableWidgetCommodities->item(
                             ui->tableWidgetCommodities->currentRow(),
                             CommodityVisualFields::ID)->data(Qt::DisplayRole).toLongLong());
-    const Money_t::val_t changeAmount = ui->tableWidgetCommodities->item(
+    const DecVal changeAmount = ui->tableWidgetCommodities->item(
                 ui->tableWidgetCommodities->currentRow(),
-                CommodityVisualFields::QUANTITY)->data(Qt::DisplayRole).value<Money_t::val_t>();
+                CommodityVisualFields::QUANTITY)->data(Qt::DisplayRole).value<DecVal>();
     db->modelCommodity()->changeAmount(idCommodity, changeAmount);
     ui->tableWidgetCommodities->removeRow(ui->tableWidgetCommodities->currentRow());
     calculateSum();
@@ -524,14 +535,7 @@ void InvoiceDialogImpl::discountConstChange()
 {
     if(ui->checkBoxDiscount->isChecked())
     {
-        ui->spinBoxDiscount->setEnabled(true);
         ui->pushButtonSave->setEnabled(true);
-        calculateSum();
-    }
-    else
-    {
-        ui->spinBoxDiscount->setValue(0);
-        ui->spinBoxDiscount->setEnabled(false);
     }
 }
 /**
@@ -569,7 +573,7 @@ void InvoiceDialogImpl::addCommodity()
         calculateSum();
 
         db->modelCommodity()->changeAmount(dialog->ret.field(CommodityVisualFields::ID).toLongLong(),
-                 -dialog->ret.field(CommodityVisualFields::QUANTITY).value<Money_t::val_t>());
+                 -dialog->ret.field(CommodityVisualFields::QUANTITY).value<DecVal>());
     }
 }
 
@@ -700,13 +704,13 @@ bool InvoiceDialogImpl::saveInvoice()
         }
         else
         {
-            qDebug() << "InvoiceDialog::saveInvoice() - lastError: " << db->modelInvoice()->lastError().text();
+            qDebug("InvoiceDialog::saveInvoice() - lastError: %s", qPrintable(db->modelInvoice()->lastError().text()));
         }
     }
     else
     {
-        qDebug() << "InvoiceDialog::saveInvoice() - mapper_submit - lastError: "
-                 << db->modelInvoice()->lastError().text();
+        qDebug("InvoiceDialog::saveInvoice() - mapper_submit - lastError: %s",
+                 qPrintable(db->modelInvoice()->lastError().text()));
     }
 
     return result;
@@ -744,7 +748,7 @@ void InvoiceDialogImpl::printInvoice()
         }
         else
         {
-            qDebug() << "File " << file.fileName() << " couldn't be opened.";
+            qDebug("File %s couldn't be opened.", qPrintable(file.fileName()));
         }
 
         const QString logo(s.value(s.LOGO).toString());
@@ -788,7 +792,7 @@ void InvoiceDialogImpl::printInvoice()
 
             if(s.contains(s.keyName(s.QUANTITY)))
             {
-                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::QUANTITY).value<Money_t::val_t>().get_d());
+                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::QUANTITY).value<DecVal>().toString());
             }
 
             if(s.contains(s.keyName(s.INTERNAT_UNIT)))
@@ -804,12 +808,12 @@ void InvoiceDialogImpl::printInvoice()
 
             if(s.contains(s.keyName(s.DISCOUNT)))
             {
-                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::DISCOUNT).value<Money_t::val_t>().get_d());
+                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::DISCOUNT).value<DecVal>().toString());
             }
 
             if(s.contains(s.keyName(s.VAT_VAL)))
             {
-                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::VAT).value<Money_t::val_t>().get_d());
+                productsHTML += QString("<td>%1</td>").arg(cvd.field(CommodityVisualFields::VAT).value<DecVal>().toString());
             }
 
             productsHTML += "</tr>";
@@ -903,7 +907,7 @@ void InvoiceDialogImpl::printInvoice()
     }
     else
     {
-        qDebug() << "File " << file.fileName() << " couldn't be opened.";
+        qDebug("File %s couldn't be opened.", qPrintable(file.fileName()));
     }
 
     //invStrList.clear();

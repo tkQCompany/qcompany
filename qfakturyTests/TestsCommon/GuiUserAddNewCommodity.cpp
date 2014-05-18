@@ -2,6 +2,7 @@
 #include <QComboBox>
 #include <QDebug>
 
+#include "SettingsGlobal.h"
 #include "GuiUserAddNewCommodity.h"
 #include "CommodityDialogPublic.h"
 #include "CommodityDialog.cpp"
@@ -30,7 +31,7 @@ void GuiUserAddNewCommodity::process()
 
     postComboBoxIndex_(cdp->ui()->comboBoxType, commodity_.field(CommodityFields::TYPE_ID).toInt());
     postComboBoxIndex_(cdp->ui()->comboBoxMeasureUnit, commodity_.field(CommodityFields::UNIT_ID).toInt());
-    postComboBoxIndex_(cdp->ui()->comboBoxVat, cdp->ui()->comboBoxVat->findText(commodity_.field(CommodityFields::VAT).value<Money_t::val_t>().get_str().c_str()));
+    postComboBoxIndex_(cdp->ui()->comboBoxVat, cdp->ui()->comboBoxVat->findText(DecVal::removeTrailingZeros(commodity_.field(CommodityFields::VAT).value<DecVal>().toString())));
 
     const int precision = 2;
     postText_(cdp->ui()->lineEditNet1, commodity_.field(CommodityFields::NET1).value<Money_t>().toString(precision));
@@ -38,7 +39,8 @@ void GuiUserAddNewCommodity::process()
     postText_(cdp->ui()->lineEditNet3, commodity_.field(CommodityFields::NET3).value<Money_t>().toString(precision));
     postText_(cdp->ui()->lineEditNet4, commodity_.field(CommodityFields::NET4).value<Money_t>().toString(precision));
 
-    postDoubleVal_(cdp->ui()->doubleSpinBoxQuantity, commodity_.field(CommodityFields::QUANTITY).value<Money_t::val_t>().get_d());
+    SettingsGlobal s;
+    postDoubleVal_(cdp->ui()->doubleSpinBoxQuantity, s.stringToDouble(commodity_.field(CommodityFields::QUANTITY).value<DecVal>().toString()));
 
     postMouseClick(cdp->ui()->pushButtonOK);
 

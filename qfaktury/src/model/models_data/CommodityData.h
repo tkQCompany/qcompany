@@ -18,7 +18,7 @@ enum Field {ID_COMMODITY, NAME, ABBREV, PKWIU, TYPE_ID, UNIT_ID, NET1, NET2, NET
 struct CommodityData
 {
 public:
-    CommodityData(): id_(0), type_id_(0), unit_id_(0), vat_(0.0f), quantity_(0.0) {}
+    CommodityData(): id_(0), type_id_(0), unit_id_(0), vat_(DecVal(0.0)), quantity_(DecVal(0.0)) {}
 
     static QString header(const CommodityFields::Field i)
     {
@@ -100,10 +100,10 @@ public:
             net4_ = val.value<Money_t>();
             break;
         case CommodityFields::VAT:
-            vat_ = val.value<Money_t::val_t>();
+            vat_ = val.value<DecVal>();
             break;
         case CommodityFields::QUANTITY:
-            quantity_ = val.value<Money_t::val_t>();
+            quantity_ = val.value<DecVal>();
             break;
         default:
             qDebug("Unknown index in CommodityData::setField(): (index = %d, val=%s) detected in %s, line=%d.",
@@ -122,8 +122,8 @@ private:
     Money_t net2_;
     Money_t net3_;
     Money_t net4_;
-    Money_t::val_t vat_;
-    Money_t::val_t quantity_;
+    DecVal vat_;
+    DecVal quantity_;
 };
 
 Q_DECLARE_METATYPE(CommodityData)

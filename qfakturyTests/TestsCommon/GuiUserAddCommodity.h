@@ -9,6 +9,7 @@
 struct CommodityData;
 class DialogWithCommodityListDialog;
 class QComboBox;
+class QSpinBox;
 class QDoubleSpinBox;
 class QListView;
 
@@ -16,7 +17,7 @@ class GuiUserAddCommodity : public GuiUser
 {
     Q_OBJECT
 public:
-    explicit GuiUserAddCommodity(DialogWithCommodityListDialog *d, const CommodityData &commodity, const int whichNetVal, QObject *parent = 0);
+    explicit GuiUserAddCommodity(DialogWithCommodityListDialog *d, const CommodityData &commodity, const int whichNetVal, const DecVal &discount, QObject *parent = 0);
     ~GuiUserAddCommodity() {}
     
 public slots:
@@ -26,16 +27,19 @@ signals:
     void setComboBoxIndex(int);
     void setCurrentIndex(const QModelIndex&);
     void setDoubleValue(double);
+    void setSpinBoxValue(int);
 
 private:
-    void postComboBoxIndex_(QComboBox *obj, const int index);
-    void postListViewIndex_(QListView *obj, const QModelIndex &index);
-    void postDoubleVal_(QDoubleSpinBox *obj, const double val);
+    void postComboBoxIndex_(const int index);
+    void postListViewIndex_(const QModelIndex &index);
+    void postDoubleVal_(const double val);
+    void postSpinBoxVal_(const DecVal &val);
 
 private:
     DialogWithCommodityListDialog *dialog_;
     const CommodityData commodity_;
     const int netValIndex_;
+    const DecVal discount_;
 };
 
 #endif // GUIUSERADDCOMMODITY_H

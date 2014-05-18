@@ -28,7 +28,7 @@ private Q_SLOTS:
     void testGUI_AddManyCommodities();
     void testGUI_AddManyCommodities_data();
 private:
-    void addCommodityInThread(InvoiceDialogPublic *idp, const CommodityData &cd, const int netValIndex);
+    void addCommodityInThread(InvoiceDialogPublic *idp, const CommodityData &cd, const int netValIndex, const DecVal &discount);
     void startUserThread(GuiUser *guiUser, QThread *thread, QPushButton *buttonStart) const;
 private:
     Database *db_;
@@ -79,8 +79,8 @@ void CommodityListDialogTest::testGUI_AddManyCommodities()
     QFETCH(Money_t, net2);
     QFETCH(Money_t, net3);
     QFETCH(Money_t, net4);
-    QFETCH(Money_t::val_t, quantity);
-    QFETCH(Money_t::val_t, discount);
+    QFETCH(DecVal, quantity);
+    QFETCH(DecVal, discount);
     QFETCH(int, netValIndex);
     QFETCH(Money_t, resultNetVal);
 
@@ -98,8 +98,8 @@ void CommodityListDialogTest::testGUI_AddManyCommodities()
     query.bindValue(":net4", net4.toString(precision));
     query.bindValue(":vat",  QString("%1").arg(qrand() % 100));
 
-    const Money_t::val_t stockQuantity(2 * quantity);
-    query.bindValue(":quantity", stockQuantity.get_str().c_str()); //on stock
+    const DecVal stockQuantity(DecVal(2) * quantity);
+    query.bindValue(":quantity", stockQuantity.toString()); //on stock
     const bool retQuery = query.exec();
     if(!retQuery)
     {
@@ -123,8 +123,8 @@ void CommodityListDialogTest::testGUI_AddManyCommodities()
     QCOMPARE(listDialog.ui()->comboBoxChosenNetPrice->currentIndex(), 0); //0 is default
 
     listDialog.ui()->comboBoxChosenNetPrice->setCurrentIndex(netValIndex);
-    listDialog.ui()->doubleSpinBoxAmount->setValue(quantity.get_d());
-    listDialog.ui()->spinBoxDiscount->setValue((int)discount.get_d());
+    listDialog.ui()->doubleSpinBoxAmount->setValue(quantity.toDouble());
+    listDialog.ui()->spinBoxDiscount->setValue((int)discount.toDouble());
 
     QCOMPARE(listDialog.ui()->labelNetVal->text(), resultNetVal.toString(precision));
 }
@@ -138,8 +138,8 @@ void CommodityListDialogTest::testGUI_AddManyCommodities_data()
     QTest::addColumn<Money_t>("net2");
     QTest::addColumn<Money_t>("net3");
     QTest::addColumn<Money_t>("net4");
-    QTest::addColumn<Money_t::val_t>("quantity");
-    QTest::addColumn<Money_t::val_t>("discount");
+    QTest::addColumn<DecVal>("quantity");
+    QTest::addColumn<DecVal>("discount");
     QTest::addColumn<int>("netValIndex");
     QTest::addColumn<Money_t>("resultNetVal");
 
@@ -156,11 +156,11 @@ void CommodityListDialogTest::testGUI_AddManyCommodities_data()
     for(int i = 0; i < maxTests; ++i)
     {
         const int netValIndex = qrand() % maxNetVals;
-        const Money_t::val_t discountPercent = qrand() % 100;
+        const DecVal discountPercent = DecVal(qrand() % 100);
         netVal = nets[netValIndex];
-        const Money_t::val_t quantity = (qrand() % 100000) + 10;
+        const DecVal quantity = DecVal((qrand() % 100000) + 10);
         const Money_t totalNetVal(netVal * quantity);
-        const Money_t::val_t onePercent(Money_t::val_t(1)/Money_t::val_t(100));
+        const DecVal onePercent(DecVal(1)/DecVal(100));
         const Money_t discountedTotalNetVal(totalNetVal - (totalNetVal * discountPercent * onePercent));
 
         QTest::newRow(qPrintable(QString("%1").arg(i))) << CommodityTypeData::GOODS
@@ -177,9 +177,9 @@ void CommodityListDialogTest::testGUI_AddManyCommodities_data()
 }
 
 
-void CommodityListDialogTest::addCommodityInThread(InvoiceDialogPublic *idp, const CommodityData &cd, const int netValIndex)
+void CommodityListDialogTest::addCommodityInThread(InvoiceDialogPublic *idp, const CommodityData &cd, const int netValIndex, const DecVal &discount)
 {
-    GuiUserAddCommodity userAddCommod(idp, cd, netValIndex);
+    GuiUserAddCommodity userAddCommod(idp, cd, netValIndex, discount);
     QThread threadCommodity;
     threadCommodity.setObjectName("threadCommodity");
     startUserThread(&userAddCommod, &threadCommodity, idp->ui()->pushButtonAddCommodity);

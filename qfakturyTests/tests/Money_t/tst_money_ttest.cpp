@@ -85,8 +85,9 @@ void Money_tTest::testCasePLN_data()
     const int radix = 10;
     const int fieldWidth = 2;
     const QChar fillChar(QChar('0'));
-    QLocale lc;
-    const QChar decimPoint(lc.decimalPoint());
+
+    SettingsGlobal s;
+    const QChar decimPoint(s.decimalPointStr().at(0));
     for(int i = 0; i < 100; ++i)
     {
         const QString textNumberFormatDot(QString("0%1%2").arg(decimPoint).arg(i, fieldWidth, radix, fillChar));

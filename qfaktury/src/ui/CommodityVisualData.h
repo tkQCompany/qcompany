@@ -33,13 +33,13 @@ struct CommodityVisualData
         {
         case CommodityVisualFields::ID: return id;
         case CommodityVisualFields::NAME: return name;
-        case CommodityVisualFields::QUANTITY: {val.setValue<Money_t::val_t>(quantity); return val;}
+        case CommodityVisualFields::QUANTITY: {val.setValue<DecVal>(quantity); return val;}
         case CommodityVisualFields::UNIT: return unit;
         case CommodityVisualFields::PKWIU: return pkwiu;
         case CommodityVisualFields::NET: {val.setValue<Money_t>(net); return val;}
-        case CommodityVisualFields::VAT: {val.setValue<Money_t::val_t>(vat); return val;}
+        case CommodityVisualFields::VAT: {val.setValue<DecVal>(vat); return val;}
         case CommodityVisualFields::TYPE: return type;
-        case CommodityVisualFields::DISCOUNT: {val.setValue<Money_t::val_t>(discount); return val;}
+        case CommodityVisualFields::DISCOUNT: {val.setValue<DecVal>(discount); return val;}
         default:
             qDebug("CommodityVisualData::field(): Unrecognized field number");
         }
@@ -64,7 +64,7 @@ struct CommodityVisualData
             name = v.toString();
             break;
         case CommodityVisualFields::QUANTITY:
-            quantity = v.value<Money_t::val_t>();
+            quantity = v.value<DecVal>();
             break;
         case CommodityVisualFields::UNIT:
             unit = v.toString();
@@ -76,13 +76,13 @@ struct CommodityVisualData
             net = v.value<Money_t>();
             break;
         case CommodityVisualFields::VAT:
-            vat = v.value<Money_t::val_t>();
+            vat = v.value<DecVal>();
             break;
         case CommodityVisualFields::TYPE:
             type = v.toString();
             break;
         case CommodityVisualFields::DISCOUNT:
-            discount = v.value<Money_t::val_t>();
+            discount = v.value<DecVal>();
             break;
         default:
             qDebug("CommodityVisualData::setField(): Unrecognized field number");
@@ -133,13 +133,13 @@ struct CommodityVisualData
 
     qlonglong id; /**< TODO */
     QString name; /**< TODO */
-    Money_t::val_t quantity; /**< TODO */
+    DecVal quantity; /**< TODO */
     QString unit; /**< TODO */ //TODO: change type to appropriate
     QString pkwiu; /**< TODO */
     Money_t net; /**< TODO */
-    Money_t::val_t vat; /**< TODO */
+    DecVal vat; /**< TODO */
     QString type; /**< TODO */ //TODO: change type to appropriate
-    Money_t::val_t discount; /**< TODO */
+    DecVal discount; /**< TODO */
 };
 
 Q_DECLARE_METATYPE(CommodityVisualData)

@@ -622,7 +622,7 @@ bool Database::invoiceWithCommoditiesInsertTransact(const InvoiceData &invoice, 
                                       .arg(invoice.field(InvoiceFields::PAYMENT_ID).toString())
                                       .arg(invoice.field(InvoiceFields::CURRENCY_ID).toString())
                                       .arg(invoice.field(InvoiceFields::ADDIT_TEXT).toString())
-                                      .arg(invoice.field(InvoiceFields::DISCOUNT).value<Money_t::val_t>().get_d()));
+                                      .arg(invoice.field(InvoiceFields::DISCOUNT).value<DecVal>().toDouble()));
 
             if(queryInv.exec(queryInvStr))
             {
@@ -636,8 +636,8 @@ bool Database::invoiceWithCommoditiesInsertTransact(const InvoiceData &invoice, 
                     queryInvCommod.bindValue(":invoice_id", id_invoice);
                     queryInvCommod.bindValue(":commodity_id", commodities.at(i).id);
                     queryInvCommod.bindValue(":net", commodities.at(i).net.toString());
-                    queryInvCommod.bindValue(":quantity", commodities.at(i).quantity.get_str().c_str());
-                    queryInvCommod.bindValue(":discount", commodities.at(i).discount.get_str().c_str());
+                    queryInvCommod.bindValue(":quantity", commodities.at(i).quantity.toString());
+                    queryInvCommod.bindValue(":discount", commodities.at(i).discount.toString());
                     if(!queryInvCommod.exec())
                     {
                         qDebug() << "queryInvCommodStr: " << queryInvCommod.lastQuery();
