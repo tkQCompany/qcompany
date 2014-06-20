@@ -23,12 +23,12 @@ void CommodityListDialog::init()
 {
     ui->listViewCommodities->setModel(db->modelCommodity());
     ui->listViewCommodities->setModelColumn(CommodityFields::NAME);
-    ui->comboBoxCommodities->setModel(db->modelCommodityType());
-    ui->comboBoxCommodities->setModelColumn(CommodityTypeFields::TYPE);
+    ui->comboBoxCommodityTypes->setModel(db->modelCommodityType());
+    ui->comboBoxCommodityTypes->setModelColumn(CommodityTypeFields::TYPE);
 
     widgetMapper->setModel(db->modelCommodity());
     comboBoxCommoditiesChanged(CommodityTypeData::GOODS);
-    widgetMapper->addMapping(ui->comboBoxCommodities, CommodityFields::TYPE_ID);
+    widgetMapper->addMapping(ui->comboBoxCommodityTypes, CommodityFields::TYPE_ID);
     widgetMapper->addMapping(ui->lineEditName, CommodityFields::NAME);
     widgetMapper->addMapping(ui->lineEditPriceNet1, CommodityFields::NET1);
     widgetMapper->addMapping(ui->lineEditPriceNet2, CommodityFields::NET2);
@@ -38,7 +38,7 @@ void CommodityListDialog::init()
     ui->doubleSpinBoxAmount->setValue(0.0);
 
     ui->listViewCommodities->selectionModel()->setCurrentIndex(db->modelCommodity()->index(0, 0), QItemSelectionModel::Rows);
-    comboBoxChosenNetPriceChanged(ui->comboBoxChosenNetPrice->currentIndex());
+    netPriceChanged();
 
     SettingsGlobal s;    
     ui->lineEditName->setEnabled(s.value(s.EDIT_NAME).toBool());
@@ -46,12 +46,12 @@ void CommodityListDialog::init()
 	// connects
     connect(ui->pushButtonOK, SIGNAL( clicked() ), this, SLOT( doAccept()));
     connect(ui->pushButtonCancel, SIGNAL( clicked() ), this, SLOT( close()));
-    connect(ui->comboBoxCommodities, SIGNAL( activated(int) ), this, SLOT( comboBoxCommoditiesChanged(int)));
+    connect(ui->comboBoxCommodityTypes, SIGNAL( currentIndexChanged(int) ), this, SLOT( comboBoxCommoditiesChanged(int)));
     connect(ui->listViewCommodities, SIGNAL(clicked(QModelIndex)), widgetMapper, SLOT(setCurrentModelIndex(QModelIndex)));
-    connect(ui->comboBoxChosenNetPrice, SIGNAL(currentIndexChanged(int)), this, SLOT( comboBoxChosenNetPriceChanged(int) ) );
-    connect(ui->spinBoxDiscount, SIGNAL( valueChanged(int) ), this, SLOT( updateNetVal() ) );
-    connect(ui->doubleSpinBoxAmount, SIGNAL( valueChanged(const QString&) ), this, SLOT( updateNetVal() ) );
-    connect(ui->listViewCommodities, SIGNAL(clicked(QModelIndex)), this, SLOT(updateNetVal()));
+    connect(this->widgetMapper, SIGNAL(currentIndexChanged(int)), this, SLOT(netPriceChanged()));
+    connect(ui->comboBoxChosenNetPrice, SIGNAL(currentIndexChanged(int)), this, SLOT( netPriceChanged() ) );
+    connect(ui->spinBoxDiscount, SIGNAL( valueChanged(int) ), this, SLOT( updateLabelNetVal() ) );
+    connect(ui->doubleSpinBoxAmount, SIGNAL( valueChanged(const QString&) ), this, SLOT( updateLabelNetVal() ) );
 
     validator.setBottom(0.0);
     validator.setDecimals(2);
@@ -74,12 +74,12 @@ CommodityListDialog::~CommodityListDialog()
 /** Slot
  *  spinBox netto numbers changed
  */
-void CommodityListDialog::comboBoxChosenNetPriceChanged(const int i)
+void CommodityListDialog::netPriceChanged()
 {
     const QModelIndex current(ui->listViewCommodities->selectionModel()->currentIndex());
     if(current.isValid())
     {
-        switch(i)
+        switch(ui->comboBoxChosenNetPrice->currentIndex())
         {
         case 0:
             netVal.setValue(ui->lineEditPriceNet1->text().remove(' '));
@@ -94,9 +94,9 @@ void CommodityListDialog::comboBoxChosenNetPriceChanged(const int i)
             netVal.setValue(ui->lineEditPriceNet4->text().remove(' '));
             break;
         default:
-            qDebug("Unexpected value in a switch() in CommodityListDialog::comboBoxChosenNetPriceChanged()");
+            qDebug("Unexpected value in a switch() in CommodityListDialog::netPriceChanged()");
         }
-        updateNetVal();
+        this->updateLabelNetVal();
     }
 }
 
@@ -165,7 +165,7 @@ void CommodityListDialog::doAccept() {
 
 
 
-void CommodityListDialog::updateNetVal()
+void CommodityListDialog::updateLabelNetVal()
 {
     const Money_t totalNetPrice = netVal * DecVal(ui->doubleSpinBoxAmount->value());
     const DecVal onePercent(DecVal(1)/DecVal(100));

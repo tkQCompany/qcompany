@@ -50,7 +50,7 @@ protected slots:
      * @brief
      *
      */
-    virtual void updateNetVal();
+    virtual void updateLabelNetVal();
     /**
      * @brief
      *
@@ -62,7 +62,7 @@ protected slots:
      *
      * @param int
      */
-    void comboBoxChosenNetPriceChanged(const int);
+    void netPriceChanged();
 
 protected:
     /**
