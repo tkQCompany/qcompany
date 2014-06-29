@@ -39,7 +39,6 @@ InvoiceDialogImpl::InvoiceDialogImpl(QWidget *parent, Database *database)
 
 InvoiceDialogImpl::~InvoiceDialogImpl()
 {
-    db->modelInvoice()->revertAll();
     delete ui;
 }
 
