@@ -120,9 +120,9 @@ void CommodityListDialog::doAccept() {
 
         if( (amountOnStock >= demandedAmount)  || (currentCommodityTypeStr == CommodityTypeData::name(CommodityTypeData::SERVICES)))
         {
-            ret.discount = DecVal(ui->spinBoxDiscount->value());
-            ret.id = id_commodity;
-            ret.name = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NAME)).toString();
+            ret.setDiscount(DecVal(ui->spinBoxDiscount->value()));
+            ret.setID(id_commodity);
+            ret.setName(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::NAME)).toString());
 
             CommodityFields::Field netIndex;
             switch(ui->comboBoxChosenNetPrice->currentIndex())
@@ -140,13 +140,13 @@ void CommodityListDialog::doAccept() {
                 netIndex = CommodityFields::NET4;
                 break;
             }
-            ret.net = Money_t(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), netIndex)).toString());
+            ret.setNet(Money_t(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), netIndex)).toString()));
 
-            ret.pkwiu = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::PKWIU)).toString();
-            ret.quantity = demandedAmount;
-            ret.type = currentCommodityTypeStr;
-            ret.unit = db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::UNIT_ID)).toString();
-            ret.vat = DecVal(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::VAT)).toDouble());
+            ret.setPkwiu(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::PKWIU)).toString());
+            ret.setQuantity(demandedAmount);
+            ret.setType(currentCommodityTypeStr);
+            ret.setUnit(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::UNIT_ID)).toString());
+            ret.setVat(DecVal(db->modelCommodity()->data(db->modelCommodity()->index(current.row(), CommodityFields::VAT)).toDouble()));
 
             accept();
         }

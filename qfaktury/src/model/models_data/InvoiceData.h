@@ -31,77 +31,126 @@ namespace InvoiceFields
 class InvoiceData
 {
 public:
-
-    /**
-     * @brief
-     *
-     * @param i
-     * @return QVariant
-     */
-    QVariant field(const InvoiceFields::Fields i) const
+    void setId(const long long newId)
     {
-        QVariant val;
-        switch(i)
-        {
-        case InvoiceFields::ID_INVOICE:         return id_;
-        case InvoiceFields::INV_NUMBER:         return invNumber_;
-        case InvoiceFields::SELLING_DATE:       return sellingDate_;
-        case InvoiceFields::TYPE_ID:            return typeID_;
-        case InvoiceFields::COUNTERPARTY_ID:    return counterpartyID_;
-        case InvoiceFields::ISSUANCE_DATE:      return issuanceDate_;
-        case InvoiceFields::PAYMENT_DATE:       return paymentDate_;
-        case InvoiceFields::PAYMENT_ID:         return paymentID_;
-        case InvoiceFields::CURRENCY_ID:        return currencyID_;
-        case InvoiceFields::ADDIT_TEXT:         return additText_;
-        case InvoiceFields::DISCOUNT:           {val.setValue<DecVal>(discount_); return val;}
-        default:
-            qDebug("Unknown index in field(): (index=%d) detected in %s, line=%d.", i, __FILE__, __LINE__);
-            return val;
-        }
+        id_ = newId;
     }
 
-    void setField(const InvoiceFields::Fields i, QVariant val)
+    long long id() const
     {
-        switch(i)
-        {
-        case InvoiceFields::ID_INVOICE:
-            id_ = val.toLongLong();
-            break;
-        case InvoiceFields::INV_NUMBER:
-            invNumber_ = val.toString();
-            break;
-        case InvoiceFields::SELLING_DATE:
-            sellingDate_ = val.toDate();
-            break;
-        case InvoiceFields::TYPE_ID:
-            typeID_ = val.toLongLong();
-            break;
-        case InvoiceFields::COUNTERPARTY_ID:
-            counterpartyID_ = val.toLongLong();
-            break;
-        case InvoiceFields::ISSUANCE_DATE:
-            issuanceDate_ = val.toDate();
-            break;
-        case InvoiceFields::PAYMENT_DATE:
-            paymentDate_ = val.toDate();
-            break;
-        case InvoiceFields::PAYMENT_ID:
-            paymentID_ = val.toLongLong();
-            break;
-        case InvoiceFields::CURRENCY_ID:
-            currencyID_ = val.toLongLong();
-            break;
-        case InvoiceFields::ADDIT_TEXT:
-            additText_ = val.toString();
-            break;
-        case InvoiceFields::DISCOUNT:
-            discount_ = val.value<DecVal>();
-            break;
-        default:
-            qDebug("Unknown index in setField(): (index = %d, val=%s) detected in %s, line=%d.",
-                   i, qPrintable(val.toString()), __FILE__, __LINE__);
-        }
+        return id_;
     }
+
+
+    void setInvNumber(const QString &newInvNumber)
+    {
+        invNumber_ = newInvNumber;
+    }
+
+    QString invNumber() const
+    {
+        return invNumber_;
+    }
+
+
+    void setSellingDate(const QDate &newDate)
+    {
+        sellingDate_ = newDate;
+    }
+
+    QDate sellingDate() const
+    {
+        return sellingDate_;
+    }
+
+
+    void setTypeID(const long long typeID)
+    {
+        typeID_ = typeID;
+    }
+
+    long long typeID() const
+    {
+        return typeID_;
+    }
+
+
+    void setCounterpartyID(const long long counterpartyID)
+    {
+        counterpartyID_ = counterpartyID;
+    }
+
+    long long counterpartyID() const
+    {
+        return counterpartyID_;
+    }
+
+
+    void setIssuanceDate(const QDate &issuanceDate)
+    {
+        issuanceDate_ = issuanceDate;
+    }
+
+    QDate issuanceDate() const
+    {
+        return issuanceDate_;
+    }
+
+
+    void setPaymentDate(const QDate &paymentDate)
+    {
+        paymentDate_ = paymentDate;
+    }
+
+    QDate paymentDate() const
+    {
+        return paymentDate_;
+    }
+
+
+    void setPaymentID(const long long paymentID)
+    {
+        paymentID_ = paymentID;
+    }
+
+    long long paymentID() const
+    {
+        return paymentID_;
+    }
+
+
+    void setCurrencyID(const long long currencyID)
+    {
+        currencyID_ = currencyID;
+    }
+
+    long long currencyID() const
+    {
+        return currencyID_;
+    }
+
+
+    void setAdditText(const QString &additText)
+    {
+        additText_ = additText;
+    }
+
+    QString additText() const
+    {
+        return additText_;
+    }
+
+
+    void setDiscount(const DecVal &discount)
+    {
+        discount_ = discount;
+    }
+
+    DecVal discount() const
+    {
+        return discount_;
+    }
+
 
     static QString header(const InvoiceFields::Fields i)
     {
@@ -125,18 +174,23 @@ public:
         }
     }
 
-
 private:
-    qint64 id_; /**< TODO */
+    long long id_; /**< TODO */
     QString invNumber_; /**< TODO */
     QDate sellingDate_; /**< TODO */
-    qint64 typeID_; /**< TODO */
-    qint64 counterpartyID_; /**< TODO */
+    long long typeID_; /**< TODO */
+    long long counterpartyID_; /**< TODO */
     QDate issuanceDate_; /**< TODO */
     QDate paymentDate_; /**< TODO */
-    qint64 paymentID_; /**< TODO */
-    qint64 currencyID_; /**< TODO */
+    long long paymentID_; /**< TODO */
+    long long currencyID_; /**< TODO */
     QString additText_; /**< TODO */
     DecVal discount_; /**< TODO */
 };
 #endif
+
+
+
+
+
+

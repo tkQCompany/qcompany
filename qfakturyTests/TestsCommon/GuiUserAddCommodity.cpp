@@ -39,12 +39,12 @@ void GuiUserAddCommodity::process()
         const QModelIndexList indList(cldp->ui()->listViewCommodities->model()->match(
                                           cldp->ui()->listViewCommodities->model()->index(0, CommodityFields::NAME),
                                           Qt::DisplayRole,
-                                          commodity_.field(CommodityFields::NAME)));
+                                          commodity_.name()));
         if(!indList.isEmpty())
         {
             postListViewIndex_(indList.at(0));
             postComboBoxIndex_(netValIndex_);
-            postDoubleVal_(commodity_.field(CommodityFields::QUANTITY).value<DecVal>().toDouble());
+            postDoubleVal_(commodity_.quantity().toDouble());
             postSpinBoxVal_(discount_);
         }
         else

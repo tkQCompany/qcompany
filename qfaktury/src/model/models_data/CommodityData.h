@@ -1,8 +1,6 @@
 #ifndef COMMODITYDATA_H
 #define COMMODITYDATA_H
 
-#include <QVariant>
-
 #include "Money_t.h"
 
 namespace CommodityFields
@@ -18,7 +16,7 @@ enum Field {ID_COMMODITY, NAME, ABBREV, PKWIU, TYPE_ID, UNIT_ID, NET1, NET2, NET
 struct CommodityData
 {
 public:
-    CommodityData(): id_(0), type_id_(0), unit_id_(0), vat_(DecVal(0.0)), quantity_(DecVal(0.0)) {}
+    CommodityData(): id_(0), typeId_(0), unitId_(0) {}
 
     static QString header(const CommodityFields::Field i)
     {
@@ -42,82 +40,145 @@ public:
         }
     }
 
-    QVariant field(const CommodityFields::Field i) const
+
+    long long id() const
     {
-        QVariant val;
-        switch(i)
-        {
-        case CommodityFields::ID_COMMODITY: return id_;
-        case CommodityFields::NAME: return name_;
-        case CommodityFields::ABBREV: return abbrev_;
-        case CommodityFields::PKWIU: return pkwiu_;
-        case CommodityFields::TYPE_ID: return type_id_;
-        case CommodityFields::UNIT_ID: return unit_id_;
-        case CommodityFields::NET1: {val.setValue(net1_); return val;}
-        case CommodityFields::NET2: {val.setValue(net2_); return val;}
-        case CommodityFields::NET3: {val.setValue(net3_); return val;}
-        case CommodityFields::NET4: {val.setValue(net4_); return val;}
-        case CommodityFields::VAT:  {val.setValue(vat_); return val;}
-        case CommodityFields::QUANTITY: {val.setValue(quantity_); return val;}
-        default:
-            qDebug("CommodityData::field(): Unknown commodity field: %d", (int)i);
-            return val;
-        }
+        return id_;
     }
 
-    void setField(const CommodityFields::Field i, QVariant val)
+    void setId(const long long id)
     {
-        switch(i)
-        {
-        case CommodityFields::ID_COMMODITY:
-            id_ = val.toLongLong();
-            break;
-        case CommodityFields::NAME:
-            name_ = val.toString();
-            break;
-        case CommodityFields::ABBREV:
-            abbrev_ = val.toString();
-            break;;
-        case CommodityFields::PKWIU:
-            pkwiu_ = val.toString();
-            break;
-        case CommodityFields::TYPE_ID:
-            type_id_ = val.toInt(); //int, because comboboxes in qt operate on ints
-            break;
-        case CommodityFields::UNIT_ID:
-            unit_id_ = val.toInt(); //int, because comboboxes in qt operate on ints
-            break;
-        case CommodityFields::NET1:
-            net1_ = val.value<Money_t>();
-            break;
-        case CommodityFields::NET2:
-            net2_ = val.value<Money_t>();
-            break;
-        case CommodityFields::NET3:
-            net3_ = val.value<Money_t>();
-            break;
-        case CommodityFields::NET4:
-            net4_ = val.value<Money_t>();
-            break;
-        case CommodityFields::VAT:
-            vat_ = val.value<DecVal>();
-            break;
-        case CommodityFields::QUANTITY:
-            quantity_ = val.value<DecVal>();
-            break;
-        default:
-            qDebug("Unknown index in CommodityData::setField(): (index = %d, val=%s) detected in %s, line=%d.",
-                   i, qPrintable(val.toString()), __FILE__, __LINE__);
-        }
+        id_ = id;
+    }
+
+
+    QString name() const
+    {
+        return name_;
+    }
+
+    void setName(const QString &name)
+    {
+        name_ = name;
+    }
+
+
+    QString abbrev() const
+    {
+        return abbrev_;
+    }
+
+    void setAbbrev(const QString &abbrev)
+    {
+        abbrev_ = abbrev;
+    }
+
+
+    QString pkwiu() const
+    {
+        return pkwiu_;
+    }
+
+    void setPkwiu(const QString &pkwiu)
+    {
+        pkwiu_ = pkwiu;
+    }
+
+
+    long long typeId() const
+    {
+        return typeId_;
+    }
+
+    void setTypeId(const long long typeId)
+    {
+        typeId_ = typeId;
+    }
+
+
+    long long unitId() const
+    {
+        return unitId_;
+    }
+
+    void setUnitId(const long long unitId)
+    {
+        unitId_ = unitId;
+    }
+
+
+    Money_t net1() const
+    {
+        return net1_;
+    }
+
+    void setNet1(const Money_t &net1)
+    {
+        net1_ = net1;
+    }
+
+
+    Money_t net2() const
+    {
+        return net2_;
+    }
+
+    void setNet2(const Money_t &net2)
+    {
+        net2_ = net2;
+    }
+
+
+    Money_t net3() const
+    {
+        return net3_;
+    }
+
+    void setNet3(const Money_t &net3)
+    {
+        net3_ = net3;
+    }
+
+
+    Money_t net4() const
+    {
+        return net4_;
+    }
+
+    void setNet4(const Money_t &net4)
+    {
+        net4_ = net4;
+    }
+
+
+    DecVal vat() const
+    {
+        return vat_;
+    }
+
+    void setVat(const DecVal &vat)
+    {
+        vat_ = vat;
+    }
+
+
+    DecVal quantity() const
+    {
+        return quantity_;
+    }
+
+    void setQuantity(const DecVal &quantity)
+    {
+        quantity_ = quantity;
     }
 
 private:
-    qint64 id_;
+    long long id_;
     QString name_;
     QString abbrev_;
     QString pkwiu_;
-    int type_id_;
-    int unit_id_;
+    long long typeId_;
+    long long unitId_;
     Money_t net1_;
     Money_t net2_;
     Money_t net3_;

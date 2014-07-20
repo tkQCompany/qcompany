@@ -20,74 +20,106 @@ namespace CommodityVisualFields
  */
 struct CommodityVisualData
 {
-    /**
-     * @brief
-     *
-     * @param fieldnum
-     * @return QString
-     */
-    QVariant field(const CommodityVisualFields::Field fieldnum) const
+    void setID(const long long newID)
     {
-        QVariant val;
-        switch(fieldnum)
-        {
-        case CommodityVisualFields::ID: return id;
-        case CommodityVisualFields::NAME: return name;
-        case CommodityVisualFields::QUANTITY: {val.setValue<DecVal>(quantity); return val;}
-        case CommodityVisualFields::UNIT: return unit;
-        case CommodityVisualFields::PKWIU: return pkwiu;
-        case CommodityVisualFields::NET: {val.setValue<Money_t>(net); return val;}
-        case CommodityVisualFields::VAT: {val.setValue<DecVal>(vat); return val;}
-        case CommodityVisualFields::TYPE: return type;
-        case CommodityVisualFields::DISCOUNT: {val.setValue<DecVal>(discount); return val;}
-        default:
-            qDebug("CommodityVisualData::field(): Unrecognized field number");
-        }
-        return val;
+        id_ = newID;
+    }
+
+    long long ID() const
+    {
+        return id_;
     }
 
 
-    /**
-     * @brief
-     *
-     * @param fieldnum
-     * @param v
-     */
-    void setField(const CommodityVisualFields::Field fieldnum, const QVariant &v)
+    void setName(const QString &newName)
     {
-        switch(fieldnum)
-        {
-        case CommodityVisualFields::ID:
-            id = v.toLongLong();
-            break;
-        case CommodityVisualFields::NAME:
-            name = v.toString();
-            break;
-        case CommodityVisualFields::QUANTITY:
-            quantity = v.value<DecVal>();
-            break;
-        case CommodityVisualFields::UNIT:
-            unit = v.toString();
-            break;
-        case CommodityVisualFields::PKWIU:
-            pkwiu = v.toString();
-            break;
-        case CommodityVisualFields::NET:
-            net = v.value<Money_t>();
-            break;
-        case CommodityVisualFields::VAT:
-            vat = v.value<DecVal>();
-            break;
-        case CommodityVisualFields::TYPE:
-            type = v.toString();
-            break;
-        case CommodityVisualFields::DISCOUNT:
-            discount = v.value<DecVal>();
-            break;
-        default:
-            qDebug("CommodityVisualData::setField(): Unrecognized field number");
-        }
+        name_ = newName;
     }
+
+    QString name() const
+    {
+        return name_;
+    }
+
+
+    void setQuantity(const DecVal &newQuantity)
+    {
+        quantity_ = newQuantity;
+    }
+
+    DecVal quantity() const
+    {
+        return quantity_;
+    }
+
+
+    void setUnit(const QString &newUnit)
+    {
+        unit_ = newUnit;
+    }
+
+    QString unit() const
+    {
+        return unit_;
+    }
+
+
+    void setPkwiu(const QString &newPkwiu)
+    {
+        pkwiu_ = newPkwiu;
+    }
+
+    QString pkwiu() const
+    {
+        return pkwiu_;
+    }
+
+
+    void setNet(const Money_t &newNetVal)
+    {
+        net_ = newNetVal;
+    }
+
+    Money_t net() const
+    {
+        return net_;
+    }
+
+
+    void setVat(const DecVal &newVat)
+    {
+        vat_ = newVat;
+    }
+
+    DecVal vat() const
+    {
+        return vat_;
+    }
+
+
+    void setType(const QString &newType)
+    {
+        type_ = newType;
+    }
+
+    QString type() const
+    {
+        return type_;
+    }
+
+
+    void setDiscount(const DecVal &newDiscount)
+    {
+        discount_ = newDiscount;
+    }
+
+    DecVal discount() const
+    {
+        return discount_;
+    }
+
+
+
 
     /**
      * @brief
@@ -116,14 +148,15 @@ struct CommodityVisualData
 
     bool operator ==(const CommodityVisualData &cvd) const
     {
-        for(int i = CommodityVisualFields::ID; i <= CommodityVisualFields::DISCOUNT; ++i)
-        {
-            if(this->field((CommodityVisualFields::Field)i) != cvd.field((CommodityVisualFields::Field)i))
-            {
-                return false;
-            }
-        }
-        return true;
+        return (this->id_ == cvd.id_) &&
+                (this->name_ == cvd.name_) &&
+                (this->quantity_ == cvd.quantity_) &&
+                (this->unit_ == cvd.unit_) &&
+                (this->pkwiu_ == cvd.pkwiu_) &&
+                (this->net_ == cvd.net_) &&
+                (this->vat_ == cvd.vat_) &&
+                (this->type_ == cvd.type_) &&
+                (this->discount_ == cvd.discount_);
     }
 
     bool operator !=(const CommodityVisualData &cvd) const
@@ -131,15 +164,16 @@ struct CommodityVisualData
         return !(*this == cvd);
     }
 
-    qlonglong id; /**< TODO */
-    QString name; /**< TODO */
-    DecVal quantity; /**< TODO */
-    QString unit; /**< TODO */ //TODO: change type to appropriate
-    QString pkwiu; /**< TODO */
-    Money_t net; /**< TODO */
-    DecVal vat; /**< TODO */
-    QString type; /**< TODO */ //TODO: change type to appropriate
-    DecVal discount; /**< TODO */
+private:
+    qlonglong id_; /**< TODO */
+    QString name_; /**< TODO */
+    DecVal quantity_; /**< TODO */
+    QString unit_; /**< TODO */ //TODO: change type to appropriate
+    QString pkwiu_; /**< TODO */
+    Money_t net_; /**< TODO */
+    DecVal vat_; /**< TODO */
+    QString type_; /**< TODO */ //TODO: change type to appropriate
+    DecVal discount_; /**< TODO */
 };
 
 Q_DECLARE_METATYPE(CommodityVisualData)

@@ -1,7 +1,7 @@
 #include <QMessageBox>
 #include <QSqlQuery>
 #include <QSqlError>
-#include <QDebug>
+#include <QDebug> //TODO: temporary
 
 #include "Database.h"
 #include "CommodityData.h"
@@ -613,16 +613,16 @@ bool Database::invoiceWithCommoditiesInsertTransact(const InvoiceData &invoice, 
             QSqlQuery queryInv(modelInvoice()->query());
             const QString dateFormat("yyyy-MM-dd");
             const QString queryInvStr(QString("INSERT INTO invoice(inv_number, selling_date, type_id, counterparty_id, issuance_date, payment_date, payment_id, currency_id, additional_text, discount) VALUES('%1', '%2', %3, %4, '%5', '%6', %7, %8, '%9', %10)")
-                                      .arg(invoice.field(InvoiceFields::INV_NUMBER).toString())
-                                      .arg(invoice.field(InvoiceFields::SELLING_DATE).toDate().toString(dateFormat))
-                                      .arg(invoice.field(InvoiceFields::TYPE_ID).toString())
-                                      .arg(invoice.field(InvoiceFields::COUNTERPARTY_ID).toString())
-                                      .arg(invoice.field(InvoiceFields::ISSUANCE_DATE).toDate().toString(dateFormat))
-                                      .arg(invoice.field(InvoiceFields::PAYMENT_DATE).toDate().toString(dateFormat))
-                                      .arg(invoice.field(InvoiceFields::PAYMENT_ID).toString())
-                                      .arg(invoice.field(InvoiceFields::CURRENCY_ID).toString())
-                                      .arg(invoice.field(InvoiceFields::ADDIT_TEXT).toString())
-                                      .arg(invoice.field(InvoiceFields::DISCOUNT).value<DecVal>().toDouble()));
+                                      .arg(invoice.invNumber())
+                                      .arg(invoice.sellingDate().toString(dateFormat))
+                                      .arg(invoice.typeID())
+                                      .arg(invoice.counterpartyID())
+                                      .arg(invoice.issuanceDate().toString(dateFormat))
+                                      .arg(invoice.paymentDate().toString(dateFormat))
+                                      .arg(invoice.paymentID())
+                                      .arg(invoice.currencyID())
+                                      .arg(invoice.additText())
+                                      .arg(invoice.discount().toDouble()));
 
             if(queryInv.exec(queryInvStr))
             {
@@ -634,10 +634,13 @@ bool Database::invoiceWithCommoditiesInsertTransact(const InvoiceData &invoice, 
                 for(int i = 0; i < commodities.size(); ++i)
                 {
                     queryInvCommod.bindValue(":invoice_id", id_invoice);
-                    queryInvCommod.bindValue(":commodity_id", commodities.at(i).id);
-                    queryInvCommod.bindValue(":net", commodities.at(i).net.toString());
-                    queryInvCommod.bindValue(":quantity", commodities.at(i).quantity.toString());
-                    queryInvCommod.bindValue(":discount", commodities.at(i).discount.toString());
+                    queryInvCommod.bindValue(":commodity_id", commodities.at(i).ID());
+
+                    const DecVal net(commodities.at(i).net().toString());
+                    queryInvCommod.bindValue(":net", net.toDouble());
+
+                    queryInvCommod.bindValue(":quantity", commodities.at(i).quantity().toDouble());
+                    queryInvCommod.bindValue(":discount", commodities.at(i).discount().toDouble());
                     if(!queryInvCommod.exec())
                     {
                         qDebug() << "queryInvCommodStr: " << queryInvCommod.lastQuery();
@@ -740,10 +743,16 @@ QList<CommodityVisualData> Database::commodities(const qint64 id_invoice)
         CommodityVisualData d;
         while(query.next())
         {
-            for(int i = CommodityVisualFields::ID; i <= CommodityVisualFields::DISCOUNT; ++i)
-            {
-                d.setField((CommodityVisualFields::Field)i, query.value(i));
-            }
+            d.setID(query.value(CommodityVisualFields::ID).toLongLong());
+            d.setName(query.value(CommodityVisualFields::NAME).toString());
+            d.setQuantity(query.value(CommodityVisualFields::QUANTITY).value<DecVal>());
+            d.setUnit(query.value(CommodityVisualFields::UNIT).toString());
+            d.setPkwiu(query.value(CommodityVisualFields::PKWIU).toString());
+            d.setNet(query.value(CommodityVisualFields::NET).value<Money_t>());
+            d.setVat(query.value(CommodityVisualFields::VAT).value<DecVal>());
+            d.setType(query.value(CommodityVisualFields::TYPE).toString());
+            d.setDiscount(query.value(CommodityVisualFields::DISCOUNT).value<DecVal>());
+
             ret.append(d);
         }
     }

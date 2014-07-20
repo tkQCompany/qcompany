@@ -73,104 +73,94 @@ void CommodityDataTest::testCaseCheckDBFields_data()
 void CommodityDataTest::testCaseCheckFields()
 {
     CommodityData cd;
-    QCOMPARE(cd.field(CommodityFields::ID_COMMODITY).toLongLong(), 0LL);
-    QVERIFY(cd.field(CommodityFields::NAME).toString().isEmpty());
-    QVERIFY(cd.field(CommodityFields::ABBREV).toString().isEmpty());
-    QVERIFY(cd.field(CommodityFields::PKWIU).toString().isEmpty());
-    QCOMPARE(cd.field(CommodityFields::TYPE_ID).toInt(), 0);
-    QCOMPARE(cd.field(CommodityFields::UNIT_ID).toInt(), 0);
-    QCOMPARE(cd.field(CommodityFields::NET1).value<Money_t>(), Money_t("0,0"));
-    QCOMPARE(cd.field(CommodityFields::NET2).value<Money_t>(), Money_t("0,0"));
-    QCOMPARE(cd.field(CommodityFields::NET3).value<Money_t>(), Money_t("0,0"));
-    QCOMPARE(cd.field(CommodityFields::NET4).value<Money_t>(), Money_t("0,0"));
-    QCOMPARE(cd.field(CommodityFields::NET1).toFloat(), 0.0f);
-    QCOMPARE(cd.field(CommodityFields::QUANTITY).toDouble(), 0.0);
+    QCOMPARE(cd.id(), 0LL);
+    QVERIFY(cd.name().isEmpty());
+    QVERIFY(cd.abbrev().isEmpty());
+    QVERIFY(cd.pkwiu().isEmpty());
+    QCOMPARE(cd.typeId(), 0LL);
+    QCOMPARE(cd.unitId(), 0LL);
+    QCOMPARE(cd.net1(), Money_t(0));
+    QCOMPARE(cd.net2(), Money_t(0));
+    QCOMPARE(cd.net3(), Money_t(0));
+    QCOMPARE(cd.net4(), Money_t(0));
+    QCOMPARE(cd.quantity().toDouble(), 0.0);
 
-    cd.setField(CommodityFields::ID_COMMODITY, 1);
-    QCOMPARE(cd.field(CommodityFields::ID_COMMODITY).toLongLong(), 1LL);
+    cd.setId(1LL);
+    QCOMPARE(cd.id(), 1LL);
 
     const QString name("name");
-    cd.setField(CommodityFields::NAME, name);
-    QCOMPARE(cd.field(CommodityFields::NAME).toString(), name);
+    cd.setName(name);
+    QCOMPARE(cd.name(), name);
 
     const QString abbrev("abbrev");
-    cd.setField(CommodityFields::ABBREV, abbrev);
-    QCOMPARE(cd.field(CommodityFields::ABBREV).toString(), abbrev);
+    cd.setAbbrev(abbrev);
+    QCOMPARE(cd.abbrev(), abbrev);
 
     const QString pkwiu("pkwiu");
-    cd.setField(CommodityFields::PKWIU, pkwiu);
-    QCOMPARE(cd.field(CommodityFields::PKWIU).toString(), pkwiu);
+    cd.setPkwiu(pkwiu);
+    QCOMPARE(cd.pkwiu(), pkwiu);
 
-    cd.setField(CommodityFields::TYPE_ID, 1);
-    QCOMPARE(cd.field(CommodityFields::TYPE_ID).toInt(), 1);
+    cd.setTypeId(1LL);
+    QCOMPARE(cd.typeId(), 1LL);
 
-    cd.setField(CommodityFields::UNIT_ID, 1);
-    QCOMPARE(cd.field(CommodityFields::UNIT_ID).toInt(), 1);
+    cd.setUnitId(1LL);
+    QCOMPARE(cd.unitId(), 1LL);
 
-    QVariant val;
     const Money_t net1(QString("0,33"));
-    val.setValue(net1);
-    cd.setField(CommodityFields::NET1, val);
-    QCOMPARE(cd.field(CommodityFields::NET1).value<Money_t>(), net1);
+    cd.setNet1(net1);
+    QCOMPARE(cd.net1(), net1);
 
     const Money_t net2("0,34");
-    val.setValue(net2);
-    cd.setField(CommodityFields::NET2, val);
-    QCOMPARE(cd.field(CommodityFields::NET2).value<Money_t>(), net2);
+    cd.setNet2(net2);
+    QCOMPARE(cd.net2(), net2);
 
     const Money_t net3(QString("0.35"));
-    val.setValue(net3);
-    cd.setField(CommodityFields::NET3, val);
-    QVERIFY(cd.field(CommodityFields::NET3).value<Money_t>() == net3);
+    cd.setNet3(net3);
+    QVERIFY(cd.net3() == net3);
 
     const Money_t net4("0.36");
-    val.setValue(net4);
-    cd.setField(CommodityFields::NET4, val);
-    QVERIFY(cd.field(CommodityFields::NET4).value<Money_t>() == net4);
+    cd.setNet4(net4);
+    QVERIFY(cd.net4() == net4);
 
 
 
-    cd.setField(CommodityFields::ID_COMMODITY, 2);
-    QCOMPARE(cd.field(CommodityFields::ID_COMMODITY).toLongLong(), 2LL);
+    cd.setId(2LL);
+    QCOMPARE(cd.id(), 2LL);
 
     const QString name2("name2");
-    cd.setField(CommodityFields::NAME, name2);
-    QCOMPARE(cd.field(CommodityFields::NAME).toString(), name2);
+    cd.setName(name2);
+    QCOMPARE(cd.name(), name2);
 
     const QString abbrev2("abbrev2");
-    cd.setField(CommodityFields::ABBREV, abbrev2);
-    QCOMPARE(cd.field(CommodityFields::ABBREV).toString(), abbrev2);
+    cd.setAbbrev(abbrev2);
+    QCOMPARE(cd.abbrev(), abbrev2);
 
     const QString pkwiu2("pkwiu2");
-    cd.setField(CommodityFields::PKWIU, pkwiu2);
-    QCOMPARE(cd.field(CommodityFields::PKWIU).toString(), pkwiu2);
+    cd.setPkwiu(pkwiu2);
+    QCOMPARE(cd.pkwiu(), pkwiu2);
 
-    cd.setField(CommodityFields::TYPE_ID, 2);
-    QCOMPARE(cd.field(CommodityFields::TYPE_ID).toInt(), 2);
+    cd.setTypeId(2LL);
+    QCOMPARE(cd.typeId(), 2LL);
 
-    cd.setField(CommodityFields::UNIT_ID, 2);
-    QCOMPARE(cd.field(CommodityFields::UNIT_ID).toInt(), 2);
+    cd.setUnitId(2LL);
+    QCOMPARE(cd.unitId(), 2LL);
 
     const Money_t net12("0,43");
-    val.setValue(net12);
-    cd.setField(CommodityFields::NET1, val);
-    QCOMPARE(cd.field(CommodityFields::NET1).value<Money_t>(), net12);
+    cd.setNet1(net12);
+    QCOMPARE(cd.net1(), net12);
 
     const Money_t net22("0,44");
-    val.setValue(net22);
-    cd.setField(CommodityFields::NET2, val);
-    QCOMPARE(cd.field(CommodityFields::NET2).value<Money_t>(), net22);
+    cd.setNet2(net22);
+    QCOMPARE(cd.net2(), net22);
 
     const Money_t net32("0,45");
-    val.setValue(net32);
-    cd.setField(CommodityFields::NET3, val);
-    QVERIFY(cd.field(CommodityFields::NET3).value<Money_t>() == net32);
+    cd.setNet3(net32);
+    QVERIFY(cd.net3() == net32);
 
     const QString net42Str("0.46");
     const Money_t net42(net42Str);
-    val.setValue(net42);
-    cd.setField(CommodityFields::NET4, val);
-    QCOMPARE(cd.field(CommodityFields::NET4).value<Money_t>(), net42);
+    cd.setNet4(net42);
+    QCOMPARE(cd.net4(), net42);
 }
 
 

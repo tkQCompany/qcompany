@@ -90,15 +90,15 @@ void CommodityListDialogTest::testGUI_AddManyCommodities()
 
     QCOMPARE(listDialog.ui()->comboBoxCommodityTypes->currentIndex(), (int)CommodityTypeData::GOODS);
     QCOMPARE(listDialog.ui()->lineEditName->text(), QString("name_%1").arg(commodityIndex));
-    QCOMPARE(listDialog.ui()->lineEditPriceNet1->text(), commodityData.field(CommodityFields::NET1).value<Money_t>().toString(precision));
-    QCOMPARE(listDialog.ui()->lineEditPriceNet2->text(), commodityData.field(CommodityFields::NET2).value<Money_t>().toString(precision));
-    QCOMPARE(listDialog.ui()->lineEditPriceNet3->text(), commodityData.field(CommodityFields::NET3).value<Money_t>().toString(precision));
-    QCOMPARE(listDialog.ui()->lineEditPriceNet4->text(), commodityData.field(CommodityFields::NET4).value<Money_t>().toString(precision));
+    QCOMPARE(listDialog.ui()->lineEditPriceNet1->text(), commodityData.net1().toString(precision));
+    QCOMPARE(listDialog.ui()->lineEditPriceNet2->text(), commodityData.net2().toString(precision));
+    QCOMPARE(listDialog.ui()->lineEditPriceNet3->text(), commodityData.net3().toString(precision));
+    QCOMPARE(listDialog.ui()->lineEditPriceNet4->text(), commodityData.net4().toString(precision));
     QCOMPARE(listDialog.ui()->comboBoxChosenNetPrice->currentIndex(), 0); //0 is default
 
     listDialog.ui()->comboBoxChosenNetPrice->setCurrentIndex(commodityIndex % 4);
 
-    listDialog.ui()->doubleSpinBoxAmount->setValue(commodityVisualData.field(CommodityVisualFields::QUANTITY).value<DecVal>().toDouble());
+    listDialog.ui()->doubleSpinBoxAmount->setValue(commodityVisualData.quantity().toDouble());
     listDialog.ui()->spinBoxDiscount->setValue(0);
 
     QCOMPARE(listDialog.ui()->labelNetVal->text(), resultNetVal.toString(precision));
@@ -134,18 +134,18 @@ void CommodityListDialogTest::insertNewCommodity(const CommodityData &cd)
     const int precision = 2;
     QSqlQuery query(db_->modelCommodity()->query());
     query.prepare("INSERT INTO commodity(name, abbreviation, pkwiu, type_id, unit_id, net1, net2, net3, net4, vat, quantity) VALUES(:name, :abbreviation, :pkwiu, :type_id, :unit_id, :net1, :net2, :net3, :net4, :vat, :quantity)");
-    query.bindValue(":name", cd.field(CommodityFields::NAME));
-    query.bindValue(":abbreviation", cd.field(CommodityFields::ABBREV));
-    query.bindValue(":pkwiu", cd.field(CommodityFields::PKWIU));
-    query.bindValue(":type_id", cd.field(CommodityFields::TYPE_ID));
-    query.bindValue(":unit_id", cd.field(CommodityFields::UNIT_ID));
-    query.bindValue(":net1", cd.field(CommodityFields::NET1).value<Money_t>().toString(precision));
-    query.bindValue(":net2", cd.field(CommodityFields::NET2).value<Money_t>().toString(precision));
-    query.bindValue(":net3", cd.field(CommodityFields::NET3).value<Money_t>().toString(precision));
-    query.bindValue(":net4", cd.field(CommodityFields::NET4).value<Money_t>().toString(precision));
-    query.bindValue(":vat",  cd.field(CommodityFields::VAT).value<DecVal>().toString(precision));
+    query.bindValue(":name", cd.name());
+    query.bindValue(":abbreviation", cd.abbrev());
+    query.bindValue(":pkwiu", cd.pkwiu());
+    query.bindValue(":type_id", cd.typeId());
+    query.bindValue(":unit_id", cd.unitId());
+    query.bindValue(":net1", cd.net1().toString(precision));
+    query.bindValue(":net2", cd.net2().toString(precision));
+    query.bindValue(":net3", cd.net3().toString(precision));
+    query.bindValue(":net4", cd.net4().toString(precision));
+    query.bindValue(":vat",  cd.vat().toString(precision));
 
-    const DecVal stockQuantity(DecVal(2) * cd.field(CommodityFields::QUANTITY).value<DecVal>());
+    const DecVal stockQuantity(DecVal(2) * cd.quantity());
     query.bindValue(":quantity", stockQuantity.toDouble()); //on stock
     const bool retQuery = query.exec();
     if(!retQuery)
@@ -161,35 +161,23 @@ const CommodityData CommodityListDialogTest::generateCommodityData(const int com
 {
     CommodityData cd;
     SettingsGlobal s;
-    QVariant v;
     const QChar decPoint(s.decimalPointStr().at(0));
 
-    cd.setField(CommodityFields::ABBREV, QString("%1").arg(commodityIndex));
-    cd.setField(CommodityFields::ID_COMMODITY, QString("%1").arg(commodityIndex + 1));
-    cd.setField(CommodityFields::NAME, QString("name_%1").arg(commodityIndex));
-
-    v.setValue(Money_t(QString("%1%2%3").arg(commodityIndex).arg(decPoint).arg("11")));
-    cd.setField(CommodityFields::NET1, v);
-
-    v.setValue(Money_t(QString("%1%2%3").arg(commodityIndex).arg(decPoint).arg("12")));
-    cd.setField(CommodityFields::NET2, v);
-
-    v.setValue(Money_t(QString("%1%2%3").arg(commodityIndex).arg(decPoint).arg("13")));
-    cd.setField(CommodityFields::NET3, v);
-
-    v.setValue(Money_t(QString("%1%2%3").arg(commodityIndex).arg(decPoint).arg("14")));
-    cd.setField(CommodityFields::NET4, v);
-    cd.setField(CommodityFields::PKWIU, QString("pkwiu_%1").arg(commodityIndex));
-
-    v.setValue(DecVal(QString("%1").arg(commodityIndex+1)));
-    cd.setField(CommodityFields::QUANTITY, v);
-    cd.setField(CommodityFields::TYPE_ID, CommodityTypeData::GOODS + 1);
-    cd.setField(CommodityFields::UNIT_ID, UnitData::KG + 1);
+    cd.setAbbrev(QString("%1").arg(commodityIndex));
+    cd.setId(commodityIndex + 1);
+    cd.setName(QString("name_%1").arg(commodityIndex));
+    cd.setNet1(Money_t(QString("%1%2%3").arg(commodityIndex).arg(decPoint).arg("11")));
+    cd.setNet2(Money_t(QString("%1%2%3").arg(commodityIndex).arg(decPoint).arg("12")));
+    cd.setNet3(Money_t(QString("%1%2%3").arg(commodityIndex).arg(decPoint).arg("13")));
+    cd.setNet4(Money_t(QString("%1%2%3").arg(commodityIndex).arg(decPoint).arg("14")));
+    cd.setPkwiu(QString("pkwiu_%1").arg(commodityIndex));
+    cd.setQuantity(DecVal(QString("%1").arg(commodityIndex+1)));
+    cd.setTypeId(CommodityTypeData::GOODS + 1);
+    cd.setUnitId(UnitData::KG + 1);
 
     const int listVatSize = db_->modelVat()->listVAT().size();
     const QString selectedVAT(db_->modelVat()->listVAT().at(commodityIndex % listVatSize));
-    v.setValue(DecVal(selectedVAT));
-    cd.setField(CommodityFields::VAT, v);
+    cd.setVat(DecVal(selectedVAT));
 
     return cd;
 }
@@ -198,30 +186,41 @@ const CommodityData CommodityListDialogTest::generateCommodityData(const int com
 const CommodityVisualData CommodityListDialogTest::generateCommodityVisualData(const CommodityData &cd) const
 {
     CommodityVisualData cvd;
-    QVariant v;
 
-    const int commodityIndex = cd.field(CommodityFields::ID_COMMODITY).toInt() - 1;
+    const long long commodityIndex = cd.id() - 1LL;
 
-    cvd.setField(CommodityVisualFields::DISCOUNT, 0);
-    cvd.setField(CommodityVisualFields::ID, commodityIndex);
-    cvd.setField(CommodityVisualFields::NAME, cd.field(CommodityFields::NAME));
+    cvd.setDiscount(DecVal(0));
+    cvd.setID(commodityIndex);
+    cvd.setName(cd.name());
 
-    v.setValue(cd.field(CommodityFields::Field(CommodityFields::NET1 + commodityIndex % 4)).value<Money_t>());
-    cvd.setField(CommodityVisualFields::NET, v);
+    switch(commodityIndex % 4)
+    {
+    case 0:
+        cvd.setNet(cd.net1());
+        break;
+    case 1:
+        cvd.setNet(cd.net2());
+        break;
+    case 2:
+        cvd.setNet(cd.net3());
+        break;
+    case 3:
+        cvd.setNet(cd.net4());
+        break;
+    default:
+        qDebug("CommodityListDialogTest::generateCommodityVisualData(): unexpected value in switch()");
+    }
 
-    cvd.setField(CommodityVisualFields::PKWIU,cd.field(CommodityFields::PKWIU));
+    cvd.setPkwiu(cd.pkwiu());
+    cvd.setQuantity(cd.quantity());
 
-    v.setValue(cd.field(CommodityFields::QUANTITY).value<DecVal>());
-    cvd.setField(CommodityVisualFields::QUANTITY, v);
+    const CommodityTypeData::CommodityType type = (CommodityTypeData::CommodityType)cd.typeId();
+    cvd.setType(CommodityTypeData::name(type));
 
-    const CommodityTypeData::CommodityType type = cd.field(CommodityFields::TYPE_ID).value<CommodityTypeData::CommodityType>();
-    cvd.setField(CommodityVisualFields::TYPE, type);
+    const UnitData::Name unit = (UnitData::Name)cd.unitId();
+    cvd.setUnit(UnitData::name(unit));
 
-    const UnitData::Name unit = (UnitData::Name)cd.field(CommodityFields::UNIT_ID).toInt();
-    cvd.setField(CommodityVisualFields::UNIT, unit);
-
-    v.setValue(cd.field(CommodityFields::VAT).value<DecVal>());
-    cvd.setField(CommodityVisualFields::VAT, v);
+    cvd.setVat(cd.vat());
 
     return cvd;
 }
