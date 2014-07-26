@@ -1,6 +1,7 @@
 #ifndef CURRENCYDATA_H
 #define CURRENCYDATA_H
 
+#include <QObject>
 #include <QString>
 #include <QMetaType>
 

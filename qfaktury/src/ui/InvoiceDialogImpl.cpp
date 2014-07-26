@@ -152,7 +152,6 @@ void InvoiceDialogImpl::calculateSum()
         const double vatConvRet = vatRateStr.toDouble(&ok); //handling non-numeric forms of vat values (e.g. "zw." in polish version)
         const DecVal vatRate = onePercent * (ok? DecVal(vatConvRet) : DecVal(0.0));
         const DecVal discountRate = onePercent * DecVal(ui->tableWidgetCommodities->item(i, CommodityVisualFields::DISCOUNT)->text());
-
         const Money_t grossValue = netValue + netValue * vatRate;
         const Money_t discountValue = grossValue * discountRate;
 
@@ -224,12 +223,12 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
     mapper.setModel(db->modelInvoice());
     mapper.addMapping(ui->lineEditInvNumber, InvoiceFields::INV_NUMBER);
     mapper.addMapping(ui->dateEditDateOfSell, InvoiceFields::SELLING_DATE);
-    mapper.addMapping(ui->comboBoxInvoiceType, InvoiceFields::TYPE_ID, "currentIndex");
-    mapper.addMapping(ui->comboBoxCounterparties, InvoiceFields::COUNTERPARTY_ID, "currentIndex");
+    mapper.addMapping(ui->comboBoxInvoiceType, InvoiceFields::TYPE_ID);
+    mapper.addMapping(ui->comboBoxCounterparties, InvoiceFields::COUNTERPARTY_ID);
     mapper.addMapping(ui->dateEditDateOfIssuance, InvoiceFields::ISSUANCE_DATE);
     mapper.addMapping(ui->dateEditDayOfPayment, InvoiceFields::PAYMENT_DATE);
-    mapper.addMapping(ui->comboBoxPayment, InvoiceFields::PAYMENT_ID, "currentIndex");
-    mapper.addMapping(ui->comboBoxCurrency, InvoiceFields::CURRENCY_ID, "currentIndex");
+    mapper.addMapping(ui->comboBoxPayment, InvoiceFields::PAYMENT_ID);
+    mapper.addMapping(ui->comboBoxCurrency, InvoiceFields::CURRENCY_ID);
     mapper.addMapping(ui->lineEditAdditionalText, InvoiceFields::ADDIT_TEXT);
     mapper.addMapping(ui->spinBoxDiscount, InvoiceFields::DISCOUNT);
 
@@ -245,6 +244,7 @@ void InvoiceDialogImpl::init(InvoiceTypeData::Type invoiceType, const QModelInde
         ui->pushButtonSave->setEnabled(false); //TODO: sprawdzić czy ustawienia z Settings mają grać tu rolę
         ui->pushButtonMoreInfo->setEnabled(true);
         parent_->setWindowTitle(trUtf8("Edycja dokumentu - %1[*]").arg(InvoiceTypeData::name(invoiceType)));
+        calculateSum();
     }
     else
     {

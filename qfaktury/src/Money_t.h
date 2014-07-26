@@ -1,8 +1,7 @@
 #ifndef MONEY_T_H
 #define MONEY_T_H
 
-#include <DecVal.h>
-
+#include "DecVal.h"
 #include "CurrencyData.h"
 
 class Money_t;

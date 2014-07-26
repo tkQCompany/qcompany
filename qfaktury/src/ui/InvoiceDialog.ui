@@ -638,7 +638,7 @@
             </size>
            </property>
            <property name="text">
-            <string>Rabat:</string>
+            <string>Rabat brutto:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

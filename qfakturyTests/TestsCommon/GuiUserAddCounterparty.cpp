@@ -23,19 +23,19 @@ void GuiUserAddCounterparty::process()
 
     cdp->show();
 
-    postText_(cdp->ui()->lineEditName, counterparty_.name);
+    postText_(cdp->ui()->lineEditName, counterparty_.name());
 
-    postComboBoxIndex_(cdp->ui()->comboBoxType, cdp->ui()->comboBoxType->findText(counterparty_.type));
-    postComboBoxIndex_(cdp->ui()->comboBoxCountry, cdp->ui()->comboBoxCountry->findText(counterparty_.country));
+    postComboBoxIndex_(cdp->ui()->comboBoxType, cdp->ui()->comboBoxType->findText(counterparty_.type()));
+    postComboBoxIndex_(cdp->ui()->comboBoxCountry, cdp->ui()->comboBoxCountry->findText(counterparty_.country()));
 
-    postText_(cdp->ui()->lineEditLocation, counterparty_.city);
-    postText_(cdp->ui()->lineEditPostalCode, counterparty_.postalCode);
-    postText_(cdp->ui()->lineEditAddress, counterparty_.street);
-    postText_(cdp->ui()->lineEditTaxID, counterparty_.taxID);
-    postText_(cdp->ui()->lineEditAccountName, counterparty_.accountNumber);
-    postText_(cdp->ui()->lineEditWWW, counterparty_.www);
-    postText_(cdp->ui()->lineEditPrimaryEmail, counterparty_.email);
-    postText_(cdp->ui()->lineEditPrimaryPhone, counterparty_.phone);
+    postText_(cdp->ui()->lineEditLocation, counterparty_.city());
+    postText_(cdp->ui()->lineEditPostalCode, counterparty_.postalCode());
+    postText_(cdp->ui()->lineEditAddress, counterparty_.street());
+    postText_(cdp->ui()->lineEditTaxID, counterparty_.taxIdent());
+    postText_(cdp->ui()->lineEditAccountName, counterparty_.accountNumber());
+    postText_(cdp->ui()->lineEditWWW, counterparty_.www());
+    postText_(cdp->ui()->lineEditPrimaryEmail, counterparty_.email());
+    postText_(cdp->ui()->lineEditPrimaryPhone, counterparty_.phone());
 
     postMouseClick(cdp->ui()->pushButtonOK);
 

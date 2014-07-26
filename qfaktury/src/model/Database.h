@@ -138,7 +138,7 @@ public:
      * @param id_invoice
      * @return QList<CommodityVisualData>
      */
-    QList<CommodityVisualData> commodities(const qint64 id_invoice);
+    QList<CommodityVisualData> commodities(const long long id_invoice);
     /**
      * @brief
      *

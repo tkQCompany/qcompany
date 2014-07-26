@@ -22,6 +22,9 @@ void GuiUserEditInvoice::process()
 
     invData_ = idp->implementation()->getInvoiceData();
     commodities_ = idp->implementation()->getCommoditiesVisualData();
+    totalNetVal_ = Money_t(idp->ui()->labelSumNetVal->text());
+    totalDiscountVal_ = Money_t(idp->ui()->labelDiscountVal->text());
+    totalGrossVal_ = Money_t(idp->ui()->labelSumGrossVal->text());
 
     if(!idp->ui()->pushButtonMoreInfo->isEnabled())
     {

@@ -622,7 +622,7 @@ bool Database::invoiceWithCommoditiesInsertTransact(const InvoiceData &invoice, 
                                       .arg(invoice.paymentID())
                                       .arg(invoice.currencyID())
                                       .arg(invoice.additText())
-                                      .arg(invoice.discount().toDouble()));
+                                      .arg((int)invoice.discount().toDouble()));
 
             if(queryInv.exec(queryInvStr))
             {
@@ -728,7 +728,7 @@ bool Database::invoiceWithCommoditiesDeleteTransact(const qint64 &id_invoice)
 }
 
 
-QList<CommodityVisualData> Database::commodities(const qint64 id_invoice)
+QList<CommodityVisualData> Database::commodities(const long long id_invoice)
 {
     QList<CommodityVisualData> ret;
     QSqlQuery query(modelInvoiceWithCommodities_->query());
@@ -745,13 +745,16 @@ QList<CommodityVisualData> Database::commodities(const qint64 id_invoice)
         {
             d.setID(query.value(CommodityVisualFields::ID).toLongLong());
             d.setName(query.value(CommodityVisualFields::NAME).toString());
-            d.setQuantity(query.value(CommodityVisualFields::QUANTITY).value<DecVal>());
+            d.setQuantity(DecVal(query.value(CommodityVisualFields::QUANTITY).toDouble()));
             d.setUnit(query.value(CommodityVisualFields::UNIT).toString());
             d.setPkwiu(query.value(CommodityVisualFields::PKWIU).toString());
-            d.setNet(query.value(CommodityVisualFields::NET).value<Money_t>());
-            d.setVat(query.value(CommodityVisualFields::VAT).value<DecVal>());
+
+            const DecVal net(query.value(CommodityVisualFields::NET).toDouble());
+            d.setNet(Money_t(net.toString()));
+
+            d.setVat(DecVal(query.value(CommodityVisualFields::VAT).toString()));
             d.setType(query.value(CommodityVisualFields::TYPE).toString());
-            d.setDiscount(query.value(CommodityVisualFields::DISCOUNT).value<DecVal>());
+            d.setDiscount(DecVal(query.value(CommodityVisualFields::DISCOUNT).toDouble()));
 
             ret.append(d);
         }

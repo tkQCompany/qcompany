@@ -20,7 +20,8 @@ SOURCES += \
     GuiUserAddNewCommodity.cpp \
     GuiUserEditInvoice.cpp \
     InvoiceDialogPublic.cpp \
-    MainWindowPublic.cpp
+    MainWindowPublic.cpp \
+    InvoiceSums.cpp
 
 HEADERS += \
     CommodityDialogPublic.h \
@@ -39,7 +40,8 @@ HEADERS += \
     GuiUserEditInvoice.h \
     InvoiceDialogPublic.h \
     MainWindowPublic.h \
-    TestsCommon.h
+    TestsCommon.h \
+    InvoiceSums.h
 unix {
     target.path = /usr/lib
     INSTALLS += target
