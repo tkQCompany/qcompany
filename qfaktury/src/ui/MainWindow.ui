@@ -7,7 +7,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>778</width>
+    <width>861</width>
     <height>487</height>
    </rect>
   </property>
@@ -62,18 +62,18 @@
             <property name="correctionMode">
              <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
             </property>
+            <property name="displayFormat">
+             <string>dd/MM/yyyy</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
             <property name="date">
              <date>
               <year>2009</year>
               <month>3</month>
               <day>1</day>
              </date>
-            </property>
-            <property name="displayFormat">
-             <string>dd/MM/yyyy</string>
-            </property>
-            <property name="calendarPopup">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -116,18 +116,18 @@
             <property name="frame">
              <bool>true</bool>
             </property>
+            <property name="displayFormat">
+             <string>dd/MM/yyyy</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
             <property name="date">
              <date>
               <year>2010</year>
               <month>1</month>
               <day>1</day>
              </date>
-            </property>
-            <property name="displayFormat">
-             <string>dd/MM/yyyy</string>
-            </property>
-            <property name="calendarPopup">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -244,8 +244,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>778</width>
-     <height>24</height>
+     <width>861</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuProgram">

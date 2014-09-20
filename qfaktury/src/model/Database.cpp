@@ -615,12 +615,12 @@ bool Database::invoiceWithCommoditiesInsertTransact(const InvoiceData &invoice, 
             const QString queryInvStr(QString("INSERT INTO invoice(inv_number, selling_date, type_id, counterparty_id, issuance_date, payment_date, payment_id, currency_id, additional_text, discount) VALUES('%1', '%2', %3, %4, '%5', '%6', %7, %8, '%9', %10)")
                                       .arg(invoice.invNumber())
                                       .arg(invoice.sellingDate().toString(dateFormat))
-                                      .arg(invoice.typeID())
+                                      .arg(invoice.type()+1) //+1 is for SQL
                                       .arg(invoice.counterpartyID())
                                       .arg(invoice.issuanceDate().toString(dateFormat))
                                       .arg(invoice.paymentDate().toString(dateFormat))
-                                      .arg(invoice.paymentID())
-                                      .arg(invoice.currencyID())
+                                      .arg(invoice.paymentType()+1)//+1 is for SQL
+                                      .arg(invoice.currency()+1)//+1 is for SQL
                                       .arg(invoice.additText())
                                       .arg((int)invoice.discount().toDouble()));
 

@@ -1,6 +1,8 @@
 #ifndef COUNTERPARTYTYPEDATA_H
 #define COUNTERPARTYTYPEDATA_H
 
+#include <QObject>
+
 
 namespace CounterpartyTypeFields
 {

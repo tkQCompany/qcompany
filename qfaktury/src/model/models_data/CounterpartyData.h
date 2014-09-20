@@ -8,6 +8,10 @@
 #ifndef COUNTERPARTYDATA_H
 #define COUNTERPARTYDATA_H
 
+#include <QString>
+
+#include "CounterpartyTypeData.h"
+
 namespace CounterpartyFields
 {
 /**
@@ -45,7 +49,60 @@ public:
             return QString();
         }
     }
-};
 
+    long long id() const;
+    void setId(long long id);
+
+    QString name() const;
+    void setName(const QString &name);
+
+    CounterpartyTypeData type_id() const;
+    void setType_id(const CounterpartyTypeData &type_id);
+
+    QString country() const;
+    void setCountry(const QString &country);
+
+    QString location() const;
+    void setLocation(const QString &location);
+
+    QString postal_code() const;
+    void setPostal_code(const QString &postal_code);
+
+    QString street() const;
+    void setStreet(const QString &street);
+
+    QString tax_ident() const;
+    void setTax_ident(const QString &tax_ident);
+
+    QString account_name() const;
+    void setAccount_name(const QString &account_name);
+
+    QString www() const;
+    void setWww(const QString &www);
+
+    QString primary_email() const;
+    void setPrimary_email(const QString &primary_email);
+
+    QString primary_phone() const;
+    void setPrimary_phone(const QString &primary_phone);
+
+    QString inv_num_format() const;
+    void setInv_num_format(const QString &inv_num_format);
+
+private:
+    long long id_;
+    QString name_;
+    CounterpartyTypeData typeId_;
+    QString country_;
+    QString location_;
+    QString postalCode_;
+    QString street_;
+    QString taxIdent_;
+    QString accountName_;
+    QString www_;
+    QString primaryEmail_;
+    QString primaryPhone_;
+    QString invNumFormat_;
+};
 
 #endif

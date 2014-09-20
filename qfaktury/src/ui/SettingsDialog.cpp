@@ -326,15 +326,15 @@ void SettingsDialog::saveSettings_()
     s.setValue(s.keyName(s.LANG), ui_->comboBoxLanguage->currentText());
     s.setValue(s.keyName(s.CSS), ui_->comboBoxCSS->currentText());
 
-    s.beginGroup("printpos");
-    s.setValue(s.keyName(s.SELLER_NAME), ui_->checkBoxName->isChecked());
-    s.setValue(s.keyName(s.SELLER_LOCATION), ui_->checkBoxLocation->isChecked());
-    s.setValue(s.keyName(s.SELLER_ADDRESS), ui_->checkBoxAddress->isChecked());
-    s.setValue(s.keyName(s.SELLER_ACCOUNT), ui_->checkBoxAccountName->isChecked());
-    s.setValue(s.keyName(s.SELLER_TAXID), ui_->checkBoxTaxID->isChecked());
-    s.setValue(s.keyName(s.SELLER_PHONE), ui_->checkBoxPhone->isChecked());
-    s.setValue(s.keyName(s.SELLER_MAIL), ui_->checkBoxEmail->isChecked());
-    s.setValue(s.keyName(s.SELLER_WWW), ui_->checkBoxWWW->isChecked());
+    s.beginGroup(s.categoryName(s.PRINT_FIELDS));
+    s.setValue(s.keyName(s.DISPLAY_SELLER_NAME), ui_->checkBoxName->isChecked());
+    s.setValue(s.keyName(s.DISPLAY_SELLER_LOCATION), ui_->checkBoxLocation->isChecked());
+    s.setValue(s.keyName(s.DISPLAY_SELLER_ADDRESS), ui_->checkBoxAddress->isChecked());
+    s.setValue(s.keyName(s.DISPLAY_SELLER_ACCOUNT), ui_->checkBoxAccountName->isChecked());
+    s.setValue(s.keyName(s.DISPLAY_SELLER_TAXID), ui_->checkBoxTaxID->isChecked());
+    s.setValue(s.keyName(s.DISPLAY_SELLER_PHONE), ui_->checkBoxPhone->isChecked());
+    s.setValue(s.keyName(s.DISPLAY_SELLER_MAIL), ui_->checkBoxEmail->isChecked());
+    s.setValue(s.keyName(s.DISPLAY_SELLER_WWW), ui_->checkBoxWWW->isChecked());
     s.endGroup();
 
     s.setValue(s.keyName(s.FIRST_RUN), false);
@@ -350,10 +350,10 @@ void SettingsDialog::saveSettings_()
     s.setValue(s.keyName(s.EDIT_SYMBOL), ui_->checkBoxInvSymbolEdit->isChecked());
     s.setValue(s.keyName(s.EDIT_NAME), ui_->checkBoxProductNameEdit->isChecked());
     s.setValue(s.keyName(s.TAXID_MASK), ui_->lineEditTaxIDMask->text());
-    s.setValue(s.keyName(s.ACCOUNT_MASK), ui_->lineEditAccountMask->text());
+    s.setValue(s.keyName(s.ACCOUNT_NUM_MASK), ui_->lineEditAccountMask->text());
     s.setValue(s.keyName(s.NUMBER_OF_COPIES), ui_->spinBoxNumCopies->value());
 
-    s.beginGroup("faktury_pozycje");
+    s.beginGroup(s.categoryName(s.INVOICE_FIELDS));
     s.setValue(s.keyName(s.ORDER_NUMBER), ui_->checkBoxFieldID->isChecked());
     s.setValue(s.keyName(s.NAME), ui_->checkBoxFieldName->isChecked());
     s.setValue(s.keyName(s.CODE), ui_->checkBoxFieldPostalCode->isChecked());
@@ -380,7 +380,7 @@ void SettingsDialog::readSettings_()
 
     ui_->lineEditLogo->setText(s.value(s.LOGO).toString());
     ui_->lineEditTaxIDMask->setText(s.value(s.TAXID_MASK).toString());
-    ui_->lineEditAccountMask->setText(s.value(s.ACCOUNT_MASK).toString());
+    ui_->lineEditAccountMask->setText(s.value(s.ACCOUNT_NUM_MASK).toString());
     ui_->lineEditFormat->setText(s.value(s.DEFAULT_INV_NUM_FORMAT).toString());
 
     //listWidgetUnit->clear();
@@ -422,14 +422,14 @@ void SettingsDialog::readSettings_()
 
     ui_->spinBoxNumCopies->setValue(s.value(s.NUMBER_OF_COPIES).toInt());
 
-    ui_->checkBoxName->setChecked(s.value(s.SELLER_NAME).toBool());
-    ui_->checkBoxLocation->setChecked(s.value(s.SELLER_LOCATION).toBool());
-    ui_->checkBoxAddress->setChecked(s.value(s.SELLER_ADDRESS).toBool());
-    ui_->checkBoxAccountName->setChecked(s.value(s.SELLER_ACCOUNT).toBool());
-    ui_->checkBoxTaxID->setChecked(s.value(s.SELLER_TAXID).toBool());
-    ui_->checkBoxPhone->setChecked(s.value(s.SELLER_PHONE).toBool());
-    ui_->checkBoxEmail->setChecked(s.value(s.SELLER_MAIL).toBool());
-    ui_->checkBoxWWW->setChecked(s.value(s.SELLER_WWW).toBool());
+    ui_->checkBoxName->setChecked(s.value(s.DISPLAY_SELLER_NAME).toBool());
+    ui_->checkBoxLocation->setChecked(s.value(s.DISPLAY_SELLER_LOCATION).toBool());
+    ui_->checkBoxAddress->setChecked(s.value(s.DISPLAY_SELLER_ADDRESS).toBool());
+    ui_->checkBoxAccountName->setChecked(s.value(s.DISPLAY_SELLER_ACCOUNT).toBool());
+    ui_->checkBoxTaxID->setChecked(s.value(s.DISPLAY_SELLER_TAXID).toBool());
+    ui_->checkBoxPhone->setChecked(s.value(s.DISPLAY_SELLER_PHONE).toBool());
+    ui_->checkBoxEmail->setChecked(s.value(s.DISPLAY_SELLER_MAIL).toBool());
+    ui_->checkBoxWWW->setChecked(s.value(s.DISPLAY_SELLER_WWW).toBool());
 
     ui_->dateEditLastUpdate->setDate(s.value(s.LAST_UPDATE_EXCHANGE_RATES).toDate());
     ui_->dateEditLastUpdateByCentralBank->setDate(

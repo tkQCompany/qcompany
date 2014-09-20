@@ -254,13 +254,13 @@ void MainWindowTest::testCaseEditInvoice_data()
         invoice.setId(invNum + 1);
         invoice.setAdditText(QString("addit_text_%1").arg(invNum));
         invoice.setCounterpartyID(invNum + 2);
-        invoice.setCurrencyID(CurrencyData::PLN + 1);
+        invoice.setCurrency(CurrencyData::PLN);
         invoice.setInvNumber(invoiceNumber);
         invoice.setIssuanceDate(QDate::currentDate());
         invoice.setPaymentDate(QDate::currentDate());
-        invoice.setPaymentID(PaymentTypeData::CASH + 1);
+        invoice.setPaymentType(PaymentTypeData::CASH);
         invoice.setSellingDate(QDate::currentDate());
-        invoice.setTypeID(InvoiceTypeData::VAT + 1);
+        invoice.setType(InvoiceTypeData::VAT);
 
         QTest::newRow(qPrintable(QString("%1").arg(invNum))) << lcd << counterparty << invoice << netValIndices
                                                              << discountsPerCommodities
@@ -471,12 +471,12 @@ void MainWindowTest::checkInvoice(Database *db, const InvoiceData &invData)
     QCOMPARE(query.value(InvoiceFields::ID_INVOICE).toLongLong(), invData.id());
     QCOMPARE(query.value(InvoiceFields::INV_NUMBER).toString(), invData.invNumber());
     QCOMPARE(query.value(InvoiceFields::SELLING_DATE).toDate(), invData.sellingDate());
-    QCOMPARE(query.value(InvoiceFields::TYPE_ID).toLongLong(), invData.typeID());
+    QCOMPARE(query.value(InvoiceFields::TYPE_ID).toInt(), invData.type() + 1);
     QCOMPARE(query.value(InvoiceFields::COUNTERPARTY_ID).toLongLong(), invData.counterpartyID());
     QCOMPARE(query.value(InvoiceFields::ISSUANCE_DATE).toDate(), invData.issuanceDate());
     QCOMPARE(query.value(InvoiceFields::PAYMENT_DATE).toDate(), invData.paymentDate());
-    QCOMPARE(query.value(InvoiceFields::PAYMENT_ID).toLongLong(), invData.paymentID());
-    QCOMPARE(query.value(InvoiceFields::CURRENCY_ID).toLongLong(), invData.currencyID());
+    QCOMPARE(query.value(InvoiceFields::PAYMENT_ID).toInt(), invData.paymentType() + 1);
+    QCOMPARE(query.value(InvoiceFields::CURRENCY_ID).toInt(), invData.currency() + 1);
     QCOMPARE(query.value(InvoiceFields::ADDIT_TEXT).toString(), invData.additText());
     QCOMPARE(query.value(InvoiceFields::DISCOUNT).toDouble(), invData.discount().toDouble());
 }

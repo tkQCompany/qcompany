@@ -114,7 +114,7 @@ void CounterpartyDialog::init_()
 
     SettingsGlobal s;
     ui->lineEditTaxID->setInputMask(s.value(s.TAXID_MASK).toString());
-    ui->lineEditAccountName->setInputMask(s.value(s.ACCOUNT_MASK).toString());
+    ui->lineEditAccountName->setInputMask(s.value(s.ACCOUNT_NUM_MASK).toString());
 }
 
 

@@ -12,6 +12,10 @@
 #include <QVariant>
 
 #include "Money_t.h"
+#include "CounterpartyTypeData.h"
+#include "CurrencyData.h"
+#include "InvoiceTypeData.h"
+#include "PaymentTypeData.h"
 
 namespace InvoiceFields
 {
@@ -31,6 +35,11 @@ namespace InvoiceFields
 class InvoiceData
 {
 public:
+
+    InvoiceData(): id_(0LL), type_(InvoiceTypeData::VAT), counterpartyID_(0LL), paymentType_(PaymentTypeData::CASH), currency_(CurrencyData::AUD)
+    {
+    }
+
     void setId(const long long newId)
     {
         id_ = newId;
@@ -64,14 +73,14 @@ public:
     }
 
 
-    void setTypeID(const long long typeID)
+    void setType(const InvoiceTypeData::Type type)
     {
-        typeID_ = typeID;
+        type_ = type;
     }
 
-    long long typeID() const
+    InvoiceTypeData::Type type() const
     {
-        return typeID_;
+        return type_;
     }
 
 
@@ -108,25 +117,25 @@ public:
     }
 
 
-    void setPaymentID(const long long paymentID)
+    void setPaymentType(const PaymentTypeData::PaymentTypes paymentType)
     {
-        paymentID_ = paymentID;
+        paymentType_ = paymentType;
     }
 
-    long long paymentID() const
+    PaymentTypeData::PaymentTypes paymentType() const
     {
-        return paymentID_;
+        return paymentType_;
     }
 
 
-    void setCurrencyID(const long long currencyID)
+    void setCurrency(const CurrencyData::Currencies currency)
     {
-        currencyID_ = currencyID;
+        currency_ = currency;
     }
 
-    long long currencyID() const
+    CurrencyData::Currencies currency() const
     {
-        return currencyID_;
+        return currency_;
     }
 
 
@@ -178,12 +187,12 @@ private:
     long long id_; /**< TODO */
     QString invNumber_; /**< TODO */
     QDate sellingDate_; /**< TODO */
-    long long typeID_; /**< TODO */
+    InvoiceTypeData::Type type_; /**< TODO */
     long long counterpartyID_; /**< TODO */
     QDate issuanceDate_; /**< TODO */
     QDate paymentDate_; /**< TODO */
-    long long paymentID_; /**< TODO */
-    long long currencyID_; /**< TODO */
+    PaymentTypeData::PaymentTypes paymentType_; /**< TODO */
+    CurrencyData::Currencies currency_; /**< TODO */
     QString additText_; /**< TODO */
     DecVal discount_; /**< TODO */
 };

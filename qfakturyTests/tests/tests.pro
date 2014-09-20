@@ -28,4 +28,5 @@ SUBDIRS += BillDialog \
     SettingsDialog \
     ModelInvoice \
     InvoiceNumberFormat_t \
-    Money_t
+    Money_t \
+    InvoiceComposer
