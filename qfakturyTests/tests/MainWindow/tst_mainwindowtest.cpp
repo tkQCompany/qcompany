@@ -129,10 +129,11 @@ void MainWindowTest::testCaseEditInvoice()
         QTest::qWait(200);
     }
 
+    const int precision = 2;
     QCOMPARE(userEditInvoice.commodities().size(), lcd.size());
-    QCOMPARE(userEditInvoice.totalNetVal().toString(2), totalNetVal.toString(2));
-    QCOMPARE(userEditInvoice.totalDiscountVal().toString(2), totalDiscountVal.toString(2));
-    QCOMPARE(userEditInvoice.totalGrossVal().toString(2), totalGrossVal.toString(2));
+    QCOMPARE(userEditInvoice.totalNetVal().toString(precision), totalNetVal.toString(precision));
+    QCOMPARE(userEditInvoice.totalDiscountVal().toString(precision), totalDiscountVal.toString(precision));
+    QCOMPARE(userEditInvoice.totalGrossVal().toString(precision), totalGrossVal.toString(precision));
 
     InvoiceData invoiceWithID(userEditInvoice.invoiceData());
     invoiceWithID.setId(invoice.id()); //supplying missing field
@@ -457,9 +458,13 @@ void MainWindowTest::checkCounterparty(Database *db, const Counterparty_t &count
 void MainWindowTest::checkInvoice(Database *db, const InvoiceData &invData)
 {
     QSqlQuery query(db->modelInvoice()->query());
-    query.exec(QString("SELECT id_invoice, inv_number, selling_date, type_id, counterparty_id, "
-                       "issuance_date, payment_date, payment_id, currency_id, additional_text, discount "
-                       "FROM invoice WHERE id_invoice = %1").arg(invData.id()));
+    query.exec(QString("SELECT id_invoice, inv_number, selling_date, invoice_type.invoice_type, counterparty_id, "
+                       "issuance_date, payment_date, payment_type.type AS payment_type, currency.code AS currency, additional_text, discount "
+                       "FROM invoice "
+                            "JOIN invoice_type ON invoice.type_id = invoice_type.id_invoice_type "
+                            "JOIN  payment_type ON invoice.payment_id = payment_type.id_payment_type "
+                            "JOIN currency ON invoice.currency_id = currency.id_currency "
+                       "WHERE invoice.id_invoice = %1").arg(invData.id()));
     if(!query.isActive())
     {
         const QString errMsg(QString("InvoiceDialogTest::checkInvoice(): SQL query failed. Reason: %1\nQuery: %2")
@@ -471,12 +476,12 @@ void MainWindowTest::checkInvoice(Database *db, const InvoiceData &invData)
     QCOMPARE(query.value(InvoiceFields::ID_INVOICE).toLongLong(), invData.id());
     QCOMPARE(query.value(InvoiceFields::INV_NUMBER).toString(), invData.invNumber());
     QCOMPARE(query.value(InvoiceFields::SELLING_DATE).toDate(), invData.sellingDate());
-    QCOMPARE(query.value(InvoiceFields::TYPE_ID).toInt(), invData.type() + 1);
+    QCOMPARE(query.value(InvoiceFields::TYPE_ID).toString(), InvoiceTypeData::name(invData.type()));
     QCOMPARE(query.value(InvoiceFields::COUNTERPARTY_ID).toLongLong(), invData.counterpartyID());
     QCOMPARE(query.value(InvoiceFields::ISSUANCE_DATE).toDate(), invData.issuanceDate());
     QCOMPARE(query.value(InvoiceFields::PAYMENT_DATE).toDate(), invData.paymentDate());
-    QCOMPARE(query.value(InvoiceFields::PAYMENT_ID).toInt(), invData.paymentType() + 1);
-    QCOMPARE(query.value(InvoiceFields::CURRENCY_ID).toInt(), invData.currency() + 1);
+    QCOMPARE(query.value(InvoiceFields::PAYMENT_ID).toString(), PaymentTypeData::name(invData.paymentType()));
+    QCOMPARE(query.value(InvoiceFields::CURRENCY_ID).toString(), CurrencyData::codeName(invData.currency()));
     QCOMPARE(query.value(InvoiceFields::ADDIT_TEXT).toString(), invData.additText());
     QCOMPARE(query.value(InvoiceFields::DISCOUNT).toDouble(), invData.discount().toDouble());
 }

@@ -1,7 +1,7 @@
 QT += sql xml network widgets printsupport
 
 # The application version
-VERSION = 0.8.10
+VERSION = 0.8.11
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 

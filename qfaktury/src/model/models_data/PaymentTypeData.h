@@ -41,6 +41,16 @@ struct PaymentTypeData
             return QString();
         }
     }
+
+    static PaymentTypes stringToPaymentType(const QString &strType)
+    {
+        int ret = CASH;
+        do
+        {
+        } while( (strType != PaymentTypeData::name((PaymentTypes)ret)) && (++ret < TRANSFER));
+
+        return (PaymentTypes)ret;
+    }
 };
 
 #endif // PAYMENTTYPEDATA_H

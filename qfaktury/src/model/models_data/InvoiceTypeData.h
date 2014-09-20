@@ -72,7 +72,7 @@ public:
         }
     }
 
-    static Type StringToInvoiceType(const QString& str)
+    static Type stringToInvoiceType(const QString& str)
     {
         Type ret = VAT;
         for(int i = VAT; i <= BILL; ++i)

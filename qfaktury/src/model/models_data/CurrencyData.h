@@ -118,6 +118,16 @@ static QString name(const Currencies currency_code)
     return QString();
 }
 
+static CurrencyData::Currencies stringToCurrencyCode(const QString &strCurrencyCode)
+{
+    int ret = AUD;
+    do
+    {
+    } while( (strCurrencyCode != CurrencyData::codeName((Currencies)ret)) && (++ret < IDR));
+
+    return (Currencies)ret;
+}
+
 };
 
 Q_DECLARE_METATYPE(CurrencyData::Currencies)

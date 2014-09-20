@@ -117,19 +117,20 @@ InvoiceData InvoiceDialogImpl::getInvoiceData() const
     ret.setCounterpartyID((CounterpartyTypeData::CounterpartyType)db->modelCounterparty()->
                  data(db->modelCounterparty()->index(ui->comboBoxCounterparties->currentIndex(),
                             CounterpartyFields::ID)).toLongLong());
-    ret.setCurrency((CurrencyData::Currencies)db->modelCurrency()->data(db->modelCurrency()->index(ui->comboBoxCurrency->currentIndex(), CurrencyFields::ID_CURRENCY)).toLongLong());
+    ret.setCurrency(CurrencyData::stringToCurrencyCode(db->modelCurrency()->data(
+                                                           db->modelCurrency()->
+                                                           index(ui->comboBoxCurrency->currentIndex(), CurrencyFields::CODE)).toString()));
     ret.setDiscount(DecVal(ui->spinBoxDiscount->value()));
     ret.setInvNumber(ui->lineEditInvNumber->text());
     ret.setIssuanceDate(ui->dateEditDateOfIssuance->date());
     ret.setPaymentDate(ui->dateEditDayOfPayment->date());
-    ret.setPaymentType((PaymentTypeData::PaymentTypes)db->modelPaymentType()->data(db->modelPaymentType()->
+    ret.setPaymentType(PaymentTypeData::stringToPaymentType(db->modelPaymentType()->data(db->modelPaymentType()->
                                                   index(ui->comboBoxPayment->currentIndex(),
-                                                        PaymentTypeFields::ID_PAYMENT_TYPE)).toLongLong());
+                                                        PaymentTypeFields::TYPE)).toString()));
     ret.setSellingDate(ui->dateEditDateOfSell->date());
-    ret.setType((InvoiceTypeData::Type)db->modelInvoiceType()->data(db->modelInvoiceType()->
+    ret.setType(InvoiceTypeData::stringToInvoiceType(db->modelInvoiceType()->data(db->modelInvoiceType()->
                                                index(ui->comboBoxInvoiceType->currentIndex(),
-                                                     InvoiceTypeFields::ID_INVOICE_TYPE)).toLongLong());
-
+                                                     InvoiceTypeFields::INVOICE_TYPE)).toString()));
     return ret;
 }
 

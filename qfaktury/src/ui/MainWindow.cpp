@@ -773,7 +773,7 @@ void MainWindow::newCorrection_()
     const QString invTypeStr(db_.modelInvoice()->data(db_.modelInvoice()->
                              index(list.at(0).row(), InvoiceFields::TYPE_ID)).
                              toString());
-    const int invType = InvoiceTypeData::StringToInvoiceType(invTypeStr);
+    const int invType = InvoiceTypeData::stringToInvoiceType(invTypeStr);
     switch(invType)
     {
     case InvoiceTypeData::VAT:
@@ -815,7 +815,7 @@ void MainWindow::newDuplicate_()
     const QString invTypeStr(db_.modelInvoice()->data(db_.modelInvoice()->
                              index(list.at(0).row(), InvoiceFields::TYPE_ID)).
                              toString());
-    const int invType = InvoiceTypeData::StringToInvoiceType(invTypeStr);
+    const int invType = InvoiceTypeData::stringToInvoiceType(invTypeStr);
     switch(invType)
     {
     case InvoiceTypeData::VAT:
