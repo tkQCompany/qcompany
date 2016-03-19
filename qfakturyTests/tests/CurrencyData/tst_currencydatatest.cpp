@@ -59,6 +59,6 @@ void CurrencyDataTest::testCaseCheckDBFields_data()
     QTest::newRow("localized_name")     << QString("localized_name")    << (int)CurrencyFields::LOCALIZED_NAME;
 }
 
-QTEST_APPLESS_MAIN(CurrencyDataTest)
+QTEST_MAIN(CurrencyDataTest)
 
 #include "tst_currencydatatest.moc"

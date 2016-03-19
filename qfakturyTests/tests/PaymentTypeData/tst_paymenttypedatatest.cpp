@@ -83,6 +83,6 @@ void PaymentTypeDataTest::testCaseCheckTypesNames_data()
     QTest::newRow("666") << 666 << QString();
 }
 
-QTEST_APPLESS_MAIN(PaymentTypeDataTest)
+QTEST_MAIN(PaymentTypeDataTest)
 
 #include "tst_paymenttypedatatest.moc"

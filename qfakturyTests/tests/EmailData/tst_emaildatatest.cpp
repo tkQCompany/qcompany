@@ -57,6 +57,6 @@ void EmailDataTest::testCaseCheckDBFields_data()
     QTest::newRow("email")              << QString("email")             << (int)EmailFields::EMAIL;
 }
 
-QTEST_APPLESS_MAIN(EmailDataTest)
+QTEST_MAIN(EmailDataTest)
 
 #include "tst_emaildatatest.moc"

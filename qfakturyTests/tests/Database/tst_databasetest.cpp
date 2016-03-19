@@ -314,6 +314,6 @@ void DatabaseTest::testCaseCheckInvoiceWithCommoditiesDeleteTransact_data()
 
 }
 
-QTEST_APPLESS_MAIN(DatabaseTest)
+QTEST_MAIN(DatabaseTest)
 
 #include "tst_databasetest.moc"

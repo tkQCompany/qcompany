@@ -59,6 +59,6 @@ void PhoneDataTest::testCaseCheckDBFields_data()
     QTest::newRow("number")             << QString("number")          << QString("number")      << (int)PhoneFields::NUMBER;
 }
 
-QTEST_APPLESS_MAIN(PhoneDataTest)
+QTEST_MAIN(PhoneDataTest)
 
 #include "tst_phonedatatest.moc"

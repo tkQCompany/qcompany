@@ -56,6 +56,6 @@ void CounterpartyTypeDataTest::testCaseCheckDBFields_data()
     QTest::newRow("type") << QString("type") << (int)CounterpartyTypeFields::TYPE;
 }
 
-QTEST_APPLESS_MAIN(CounterpartyTypeDataTest)
+QTEST_MAIN(CounterpartyTypeDataTest)
 
 #include "tst_counterpartytypedatatest.moc"

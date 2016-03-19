@@ -165,6 +165,6 @@ void CommodityDataTest::testCaseCheckFields()
 
 
 
-QTEST_APPLESS_MAIN(CommodityDataTest)
+QTEST_MAIN(CommodityDataTest)
 
 #include "tst_commoditydatatest.moc"

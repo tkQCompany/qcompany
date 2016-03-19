@@ -63,6 +63,6 @@ void InvoiceDataTest::testCaseCaseCheckDBFields_data()
     QTest::newRow("discount")           << QString("discount")       << QString("discount")          << (int)InvoiceFields::DISCOUNT;
 }
 
-QTEST_APPLESS_MAIN(InvoiceDataTest)
+QTEST_MAIN(InvoiceDataTest)
 
 #include "tst_invoicedatatest.moc"

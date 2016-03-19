@@ -69,6 +69,6 @@ void CounterpartyDataTest::testCaseCheckDBFields_data()
     QTest::newRow("primary_phone")      << QString("primary_phone")    << QString("primary_phone")    << (int)CounterpartyFields::PRIMARY_PHONE;
 }
 
-QTEST_APPLESS_MAIN(CounterpartyDataTest)
+QTEST_MAIN(CounterpartyDataTest)
 
 #include "tst_counterpartydatatest.moc"
