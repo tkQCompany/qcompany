@@ -3,6 +3,8 @@
 
 #include <QString>
 
+#include "mustache.h"
+
 #include "InvoiceData.h"
 #include "CommodityVisualData.h"
 #include "CounterpartyData.h"
@@ -23,7 +25,7 @@ public:
     void setGrossVal(const Money_t &grossVal);
 
 private:
-    QString composeProductsIntoHtml() const;
+    QVariantList composeProducts() const;
     QString composeSellerIntoHtml() const;
     QString composeSummaryIntoHtml() const;
     static QString readTextFileContent(const QString &filename);
@@ -38,7 +40,7 @@ private:
     bool isInvoiceDataLoaded_;
     QList<CommodityVisualData> products_;
     CounterpartyData seller_;
-    CounterpartyData customer_;
+    CounterpartyData buyer_;
     Money_t netVal_;
     DecVal quantity_;
     Money_t grossVal_;

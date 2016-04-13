@@ -6,7 +6,9 @@
 #include "InvoiceTypeData.h"
 #include "SettingsGlobal.h"
 
-InvoiceComposer::InvoiceComposer(): filenameHtmlTemplate_(":/res/templates/template.html"), filenameCssStyle_("style.css"), isInvoiceDataLoaded_(false)
+InvoiceComposer::InvoiceComposer(): filenameHtmlTemplate_(":/res/templates/template.html"),
+    filenameCssStyle_(":/res/templates/style.css"),
+    isInvoiceDataLoaded_(false)
 {
     invoiceHtmlTemplate_ = InvoiceComposer::readTextFileContent(filenameHtmlTemplate_);
     styleCssContent_ = InvoiceComposer::readTextFileContent(filenameCssStyle_);
@@ -28,88 +30,136 @@ QString InvoiceComposer::getInvoiceHtml() const
         return QString("");
     }
 
-    const int precisionMoney = 2;
     SettingsGlobal s;
 
     const QString logo(s.value(s.LOGO).toString());
     const QString stampStr(logo.isEmpty() ? QObject::trUtf8("Pieczęć wystawcy") : QString("<img src=\"%1\">").arg(logo));
 
-    return invoiceHtmlTemplate_.arg(s.value(s.LANG).toString())
-            .arg(InvoiceTypeData::name(invoiceData_.type()))
-            .arg(styleCssContent_)
-            .arg(stampStr)
-            .arg(InvoiceTypeData::name(invoiceData_.type()))
-            .arg(QObject::trUtf8("Nr: %1").arg(invoiceData_.invNumber()))
-            .arg(QObject::trUtf8("Data wystawienia: %1").arg(invoiceData_.issuanceDate().toString(s.dateFormatExternal())))
-            .arg(QObject::trUtf8("Data sprzedaży: %1").arg(invoiceData_.sellingDate().toString(s.dateFormatExternal())))
-            .arg(QObject::trUtf8("ORYGINAŁ"))
-            .arg(QString("<h1>Sprzedawca:</h1><ul>%1</ul>").arg(composeSellerIntoHtml()))
-            .arg(QObject::trUtf8("<h1>Nabywca:</h1><ul><li>%1</li></ul>").arg(customer_.name()))
-            .arg(composeProductsIntoHtml())
-            .arg(QObject::trUtf8("Wartość Netto"))
-            .arg(QObject::trUtf8("Kwota VAT"))
-            .arg(QObject::trUtf8("Wartość Brutto"))
-            .arg(QObject::trUtf8("Razem:"))
-            .arg(netVal_.toString(precisionMoney))
-            .arg((grossVal_ - netVal_).toString(precisionMoney))
-            .arg(grossVal_.toString(precisionMoney))
-            .arg(composeSummaryIntoHtml());
+    Mustache::Renderer renderer;
+    QVariantHash map;
+
+    map["lang"] = s.value(s.LANG).toString();
+    map["invoice_type"] = InvoiceTypeData::name(invoiceData_.type());
+    map["css_style"] = styleCssContent_;
+    map["logo"] = stampStr;
+
+    map["invoice_header"] = true;
+    map["invoice_number_flag"] = true;
+    map["invoice_number"] = QObject::trUtf8("Nr: %1").arg(invoiceData_.invNumber());
+    map["invoice_issuance_date_flag"] = true;
+    map["invoice_issuance_date"] = QObject::trUtf8("Data wystawienia: %1").arg(invoiceData_.issuanceDate().toString(s.dateFormatExternal()));
+    map["invoice_selling_date_flag"] = true;
+    map["invoice_selling_date"] = QObject::trUtf8("Data sprzedaży: %1").arg(invoiceData_.sellingDate().toString(s.dateFormatExternal()));
+    map["invoice_original_copy_flag"] = true;
+    map["invoice_original_copy"] = QObject::trUtf8("ORYGINAŁ");
+
+    map["seller"] = true;
+    map["seller_name_flag"] = s.value(s.DISPLAY_SELLER_NAME).toBool();
+    map["seller_name"] = seller_.name();
+    map["seller_street_flag"] = s.value(s.DISPLAY_SELLER_ADDRESS).toBool();
+    map["seller_street"] = seller_.street();
+    map["seller_location_flag"] = s.value(s.DISPLAY_SELLER_LOCATION).toBool();
+    map["seller_location"] = seller_.location();
+    map["seller_taxid_flag"] = s.value(s.DISPLAY_SELLER_TAXID).toBool();
+    map["seller_taxid"] = seller_.tax_ident();
+    map["seller_account_flag"] = s.value(s.DISPLAY_SELLER_ACCOUNT).toBool();
+    map["seller_account"] = seller_.account_name();
+
+    map["buyer"] = true;
+    map["buyer_name_flag"] = s.value(s.DISPLAY_BUYER_NAME).toBool();
+    map["buyer_name"] = buyer_.name();
+    map["buyer_street_flag"] = s.value(s.DISPLAY_BUYER_ADDRESS).toBool();
+    map["buyer_street"] = buyer_.street();
+    map["buyer_location_flag"] = s.value(s.DISPLAY_BUYER_LOCATION).toBool();
+    map["buyer_location"] = buyer_.location();
+    map["buyer_taxid_flag"] = s.value(s.DISPLAY_BUYER_TAXID).toBool();
+    map["buyer_taxid"] = buyer_.tax_ident();
+    map["buyer_account_flag"] = s.value(s.DISPLAY_BUYER_ACCOUNT).toBool();
+    map["buyer_account"] = buyer_.account_name();
+
+    const QVariantList products = composeProducts();
+    map["products"] = products;
+
+    Mustache::QtVariantContext invoiceContext(map);
+    return renderer.render(invoiceHtmlTemplate_, &invoiceContext);
+
+
+//    return invoiceHtmlTemplate_.arg(s.value(s.LANG).toString())
+//            .arg(InvoiceTypeData::name(invoiceData_.type()))
+//            .arg(styleCssContent_)
+//            .arg(stampStr)
+//            .arg(InvoiceTypeData::name(invoiceData_.type()))
+//            .arg(QObject::trUtf8("Nr: %1").arg(invoiceData_.invNumber()))
+//            .arg(QObject::trUtf8("Data wystawienia: %1").arg(invoiceData_.issuanceDate().toString(s.dateFormatExternal())))
+//            .arg(QObject::trUtf8("Data sprzedaży: %1").arg(invoiceData_.sellingDate().toString(s.dateFormatExternal())))
+//            .arg(QObject::trUtf8("ORYGINAŁ"))
+//            .arg(QString("<h1>Sprzedawca:</h1><ul>%1</ul>").arg(composeSellerIntoHtml()))
+//            .arg(QObject::trUtf8("<h1>Nabywca:</h1><ul><li>%1</li></ul>").arg(buyer_.name()))
+//            .arg(composeProducts())
+//            .arg(QObject::trUtf8("Wartość Netto"))
+//            .arg(QObject::trUtf8("Kwota VAT"))
+//            .arg(QObject::trUtf8("Wartość Brutto"))
+//            .arg(QObject::trUtf8("Razem:"))
+//            .arg(netVal_.toString(precisionMoney))
+//            .arg((grossVal_ - netVal_).toString(precisionMoney))
+//            .arg(grossVal_.toString(precisionMoney))
+//            .arg(composeSummaryIntoHtml());
 }
 
 
-QString InvoiceComposer::composeProductsIntoHtml() const
+QVariantList InvoiceComposer::composeProducts() const
 {
-    QString productsHTML;
+    QVariantList products;
     SettingsGlobal s;
 
     foreach(CommodityVisualData cvd, products_)
     {
-        productsHTML += "<tr>";
+        QVariantHash product;
         if(s.contains(s.keyName(s.ORDER_NUMBER)))
         {
-            productsHTML += QString("<td>%1</td>").arg(cvd.ID());
+            product["prod_id"] = cvd.ID();
         }
 
         if(s.contains(s.keyName(s.NAME)))
         {
-            productsHTML += QString("<td>%1</td>").arg(cvd.name());
+            product["prod_name"] = cvd.name();
         }
 
         if(s.contains(s.keyName(s.PKWIU)))
         {
-            productsHTML += QString("<td>%1</td>").arg(cvd.pkwiu());
+            product["prod_pkwiu"] = cvd.pkwiu();
         }
 
         if(s.contains(s.keyName(s.QUANTITY)))
         {
-            productsHTML += QString("<td>%1</td>").arg(cvd.quantity().toString());
+            product["prod_quantity"] = cvd.quantity().toString();
         }
 
         if(s.contains(s.keyName(s.INTERNAT_UNIT)))
         {
-            productsHTML += QString("<td>%1</td>").arg(cvd.unit());
+            product["prod_unit"] = cvd.unit();
         }
 
         if(s.contains(s.keyName(s.NET_VAL)))
         {
             const int precision = 2;
-            productsHTML += QString("<td>%1</td>").arg(cvd.net().toString(precision));
+            product["prod_net_value"] = cvd.net().toString(precision);
         }
 
         if(s.contains(s.keyName(s.DISCOUNT)))
         {
-            productsHTML += QString("<td>%1</td>").arg(cvd.discount().toString());
+            product["prod_discount"] = cvd.discount().toString();
         }
 
         if(s.contains(s.keyName(s.VAT_VAL)))
         {
-            productsHTML += QString("<td>%1</td>").arg(cvd.vat().toString());
+            product["prod_vat_value"] = cvd.vat().toString();
         }
 
-        productsHTML += "</tr>";
+        products << product;
     }
 
-    return productsHTML;
+    return products;
 }
 
 
@@ -256,7 +306,7 @@ void InvoiceComposer::setNetVal(const Money_t &netVal)
 
 void InvoiceComposer::setCustomer(const CounterpartyData &customer)
 {
-    customer_ = customer;
+    buyer_ = customer;
 }
 
 

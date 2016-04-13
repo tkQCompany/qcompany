@@ -65,6 +65,14 @@ const QString SettingsGlobal::keyName(const SettingsGlobal::KEYS key)
     case DISPLAY_SELLER_PHONE: return QString("%1/display_seller_phone").arg(categoryName(PRINT_FIELDS));
     case DISPLAY_SELLER_MAIL: return QString("%1/display_seller_email").arg(categoryName(PRINT_FIELDS));
     case DISPLAY_SELLER_WWW: return QString("%1/display_seller_www").arg(categoryName(PRINT_FIELDS));
+    case DISPLAY_BUYER_NAME: return QString("%1/display_buyer_name").arg(categoryName(PRINT_FIELDS));
+    case DISPLAY_BUYER_LOCATION: return QString("%1/display_buyer_location").arg(categoryName(PRINT_FIELDS));
+    case DISPLAY_BUYER_ADDRESS: return QString("%1/display_buyer_address").arg(categoryName(PRINT_FIELDS));
+    case DISPLAY_BUYER_ACCOUNT: return QString("%1/display_buyer_account").arg(categoryName(PRINT_FIELDS));
+    case DISPLAY_BUYER_TAXID: return QString("%1/display_buyer_taxid").arg(categoryName(PRINT_FIELDS));
+    case DISPLAY_BUYER_PHONE: return QString("%1/display_buyer_phone").arg(categoryName(PRINT_FIELDS));
+    case DISPLAY_BUYER_MAIL: return QString("%1/display_buyer_email").arg(categoryName(PRINT_FIELDS));
+    case DISPLAY_BUYER_WWW: return QString("%1/display_buyer_www").arg(categoryName(PRINT_FIELDS));
     case CSS: return QString("css");
     case DEFAULT_INV_NUM_FORMAT: return QString("default_inv_num_format");
     case DEFAULT_CURRENCY: return QString("default_currency");
@@ -147,4 +155,13 @@ void SettingsGlobal::resetSettings()
     setValue(keyName(DISPLAY_SELLER_PHONE), true);
     setValue(keyName(DISPLAY_SELLER_MAIL), true);
     setValue(keyName(DISPLAY_SELLER_WWW), true);
+
+    setValue(keyName(DISPLAY_BUYER_NAME), true);
+    setValue(keyName(DISPLAY_BUYER_LOCATION), true);
+    setValue(keyName(DISPLAY_BUYER_ADDRESS), true);
+    setValue(keyName(DISPLAY_BUYER_ACCOUNT), true);
+    setValue(keyName(DISPLAY_BUYER_TAXID), true);
+    setValue(keyName(DISPLAY_BUYER_PHONE), true);
+    setValue(keyName(DISPLAY_BUYER_MAIL), true);
+    setValue(keyName(DISPLAY_BUYER_WWW), true);
 }

@@ -56,7 +56,8 @@ HEADERS += src/ui/BillDialog.h \
     src/model/models_data/InvoiceWithCommodities.h \
     src/CommodityDelegate.h \
     src/DecVal.h \
-    src/InvoiceComposer.h
+    src/InvoiceComposer.h \
+    $$PWD/src/mustache.h
 
 
 
@@ -106,4 +107,5 @@ SOURCES += src/main.cpp \
     src/CommodityDelegate.cpp \
     src/DecVal.cpp \
     src/InvoiceComposer.cpp \
-    src/model/models_data/CounterpartyData.cpp
+    src/model/models_data/CounterpartyData.cpp \
+    $$PWD/src/mustache.cpp

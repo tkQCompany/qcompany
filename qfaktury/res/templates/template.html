@@ -1,8 +1,57 @@
-<html>
+<!DOCTYPE html>
+<html xml:lang={{lang}} lang={{lang}}>
   <head>
-    
-  </head>
-  
+    <meta charset="UTF-8">
+    <title>{{invoice_type}}</title>
+    <style>{{css_style}}</style>
+  </head>  
   <body>
+
+  <div id="logo">{{logo}}</div>
+
+  <div id="invoice_header">
+    {{#invoice_header}}
+    <ul>
+        {{#invoice_number_flag}}<li>{{invoice_number}}</li>{{/invoice_number_flag}}
+        {{#invoice_issuance_date_flag}}<li>{{invoice_issuance_date}}</li>{{/invoice_issuance_date_flag}}
+        {{#invoice_selling_date_flag}}<li>{{invoice_selling_date}}</li>{{/invoice_selling_date_flag}}
+        {{#invoice_original_copy_flag}}<li>{{invoice_original_copy}}</li>{{/invoice_original_copy_flag}}
+    </ul>
+    {{/invoice_header}}
+  </div>
+
+  <div id="seller">
+    {{#seller}}
+    <ul>
+        {{#seller_name_flag}}<li>{{seller_name}}</li>{{/seller_name_flag}}
+        {{#seller_street_flag}}<li>{{seller_street}}</li>{{/seller_street_flag}}
+        {{#seller_location_flag}}<li>{{seller_location}}</li>{{/seller_location_flag}}
+        {{#seller_taxid_flag}}<li>{{seller_taxid}}</li>{{/seller_taxid_flag}}
+        {{#seller_account_flag}}<li>{{seller_account}}</li>{{/seller_account_flag}}
+    </ul>
+    {{/seller}}
+  </div>
+
+  <div id="buyer">
+    {{#buyer}}
+    <ul>
+        {{#buyer_name_flag}}<li>{{buyer_name}}</li>{{/buyer_name_flag}}
+        {{#buyer_street_flag}}<li>{{buyer_street}}</li>{{/buyer_street_flag}}
+        {{#buyer_location_flag}}<li>{{buyer_location}}</li>{{/buyer_location_flag}}
+        {{#buyer_taxid_flag}}<li>{{buyer_taxid}}</li>{{/buyer_taxid_flag}}
+        {{#buyer_account_flag}}<li>{{buyer_account}}</li>{{/buyer_account_flag}}
+    </ul>
+    {{/buyer}}
+  </div>
+
+    <div id="products">
+    <table>
+    <tr><th>#</th><th>Name</th><th>PKWiU</th><th>Quantity</th><th>Unit</th><th>Net value</th><th>Discount</th><th>VAT value</th></tr>
+    {{#products}}
+       <tr><td>{{prod_id}}</td><td>{{prod_name}}</td><td>{{prod_pkwiu}}</td><td>{{prod_quantity}}</td><td>{{prod_unit}}</td><td>{{prod_net_value}}</td><td>{{prod_discount}}</td><td>{{prod_vat_value}}</td></tr>
+    {{/products}}
+    </table>
+    </div>
+
   </body>
 </html>
