@@ -15,14 +15,10 @@ class InvoiceComposer
 public:
     InvoiceComposer();
 
-    void setInvoiceData(const InvoiceData &invData);
+    void setData(const InvoiceData &invData, const Money_t &netVal, const Money_t &grossVal, const DecVal &quantity,
+                        const CounterpartyData &buyer, const CounterpartyData &seller,
+                        const QList<CommodityVisualData> &products);
     QString getInvoiceHtml() const;
-    void setProducts(const QList<CommodityVisualData> &products);
-    void setSeller(const CounterpartyData &seller);
-    void setCustomer(const CounterpartyData &customer);
-    void setNetVal(const Money_t &netVal);
-    void setQuantity(const DecVal &quantity);
-    void setGrossVal(const Money_t &grossVal);
 
 private:
     QVariantList composeProducts() const;

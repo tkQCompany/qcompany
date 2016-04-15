@@ -737,20 +737,14 @@ void InvoiceDialogImpl::printInvoice()
 
     SettingsGlobal s;
 
-    InvoiceComposer ic;
-    ic.setInvoiceData(getInvoiceData());
-
     CounterpartyData customer;
-    customer.setAccount_name(ui->comboBoxCounterparties->currentText());
-    ic.setCustomer(customer);
-
-    ic.setGrossVal(Money_t(ui->labelSumGrossVal->text()));
-    ic.setNetVal(Money_t(ui->labelSumNetVal->text()));
-    ic.setProducts(getCommoditiesVisualData());
-    ic.setQuantity(DecVal(0));
+    customer.setAccountName(ui->comboBoxCounterparties->currentText());
 
     CounterpartyData seller;
-    ic.setSeller(seller);
+
+    InvoiceComposer ic;
+    ic.setData(getInvoiceData(), Money_t(ui->labelSumNetVal->text()), Money_t(ui->labelSumGrossVal->text()),
+                      DecVal(0), customer, seller, getCommoditiesVisualData());
 
 //    QTextStream stream;
 //    QString invoiceHTMLTemplate, styleCSS;

@@ -77,7 +77,7 @@ QString CounterpartyData::account_name() const
     return accountName_;
 }
 
-void CounterpartyData::setAccount_name(const QString &account_name)
+void CounterpartyData::setAccountName(const QString &account_name)
 {
     accountName_ = account_name;
 }

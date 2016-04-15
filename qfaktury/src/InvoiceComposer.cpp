@@ -16,10 +16,19 @@ InvoiceComposer::InvoiceComposer(): filenameHtmlTemplate_(":/res/templates/templ
 }
 
 
-void InvoiceComposer::setInvoiceData(const InvoiceData &invData)
+void InvoiceComposer::setData(const InvoiceData &invData, const Money_t &netVal,
+                                     const Money_t &grossVal, const DecVal &quantity,
+                                     const CounterpartyData &buyer, const CounterpartyData &seller,
+                                     const QList<CommodityVisualData> &products)
 {
     invoiceData_ = invData;
     isInvoiceDataLoaded_ = true;
+    netVal_ = netVal;
+    grossVal_ = grossVal;
+    quantity_ = quantity;
+    buyer_ = buyer;
+    seller_ = seller;
+    products_ = products;
 }
 
 
@@ -280,46 +289,3 @@ QString InvoiceComposer::readTextFileContent(const QString &filename)
 
     return ret;
 }
-
-
-
-void InvoiceComposer::setGrossVal(const Money_t &grossVal)
-{
-    grossVal_ = grossVal;
-}
-
-
-
-void InvoiceComposer::setQuantity(const DecVal &quantity)
-{
-    quantity_ = quantity;
-}
-
-
-
-void InvoiceComposer::setNetVal(const Money_t &netVal)
-{
-    netVal_ = netVal;
-}
-
-
-
-void InvoiceComposer::setCustomer(const CounterpartyData &customer)
-{
-    buyer_ = customer;
-}
-
-
-
-void InvoiceComposer::setSeller(const CounterpartyData &seller)
-{
-    seller_ = seller;
-}
-
-
-
-void InvoiceComposer::setProducts(const QList<CommodityVisualData> &products)
-{
-    products_ = products;
-}
-

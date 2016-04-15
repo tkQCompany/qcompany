@@ -75,7 +75,7 @@ public:
     void setTax_ident(const QString &tax_ident);
 
     QString account_name() const;
-    void setAccount_name(const QString &account_name);
+    void setAccountName(const QString &account_name);
 
     QString www() const;
     void setWww(const QString &www);
