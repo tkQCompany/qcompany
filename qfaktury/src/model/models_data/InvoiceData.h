@@ -196,6 +196,9 @@ private:
     QString additText_; /**< TODO */
     DecVal discount_; /**< TODO */
 };
+
+Q_DECLARE_METATYPE(InvoiceData)
+
 #endif
 
 

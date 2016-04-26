@@ -360,19 +360,19 @@ void InvoiceDialogTest::checkTableCommoditiesWidget(const QTableWidget *tableWid
         {
         case 0:
             QCOMPARE(item->text(), lcd.at(i).net1().toString(precision));
-            QCOMPARE(item->text(), QString("%1%2%3").arg(i).arg(s.decimalPointStr().at(0)).arg(11));
+            QCOMPARE(item->text(), QString("%1%2%3").arg(i).arg(s.decimalPoint()).arg(11));
             break;
         case 1:
             QCOMPARE(item->text(), lcd.at(i).net2().toString(precision));
-            QCOMPARE(item->text(), QString("%1%2%3").arg(i).arg(s.decimalPointStr().at(0)).arg(12));
+            QCOMPARE(item->text(), QString("%1%2%3").arg(i).arg(s.decimalPoint()).arg(12));
             break;
         case 2:
             QCOMPARE(item->text(), lcd.at(i).net3().toString(precision));
-            QCOMPARE(item->text(), QString("%1%2%3").arg(i).arg(s.decimalPointStr().at(0)).arg(13));
+            QCOMPARE(item->text(), QString("%1%2%3").arg(i).arg(s.decimalPoint()).arg(13));
             break;
         case 3:
             QCOMPARE(item->text(), lcd.at(i).net4().toString(precision));
-            QCOMPARE(item->text(), QString("%1%2%3").arg(i).arg(s.decimalPointStr().at(0)).arg(14));
+            QCOMPARE(item->text(), QString("%1%2%3").arg(i).arg(s.decimalPoint()).arg(14));
             break;
         default:
             QFAIL("Unexpected case value in the switch");
@@ -505,10 +505,10 @@ CommodityData InvoiceDialogTest::createNewCommodity(const int invoiceIndex, cons
     cd.setAbbrev(QString("abbrev_%1").arg(invoiceIndex));
     cd.setId(commodityIDNum++);
     cd.setName(QString("name_%1_%2").arg(invoiceIndex).arg(commodityIndex));
-    cd.setNet1(Money_t(QString("%1%2%3").arg(commodityIndex).arg(s.decimalPointStr()).arg(11)));
-    cd.setNet2(Money_t(QString("%1%2%3").arg(commodityIndex).arg(s.decimalPointStr()).arg(12)));
-    cd.setNet3(Money_t(QString("%1%2%3").arg(commodityIndex).arg(s.decimalPointStr()).arg(13)));
-    cd.setNet4(Money_t(QString("%1%2%3").arg(commodityIndex).arg(s.decimalPointStr()).arg(14)));
+    cd.setNet1(Money_t(QString("%1%2%3").arg(commodityIndex).arg(s.decimalPoint()).arg(11)));
+    cd.setNet2(Money_t(QString("%1%2%3").arg(commodityIndex).arg(s.decimalPoint()).arg(12)));
+    cd.setNet3(Money_t(QString("%1%2%3").arg(commodityIndex).arg(s.decimalPoint()).arg(13)));
+    cd.setNet4(Money_t(QString("%1%2%3").arg(commodityIndex).arg(s.decimalPoint()).arg(14)));
     cd.setPkwiu(QString("pkwiu_%1_%2").arg(invoiceIndex).arg(commodityIndex));
     cd.setQuantity(DecVal(1000.123 + 10 * invoiceIndex + commodityIndex));
 

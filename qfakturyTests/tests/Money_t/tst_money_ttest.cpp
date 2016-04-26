@@ -33,7 +33,7 @@ void Money_tTest::testCaseDefaultValues()
 {
     Money_t m;
     SettingsGlobal s;
-    QCOMPARE(m.toString(2), QString("%0%1%2").arg(0).arg(s.decimalPointStr()).arg("00"));
+    QCOMPARE(m.toString(2), QString("%0%1%2").arg(0).arg(s.decimalPoint()).arg("00"));
     QCOMPARE((int)m.currency(), (int)s.value(s.keyName(s.DEFAULT_CURRENCY)).value<int>());
 }
 
@@ -87,7 +87,7 @@ void Money_tTest::testCasePLN_data()
     const QChar fillChar(QChar('0'));
 
     SettingsGlobal s;
-    const QChar decimPoint(s.decimalPointStr().at(0));
+    const QChar decimPoint(s.decimalPoint());
     for(int i = 0; i < 100; ++i)
     {
         const QString textNumberFormatDot(QString("0%1%2").arg(decimPoint).arg(i, fieldWidth, radix, fillChar));

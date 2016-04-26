@@ -45,4 +45,6 @@ struct CounterpartyTypeData
     }
 };
 
+Q_DECLARE_METATYPE(CounterpartyTypeData::CounterpartyType)
+
 #endif // COUNTERPARTYTYPEDATA_H

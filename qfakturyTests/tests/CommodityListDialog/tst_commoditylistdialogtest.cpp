@@ -161,7 +161,7 @@ const CommodityData CommodityListDialogTest::generateCommodityData(const int com
 {
     CommodityData cd;
     SettingsGlobal s;
-    const QChar decPoint(s.decimalPointStr().at(0));
+    const QChar decPoint(s.decimalPoint());
 
     cd.setAbbrev(QString("%1").arg(commodityIndex));
     cd.setId(commodityIndex + 1);

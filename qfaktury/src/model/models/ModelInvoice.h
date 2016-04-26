@@ -45,7 +45,7 @@ public:
         QDate gotIssuanceDate;
         QString invNumStr;
     };
-    std::auto_ptr<DBData> getLastExistingNumberDateFromDB(const bool defaultInvNumFormat, const QString &counterpartyName) const;
+    std::unique_ptr<DBData> getLastExistingNumberDateFromDB(const bool defaultInvNumFormat, const QString &counterpartyName) const;
     void setDataRange(const QDate &from, const QDate &to);
     QStringList simulateConsecutiveInvoiceNumbers(const InvoiceNumberFormat_t &invoiceNumFormat, const QDate &firstIssuanceDate, const InvoiceTypeData::Type invoiceType, const int invNumCounts = 1) const;
 

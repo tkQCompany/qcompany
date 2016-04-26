@@ -38,7 +38,7 @@ public:
     static QString toRegexp(const QString& format);
     QString toString() const;
 
-    static std::auto_ptr<InvoiceNumberFormat_t> Parse(const QString &format);
+    static std::unique_ptr<InvoiceNumberFormat_t> Parse(const QString &format);
 
 private:
     static QString fieldToRegexpStr(const Field field, const SettingsGlobal &s);

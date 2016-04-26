@@ -187,12 +187,12 @@ void MainWindowTest::testCaseEditInvoice_data()
             cd.setAbbrev(QString("abbrev_%1").arg(id_commodity));
             cd.setId(id_commodity);
             cd.setName(QString("name_%1").arg(id_commodity));
-            cd.setNet1(Money_t(QString("%1%2%3").arg(id_commodity % 4).arg(s.decimalPointStr().at(0)).arg(11)));
-            cd.setNet2(Money_t(QString("%1%2%3").arg(id_commodity % 4).arg(s.decimalPointStr().at(0)).arg(12)));
-            cd.setNet3(Money_t(QString("%1%2%3").arg(id_commodity % 4).arg(s.decimalPointStr().at(0)).arg(13)));
-            cd.setNet4(Money_t(QString("%1%2%3").arg(id_commodity % 4).arg(s.decimalPointStr().at(0)).arg(14)));
+            cd.setNet1(Money_t(QString("%1%2%3").arg(id_commodity % 4).arg(s.decimalPoint()).arg(11)));
+            cd.setNet2(Money_t(QString("%1%2%3").arg(id_commodity % 4).arg(s.decimalPoint()).arg(12)));
+            cd.setNet3(Money_t(QString("%1%2%3").arg(id_commodity % 4).arg(s.decimalPoint()).arg(13)));
+            cd.setNet4(Money_t(QString("%1%2%3").arg(id_commodity % 4).arg(s.decimalPoint()).arg(14)));
             cd.setPkwiu(QString("pkwiu_%1_%2").arg(invNum).arg(commod));
-            cd.setQuantity(DecVal(QString("%1%2%3").arg(id_commodity).arg(s.decimalPointStr().at(0)).arg(356)));
+            cd.setQuantity(DecVal(QString("%1%2%3").arg(id_commodity).arg(s.decimalPoint()).arg(356)));
             cd.setVat(DecVal(vatRates.at(commod % vatRates.size())));
             const CommodityTypeData::CommodityType type = CommodityTypeData::GOODS;
             cd.setTypeId(type + 1);
@@ -207,8 +207,8 @@ void MainWindowTest::testCaseEditInvoice_data()
             const DecVal discountPerCommodity(invNum % 100);
             discountsPerCommodities.append(discountPerCommodity);
 
-            const Money_t netVal(QString("%1%2%3").arg(id_commodity % 4).arg(s.decimalPointStr().at(0)).arg(11 + id_commodity % 4));
-            const DecVal quantity(DecVal(QString("%1%2%3").arg(id_commodity).arg(s.decimalPointStr().at(0)).arg(356)));
+            const Money_t netVal(QString("%1%2%3").arg(id_commodity % 4).arg(s.decimalPoint()).arg(11 + id_commodity % 4));
+            const DecVal quantity(DecVal(QString("%1%2%3").arg(id_commodity).arg(s.decimalPoint()).arg(356)));
             const Money_t grossVal(netVal * (DecVal(1) + cd.vat() * onePercent));
             const Money_t discountVal(grossVal * discountPerCommodity * onePercent);
             totalNetVal += netVal * quantity;
@@ -486,8 +486,6 @@ void MainWindowTest::checkInvoice(Database *db, const InvoiceData &invData)
     QCOMPARE(query.value(InvoiceFields::DISCOUNT).toDouble(), invData.discount().toDouble());
 }
 
-
-Q_DECLARE_METATYPE(InvoiceData);
 
 QTEST_MAIN(MainWindowTest)
 

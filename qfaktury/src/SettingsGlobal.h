@@ -33,18 +33,16 @@ public:
     static const QString categoryName(const CATEGORY_OF_KEYS key);
     static const QString keyName(const KEYS key);
 
-    /** Reset all settings to default values
-     */
     /**
-     * @brief
+     * @brief Reset all settings to default values
      *
      */
     void resetSettings();
 
     /**
-     * @brief
+     * @brief Getter for the current date format used for dates presented to the user.
      *
-     * @return QString
+     * @return QString Current date format.
      */
     const QString dateFormatExternal() const
     {
@@ -53,9 +51,9 @@ public:
 
 
     /**
-     * @brief
+     * @brief Getter for the current date format used for dates NOT presented to the user.
      *
-     * @return QString
+     * @return QString Current date format.
      */
     const QString dateFormatInternal() const
     {
@@ -64,13 +62,13 @@ public:
 
 
     /**
-     * @brief
+     * @brief Returns decimal point.
      *
-     * @return QString
+     * @return QChar
      */
-    const QString decimalPointStr() const
+    const QChar decimalPoint() const
     {
-        return QString(locale_.decimalPoint());
+        return locale_.decimalPoint();
     }
 
 

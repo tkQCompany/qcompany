@@ -43,7 +43,7 @@ QString DecVal::removeTrailingZeros(const QString &numberStr)
     }
 
     SettingsGlobal s;
-    const QChar decimalPointChar(s.decimalPointStr().at(0));
+    const QChar decimalPointChar(s.decimalPoint());
     if(ret.endsWith(decimalPointChar))
     {
         ret = ret.remove(ret.size() - 1, 1);

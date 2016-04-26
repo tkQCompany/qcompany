@@ -167,10 +167,10 @@ void ModelInvoice::setDataRange(const QDate &from, const QDate &to)
 }
 
 
-std::auto_ptr<ModelInvoice::DBData> ModelInvoice::getLastExistingNumberDateFromDB(const bool defaultInvNumFormat,
+std::unique_ptr<ModelInvoice::DBData> ModelInvoice::getLastExistingNumberDateFromDB(const bool defaultInvNumFormat,
                                                                                     const QString &counterpartyName) const
 {
-    std::auto_ptr<ModelInvoice::DBData> ret(new ModelInvoice::DBData());
+    std::unique_ptr<ModelInvoice::DBData> ret(new ModelInvoice::DBData());
     if( (!defaultInvNumFormat) && (counterpartyName.isEmpty() || counterpartyName.isNull()))
     {
         qDebug("ModelInvoice::getLastExistingNumberDateFromDB_(): Counterparty's name is not supplied.");

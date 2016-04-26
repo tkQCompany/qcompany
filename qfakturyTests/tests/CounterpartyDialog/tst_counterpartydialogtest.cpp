@@ -196,8 +196,6 @@ void CounterpartyDialogTest::fail_(const int lineNum, const QSqlError &errSql, c
                      .arg(lastQuery)));
 }
 
-Q_DECLARE_METATYPE(CounterpartyTypeData::CounterpartyType)
-
 QTEST_MAIN(CounterpartyDialogTest)
 
 #include "tst_counterpartydialogtest.moc"

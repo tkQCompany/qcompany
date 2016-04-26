@@ -21,7 +21,7 @@ bool InvoiceNumberFormat_t::append(const Field field, const SettingsGlobal &s)
     }
 
     const QString regexpStr(fieldToRegexpStr(field, s));
-    list_.append(std::make_pair<pairFirstType_, pairSecondType_>(field, regexpStr));
+    list_.append(std::make_pair(field, regexpStr));
     regexp_.setPattern(regexp_.pattern() + regexpStr);
     return true;
 }
@@ -196,12 +196,12 @@ QString InvoiceNumberFormat_t::toString() const
 }
 
 
-std::auto_ptr<InvoiceNumberFormat_t> InvoiceNumberFormat_t::Parse(const QString &format)
+std::unique_ptr<InvoiceNumberFormat_t> InvoiceNumberFormat_t::Parse(const QString &format)
 {
     int from = 0, to = 0;
     const QChar left('{'), right('}');
     SettingsGlobal s;
-    std::auto_ptr<InvoiceNumberFormat_t> ret(new InvoiceNumberFormat_t);
+    std::unique_ptr<InvoiceNumberFormat_t> ret(new InvoiceNumberFormat_t);
 
     if(!format.isEmpty())
     {
