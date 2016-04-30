@@ -19,6 +19,8 @@ private Q_SLOTS:
     void testCaseCheckLanguage_data();
     void testCaseCheckInvoiceType();
     void testCaseCheckInvoiceType_data();
+    void testCaseCheckStyle();
+
 };
 
 
@@ -109,6 +111,33 @@ void InvoiceComposerTest::testCaseCheckInvoiceType_data()
     QTest::newRow("InvoiceTypeData::GROSS") << InvoiceTypeData::GROSS;
     QTest::newRow("InvoiceTypeData::PRO_FORMA") << InvoiceTypeData::PRO_FORMA;
     QTest::newRow("InvoiceTypeData::VAT") << InvoiceTypeData::VAT;
+}
+
+
+void InvoiceComposerTest::testCaseCheckStyle()
+{
+    //filling invoice
+    InvoiceComposer ic;
+    InvoiceData id;
+    Money_t val;
+    DecVal quantity;
+    CounterpartyData cd;
+    CommodityVisualData cvd;
+    QList<CommodityVisualData> lcvd;
+    lcvd.append(cvd);
+    ic.setData(id, val, val, quantity, cd, cd, lcvd);
+
+    //checking
+    QDomDocument doc;
+    QString errorMsg;
+    int errorLine = -1, errorColumn = -1;
+    //std::cerr << ic.getInvoiceHtml().toStdString() << std::endl;
+    QVERIFY2(doc.setContent(ic.getInvoiceHtml(), &errorMsg, &errorLine, &errorColumn),
+             (errorMsg + QString(", errorLine = %1, errorColumn = %2")
+              .arg(errorLine).arg(errorColumn))
+             .toStdString().c_str());
+    const auto styleElem = doc.documentElement().firstChildElement().firstChildElement("style");
+    QVERIFY(!styleElem.isNull());
 }
 
 QTEST_APPLESS_MAIN(InvoiceComposerTest)
