@@ -42,7 +42,7 @@ QString InvoiceComposer::getInvoiceHtml() const
     SettingsGlobal s;
 
     const QString logo(s.value(s.LOGO).toString());
-    const QString stampStr(logo.isEmpty() ? QObject::trUtf8("Pieczęć wystawcy") : QString("<img src=\"%1\">").arg(logo));
+    const QString stampStr(logo.isEmpty() ? QObject::trUtf8("Pieczęć wystawcy") : QString("<img src=\"%1\"/>").arg(logo).toHtmlEscaped());
 
     Mustache::Renderer renderer;
     QVariantHash map;

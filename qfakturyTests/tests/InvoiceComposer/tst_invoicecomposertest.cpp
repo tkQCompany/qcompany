@@ -20,7 +20,7 @@ private Q_SLOTS:
     void testCaseCheckInvoiceType();
     void testCaseCheckInvoiceType_data();
     void testCaseCheckStyle();
-
+    void testCaseCheckLogo();
 };
 
 
@@ -138,6 +138,36 @@ void InvoiceComposerTest::testCaseCheckStyle()
              .toStdString().c_str());
     const auto styleElem = doc.documentElement().firstChildElement().firstChildElement("style");
     QVERIFY(!styleElem.isNull());
+}
+
+void InvoiceComposerTest::testCaseCheckLogo()
+{
+    //filling invoice
+    SettingsGlobal s;
+    s.setValue(s.keyName(s.LOGO), "logo.png");
+
+    InvoiceComposer ic;
+    InvoiceData id;
+    Money_t val;
+    DecVal quantity;
+    CounterpartyData cd;
+    CommodityVisualData cvd;
+    QList<CommodityVisualData> lcvd;
+    lcvd.append(cvd);
+    ic.setData(id, val, val, quantity, cd, cd, lcvd);
+
+    //checking
+    QDomDocument doc;
+    QString errorMsg;
+    int errorLine = -1, errorColumn = -1;
+    //std::cerr << ic.getInvoiceHtml().toStdString() << std::endl;
+    QVERIFY2(doc.setContent(ic.getInvoiceHtml(), &errorMsg, &errorLine, &errorColumn),
+             (errorMsg + QString(", errorLine = %1, errorColumn = %2")
+              .arg(errorLine).arg(errorColumn))
+             .toStdString().c_str());
+    const auto logoElem = doc.documentElement().firstChildElement("body").firstChildElement("div").firstChildElement("img");
+    QVERIFY(!logoElem.isNull());
+    QCOMPARE(logoElem.attribute("src"), QString("logo.png"));
 }
 
 QTEST_APPLESS_MAIN(InvoiceComposerTest)
