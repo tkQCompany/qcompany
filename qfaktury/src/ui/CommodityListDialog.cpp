@@ -41,7 +41,7 @@ void CommodityListDialog::init()
     netPriceChanged();
 
     SettingsGlobal s;    
-    ui->lineEditName->setEnabled(s.value(s.EDIT_NAME).toBool());
+    ui->lineEditName->setEnabled(s.value(s.CAN_EDIT_NAME).toBool());
 
 	// connects
     connect(ui->pushButtonOK, SIGNAL( clicked() ), this, SLOT( doAccept()));

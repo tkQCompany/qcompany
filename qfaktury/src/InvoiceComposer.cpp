@@ -41,7 +41,7 @@ QString InvoiceComposer::getInvoiceHtml() const
 
     SettingsGlobal s;
 
-    const QString logo(s.value(s.LOGO).toString());
+    const QString logo(s.value(s.LOGO_PATH).toString());
     const QString stampStr(logo.isEmpty() ? QObject::trUtf8("Pieczęć wystawcy") : QString("<img src=\"%1\"/>").arg(logo).toHtmlEscaped());
 
     Mustache::Renderer renderer;
@@ -177,7 +177,7 @@ QString InvoiceComposer::composeSellerIntoHtml() const
     QString sellerAttrList;
     SettingsGlobal s;
 
-    s.beginGroup(s.categoryName(s.PRINT_FIELDS));
+    s.beginGroup(s.categoryName(s.PRINT_FLAGS));
     if(s.value(s.DISPLAY_SELLER_NAME).toBool())
     {
         sellerAttrList += QString("<li>Nazwa: %1</li>").arg(seller_.name());

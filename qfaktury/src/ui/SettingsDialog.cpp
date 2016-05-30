@@ -326,7 +326,7 @@ void SettingsDialog::saveSettings_()
     s.setValue(s.keyName(s.LANG), ui_->comboBoxLanguage->currentText());
     s.setValue(s.keyName(s.CSS), ui_->comboBoxCSS->currentText());
 
-    s.beginGroup(s.categoryName(s.PRINT_FIELDS));
+    s.beginGroup(s.categoryName(s.PRINT_FLAGS));
     s.setValue(s.keyName(s.DISPLAY_SELLER_NAME), ui_->checkBoxName->isChecked());
     s.setValue(s.keyName(s.DISPLAY_SELLER_LOCATION), ui_->checkBoxLocation->isChecked());
     s.setValue(s.keyName(s.DISPLAY_SELLER_ADDRESS), ui_->checkBoxAddress->isChecked());
@@ -338,7 +338,7 @@ void SettingsDialog::saveSettings_()
     s.endGroup();
 
     s.setValue(s.keyName(s.FIRST_RUN), false);
-    s.setValue(s.keyName(s.LOGO), ui_->lineEditLogo->text());
+    s.setValue(s.keyName(s.LOGO_PATH), ui_->lineEditLogo->text());
     //s.setValue(s.keyName(s.UNITS), getItemsToString_(listWidgetUnit));
     s.setValue(s.keyName(s.VAT_RATES), getItemsToString_(ui_->listWidgetVAT).remove("%"));
     //s.setValue(s.keyName(s.CURRENCIES), getItemsToString_(listWidgetCurrency));
@@ -346,9 +346,9 @@ void SettingsDialog::saveSettings_()
     s.setValue(s.keyName(s.PAYMENT_TYPE), getItemsToString_(ui_->listWidgetPayment));
     s.setValue(s.keyName(s.ADDIT_TEXT), ui_->textEditAdditionalText->toPlainText());
 
-    s.setValue(s.keyName(s.EDIT), ui_->checkBoxInvEdit->isChecked());
-    s.setValue(s.keyName(s.EDIT_SYMBOL), ui_->checkBoxInvSymbolEdit->isChecked());
-    s.setValue(s.keyName(s.EDIT_NAME), ui_->checkBoxProductNameEdit->isChecked());
+    s.setValue(s.keyName(s.CAN_EDIT), ui_->checkBoxInvEdit->isChecked());
+    s.setValue(s.keyName(s.CAN_EDIT_SYMBOL), ui_->checkBoxInvSymbolEdit->isChecked());
+    s.setValue(s.keyName(s.CAN_EDIT_NAME), ui_->checkBoxProductNameEdit->isChecked());
     s.setValue(s.keyName(s.TAXID_MASK), ui_->lineEditTaxIDMask->text());
     s.setValue(s.keyName(s.ACCOUNT_NUM_MASK), ui_->lineEditAccountMask->text());
     s.setValue(s.keyName(s.NUMBER_OF_COPIES), ui_->spinBoxNumCopies->value());
@@ -378,7 +378,7 @@ void SettingsDialog::readSettings_()
     int curr = 0;
     SettingsGlobal s;
 
-    ui_->lineEditLogo->setText(s.value(s.LOGO).toString());
+    ui_->lineEditLogo->setText(s.value(s.LOGO_PATH).toString());
     ui_->lineEditTaxIDMask->setText(s.value(s.TAXID_MASK).toString());
     ui_->lineEditAccountMask->setText(s.value(s.ACCOUNT_NUM_MASK).toString());
     ui_->lineEditFormat->setText(s.value(s.DEFAULT_INV_NUM_FORMAT).toString());
@@ -416,9 +416,9 @@ void SettingsDialog::readSettings_()
     ui_->checkBoxFieldGrossVal->setChecked(s.value(s.GROSS_VAL).toBool());
 
     ui_->textEditAdditionalText->setText(s.value(s.ADDIT_TEXT).toString());
-    ui_->checkBoxInvEdit->setChecked(s.value(s.EDIT).toBool());
-    ui_->checkBoxInvSymbolEdit->setChecked(s.value(s.EDIT_SYMBOL).toBool());
-    ui_->checkBoxProductNameEdit->setChecked(s.value(s.EDIT_NAME).toBool());
+    ui_->checkBoxInvEdit->setChecked(s.value(s.CAN_EDIT).toBool());
+    ui_->checkBoxInvSymbolEdit->setChecked(s.value(s.CAN_EDIT_SYMBOL).toBool());
+    ui_->checkBoxProductNameEdit->setChecked(s.value(s.CAN_EDIT_NAME).toBool());
 
     ui_->spinBoxNumCopies->setValue(s.value(s.NUMBER_OF_COPIES).toInt());
 
