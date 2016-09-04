@@ -53,14 +53,14 @@ QString InvoiceComposer::getInvoiceHtml() const
     map["logo"] = stampStr;
 
     map["invoice_header"] = true;
-    map["invoice_number_flag"] = true;
+    map["invoice_number_flag"] = s.value(s.DISPLAY_INVOICE_NUMBER).toBool();
     map["invoice_number"] = QObject::trUtf8("Nr: %1").arg(invoiceData_.invNumber());
-    map["invoice_issuance_date_flag"] = true;
+    map["invoice_issuance_date_flag"] = s.value(s.DISPLAY_ISSUANCE_DATE).toBool();
     map["invoice_issuance_date"] = QObject::trUtf8("Data wystawienia: %1").arg(invoiceData_.issuanceDate().toString(s.dateFormatExternal()));
-    map["invoice_selling_date_flag"] = true;
+    map["invoice_selling_date_flag"] = s.value(s.DISPLAY_SELLING_DATE).toBool();
     map["invoice_selling_date"] = QObject::trUtf8("Data sprzedaży: %1").arg(invoiceData_.sellingDate().toString(s.dateFormatExternal()));
-    map["invoice_original_copy_flag"] = true;
-    map["invoice_original_copy"] = QObject::trUtf8("ORYGINAŁ");
+    map["invoice_original_copy_flag"] = s.value(s.DISPLAY_ORIGINAL_COPY).toBool();
+    map["invoice_original_copy"] = invoiceData_.isOriginal() ? QObject::trUtf8("ORYGINAŁ") : QObject::trUtf8("KOPIA");
 
     map["seller"] = true;
     map["seller_name_flag"] = s.value(s.DISPLAY_SELLER_NAME).toBool();
@@ -124,43 +124,43 @@ QVariantList InvoiceComposer::composeProducts() const
     foreach(CommodityVisualData cvd, products_)
     {
         QVariantHash product;
-        if(s.contains(s.keyName(s.ORDER_NUMBER)))
+        if(s.contains(s.ORDER_NUMBER))
         {
             product["prod_id"] = cvd.ID();
         }
 
-        if(s.contains(s.keyName(s.NAME)))
+        if(s.contains(s.NAME))
         {
             product["prod_name"] = cvd.name();
         }
 
-        if(s.contains(s.keyName(s.PKWIU)))
+        if(s.contains(s.PKWIU))
         {
             product["prod_pkwiu"] = cvd.pkwiu();
         }
 
-        if(s.contains(s.keyName(s.QUANTITY)))
+        if(s.contains(s.QUANTITY))
         {
             product["prod_quantity"] = cvd.quantity().toString();
         }
 
-        if(s.contains(s.keyName(s.INTERNAT_UNIT)))
+        if(s.contains(s.INTERNAT_UNIT))
         {
             product["prod_unit"] = cvd.unit();
         }
 
-        if(s.contains(s.keyName(s.NET_VAL)))
+        if(s.contains(s.NET_VAL))
         {
             const int precision = 2;
             product["prod_net_value"] = cvd.net().toString(precision);
         }
 
-        if(s.contains(s.keyName(s.DISCOUNT)))
+        if(s.contains(s.DISCOUNT))
         {
             product["prod_discount"] = cvd.discount().toString();
         }
 
-        if(s.contains(s.keyName(s.VAT_VAL)))
+        if(s.contains(s.VAT_VAL))
         {
             product["prod_vat_value"] = cvd.vat().toString();
         }
@@ -177,7 +177,6 @@ QString InvoiceComposer::composeSellerIntoHtml() const
     QString sellerAttrList;
     SettingsGlobal s;
 
-    s.beginGroup(s.categoryName(s.PRINT_FLAGS));
     if(s.value(s.DISPLAY_SELLER_NAME).toBool())
     {
         sellerAttrList += QString("<li>Nazwa: %1</li>").arg(seller_.name());
@@ -202,7 +201,6 @@ QString InvoiceComposer::composeSellerIntoHtml() const
     {
         sellerAttrList += QObject::trUtf8("<li>Nr konta: %1</li>").arg(seller_.account_name());
     }
-    s.endGroup();
 
     const QString sellerHTML(QString("<h1>Sprzedawca:</h1><ul>%1</ul>").arg(sellerAttrList));
     return sellerHTML;

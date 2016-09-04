@@ -2,12 +2,13 @@
 #include "CurrencyData.h"
 
 
-SettingsGlobal::SettingsGlobal() : dateFormatInternal_("yyyy-MM-dd"),
+SettingsGlobal::SettingsGlobal() : QObject(), dateFormatInternal_("yyyy-MM-dd"),
     dateFormatExternal_("dd/MM/yyyy")
 {
     if(firstRun())
     {
         resetSettings();
+        setValue(FIRST_RUN, false);
     }
 }
 
@@ -44,7 +45,7 @@ const QString SettingsGlobal::keyName(const SettingsGlobal::KEYS key)
     case UNITS: return QString("%1/units").arg(categoryName(LISTS));
     case LOGO_PATH: return QString("%1/logo").arg(categoryName(SETTINGS));
     case PAYMENT_TYPE: return QString("%1/payment_type").arg(categoryName(LISTS));
-    case CORRECTION_REASONS: return QString("correction_reasons").arg(categoryName(LISTS));
+    case CORRECTION_REASONS: return QString("%1/correction_reasons").arg(categoryName(LISTS));
     case ORDER_NUMBER: return QString("%1/order_number").arg(categoryName(INVOICE_FIELDS));
     case NAME: return QString("%1/name").arg(categoryName(INVOICE_FIELDS));
     case CODE: return QString("%1/code").arg(categoryName(INVOICE_FIELDS));
@@ -75,6 +76,10 @@ const QString SettingsGlobal::keyName(const SettingsGlobal::KEYS key)
     case DISPLAY_BUYER_PHONE: return QString("%1/display_buyer_phone").arg(categoryName(PRINT_FLAGS));
     case DISPLAY_BUYER_MAIL: return QString("%1/display_buyer_email").arg(categoryName(PRINT_FLAGS));
     case DISPLAY_BUYER_WWW: return QString("%1/display_buyer_www").arg(categoryName(PRINT_FLAGS));
+    case DISPLAY_INVOICE_NUMBER: return QString("%1/display_invoice_number").arg(categoryName(PRINT_FLAGS));
+    case DISPLAY_ISSUANCE_DATE: return QString("%1/display_issuance_date").arg(categoryName(PRINT_FLAGS));
+    case DISPLAY_SELLING_DATE: return QString("%1/display_selling_date").arg(categoryName(PRINT_FLAGS));
+    case DISPLAY_ORIGINAL_COPY: return QString("%1/display_original_copy").arg(categoryName(PRINT_FLAGS));
     case CSS: return QString("%1/css").arg(categoryName(SETTINGS));
     case DEFAULT_INV_NUM_FORMAT: return QString("%1/default_inv_num_format").arg(categoryName(SETTINGS));
     case DEFAULT_CURRENCY: return QString("%1/default_currency").arg(categoryName(SETTINGS));
@@ -93,18 +98,18 @@ const QString SettingsGlobal::keyName(const SettingsGlobal::KEYS key)
 
 void SettingsGlobal::resetSettings()
 {
-    setValue(keyName(LANG), trUtf8("pl"));
-    setValue(keyName(ADDIT_TEXT), trUtf8("Towar odebrałem zgodnie z fakturą"));
-    setValue(keyName(CAN_EDIT), "false");
-    setValue(keyName(CAN_EDIT_NAME), "false");
-    setValue(keyName(CAN_EDIT_SYMBOL), "false");
-    setValue(keyName(NUMBER_OF_COPIES), 1);
-    setValue(keyName(TAXID_MASK), "999-999-99-99; ");
-    setValue(keyName(ACCOUNT_NUM_MASK), "99-9999-9999-9999-9999-9999-9999; ");
-    setValue(keyName(UNITS), trUtf8("szt.|kg.|g.|m.|km.|godz."));
-    setValue(keyName(LOGO_PATH), "");
-    setValue(keyName(PAYMENT_TYPE), trUtf8("gotówka|przelew|zaliczka"));
-    setValue(keyName(CORRECTION_REASONS), trUtf8("Pomyłka w rabacie|"
+    setValue(LANG, trUtf8("pl"));
+    setValue(ADDIT_TEXT, trUtf8("Towar odebrałem zgodnie z fakturą"));
+    setValue(CAN_EDIT, "false");
+    setValue(CAN_EDIT_NAME, "false");
+    setValue(CAN_EDIT_SYMBOL, "false");
+    setValue(NUMBER_OF_COPIES, 1);
+    setValue(TAXID_MASK, "999-999-99-99; ");
+    setValue(ACCOUNT_NUM_MASK, "99-9999-9999-9999-9999-9999-9999; ");
+    setValue(UNITS, trUtf8("szt.|kg.|g.|m.|km.|godz."));
+    setValue(LOGO_PATH, "");
+    setValue(PAYMENT_TYPE, trUtf8("gotówka|przelew|zaliczka"));
+    setValue(CORRECTION_REASONS, trUtf8("Pomyłka w rabacie|"
                                                 "Podwyższenie ceny|"
                                                 "Pomyłka w cenie|"
                                                 "Pomyłka w stawce VAT|"
@@ -123,47 +128,52 @@ void SettingsGlobal::resetSettings()
                                                  "Pomyłka w terminie płatności|"
                                                  "Pomyłka w wybranej walucie|"
                                                  "Pomyłka w uwagach") );
-    setValue(keyName(VAT_RATES), trUtf8("23|8|5|0|zw."));
-    setValue(keyName(CSS), QString("style.css"));
-    setValue(keyName(DEFAULT_INV_NUM_FORMAT), trUtf8("{TEKST1}/{R}-{M}-{D}/{NR_R}"));
-    setValue(keyName(DEFAULT_CURRENCY), CurrencyData::PLN);
-    setValue(keyName(COUNTRY), trUtf8("Polska"));
-    setValue(keyName(TEXT1), trUtf8("F"));
-    setValue(keyName(TEXT2), trUtf8(""));
-    setValue(keyName(TEXT3), trUtf8(""));
-    setValue(keyName(LAST_UPDATE_EXCHANGE_RATES), QString(""));
-    setValue(keyName(LAST_UPDATE_EXCHANGE_RATES_CENTRAL_BANK), QString(""));
+    setValue(VAT_RATES, trUtf8("23|8|5|0|zw."));
+    setValue(CSS, QString("style.css"));
+    setValue(DEFAULT_INV_NUM_FORMAT, trUtf8("{TEKST1}/{R}-{M}-{D}/{NR_R}"));
+    setValue(DEFAULT_CURRENCY, CurrencyData::PLN);
+    setValue(COUNTRY, trUtf8("Polska"));
+    setValue(TEXT1, trUtf8("F"));
+    setValue(TEXT2, trUtf8(""));
+    setValue(TEXT3, trUtf8(""));
+    setValue(LAST_UPDATE_EXCHANGE_RATES, QString(""));
+    setValue(LAST_UPDATE_EXCHANGE_RATES_CENTRAL_BANK, QString(""));
 
-    setValue(keyName(ORDER_NUMBER), true);
-    setValue(keyName(NAME), true);
-    setValue(keyName(CODE), true);
-    setValue(keyName(PKWIU), true);
-    setValue(keyName(QUANTITY), true);
-    setValue(keyName(INTERNAT_UNIT), true);
-    setValue(keyName(UNIT_PRICE), true);
-    setValue(keyName(NET_VAL), true);
-    setValue(keyName(DISCOUNT), true);
-    setValue(keyName(DISCOUNT_VAL), true);
-    setValue(keyName(NET_AFTER), true);
-    setValue(keyName(VAT_VAL), true);
-    setValue(keyName(VAT_PRICE), true);
-    setValue(keyName(GROSS_VAL), true);
+    setValue(ORDER_NUMBER, true);
+    setValue(NAME, true);
+    setValue(CODE, true);
+    setValue(PKWIU, true);
+    setValue(QUANTITY, true);
+    setValue(INTERNAT_UNIT, true);
+    setValue(UNIT_PRICE, true);
+    setValue(NET_VAL, true);
+    setValue(DISCOUNT, true);
+    setValue(DISCOUNT_VAL, true);
+    setValue(NET_AFTER, true);
+    setValue(VAT_VAL, true);
+    setValue(VAT_PRICE, true);
+    setValue(GROSS_VAL, true);
 
-    setValue(keyName(DISPLAY_SELLER_NAME), true);
-    setValue(keyName(DISPLAY_SELLER_LOCATION), true);
-    setValue(keyName(DISPLAY_SELLER_ADDRESS), true);
-    setValue(keyName(DISPLAY_SELLER_ACCOUNT), true);
-    setValue(keyName(DISPLAY_SELLER_TAXID), true);
-    setValue(keyName(DISPLAY_SELLER_PHONE), true);
-    setValue(keyName(DISPLAY_SELLER_MAIL), true);
-    setValue(keyName(DISPLAY_SELLER_WWW), true);
+    setValue(DISPLAY_SELLER_NAME, true);
+    setValue(DISPLAY_SELLER_LOCATION, true);
+    setValue(DISPLAY_SELLER_ADDRESS, true);
+    setValue(DISPLAY_SELLER_ACCOUNT, true);
+    setValue(DISPLAY_SELLER_TAXID, true);
+    setValue(DISPLAY_SELLER_PHONE, true);
+    setValue(DISPLAY_SELLER_MAIL, true);
+    setValue(DISPLAY_SELLER_WWW, true);
 
-    setValue(keyName(DISPLAY_BUYER_NAME), true);
-    setValue(keyName(DISPLAY_BUYER_LOCATION), true);
-    setValue(keyName(DISPLAY_BUYER_ADDRESS), true);
-    setValue(keyName(DISPLAY_BUYER_ACCOUNT), true);
-    setValue(keyName(DISPLAY_BUYER_TAXID), true);
-    setValue(keyName(DISPLAY_BUYER_PHONE), true);
-    setValue(keyName(DISPLAY_BUYER_MAIL), true);
-    setValue(keyName(DISPLAY_BUYER_WWW), true);
+    setValue(DISPLAY_BUYER_NAME, true);
+    setValue(DISPLAY_BUYER_LOCATION, true);
+    setValue(DISPLAY_BUYER_ADDRESS, true);
+    setValue(DISPLAY_BUYER_ACCOUNT, true);
+    setValue(DISPLAY_BUYER_TAXID, true);
+    setValue(DISPLAY_BUYER_PHONE, true);
+    setValue(DISPLAY_BUYER_MAIL, true);
+    setValue(DISPLAY_BUYER_WWW, true);
+
+    setValue(DISPLAY_INVOICE_NUMBER, true);
+    setValue(DISPLAY_ISSUANCE_DATE, true);
+    setValue(DISPLAY_SELLING_DATE, true);
+    setValue(DISPLAY_ORIGINAL_COPY, true);
 }

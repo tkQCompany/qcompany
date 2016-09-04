@@ -34,7 +34,7 @@ void Money_tTest::testCaseDefaultValues()
     Money_t m;
     SettingsGlobal s;
     QCOMPARE(m.toString(2), QString("%0%1%2").arg(0).arg(s.decimalPoint()).arg("00"));
-    QCOMPARE((int)m.currency(), (int)s.value(s.keyName(s.DEFAULT_CURRENCY)).value<int>());
+    QCOMPARE((int)m.currency(), (int)s.value(s.DEFAULT_CURRENCY).value<int>());
 }
 
 

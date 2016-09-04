@@ -15,12 +15,9 @@ private Q_SLOTS:
     void testCaseSamePeriodValues_data();
     void testCaseCheckAllFields();
     void testCaseCheckAllFields_data();
-    void test_compatibilityWithOldGenerateInvoiceNumber();
-    void test_compatibilityWithOldGenerateInvoiceNumber_data();
 
 private:
     void generateCasesSamePeriodValues_(const size_t maxInvoicesPerDay, const size_t maxDays, const QDate &startDate, const int maxDaysWithoutInvoices);
-    QString generateInvoiceNumberOldVer(InvoiceTypeData::Type invType, bool day, bool month, bool year, bool shortYear);
     QString numbersCount(int in, int x);
     static bool isDayChanging_(const QDate &currentDate, const QDate &prevDate);
     static bool isMonthChanging_(const QDate &currentDate, const QDate &prevDate);
@@ -305,116 +302,6 @@ bool ModelInvoiceTest::isYearChanging_(const QDate &currentDate, const QDate &pr
     {
         return true;
     }
-}
-
-
-void ModelInvoiceTest::test_compatibilityWithOldGenerateInvoiceNumber()
-{
-    SettingsGlobal s;
-
-    QFETCH(QStringList, format);
-    QFETCH(QDate, issuanceDate);
-    QFETCH(bool, isVAT);
-    QFETCH(QString, invoiceNum);
-
-    InvoiceNumberFormat_t fmt;
-    foreach(const QString field, format)
-    {
-        fmt.append(InvoiceNumberFormat_t::FieldID(field), s);
-    }
-
-    QCOMPARE(model_->simulateConsecutiveInvoiceNumbers(fmt, issuanceDate,
-                                                                  isVAT ? InvoiceTypeData::VAT: InvoiceTypeData::PRO_FORMA, 1).at(0), invoiceNum);
-}
-
-
-void ModelInvoiceTest::test_compatibilityWithOldGenerateInvoiceNumber_data()
-{
-    QTest::addColumn<QStringList>("format");
-    QTest::addColumn<QDate>("issuanceDate");
-    QTest::addColumn<bool>("isVAT");
-    QTest::addColumn<QString>("invoiceNum");
-
-    for(unsigned int state = 0; state < 32; ++state)//32 is a number of all possible combinations of input of generateInvoiceNumberOldVer()
-    {
-        InvoiceTypeData::Type invType = ( state & 16 ? InvoiceTypeData::VAT : InvoiceTypeData::PRO_FORMA);
-        bool day = (state & 8);
-        bool month = (state & 4);
-        bool year = (state & 2);
-        bool shortYear = (state & 1);
-        QStringList formatList;
-        formatList.append(InvoiceNumberFormat_t::FieldName(InvoiceNumberFormat_t::NR));
-        if(day)
-        {
-            formatList.append(InvoiceNumberFormat_t::FieldName(InvoiceNumberFormat_t::SLASH));
-            formatList.append(InvoiceNumberFormat_t::FieldName(InvoiceNumberFormat_t::PERIOD_DAY));
-        }
-
-        if(month)
-        {
-            formatList.append(InvoiceNumberFormat_t::FieldName(InvoiceNumberFormat_t::SLASH));
-            formatList.append(InvoiceNumberFormat_t::FieldName(InvoiceNumberFormat_t::PERIOD_MONTH));
-        }
-
-        if(year)
-        {
-            formatList.append(InvoiceNumberFormat_t::FieldName(InvoiceNumberFormat_t::SLASH));
-            if(shortYear)
-                formatList.append(InvoiceNumberFormat_t::FieldName(InvoiceNumberFormat_t::PERIOD_SHORT_YEAR));
-            else
-                formatList.append(InvoiceNumberFormat_t::FieldName(InvoiceNumberFormat_t::PERIOD_YEAR));
-        }
-
-        QTest::newRow(qPrintable(QString("%1%2%3%4%5")
-                                 .arg(int(invType == InvoiceTypeData::VAT))
-                                 .arg((int)day)
-                                 .arg((int)month)
-                                 .arg((int)year)
-                                 .arg((int)shortYear)))
-                << formatList << QDate::currentDate() << (invType == InvoiceTypeData::VAT)
-                                                << generateInvoiceNumberOldVer(invType, day, month, year, shortYear);
-    }
-}
-
-
-QString ModelInvoiceTest::generateInvoiceNumberOldVer(InvoiceTypeData::Type invType, bool day, bool month, bool year, bool shortYear)
-{//old code - for checking compatibility with previous versions
-    QString tmp, prefix, suffix;
-    SettingsGlobal s;
-
-    if(invType == InvoiceTypeData::PRO_FORMA)
-    {
-        tmp = s.value("fpro").toString();
-    }
-    else
-    {
-        tmp = s.value("fvat").toString();
-    }
-
-    prefix = s.value("prefix").toString(); //empty by default
-
-    QStringList one1 = tmp.split("/");
-    one1[0] = one1[0].remove(prefix);
-
-    int nr = one1[0].toInt() + 1;
-    QString lastInvoice = prefix + numbersCount(nr, 0);
-
-    if(day)//if (s.value("day") .toBool())
-        lastInvoice += "/" + QDate::currentDate().toString("dd");
-
-    if(month)//if (sett().value("month") .toBool())
-        lastInvoice += "/" + QDate::currentDate().toString("MM");
-
-    if(year) {//if (s.value("year") .toBool()) {
-        if(shortYear) //if (!s.value("shortYear") .toBool())
-            lastInvoice += "/" + QDate::currentDate().toString("yy");
-        else
-            lastInvoice += "/" + QDate::currentDate().toString("yyyy");
-    }
-    suffix = s.value("sufix").toString(); //empty by default
-    lastInvoice += suffix;
-
-    return lastInvoice;
 }
 
 

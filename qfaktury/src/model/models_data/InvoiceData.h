@@ -24,7 +24,7 @@ namespace InvoiceFields
      *
      */
     enum Fields {ID_INVOICE, INV_NUMBER, SELLING_DATE, TYPE_ID, COUNTERPARTY_ID,
-                 ISSUANCE_DATE, PAYMENT_DATE, PAYMENT_ID, CURRENCY_ID, ADDIT_TEXT, DISCOUNT};
+                 ISSUANCE_DATE, ORIGINAL_OR_COPY, PAYMENT_DATE, PAYMENT_ID, CURRENCY_ID, ADDIT_TEXT, DISCOUNT};
 }
 
 
@@ -105,6 +105,16 @@ public:
         return issuanceDate_;
     }
 
+    void setOriginal(const bool &isOriginal)
+    {
+        isOriginal_ = isOriginal;
+    }
+
+    bool isOriginal() const
+    {
+        return isOriginal_;
+    }
+
 
     void setPaymentDate(const QDate &paymentDate)
     {
@@ -171,6 +181,7 @@ public:
         case InvoiceFields::TYPE_ID:            return QObject::trUtf8("Rodzaj faktury");
         case InvoiceFields::COUNTERPARTY_ID:    return QObject::trUtf8("Nazwa kontrahenta");
         case InvoiceFields::ISSUANCE_DATE:      return QObject::trUtf8("Data wydania");
+        case InvoiceFields::ORIGINAL_OR_COPY:   return QObject::trUtf8("Oryginał/kopia");
         case InvoiceFields::PAYMENT_DATE:       return QObject::trUtf8("Data płatności");
         case InvoiceFields::PAYMENT_ID:         return QObject::trUtf8("Rodzaj płatności");
         case InvoiceFields::CURRENCY_ID:        return QObject::trUtf8("Waluta");
@@ -190,6 +201,7 @@ private:
     InvoiceTypeData::Type type_; /**< TODO */
     long long counterpartyID_; /**< TODO */
     QDate issuanceDate_; /**< TODO */
+    bool isOriginal_; /**< TODO */
     QDate paymentDate_; /**< TODO */
     PaymentTypeData::PaymentTypes paymentType_; /**< TODO */
     CurrencyData::Currencies currency_; /**< TODO */

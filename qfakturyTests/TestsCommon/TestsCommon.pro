@@ -10,6 +10,8 @@ TARGET = TestsCommon
 TEMPLATE = lib
 CONFIG += staticlib
 
+QMAKE_CXXFLAGS += -Wall -std=c++14
+
 SOURCES += \
     CommodityDialogPublic.cpp \
     CommodityListDialogPublic.cpp \

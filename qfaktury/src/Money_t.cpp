@@ -147,7 +147,7 @@ short Money_t::digit_(const DecVal &num, const int index) const
 void Money_t::setDefaultCurrency_()
 {
     SettingsGlobal s;
-    currency_ = (CurrencyData::Currencies)s.value(s.keyName(s.DEFAULT_CURRENCY)).toInt();
+    currency_ = (CurrencyData::Currencies)s.value(s.DEFAULT_CURRENCY).toInt();
 }
 
 

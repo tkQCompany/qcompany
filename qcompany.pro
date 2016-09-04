@@ -9,4 +9,4 @@ CONFIG += ordered
 TRANSLATIONS += qfaktury/res/translations/qcompany_de.ts \
                  qfaktury/res/translations/qcompany_en.ts
 
-QMAKE_CXXFLAGS += -Wall -std=c++14
+QMAKE_CXXFLAGS += -Wall

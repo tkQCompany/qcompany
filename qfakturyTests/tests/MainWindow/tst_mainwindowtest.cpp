@@ -164,7 +164,7 @@ void MainWindowTest::testCaseEditInvoice_data()
     SettingsGlobal s;
     Database db;
     QString invoiceNumber;
-    const QStringList vatRates(s.value(s.keyName(s.VAT_RATES)).toString().split("|"));
+    const QStringList vatRates(s.value(s.VAT_RATES).toString().split("|"));
 
     const int maxInvoices = qrand() % 20 + 3; //3-20
     const int base = 10;

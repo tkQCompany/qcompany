@@ -168,9 +168,9 @@ void SettingsDialog::updateCurrenciesTableView_()
 {
     db_->modelCurrency()->select();
     SettingsGlobal s;
-    s.setValue(s.keyName(s.LAST_UPDATE_EXCHANGE_RATES),
+    s.setValue(s.LAST_UPDATE_EXCHANGE_RATES,
                QDate::currentDate().toString(s.dateFormatInternal()));
-    s.setValue(s.keyName(s.LAST_UPDATE_EXCHANGE_RATES_CENTRAL_BANK),
+    s.setValue(s.LAST_UPDATE_EXCHANGE_RATES_CENTRAL_BANK,
                db_->modelCurrency()->lastUpdateByCentralBank());
     ui_->dateEditLastUpdate->setDate(QDate::currentDate());
     ui_->dateEditLastUpdateByCentralBank->setDate(db_->modelCurrency()->lastUpdateByCentralBank());
@@ -323,53 +323,48 @@ void SettingsDialog::saveSettings_()
 {
     SettingsGlobal s;
 
-    s.setValue(s.keyName(s.LANG), ui_->comboBoxLanguage->currentText());
-    s.setValue(s.keyName(s.CSS), ui_->comboBoxCSS->currentText());
+    s.setValue(s.LANG, ui_->comboBoxLanguage->currentText());
+    s.setValue(s.CSS, ui_->comboBoxCSS->currentText());
 
-    s.beginGroup(s.categoryName(s.PRINT_FLAGS));
-    s.setValue(s.keyName(s.DISPLAY_SELLER_NAME), ui_->checkBoxName->isChecked());
-    s.setValue(s.keyName(s.DISPLAY_SELLER_LOCATION), ui_->checkBoxLocation->isChecked());
-    s.setValue(s.keyName(s.DISPLAY_SELLER_ADDRESS), ui_->checkBoxAddress->isChecked());
-    s.setValue(s.keyName(s.DISPLAY_SELLER_ACCOUNT), ui_->checkBoxAccountName->isChecked());
-    s.setValue(s.keyName(s.DISPLAY_SELLER_TAXID), ui_->checkBoxTaxID->isChecked());
-    s.setValue(s.keyName(s.DISPLAY_SELLER_PHONE), ui_->checkBoxPhone->isChecked());
-    s.setValue(s.keyName(s.DISPLAY_SELLER_MAIL), ui_->checkBoxEmail->isChecked());
-    s.setValue(s.keyName(s.DISPLAY_SELLER_WWW), ui_->checkBoxWWW->isChecked());
-    s.endGroup();
+    s.setValue(s.DISPLAY_SELLER_NAME, ui_->checkBoxName->isChecked());
+    s.setValue(s.DISPLAY_SELLER_LOCATION, ui_->checkBoxLocation->isChecked());
+    s.setValue(s.DISPLAY_SELLER_ADDRESS, ui_->checkBoxAddress->isChecked());
+    s.setValue(s.DISPLAY_SELLER_ACCOUNT, ui_->checkBoxAccountName->isChecked());
+    s.setValue(s.DISPLAY_SELLER_TAXID, ui_->checkBoxTaxID->isChecked());
+    s.setValue(s.DISPLAY_SELLER_PHONE, ui_->checkBoxPhone->isChecked());
+    s.setValue(s.DISPLAY_SELLER_MAIL, ui_->checkBoxEmail->isChecked());
+    s.setValue(s.DISPLAY_SELLER_WWW, ui_->checkBoxWWW->isChecked());
 
-    s.setValue(s.keyName(s.FIRST_RUN), false);
-    s.setValue(s.keyName(s.LOGO_PATH), ui_->lineEditLogo->text());
-    //s.setValue(s.keyName(s.UNITS), getItemsToString_(listWidgetUnit));
-    s.setValue(s.keyName(s.VAT_RATES), getItemsToString_(ui_->listWidgetVAT).remove("%"));
-    //s.setValue(s.keyName(s.CURRENCIES), getItemsToString_(listWidgetCurrency));
-    s.setValue(s.keyName(s.CORRECTION_REASONS), getItemsToString_(ui_->listWidgetCorrectionReason));
-    s.setValue(s.keyName(s.PAYMENT_TYPE), getItemsToString_(ui_->listWidgetPayment));
-    s.setValue(s.keyName(s.ADDIT_TEXT), ui_->textEditAdditionalText->toPlainText());
+    s.setValue(s.FIRST_RUN, false);
+    s.setValue(s.LOGO_PATH, ui_->lineEditLogo->text());
+    //s.setValue(s.UNITS, getItemsToString_(listWidgetUnit));
+    s.setValue(s.VAT_RATES, getItemsToString_(ui_->listWidgetVAT).remove("%"));
+    //s.setValue(s.CURRENCIES, getItemsToString_(listWidgetCurrency));
+    s.setValue(s.CORRECTION_REASONS, getItemsToString_(ui_->listWidgetCorrectionReason));
+    s.setValue(s.PAYMENT_TYPE, getItemsToString_(ui_->listWidgetPayment));
+    s.setValue(s.ADDIT_TEXT, ui_->textEditAdditionalText->toPlainText());
 
-    s.setValue(s.keyName(s.CAN_EDIT), ui_->checkBoxInvEdit->isChecked());
-    s.setValue(s.keyName(s.CAN_EDIT_SYMBOL), ui_->checkBoxInvSymbolEdit->isChecked());
-    s.setValue(s.keyName(s.CAN_EDIT_NAME), ui_->checkBoxProductNameEdit->isChecked());
-    s.setValue(s.keyName(s.TAXID_MASK), ui_->lineEditTaxIDMask->text());
-    s.setValue(s.keyName(s.ACCOUNT_NUM_MASK), ui_->lineEditAccountMask->text());
-    s.setValue(s.keyName(s.NUMBER_OF_COPIES), ui_->spinBoxNumCopies->value());
+    s.setValue(s.CAN_EDIT, ui_->checkBoxInvEdit->isChecked());
+    s.setValue(s.CAN_EDIT_SYMBOL, ui_->checkBoxInvSymbolEdit->isChecked());
+    s.setValue(s.CAN_EDIT_NAME, ui_->checkBoxProductNameEdit->isChecked());
+    s.setValue(s.TAXID_MASK, ui_->lineEditTaxIDMask->text());
+    s.setValue(s.ACCOUNT_NUM_MASK, ui_->lineEditAccountMask->text());
+    s.setValue(s.NUMBER_OF_COPIES, ui_->spinBoxNumCopies->value());
 
-    s.beginGroup(s.categoryName(s.INVOICE_FIELDS));
-    s.setValue(s.keyName(s.ORDER_NUMBER), ui_->checkBoxFieldID->isChecked());
-    s.setValue(s.keyName(s.NAME), ui_->checkBoxFieldName->isChecked());
-    s.setValue(s.keyName(s.CODE), ui_->checkBoxFieldPostalCode->isChecked());
-    s.setValue(s.keyName(s.PKWIU), ui_->checkBoxFieldPKWIU->isChecked());
-    s.setValue(s.keyName(s.QUANTITY), ui_->checkBoxFieldAmount->isChecked());
-    s.setValue(s.keyName(s.INTERNAT_UNIT), ui_->checkBoxFieldUnit->isChecked());
-    s.setValue(s.keyName(s.UNIT_PRICE), ui_->checkBoxFieldUnitPrice->isChecked());
-    s.setValue(s.keyName(s.NET_VAL), ui_->checkBoxFieldNetVal->isChecked());
-    s.setValue(s.keyName(s.DISCOUNT), ui_->checkBoxFieldDiscount->isChecked());
-    s.setValue(s.keyName(s.DISCOUNT_VAL), ui_->checkBoxFieldDiscountVal->isChecked());
-    s.setValue(s.keyName(s.NET_AFTER), ui_->checkBoxFieldNetAfterDiscount->isChecked());
-    s.setValue(s.keyName(s.VAT_PRICE), ui_->checkBoxFieldVAT->isChecked());
-    s.setValue(s.keyName(s.VAT_VAL), ui_->checkBoxFieldVATVal->isChecked());
-    s.setValue(s.keyName(s.GROSS_VAL), ui_->checkBoxFieldGrossVal->isChecked());
-    s.endGroup();
-
+    s.setValue(s.ORDER_NUMBER, ui_->checkBoxFieldID->isChecked());
+    s.setValue(s.NAME, ui_->checkBoxFieldName->isChecked());
+    s.setValue(s.CODE, ui_->checkBoxFieldPostalCode->isChecked());
+    s.setValue(s.PKWIU, ui_->checkBoxFieldPKWIU->isChecked());
+    s.setValue(s.QUANTITY, ui_->checkBoxFieldAmount->isChecked());
+    s.setValue(s.INTERNAT_UNIT, ui_->checkBoxFieldUnit->isChecked());
+    s.setValue(s.UNIT_PRICE, ui_->checkBoxFieldUnitPrice->isChecked());
+    s.setValue(s.NET_VAL, ui_->checkBoxFieldNetVal->isChecked());
+    s.setValue(s.DISCOUNT, ui_->checkBoxFieldDiscount->isChecked());
+    s.setValue(s.DISCOUNT_VAL, ui_->checkBoxFieldDiscountVal->isChecked());
+    s.setValue(s.NET_AFTER, ui_->checkBoxFieldNetAfterDiscount->isChecked());
+    s.setValue(s.VAT_PRICE, ui_->checkBoxFieldVAT->isChecked());
+    s.setValue(s.VAT_VAL, ui_->checkBoxFieldVATVal->isChecked());
+    s.setValue(s.GROSS_VAL, ui_->checkBoxFieldGrossVal->isChecked());
 }
 
 

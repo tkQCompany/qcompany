@@ -12,10 +12,10 @@
   <div id="invoice_header">
     {{#invoice_header}}
     <ul>
-        {{#invoice_number_flag}}<li>{{invoice_number}}</li>{{/invoice_number_flag}}
-        {{#invoice_issuance_date_flag}}<li>{{invoice_issuance_date}}</li>{{/invoice_issuance_date_flag}}
-        {{#invoice_selling_date_flag}}<li>{{invoice_selling_date}}</li>{{/invoice_selling_date_flag}}
-        {{#invoice_original_copy_flag}}<li>{{invoice_original_copy}}</li>{{/invoice_original_copy_flag}}
+        {{#invoice_number_flag}}<li id="invoice_number">{{invoice_number}}</li>{{/invoice_number_flag}}
+        {{#invoice_issuance_date_flag}}<li id="issuance_date">{{invoice_issuance_date}}</li>{{/invoice_issuance_date_flag}}
+        {{#invoice_selling_date_flag}}<li id="selling_date">{{invoice_selling_date}}</li>{{/invoice_selling_date_flag}}
+        {{#invoice_original_copy_flag}}<li id="original_or_copy">{{invoice_original_copy}}</li>{{/invoice_original_copy_flag}}
     </ul>
     {{/invoice_header}}
   </div>
