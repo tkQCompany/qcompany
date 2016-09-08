@@ -121,7 +121,7 @@ public:
 
     bool firstRun() const
     {
-        return settings_.value(keyName(FIRST_RUN)).toBool();
+        return settings_.value(keyName(FIRST_RUN), true).toBool();
     }
 
     void setFirstRun(const bool firstRun)

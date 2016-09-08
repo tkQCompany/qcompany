@@ -34,7 +34,8 @@ void InvoiceComposerTest::initTestCase()
     TestsCommon::setAppData();
     TestsCommon::removeDBFile();
     SettingsGlobal s;
-    s.setFirstRun(true);
+    s.resetSettings();
+    s.setFirstRun(false);
 }
 
 QDomElement InvoiceComposerTest::findChildElementById(const QString &attributeValue, const QString &elemName, const QDomElement &parent)

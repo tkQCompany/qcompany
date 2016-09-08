@@ -28,6 +28,8 @@ void InvoiceDataTest::initTestCase()
     TestsCommon::removeDBFile();
     SettingsGlobal s;
     s.setFirstRun(true);
+    Database db;
+    s.setFirstRun(false);
 }
 
 void InvoiceDataTest::testCaseCaseCheckDBFields()

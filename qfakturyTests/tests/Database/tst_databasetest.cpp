@@ -34,7 +34,6 @@ public:
     
 private Q_SLOTS:
     void initTestCase();
-    void init();
 
     void testCaseCheckDBFileName();
     void testCaseCheckDBStructure();
@@ -70,15 +69,10 @@ DatabaseTest::DatabaseTest()
 void DatabaseTest::initTestCase()
 {
     TestsCommon::setAppData();
-    //SettingsGlobal s;
-    //s.setFirstRun(true);
+    TestsCommon::removeDBFile();
+    SettingsGlobal s;
+    s.setFirstRun(true);
 }
-
-void DatabaseTest::init()
-{
-    //TestsCommon::removeDBFile();
-}
-
 
 
 void DatabaseTest::testCaseCheckDBFileName()

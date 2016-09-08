@@ -8,7 +8,6 @@ SettingsGlobal::SettingsGlobal() : QObject(), dateFormatInternal_("yyyy-MM-dd"),
     if(firstRun())
     {
         resetSettings();
-        setValue(FIRST_RUN, false);
     }
 }
 

@@ -24,7 +24,7 @@ namespace InvoiceFields
      *
      */
     enum Fields {ID_INVOICE, INV_NUMBER, SELLING_DATE, TYPE_ID, COUNTERPARTY_ID,
-                 ISSUANCE_DATE, ORIGINAL_OR_COPY, PAYMENT_DATE, PAYMENT_ID, CURRENCY_ID, ADDIT_TEXT, DISCOUNT};
+                 ISSUANCE_DATE, PAYMENT_DATE, PAYMENT_ID, CURRENCY_ID, ADDIT_TEXT, DISCOUNT, ORIGINAL_OR_COPY};
 }
 
 
@@ -181,12 +181,12 @@ public:
         case InvoiceFields::TYPE_ID:            return QObject::trUtf8("Rodzaj faktury");
         case InvoiceFields::COUNTERPARTY_ID:    return QObject::trUtf8("Nazwa kontrahenta");
         case InvoiceFields::ISSUANCE_DATE:      return QObject::trUtf8("Data wydania");
-        case InvoiceFields::ORIGINAL_OR_COPY:   return QObject::trUtf8("Oryginał/kopia");
         case InvoiceFields::PAYMENT_DATE:       return QObject::trUtf8("Data płatności");
         case InvoiceFields::PAYMENT_ID:         return QObject::trUtf8("Rodzaj płatności");
         case InvoiceFields::CURRENCY_ID:        return QObject::trUtf8("Waluta");
         case InvoiceFields::ADDIT_TEXT:         return QObject::trUtf8("Tekst dodatkowy");
         case InvoiceFields::DISCOUNT:           return QObject::trUtf8("Zniżka");
+        case InvoiceFields::ORIGINAL_OR_COPY:   return QObject::trUtf8("Oryginał/kopia");
 
         default:
             qDebug("Value:%d, file: %s, line: %d - Unknown header of invoices' table: %d", i, __FILE__, __LINE__, i);
@@ -201,12 +201,12 @@ private:
     InvoiceTypeData::Type type_; /**< TODO */
     long long counterpartyID_; /**< TODO */
     QDate issuanceDate_; /**< TODO */
-    bool isOriginal_; /**< TODO */
     QDate paymentDate_; /**< TODO */
     PaymentTypeData::PaymentTypes paymentType_; /**< TODO */
     CurrencyData::Currencies currency_; /**< TODO */
     QString additText_; /**< TODO */
     DecVal discount_; /**< TODO */
+    bool isOriginal_; /**< TODO */
 };
 
 Q_DECLARE_METATYPE(InvoiceData)
