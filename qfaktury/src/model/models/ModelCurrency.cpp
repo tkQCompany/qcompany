@@ -10,6 +10,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
+#include "SettingsGlobal.h"
 #include "ModelCurrency.h"
 
 ModelCurrency::ModelCurrency(QObject *parent) :
@@ -115,6 +116,7 @@ void ModelCurrency::updateDBsCurrenciesRates_()
 
     const QDomNodeList elements(xmlDoc.documentElement()
                                 .elementsByTagName("pozycja"));
+    SettingsGlobal s;
     for(int i = 0; i < elements.size(); ++i)
     {
         const QDomNodeList children(elements.item(i).childNodes());
@@ -141,7 +143,7 @@ void ModelCurrency::updateDBsCurrenciesRates_()
             if(children.item(j).nodeName() == "kurs_sredni")
             {
                 QDomElement e = children.item(j).toElement();
-                currencyRate = e.firstChild().nodeValue().toDouble();
+                currencyRate = s.stringToDouble(e.firstChild().nodeValue());
             }
         }
         QSqlQuery q(query());

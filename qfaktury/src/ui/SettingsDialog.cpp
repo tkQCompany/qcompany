@@ -160,7 +160,10 @@ void SettingsDialog::showExamples_()
 
 void SettingsDialog::updateCurrenciesRates_()
 {
-    db_->modelCurrency()->updateCurrenciesRates();
+    if(ui_->dateEditLastUpdate->date() != QDate::currentDate())
+        db_->modelCurrency()->updateCurrenciesRates();
+    else
+        QMessageBox::information(this, trUtf8("Status aktualizacji"), trUtf8("Aktualizacja kursów średnich walut NBP była już dzisiaj przeprowadzona."));
 }
 
 
