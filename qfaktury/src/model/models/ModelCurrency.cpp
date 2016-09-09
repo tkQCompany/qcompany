@@ -9,9 +9,11 @@
 #include <QDomDocument>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QMessageBox>
 
 #include "SettingsGlobal.h"
 #include "ModelCurrency.h"
+#include "CurrencyData.h"
 
 ModelCurrency::ModelCurrency(QObject *parent) :
     QSqlTableModel(parent, QSqlDatabase::database())
@@ -94,6 +96,18 @@ void ModelCurrency::updateDBsCurrenciesRates_()
     int currencyUnit;
     double currencyRate;
     QString currencyName, currencyCode;
+
+    QSet<QString> missedCurrencyCodes;
+    for(int c = CurrencyData::AUD; c <= CurrencyData::IDR; ++c)
+    {
+        const QString codeName = CurrencyData::codeName(static_cast<CurrencyData::Currencies>(c));
+        if(!missedCurrencyCodes.contains(codeName))
+        {
+            if(codeName != "PLN")
+                missedCurrencyCodes.insert(codeName);
+        }
+    }
+
     const QString lastUpdateElementName("data_publikacji");
     const QDomNodeList lastUpdate(xmlDoc.documentElement()
                                   .elementsByTagName(lastUpdateElementName));
@@ -138,6 +152,15 @@ void ModelCurrency::updateDBsCurrenciesRates_()
             {
                 QDomElement e = children.item(j).toElement();
                 currencyCode = e.firstChild().nodeValue();
+
+                if(!missedCurrencyCodes.contains(currencyCode))
+                {
+                    missedCurrencyCodes.insert('+' + currencyCode);
+                }
+                else
+                {
+                    missedCurrencyCodes.remove(currencyCode);
+                }
             }
             else
             if(children.item(j).nodeName() == "kurs_sredni")
@@ -163,6 +186,17 @@ void ModelCurrency::updateDBsCurrenciesRates_()
             break;
         }
     }
+
+    if(!missedCurrencyCodes.isEmpty())
+    {
+        QString msg = trUtf8("Rozbieżności w listach walut ('+' oznacza walutę obecną na serwerze NBP i nieobecną w programie; waluty bez plusa to te obecne w programie, a nieobecne na serwerze NBP):");
+        for(const QString currCode: missedCurrencyCodes)
+        {
+            msg.append('\n' + currCode);
+        }
+        QMessageBox::warning(nullptr, trUtf8("Rozbieżności w listach walut"), msg);
+    }
+
     if(ret)
         emit updatingCurrenciesRatesFinished();
     reply->deleteLater();

@@ -18,7 +18,7 @@ class CurrencyData
 {
 public:
 enum Currencies{AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD, HRK, ILS,
-                LTL, LVL, MXN, MYR, NOK, NZD, PHP, PLN, RON, RUB, SEK, SGD, THB,
+                MXN, MYR, NOK, NZD, PHP, PLN, RON, RUB, SEK, SGD, THB,
                 TRY, UAH, USD, XDR, ZAR, CLP, HUF, INR, ISK, JPY, KRW, IDR};
 
 static QString codeName(const Currencies currency_code)
@@ -38,8 +38,6 @@ static QString codeName(const Currencies currency_code)
     case HKD: return QString("HKD");
     case HRK: return QString("HRK");
     case ILS: return QString("ILS");
-    case LTL: return QString("LTL");
-    case LVL: return QString("LVL");
     case MXN: return QString("MXN");
     case MYR: return QString("MYR");
     case NOK: return QString("NOK");
@@ -87,8 +85,6 @@ static QString name(const Currencies currency_code)
     case HKD: return QObject::trUtf8("dolar Hongkongu");
     case HRK: return QObject::trUtf8("kuna chorwacka");
     case ILS: return QObject::trUtf8("nowy izraelski szekel");
-    case LTL: return QObject::trUtf8("lit litewski");
-    case LVL: return QObject::trUtf8("łat łotewski");
     case MXN: return QObject::trUtf8("peso meksykańskie");
     case MYR: return QObject::trUtf8("ringgit malezyjski");
     case NOK: return QObject::trUtf8("korona norweska");
