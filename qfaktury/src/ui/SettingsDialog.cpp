@@ -331,7 +331,7 @@ void SettingsDialog::saveSettings_()
 
     s.setValue(s.DISPLAY_SELLER_NAME, ui_->checkBoxName->isChecked());
     s.setValue(s.DISPLAY_SELLER_LOCATION, ui_->checkBoxLocation->isChecked());
-    s.setValue(s.DISPLAY_SELLER_ADDRESS, ui_->checkBoxAddress->isChecked());
+    s.setValue(s.DISPLAY_SELLER_STREET, ui_->checkBoxAddress->isChecked());
     s.setValue(s.DISPLAY_SELLER_ACCOUNT, ui_->checkBoxAccountName->isChecked());
     s.setValue(s.DISPLAY_SELLER_TAXID, ui_->checkBoxTaxID->isChecked());
     s.setValue(s.DISPLAY_SELLER_PHONE, ui_->checkBoxPhone->isChecked());
@@ -422,7 +422,7 @@ void SettingsDialog::readSettings_()
 
     ui_->checkBoxName->setChecked(s.value(s.DISPLAY_SELLER_NAME).toBool());
     ui_->checkBoxLocation->setChecked(s.value(s.DISPLAY_SELLER_LOCATION).toBool());
-    ui_->checkBoxAddress->setChecked(s.value(s.DISPLAY_SELLER_ADDRESS).toBool());
+    ui_->checkBoxAddress->setChecked(s.value(s.DISPLAY_SELLER_STREET).toBool());
     ui_->checkBoxAccountName->setChecked(s.value(s.DISPLAY_SELLER_ACCOUNT).toBool());
     ui_->checkBoxTaxID->setChecked(s.value(s.DISPLAY_SELLER_TAXID).toBool());
     ui_->checkBoxPhone->setChecked(s.value(s.DISPLAY_SELLER_PHONE).toBool());

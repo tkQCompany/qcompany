@@ -61,7 +61,7 @@ const QString SettingsGlobal::keyName(const SettingsGlobal::KEYS key)
     case GROSS_VAL: return QString("%1/gross_value").arg(categoryName(INVOICE_FIELDS));
     case DISPLAY_SELLER_NAME: return QString("%1/display_seller_name").arg(categoryName(PRINT_FLAGS));
     case DISPLAY_SELLER_LOCATION: return QString("%1/display_seller_location").arg(categoryName(PRINT_FLAGS));
-    case DISPLAY_SELLER_ADDRESS: return QString("%1/display_seller_address").arg(categoryName(PRINT_FLAGS));
+    case DISPLAY_SELLER_STREET: return QString("%1/display_seller_address").arg(categoryName(PRINT_FLAGS));
     case DISPLAY_SELLER_ACCOUNT: return QString("%1/display_seller_account").arg(categoryName(PRINT_FLAGS));
     case DISPLAY_SELLER_TAXID: return QString("%1/display_seller_taxid").arg(categoryName(PRINT_FLAGS));
     case DISPLAY_SELLER_PHONE: return QString("%1/display_seller_phone").arg(categoryName(PRINT_FLAGS));
@@ -69,7 +69,7 @@ const QString SettingsGlobal::keyName(const SettingsGlobal::KEYS key)
     case DISPLAY_SELLER_WWW: return QString("%1/display_seller_www").arg(categoryName(PRINT_FLAGS));
     case DISPLAY_BUYER_NAME: return QString("%1/display_buyer_name").arg(categoryName(PRINT_FLAGS));
     case DISPLAY_BUYER_LOCATION: return QString("%1/display_buyer_location").arg(categoryName(PRINT_FLAGS));
-    case DISPLAY_BUYER_ADDRESS: return QString("%1/display_buyer_address").arg(categoryName(PRINT_FLAGS));
+    case DISPLAY_BUYER_STREET: return QString("%1/display_buyer_address").arg(categoryName(PRINT_FLAGS));
     case DISPLAY_BUYER_ACCOUNT: return QString("%1/display_buyer_account").arg(categoryName(PRINT_FLAGS));
     case DISPLAY_BUYER_TAXID: return QString("%1/display_buyer_taxid").arg(categoryName(PRINT_FLAGS));
     case DISPLAY_BUYER_PHONE: return QString("%1/display_buyer_phone").arg(categoryName(PRINT_FLAGS));
@@ -155,7 +155,7 @@ void SettingsGlobal::resetSettings()
 
     setValue(DISPLAY_SELLER_NAME, true);
     setValue(DISPLAY_SELLER_LOCATION, true);
-    setValue(DISPLAY_SELLER_ADDRESS, true);
+    setValue(DISPLAY_SELLER_STREET, true);
     setValue(DISPLAY_SELLER_ACCOUNT, true);
     setValue(DISPLAY_SELLER_TAXID, true);
     setValue(DISPLAY_SELLER_PHONE, true);
@@ -164,7 +164,7 @@ void SettingsGlobal::resetSettings()
 
     setValue(DISPLAY_BUYER_NAME, true);
     setValue(DISPLAY_BUYER_LOCATION, true);
-    setValue(DISPLAY_BUYER_ADDRESS, true);
+    setValue(DISPLAY_BUYER_STREET, true);
     setValue(DISPLAY_BUYER_ACCOUNT, true);
     setValue(DISPLAY_BUYER_TAXID, true);
     setValue(DISPLAY_BUYER_PHONE, true);

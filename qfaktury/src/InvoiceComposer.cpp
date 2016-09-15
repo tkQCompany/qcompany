@@ -65,7 +65,7 @@ QString InvoiceComposer::getInvoiceHtml() const
     map["seller"] = true;
     map["seller_name_flag"] = s.value(s.DISPLAY_SELLER_NAME).toBool();
     map["seller_name"] = seller_.name();
-    map["seller_street_flag"] = s.value(s.DISPLAY_SELLER_ADDRESS).toBool();
+    map["seller_street_flag"] = s.value(s.DISPLAY_SELLER_STREET).toBool();
     map["seller_street"] = seller_.street();
     map["seller_location_flag"] = s.value(s.DISPLAY_SELLER_LOCATION).toBool();
     map["seller_location"] = seller_.location();
@@ -77,7 +77,7 @@ QString InvoiceComposer::getInvoiceHtml() const
     map["buyer"] = true;
     map["buyer_name_flag"] = s.value(s.DISPLAY_BUYER_NAME).toBool();
     map["buyer_name"] = buyer_.name();
-    map["buyer_street_flag"] = s.value(s.DISPLAY_BUYER_ADDRESS).toBool();
+    map["buyer_street_flag"] = s.value(s.DISPLAY_BUYER_STREET).toBool();
     map["buyer_street"] = buyer_.street();
     map["buyer_location_flag"] = s.value(s.DISPLAY_BUYER_LOCATION).toBool();
     map["buyer_location"] = buyer_.location();
@@ -182,7 +182,7 @@ QString InvoiceComposer::composeSellerIntoHtml() const
         sellerAttrList += QString("<li>Nazwa: %1</li>").arg(seller_.name());
     }
 
-    if(s.value(s.DISPLAY_SELLER_ADDRESS).toBool())
+    if(s.value(s.DISPLAY_SELLER_STREET).toBool())
     {
         sellerAttrList += QString("<li>Ulica: %1</li>").arg(seller_.street());
     }
