@@ -141,7 +141,8 @@ QVariantList InvoiceComposer::composeProducts() const
 
         if(s.contains(s.QUANTITY))
         {
-            product["prod_quantity"] = cvd.quantity().toString();
+            const int precision = 3;
+            product["prod_quantity"] = cvd.quantity().toString(precision);
         }
 
         if(s.contains(s.INTERNAT_UNIT))
@@ -157,12 +158,14 @@ QVariantList InvoiceComposer::composeProducts() const
 
         if(s.contains(s.DISCOUNT))
         {
-            product["prod_discount"] = cvd.discount().toString();
+            const int precision = 2;
+            product["prod_discount"] = cvd.discount().toString(precision);
         }
 
         if(s.contains(s.VAT_VAL))
         {
-            product["prod_vat_value"] = cvd.vat().toString();
+            const int precision = 2;
+            product["prod_vat_value"] = cvd.vat().toString(precision);
         }
 
         products << product;

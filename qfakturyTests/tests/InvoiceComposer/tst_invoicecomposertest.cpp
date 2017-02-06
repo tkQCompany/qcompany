@@ -30,7 +30,8 @@ private Q_SLOTS:
     void testCaseCheckSeller_data();
     void testCaseCheckBuyer();
     void testCaseCheckBuyer_data();
-
+    void testCaseCheckProducts();
+    void testCaseCheckProducts_data();
 };
 
 
@@ -640,6 +641,97 @@ void InvoiceComposerTest::testCaseCheckBuyer_data()
     QTest::newRow("11101") << true  << true  << true  << false << true  << QString("name29") << QString("street29") << QString("location29") << QString("taxId29") << QString("account29");
     QTest::newRow("11110") << true  << true  << true  << true  << false << QString("name30") << QString("street30") << QString("location30") << QString("taxId30") << QString("account30");
     QTest::newRow("11111") << true  << true  << true  << true  << true  << QString("name31") << QString("street31") << QString("location31") << QString("taxId31") << QString("account31");
+}
+
+
+void InvoiceComposerTest::testCaseCheckProducts()
+{
+    QFETCH(QList<CommodityVisualData>, products);
+
+    //filling invoice
+    InvoiceComposer ic;
+
+    InvoiceData id;
+    Money_t val;
+    DecVal quantity;
+    CounterpartyData cd;
+
+    ic.setData(id, val, val, quantity, cd, cd, products);
+
+
+    //checking
+    QDomDocument doc;
+    QString errorMsg;
+    int errorLine = -1, errorColumn = -1;
+
+    QVERIFY2(doc.setContent(ic.getInvoiceHtml(), &errorMsg, &errorLine, &errorColumn),
+             (errorMsg + QString(", errorLine = %1, errorColumn = %2")
+              .arg(errorLine).arg(errorColumn))
+             .toStdString().c_str());
+    const auto elemProducts = doc.documentElement().firstChildElement("body").firstChildElement("div").nextSiblingElement().nextSiblingElement().nextSiblingElement().nextSiblingElement();
+    QVERIFY(!elemProducts.isNull());
+    QCOMPARE(elemProducts.attribute("id"), QString("products"));
+
+    auto elemCurrentRow = elemProducts.firstChildElement("table").firstChildElement("tr");
+    QVERIFY(!elemCurrentRow.isNull());
+
+    for(const CommodityVisualData product: products)
+    {
+        elemCurrentRow = elemCurrentRow.nextSiblingElement("tr");
+        QVERIFY(!elemCurrentRow.isNull());
+
+        const auto elemProductsId =         findChildElementById("prod_id", "td",       elemCurrentRow);
+        const auto elemProductsName =       findChildElementById("prod_name", "td",     elemCurrentRow);
+        const auto elemProductsPkwiu =      findChildElementById("prod_pkwiu", "td",    elemCurrentRow);
+        const auto elemProductsQuantity =   findChildElementById("prod_quantity", "td", elemCurrentRow);
+        const auto elemProductsUnit =       findChildElementById("prod_unit", "td",     elemCurrentRow);
+        const auto elemProductsNetVal =     findChildElementById("prod_net_value", "td",  elemCurrentRow);
+        const auto elemProductsDiscount =   findChildElementById("prod_discount", "td", elemCurrentRow);
+        const auto elemProductsVatVal =     findChildElementById("prod_vat_value", "td",  elemCurrentRow);
+
+        QCOMPARE(elemProductsId.text().toLongLong(),    product.ID());
+        QCOMPARE(elemProductsName.text(),               product.name());
+        QCOMPARE(elemProductsPkwiu.text(),              product.pkwiu());
+        QCOMPARE(elemProductsQuantity.text(),           product.quantity().toString(3));
+        QCOMPARE(elemProductsUnit.text(),               product.unit());
+        QCOMPARE(elemProductsNetVal.text(),             product.net().toString(2));
+        QCOMPARE(elemProductsDiscount.text(),           product.discount().toString(2));
+        QCOMPARE(elemProductsVatVal.text(),             product.vat().toString(2));
+    }
+}
+
+
+void InvoiceComposerTest::testCaseCheckProducts_data()
+{
+    QTest::addColumn<QList<CommodityVisualData>>("products");
+
+    CommodityVisualData cvd1, cvd2;
+    QList<CommodityVisualData> oneProduct, twoProducts;
+
+    cvd1.setID(1LL);
+    cvd1.setName("2");
+    cvd1.setPkwiu("3");
+    cvd1.setQuantity(DecVal(4.0));
+    cvd1.setUnit("5");
+    cvd1.setNet(Money_t(6));
+    cvd1.setDiscount(DecVal(7));
+    cvd1.setVat(DecVal(8));
+
+    cvd2.setID(9LL);
+    cvd2.setName("10");
+    cvd2.setPkwiu("11");
+    cvd2.setQuantity(DecVal(12.0));
+    cvd2.setUnit("13");
+    cvd2.setNet(Money_t(14));
+    cvd2.setDiscount(DecVal(15));
+    cvd2.setVat(DecVal(16));
+
+    oneProduct.append(cvd1);
+    twoProducts.append(cvd1);
+    twoProducts.append(cvd2);
+
+    QTest::newRow("1") << oneProduct;
+    QTest::newRow("2") << twoProducts;
 }
 
 
