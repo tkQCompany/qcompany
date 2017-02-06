@@ -91,28 +91,6 @@ QString InvoiceComposer::getInvoiceHtml() const
 
     Mustache::QtVariantContext invoiceContext(map);
     return renderer.render(invoiceHtmlTemplate_, &invoiceContext);
-
-
-//    return invoiceHtmlTemplate_.arg(s.value(s.LANG).toString())
-//            .arg(InvoiceTypeData::name(invoiceData_.type()))
-//            .arg(styleCssContent_)
-//            .arg(stampStr)
-//            .arg(InvoiceTypeData::name(invoiceData_.type()))
-//            .arg(QObject::trUtf8("Nr: %1").arg(invoiceData_.invNumber()))
-//            .arg(QObject::trUtf8("Data wystawienia: %1").arg(invoiceData_.issuanceDate().toString(s.dateFormatExternal())))
-//            .arg(QObject::trUtf8("Data sprzedaży: %1").arg(invoiceData_.sellingDate().toString(s.dateFormatExternal())))
-//            .arg(QObject::trUtf8("ORYGINAŁ"))
-//            .arg(QString("<h1>Sprzedawca:</h1><ul>%1</ul>").arg(composeSellerIntoHtml()))
-//            .arg(QObject::trUtf8("<h1>Nabywca:</h1><ul><li>%1</li></ul>").arg(buyer_.name()))
-//            .arg(composeProducts())
-//            .arg(QObject::trUtf8("Wartość Netto"))
-//            .arg(QObject::trUtf8("Kwota VAT"))
-//            .arg(QObject::trUtf8("Wartość Brutto"))
-//            .arg(QObject::trUtf8("Razem:"))
-//            .arg(netVal_.toString(precisionMoney))
-//            .arg((grossVal_ - netVal_).toString(precisionMoney))
-//            .arg(grossVal_.toString(precisionMoney))
-//            .arg(composeSummaryIntoHtml());
 }
 
 
