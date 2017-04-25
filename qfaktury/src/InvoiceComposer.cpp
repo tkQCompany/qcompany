@@ -54,36 +54,51 @@ QString InvoiceComposer::getInvoiceHtml() const
 
     map["invoice_header"] = true;
     map["invoice_number_flag"] = s.value(s.DISPLAY_INVOICE_NUMBER).toBool();
-    map["invoice_number"] = QObject::trUtf8("Nr: %1").arg(invoiceData_.invNumber());
+    map["invoice_number_string"] = QObject::trUtf8("Numer faktury: ");
+    map["invoice_number"] = QObject::trUtf8("%1").arg(invoiceData_.invNumber());
     map["invoice_issuance_date_flag"] = s.value(s.DISPLAY_ISSUANCE_DATE).toBool();
-    map["invoice_issuance_date"] = QObject::trUtf8("Data wystawienia: %1").arg(invoiceData_.issuanceDate().toString(s.dateFormatExternal()));
+    map["invoice_issuance_date_string"] = QObject::trUtf8("Data wystawienia: ");
+    map["invoice_issuance_date"] = QObject::trUtf8("%1").arg(invoiceData_.issuanceDate().toString(s.dateFormatExternal()));
     map["invoice_selling_date_flag"] = s.value(s.DISPLAY_SELLING_DATE).toBool();
-    map["invoice_selling_date"] = QObject::trUtf8("Data sprzedaży: %1").arg(invoiceData_.sellingDate().toString(s.dateFormatExternal()));
+    map["invoice_selling_date_string"] = QObject::trUtf8("Data sprzedaży: ");
+    map["invoice_selling_date"] = QObject::trUtf8("%1").arg(invoiceData_.sellingDate().toString(s.dateFormatExternal()));
     map["invoice_original_copy_flag"] = s.value(s.DISPLAY_ORIGINAL_COPY).toBool();
     map["invoice_original_copy"] = invoiceData_.isOriginal() ? QObject::trUtf8("ORYGINAŁ") : QObject::trUtf8("KOPIA");
 
     map["seller"] = true;
+    map["seller_string"] = QObject::trUtf8("Sprzedawca");
     map["seller_name_flag"] = s.value(s.DISPLAY_SELLER_NAME).toBool();
+    map["seller_name_string"] = QObject::trUtf8("Nazwa: ");
     map["seller_name"] = seller_.name();
     map["seller_street_flag"] = s.value(s.DISPLAY_SELLER_STREET).toBool();
+    map["seller_street_string"] = QObject::trUtf8("Ulica: ");
     map["seller_street"] = seller_.street();
     map["seller_location_flag"] = s.value(s.DISPLAY_SELLER_LOCATION).toBool();
+    map["seller_location_string"] = QObject::trUtf8("Miejscowość: ");
     map["seller_location"] = seller_.location();
     map["seller_taxid_flag"] = s.value(s.DISPLAY_SELLER_TAXID).toBool();
+    map["seller_taxid_string"] = QObject::trUtf8("NIP: ");
     map["seller_taxid"] = seller_.tax_ident();
     map["seller_account_flag"] = s.value(s.DISPLAY_SELLER_ACCOUNT).toBool();
+    map["seller_account_string"] = QObject::trUtf8("Numer konta: ");
     map["seller_account"] = seller_.account_name();
 
     map["buyer"] = true;
+    map["buyer_string"] = QObject::trUtf8("Nabywca");
     map["buyer_name_flag"] = s.value(s.DISPLAY_BUYER_NAME).toBool();
+    map["buyer_name_string"] = QObject::trUtf8("Nazwa: ");
     map["buyer_name"] = buyer_.name();
     map["buyer_street_flag"] = s.value(s.DISPLAY_BUYER_STREET).toBool();
+    map["buyer_street_string"] = QObject::trUtf8("Ulica: ");
     map["buyer_street"] = buyer_.street();
     map["buyer_location_flag"] = s.value(s.DISPLAY_BUYER_LOCATION).toBool();
+    map["buyer_location_string"] = QObject::trUtf8("Miejscowość: ");
     map["buyer_location"] = buyer_.location();
     map["buyer_taxid_flag"] = s.value(s.DISPLAY_BUYER_TAXID).toBool();
+    map["buyer_taxid_string"] = QObject::trUtf8("NIP: ");
     map["buyer_taxid"] = buyer_.tax_ident();
     map["buyer_account_flag"] = s.value(s.DISPLAY_BUYER_ACCOUNT).toBool();
+    map["buyer_account_string"] = QObject::trUtf8("Numer konta: ");
     map["buyer_account"] = buyer_.account_name();
 
     const QVariantList products = composeProducts();

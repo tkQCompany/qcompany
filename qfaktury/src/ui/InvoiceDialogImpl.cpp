@@ -1,6 +1,6 @@
 #include <QSqlRelationalDelegate>
 #include <QSqlError>
-#include <QTextDocument>
+#include <QWebView>
 #include <QTextStream>
 #include <QPrinter>
 #include <QPrintPreviewDialog>
@@ -504,7 +504,7 @@ void InvoiceDialogImpl::editCommodity()
 
 void InvoiceDialogImpl::printPaintRequested(QPrinter *printer)
 {
-    QTextDocument doc(this);
+    QWebView doc;
     doc.setHtml(docHTML);
     doc.print(printer);
 }
@@ -738,254 +738,50 @@ void InvoiceDialogImpl::printInvoice()
     SettingsGlobal s;
 
     CounterpartyData customer;
-    customer.setAccountName(ui->comboBoxCounterparties->currentText());
+    ModelCounterparty *model = static_cast<ModelCounterparty *>(ui->comboBoxCounterparties->model());
+
+    const int currIndex = ui->comboBoxCounterparties->currentIndex();
+    customer.setAccountName(model->data(model->index(currIndex, CounterpartyFields::ACCOUNT_NAME)).toString());
+    customer.setCountry(model->data(model->index(currIndex, CounterpartyFields::COUNTRY)).toString());
+    customer.setId(model->data(model->index(currIndex, CounterpartyFields::ID)).toLongLong());
+    customer.setLocation(model->data(model->index(currIndex, CounterpartyFields::LOCATION)).toString());
+    customer.setName(model->data(model->index(currIndex, CounterpartyFields::NAME)).toString());
+    customer.setStreet(model->data(model->index(currIndex, CounterpartyFields::STREET)).toString());
+    customer.setTax_ident(model->data(model->index(currIndex, CounterpartyFields::TAX_IDENT)).toString());
 
     CounterpartyData seller;
+    model->setOnlyMyCompanyVisible(true);
+    constexpr int sellerIndex = 0;
+    seller.setAccountName(model->data(model->index(sellerIndex, CounterpartyFields::ACCOUNT_NAME)).toString());
+    seller.setCountry(model->data(model->index(sellerIndex, CounterpartyFields::COUNTRY)).toString());
+    seller.setId(model->data(model->index(sellerIndex, CounterpartyFields::ID)).toLongLong());
+    seller.setLocation(model->data(model->index(sellerIndex, CounterpartyFields::LOCATION)).toString());
+    seller.setName(model->data(model->index(sellerIndex, CounterpartyFields::NAME)).toString());
+    seller.setStreet(model->data(model->index(sellerIndex, CounterpartyFields::STREET)).toString());
+    seller.setTax_ident(model->data(model->index(sellerIndex, CounterpartyFields::TAX_IDENT)).toString());
+    db->modelCounterparty()->setOnlyMyCompanyVisible(false);
+
 
     InvoiceComposer ic;
     ic.setData(getInvoiceData(), Money_t(ui->labelSumNetVal->text()), Money_t(ui->labelSumGrossVal->text()),
-                      DecVal(0), customer, seller, getCommoditiesVisualData());
+               DecVal(0), customer, seller, getCommoditiesVisualData());
 
-//    QTextStream stream;
-//    QString invoiceHTMLTemplate, styleCSS;
+    docHTML = ic.getInvoiceHtml();
 
-//    QFile file(":/res/templates/template.html");
-//    if(file.open(QIODevice::ReadOnly))
-//    {
-//        stream.setDevice(&file);
-//        invoiceHTMLTemplate = stream.readAll();
-//        file.close();
+    QFile file;
+    QTextStream stream;
+    file.setFileName("debugInvoice.html");
+    file.open(QIODevice::WriteOnly);
+    stream.setDevice(&file);
+    stream << docHTML;
+    file.close();
 
-//        file.setFileName("style.css");
-//        if(file.open(QIODevice::ReadOnly))
-//        {
-//            stream.setDevice(&file);
-//            styleCSS = stream.readAll();
-//            file.close();
-//        }
-//        else
-//        {
-//            qDebug("File %s couldn't be opened.", qPrintable(file.fileName()));
-//        }
-
-//        const QString logo(s.value(s.LOGO).toString());
-//        const QString stampStr(logo.isEmpty() ? trUtf8("Pieczęć wystawcy") : QString("<img src=\"%1\">").arg(logo));
-
-//        QString sellerAttrList;
-
-//        s.beginGroup(s.categoryName(s.PRINT_FIELDS));
-//        QString field;
-//        QModelIndex index;
-//        const int indexSeller = 0; //the seller in always number 1 on the SQL list of counterparties (i.e. 0 in comboboxes)
-//        const int indexComboPrev = ui->comboBoxCounterparties->currentIndex();
-//        db->modelCounterparty()->setOnlyMyCompanyVisible(true);
-//        if(s.value(s.DISPLAY_SELLER_NAME).toBool())
-//        {
-//            index = db->modelCounterparty()->index(indexSeller, CounterpartyFields::NAME);
-//            field = db->modelCounterparty()->data(index).toString();
-//            sellerAttrList += QString("<li>Nazwa: %1</li>").arg(field);
-//        }
-
-//        if(s.value(s.DISPLAY_SELLER_ADDRESS).toBool())
-//        {
-//            index = db->modelCounterparty()->index(indexSeller, CounterpartyFields::STREET);
-//            field = db->modelCounterparty()->data(index).toString();
-//            sellerAttrList += QString("<li>Ulica: %1</li>").arg(field);
-//        }
-
-//        if(s.value(s.DISPLAY_SELLER_LOCATION).toBool())
-//        {
-//            index = db->modelCounterparty()->index(indexSeller, CounterpartyFields::LOCATION);
-//            field = db->modelCounterparty()->data(index).toString();
-//            sellerAttrList += QString("<li>Miejscowość: %1</li>").arg(field);
-//        }
-
-//        if(s.value(s.DISPLAY_SELLER_TAXID).toBool())
-//        {
-//            index = db->modelCounterparty()->index(indexSeller, CounterpartyFields::TAX_IDENT);
-//            field = db->modelCounterparty()->data(index).toString();
-//            sellerAttrList += trUtf8("<li>NIP: %1</li>").arg(field);
-//        }
-
-//        if(s.value(s.DISPLAY_SELLER_ACCOUNT).toBool())
-//        {
-//            index = db->modelCounterparty()->index(indexSeller, CounterpartyFields::ACCOUNT_NAME);
-//            field = db->modelCounterparty()->data(index).toString();
-//            sellerAttrList += trUtf8("<li>Nr konta: %1</li>").arg(field);
-//        }
-//        db->modelCounterparty()->setOnlyMyCompanyVisible(false);
-//        ui->comboBoxCounterparties->setCurrentIndex(indexComboPrev);
-//        s.endGroup();
-//        const QString sellerHTML(QString("<h1>Sprzedawca:</h1><ul>%1</ul>").arg(sellerAttrList));
-
-//        const QList<CommodityVisualData> products(getCommoditiesVisualData());
-//        QString productsHTML;
-//        foreach(CommodityVisualData cvd, products)
-//        {
-//            productsHTML += "<tr>";
-//            if(s.contains(s.keyName(s.ORDER_NUMBER)))
-//            {
-//                productsHTML += QString("<td>%1</td>").arg(cvd.ID());
-//            }
-
-//            if(s.contains(s.keyName(s.NAME)))
-//            {
-//                productsHTML += QString("<td>%1</td>").arg(cvd.name());
-//            }
-
-//            if(s.contains(s.keyName(s.PKWIU)))
-//            {
-//                productsHTML += QString("<td>%1</td>").arg(cvd.pkwiu());
-//            }
-
-//            if(s.contains(s.keyName(s.QUANTITY)))
-//            {
-//                productsHTML += QString("<td>%1</td>").arg(cvd.quantity().toString());
-//            }
-
-//            if(s.contains(s.keyName(s.INTERNAT_UNIT)))
-//            {
-//                productsHTML += QString("<td>%1</td>").arg(cvd.unit());
-//            }
-
-//            if(s.contains(s.keyName(s.NET_VAL)))
-//            {
-//                const int precision = 2;
-//                productsHTML += QString("<td>%1</td>").arg(cvd.net().toString(precision));
-//            }
-
-//            if(s.contains(s.keyName(s.DISCOUNT)))
-//            {
-//                productsHTML += QString("<td>%1</td>").arg(cvd.discount().toString());
-//            }
-
-//            if(s.contains(s.keyName(s.VAT_VAL)))
-//            {
-//                productsHTML += QString("<td>%1</td>").arg(cvd.vat().toString());
-//            }
-
-//            productsHTML += "</tr>";
-//        }
-
-//        Money_t m(ui->labelSumGrossVal->text());
-//        m.setCurrency(ui->comboBoxCurrency->itemData(ui->comboBoxCurrency->currentIndex()).value<CurrencyData::Currencies>());
-//        QString summaryHTML(QString("<span>%1 %2 %3</span>").arg(trUtf8("Do zapłaty:")).arg(ui->labelSumGrossVal->text()).arg(ui->comboBoxCurrency->currentText()));
-//        summaryHTML += QString("%1 %2").arg(trUtf8("słownie:")).arg(m.verballyPL());
-
-//        if(ui->comboBoxPayment->currentIndex() == 0)
-//        {
-//            summaryHTML += trUtf8("forma płatności: ") + ui->comboBoxPayment->currentText() + "<b>";
-//            summaryHTML += trUtf8("Zapłacono gotówką");
-//        }
-//        else if((ui->comboBoxPayment->currentIndex() == ui->comboBoxPayment->count() -1) && (custPaymDataPtr != 0))
-//        {
-//            summaryHTML += "<span style=\"toPay\">";
-//            summaryHTML += QString(trUtf8("Zapłacono: ") + custPaymDataPtr->payment1 + ": "
-//                                  +  s.numberToString(custPaymDataPtr->amount1) + " " + ui->comboBoxCurrency->currentText() + " "
-//                                  + custPaymDataPtr->date1.toString(s.dateFormatExternal()) + "<br>");
-//            summaryHTML += QString(trUtf8("Zaległości: ") + custPaymDataPtr->payment2 + ": "
-//                                  +  s.numberToString(custPaymDataPtr->amount2) + " " + ui->comboBoxCurrency->currentText() + " "
-//                                  + custPaymDataPtr->date2.toString(s.dateFormatExternal()));
-//            summaryHTML += "</span>";
-//        }
-//        else
-//        {
-//            summaryHTML += trUtf8("forma płatności: ") + ui->comboBoxPayment->currentText() + "<b>";
-//            summaryHTML += "<span style=\"payDate\">";
-//            summaryHTML += trUtf8("termin płatności: ") + ui->dateEditDayOfPayment->date().toString(s.dateFormatExternal());
-//            summaryHTML += "</span></b>";
-//        }
-
-//        summaryHTML += "<span class=\"additionalText\">"	+ ui->lineEditAdditionalText->text() + "</span>";
-//        summaryHTML += "</td>";
-//        summaryHTML += "<td width=\"3%\">&nbsp;</td>";
-//        summaryHTML += "<td width=\"48%\" valign=\"top\">";
-
-//        summaryHTML += "<table width=\"90%\" border=\"0\">";
-//        summaryHTML += "<tr class=\"stawkiHeader\"><td colspan=\"4\">";
-//        summaryHTML += trUtf8("Ogółem stawkami:");
-//        summaryHTML += "</td></tr>";
-//        summaryHTML += getGroupedSums();
-//        summaryHTML += "<tr>";
-//        summaryHTML += "<td>&nbsp;</td>"; // netto
-//        summaryHTML += "<td>&nbsp;</td>"; // stawka
-//        summaryHTML += "<td>&nbsp;</td>"; // podatek
-//        summaryHTML += "<td>&nbsp;</td>"; // brutto
-//        summaryHTML += "</tr>";
-//        summaryHTML += "</table>";
-//        summaryHTML += "</td>";
-//        summaryHTML += "</tr>";
-//        summaryHTML += "</table>";
-//        summaryHTML += "</td></tr>";
-
-
-//        docHTML = invoiceHTMLTemplate.arg(s.value(s.LANG).toString())
-//                                  .arg(ui->comboBoxInvoiceType->currentText())
-//                                  .arg(styleCSS)
-//                                  .arg(stampStr)
-//                                  .arg(ui->comboBoxInvoiceType->currentText())
-//                                  .arg(trUtf8("Nr: %1").arg(ui->lineEditInvNumber->text()))
-//                                  .arg(trUtf8("Data wystawienia: %1").arg(ui->dateEditDateOfIssuance->date().toString(s.dateFormatExternal())))
-//                                  .arg(trUtf8("Data sprzedaży: %1").arg(ui->dateEditDateOfSell->date().toString(s.dateFormatExternal())))
-//                                  .arg(trUtf8("ORYGINAŁ"))
-//                                  .arg(sellerHTML)
-//                                  .arg(trUtf8("<h1>Nabywca:</h1><ul><li>%1</li></ul>").arg(ui->comboBoxCounterparties->currentText()) )
-//                                  .arg(productsHTML)
-//                                  .arg(trUtf8("Wartość Netto"))
-//                                  .arg(trUtf8("Kwota VAT"))
-//                                  .arg(trUtf8("Wartość Brutto"))
-//                                  .arg(trUtf8("Razem:"))
-//                                  .arg(ui->labelSumNetVal->text())
-//                                  .arg(s.numberToString(s.stringToDouble(ui->labelSumGrossVal->text()) - s.stringToDouble(ui->labelSumNetVal->text()), 'f', 2))
-//                                  .arg(ui->labelSumGrossVal->text())
-//                                  .arg(summaryHTML);
-        docHTML = ic.getInvoiceHtml();
-
-        QFile file;
-        QTextStream stream;
-        file.setFileName("debugInvoice.html");
-        file.open(QIODevice::WriteOnly);
-        stream.setDevice(&file);
-        stream << docHTML;
-        file.close();
-
-        QPrinter printer(QPrinter::HighResolution);
-        QPrintPreviewDialog preview(&printer, parent_);
-        preview.setWindowFlags(Qt::Window);
-        preview.setWindowTitle(trUtf8("%1 - Podgląd wydruku").arg(ui->comboBoxInvoiceType->currentText()));
-        connect(&preview, SIGNAL(paintRequested(QPrinter*)), this, SLOT(printPaintRequested(QPrinter*)));
-        preview.exec();
-    //}
-//    else
-//    {
-//        qDebug("File %s couldn't be opened.", qPrintable(file.fileName()));
-//    }
-
-    //invStrList.clear();
-    //makeInvoiceHeaderHTML(comboBoxInvoiceType->currentIndex() + 1);
-
-    //makeInvoiceHeader(comboBoxInvoiceType->currentIndex() + 1, true, false, true);
-    //makeInvoiceBody();
-    //makeInvoiceProducts();
-    //makeInvoiceSumm();
-    //makeInvoiceSummAll();
-    //makeInvoiceFooter();
-
-    //const int numberOfCopies = s.value(s.NUMBER_OF_COPIES, 2).toInt();
-    //for (int i = 0; i < numberOfCopies; ++i)
-    //{
-        // print copy
-        //makeInvoiceHeader(comboBoxInvoiceType->currentIndex() + 1, true, true, false);
-        //makeInvoiceBody();
-        //makeInvoiceProducts();
-        //makeInvoiceSumm();
-        //makeInvoiceSummAll();
-        //makeInvoiceFooter();
-   //}
-
-    //makeInvoiceFooterHtml();
-    //print();
-    //pushButtonSave->setFocus();
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintPreviewDialog preview(&printer, parent_);
+    preview.setWindowFlags(Qt::Window);
+    preview.setWindowTitle(trUtf8("%1 - Podgląd wydruku").arg(ui->comboBoxInvoiceType->currentText()));
+    connect(&preview, SIGNAL(paintRequested(QPrinter*)), this, SLOT(printPaintRequested(QPrinter*)));
+    preview.exec();
 }
 
 

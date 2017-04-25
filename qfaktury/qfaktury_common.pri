@@ -1,4 +1,4 @@
-QT += sql xml network widgets printsupport
+QT += sql xml network widgets printsupport webkitwidgets
 
 # The application version
 VERSION = 0.8.12

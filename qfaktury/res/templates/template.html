@@ -12,37 +12,42 @@
   <div id="invoice_header">
     {{#invoice_header}}
     <ul>
-        {{#invoice_number_flag}}<li id="invoice_number">{{invoice_number}}</li>{{/invoice_number_flag}}
-        {{#invoice_issuance_date_flag}}<li id="issuance_date">{{invoice_issuance_date}}</li>{{/invoice_issuance_date_flag}}
-        {{#invoice_selling_date_flag}}<li id="selling_date">{{invoice_selling_date}}</li>{{/invoice_selling_date_flag}}
+        {{#invoice_number_flag}}<li id="invoice_number"><span class="bold">{{invoice_number_string}}</span>{{invoice_number}}</li>{{/invoice_number_flag}}
+        {{#invoice_issuance_date_flag}}<li id="issuance_date"><span class="bold">{{invoice_issuance_date_string}}</span>{{invoice_issuance_date}}</li>{{/invoice_issuance_date_flag}}
+        {{#invoice_selling_date_flag}}<li id="selling_date"><span class="bold">{{invoice_selling_date_string}}</span>{{invoice_selling_date}}</li>{{/invoice_selling_date_flag}}
         {{#invoice_original_copy_flag}}<li id="original_or_copy">{{invoice_original_copy}}</li>{{/invoice_original_copy_flag}}
     </ul>
     {{/invoice_header}}
   </div>
 
-  <div id="seller">
-    {{#seller}}
-    <ul>
-        {{#seller_name_flag}}<li id="seller_name">{{seller_name}}</li>{{/seller_name_flag}}
-        {{#seller_street_flag}}<li id="seller_street">{{seller_street}}</li>{{/seller_street_flag}}
-        {{#seller_location_flag}}<li id="seller_location">{{seller_location}}</li>{{/seller_location_flag}}
-        {{#seller_taxid_flag}}<li id="seller_tax_id">{{seller_taxid}}</li>{{/seller_taxid_flag}}
-        {{#seller_account_flag}}<li id="seller_account">{{seller_account}}</li>{{/seller_account_flag}}
-    </ul>
-    {{/seller}}
-  </div>
 
-  <div id="buyer">
-    {{#buyer}}
-    <ul>
-        {{#buyer_name_flag}}<li id="buyer_name">{{buyer_name}}</li>{{/buyer_name_flag}}
-        {{#buyer_street_flag}}<li id="buyer_street">{{buyer_street}}</li>{{/buyer_street_flag}}
-        {{#buyer_location_flag}}<li id="buyer_location">{{buyer_location}}</li>{{/buyer_location_flag}}
-        {{#buyer_taxid_flag}}<li id="buyer_tax_id">{{buyer_taxid}}</li>{{/buyer_taxid_flag}}
-        {{#buyer_account_flag}}<li id="buyer_account">{{buyer_account}}</li>{{/buyer_account_flag}}
-    </ul>
-    {{/buyer}}
-  </div>
+    <div id="seller_buyer">
+        <div id="seller">
+        {{#seller}}
+        <h1>{{seller_string}}</h1>
+        <ul>
+            {{#seller_name_flag}}<li id="seller_name"><span class="bold">{{seller_name_string}}</span>{{seller_name}}</li>{{/seller_name_flag}}
+            {{#seller_street_flag}}<li id="seller_street"><span class="bold">{{seller_street_string}}</span>{{seller_street}}</li>{{/seller_street_flag}}
+            {{#seller_location_flag}}<li id="seller_location"><span class="bold">{{seller_location_string}}</span>{{seller_location}}</li>{{/seller_location_flag}}
+            {{#seller_taxid_flag}}<li id="seller_tax_id"><span class="bold">{{seller_taxid_string}}</span>{{seller_taxid}}</li>{{/seller_taxid_flag}}
+            {{#seller_account_flag}}<li id="seller_account"><span class="bold">{{seller_account_string}}</span>{{seller_account}}</li>{{/seller_account_flag}}
+        </ul>
+        {{/seller}}
+        </div>
+
+        <div id="buyer">
+        {{#buyer}}
+        <h1>{{buyer_string}}</h1>
+        <ul>
+            {{#buyer_name_flag}}<li id="buyer_name"><span class="bold">{{buyer_name_string}}</span>{{buyer_name}}</li>{{/buyer_name_flag}}
+            {{#buyer_street_flag}}<li id="buyer_street"><span class="bold">{{buyer_street_string}}</span>{{buyer_street}}</li>{{/buyer_street_flag}}
+            {{#buyer_location_flag}}<li id="buyer_location"><span class="bold">{{buyer_location_string}}</span>{{buyer_location}}</li>{{/buyer_location_flag}}
+            {{#buyer_taxid_flag}}<li id="buyer_tax_id"><span class="bold">{{buyer_taxid_string}}</span>{{buyer_taxid}}</li>{{/buyer_taxid_flag}}
+            {{#buyer_account_flag}}<li id="buyer_account"><span class="bold">{{buyer_account_string}}</span>{{buyer_account}}</li>{{/buyer_account_flag}}
+        </ul>
+        {{/buyer}}
+        </div>
+    </div>
 
     <div id="products">
     <table>
@@ -51,6 +56,11 @@
        <tr><td id="prod_id">{{prod_id}}</td><td id="prod_name">{{prod_name}}</td><td id="prod_pkwiu">{{prod_pkwiu}}</td><td id="prod_quantity">{{prod_quantity}}</td><td id="prod_unit">{{prod_unit}}</td><td id="prod_net_value">{{prod_net_value}}</td><td id="prod_discount">{{prod_discount}}</td><td id="prod_vat_value">{{prod_vat_value}}</td></tr>
     {{/products}}
     </table>
+    </div>
+
+    <div id="summary">
+        <span>{{to_pay_string}}{{sum_gross_val}}{{currency}}</span>
+        <span>{{verbally_string}}{{verbally}}</span>
     </div>
 
   </body>

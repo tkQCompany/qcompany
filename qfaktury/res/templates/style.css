@@ -1,0 +1,49 @@
+* {margin: 0; padding: 0}
+
+body { border-radius: 16px; border:1px solid black; width: 210mm; height: 297mm; margin: 5mm;}
+div li {list-style: none}
+
+span.bold {font-weight: bold }
+
+main {
+    min-height: 100%;
+    margin-bottom: -3em;
+    position: relative;
+}
+
+main:after {
+    content: "";
+    display: block;
+    height: 3em;
+}
+footer {
+    border-top: 1px dashed black;
+    height: 3em;
+    text-align: center;
+}
+
+div#logo {float: right; margin-right: 3em; margin-top: 1mm;}
+
+div#invoice_header {margin: 1em; margin-left:1%}
+div#invoice_header span {font-weight: bold}
+
+div#seller_buyer {overflow: hidden; margin-top: 2em;}
+
+div#seller {float: left; border: 1px solid black; border-radius: 10px; margin-left: 1%; width: 48%; position:relative;}
+div#seller h1 {text-align: center}
+
+div#buyer {float: right; border: 1px solid black; border-radius: 10px; margin-right: 1%; width: 48%; position:relative;}
+div#buyer h1 {text-align: center}
+
+div#products {width: 98%; margin-top: 3em; position:relative;}
+div#products table {border-collapse: collapse; width:100%; margin: 1%}
+div#products table th, tr, td {border:2px solid black; margin:0px; padding:0px; text-align: center}
+
+div#summary {float:right; margin-right:1%; margin-top: 2em; border: 1px dashed black; border-radius: 10px; padding: 3px;}
+div#summary div#to_pay {margin-top: 1ex;}
+
+div#signatures {width: 100%; margin-top: 3em; overflow: hidden; position: absolute; bottom: 5em; text-align: center;}
+div#signature_seller {float: left; width:48%;}
+div#signature_seller p {margin-top: 1em;}
+div#signature_buyer {float: right; width:48%;}
+div#signature_buyer p {margin-top: 1em;}

@@ -376,7 +376,7 @@ void InvoiceComposerTest::testCaseCheckSeller()
              (errorMsg + QString(", errorLine = %1, errorColumn = %2")
               .arg(errorLine).arg(errorColumn))
              .toStdString().c_str());
-    const auto elemSeller = doc.documentElement().firstChildElement("body").firstChildElement("div").nextSiblingElement().nextSiblingElement();
+    const auto elemSeller = doc.documentElement().firstChildElement("body").firstChildElement("div").nextSiblingElement().nextSiblingElement().firstChildElement();
     QVERIFY(!elemSeller.isNull());
     QCOMPARE(elemSeller.attribute("id"), QString("seller"));
 
@@ -534,7 +534,7 @@ void InvoiceComposerTest::testCaseCheckBuyer()
              (errorMsg + QString(", errorLine = %1, errorColumn = %2")
               .arg(errorLine).arg(errorColumn))
              .toStdString().c_str());
-    const auto elemBuyer = doc.documentElement().firstChildElement("body").firstChildElement("div").nextSiblingElement().nextSiblingElement().nextSiblingElement();
+    const auto elemBuyer = doc.documentElement().firstChildElement("body").firstChildElement("div").nextSiblingElement().nextSiblingElement().firstChildElement().nextSiblingElement();
     QVERIFY(!elemBuyer.isNull());
     QCOMPARE(elemBuyer.attribute("id"), QString("buyer"));
 
@@ -668,7 +668,7 @@ void InvoiceComposerTest::testCaseCheckProducts()
              (errorMsg + QString(", errorLine = %1, errorColumn = %2")
               .arg(errorLine).arg(errorColumn))
              .toStdString().c_str());
-    const auto elemProducts = doc.documentElement().firstChildElement("body").firstChildElement("div").nextSiblingElement().nextSiblingElement().nextSiblingElement().nextSiblingElement();
+    const auto elemProducts = doc.documentElement().firstChildElement("body").firstChildElement("div").nextSiblingElement().nextSiblingElement().nextSiblingElement();
     QVERIFY(!elemProducts.isNull());
     QCOMPARE(elemProducts.attribute("id"), QString("products"));
 
