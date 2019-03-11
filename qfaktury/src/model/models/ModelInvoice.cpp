@@ -247,7 +247,7 @@ long ModelInvoice::increaseNumber_(const InvoiceNumberFormat_t& invoiceNumFormat
         break;
     case InvoiceNumberFormat_t::NR_Q:
         if(issuanceDate.year() == prevIssuanceDate.year() &&
-                issuanceDate.month()/4 == prevIssuanceDate.month()/4)
+                (issuanceDate.month()-1)/3 == (prevIssuanceDate.month()-1)/3)
         {
             return capStr.toLong() + 1L;
         }

@@ -17,7 +17,7 @@ public:
                 PERIOD_YEAR, PERIOD_SHORT_YEAR, PERIOD_MONTH, PERIOD_DAY, PERIOD_QUARTER, SLASH, BACKSLASH, HYPHEN};
     enum Separator {SEPARATOR_START = SLASH, SEPARATOR_END = HYPHEN};
 
-    explicit InvoiceNumberFormat_t(QObject *parent = 0);
+    explicit InvoiceNumberFormat_t(QObject *parent = nullptr);
 
     bool append(const Field field, const SettingsGlobal &s);
     QString cap(const QString &strIn, const int position) const;
