@@ -28,6 +28,8 @@ void EmailDataTest::initTestCase()
 {
     TestsCommon::setAppData();
     TestsCommon::removeDBFile();
+    SettingsGlobal s;
+    s.setFirstRun(true);
 }
 
 void EmailDataTest::cleanupTestCase()

@@ -28,6 +28,8 @@ void CurrencyDataTest::initTestCase()
 {
     TestsCommon::setAppData();
     TestsCommon::removeDBFile();
+    SettingsGlobal s;
+    s.setFirstRun(true);
 }
 
 void CurrencyDataTest::cleanupTestCase()
